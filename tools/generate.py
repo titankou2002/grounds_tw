@@ -156,12 +156,12 @@ CHAPTERS = [
                    "Visual Merchandising", "Customer Journey", "Lighting", "Music", "Service Flow"],
         },
         "callout": {
-            "ja": {"title": "日本側に確認が必要な事項",
-                   "lines": ["1号店の位置づけは、", "Brand Flagship なのか、", "それとも Market Validation Store なのか。"]},
-            "en": {"title": "Needs Confirmation from Japan HQ",
-                   "lines": ["Is the first store meant to be", "a Brand Flagship,", "or a Market Validation Store?"]},
-            "zh": {"title": "需要日本確認",
-                   "lines": ["第一家店到底是", "Brand Flagship，", "還是 Market Validation Store？"]},
+            "ja": {"title": "ぜひご意見を伺いたい点",
+                   "lines": ["1号店の位置づけについて、", "Brand Flagship として考えるべきか、", "Market Validation Store として考えるべきか、", "本社のお考えを伺えれば幸いです。"]},
+            "en": {"title": "A Point We'd Love Japan HQ's Perspective On",
+                   "lines": ["We'd love to understand how Japan HQ sees the first store —", "more as a Brand Flagship,", "or as a Market Validation Store."]},
+            "zh": {"title": "想請教總部的想法",
+                   "lines": ["關於第一家店的定位，", "是偏向 Brand Flagship，", "還是 Market Validation Store，", "很希望能聽聽總部的想法。"]},
         },
     },
     {
@@ -236,9 +236,9 @@ CHAPTERS = [
             "zh": ["供應鏈", "進口", "HS Code", "關稅", "物流", "報關", "標示", "安全庫存", "補貨流程"],
         },
         "callout": {
-            "ja": {"title": "要確認事項", "lines": ["日本からの出荷か？", "工場直送か？", "日本の物流センター経由か？"]},
-            "en": {"title": "To Be Confirmed", "lines": ["Shipped from Japan?", "Direct from factory?", "Via a Japan logistics center?"]},
-            "zh": {"title": "待確認", "lines": ["日本出貨？", "工廠直送？", "日本物流中心？"]},
+            "ja": {"title": "教えていただきたい点", "lines": ["日本からの出荷、", "工場直送、", "日本の物流センター経由——", "どの形が望ましいか、ぜひ伺いたいです。"]},
+            "en": {"title": "Something We'd Love to Learn", "lines": ["Shipped from Japan, direct from factory, or via a Japan logistics center —", "we'd love to hear which approach Japan HQ would prefer."]},
+            "zh": {"title": "想了解的地方", "lines": ["日本出貨、工廠直送、還是透過日本物流中心——", "想請教總部比較希望的方式。"]},
         },
     },
     {
@@ -252,9 +252,9 @@ CHAPTERS = [
             "zh": ["POS", "ERP", "CRM", "會員", "LINE", "電子發票", "官網", "Dashboard", "數據分析"],
         },
         "callout": {
-            "ja": {"title": "要確認事項", "lines": ["日本の POS システムを継続利用するか、", "台湾独自のシステムを採用するか。"]},
-            "en": {"title": "To Be Confirmed", "lines": ["Continue using Japan's POS system,", "or adopt a Taiwan-specific system?"]},
-            "zh": {"title": "待確認", "lines": ["日本 POS 是否沿用？", "或採台灣系統？"]},
+            "ja": {"title": "教えていただきたい点", "lines": ["日本の POS システムを継続利用するか、", "台湾独自のシステムを採用するか——", "本社のご意見を伺えればと思います。"]},
+            "en": {"title": "Something We'd Love to Learn", "lines": ["Continue using Japan's POS system, or adopt a Taiwan-specific one —", "we'd love Japan HQ's thoughts here."]},
+            "zh": {"title": "想了解的地方", "lines": ["日本 POS 是否沿用、或採台灣系統，", "想聽聽總部的想法。"]},
         },
     },
     {
@@ -362,9 +362,10 @@ SUCCESS_FACTORS = {
 
 OPEN_QUESTIONS = {
     "ja": {
-        "title": "重要な意思決定事項（Open Questions）",
+        "title": "すり合わせさせていただきたい点（Open Questions）",
+        "intro": "以下は、私たちが今後の準備をより良く進めるために、日本本社の皆さまのお考えをぜひお伺いしたい点です。回答を急かすものではなく、私たちがブランドと本社の意向をより深く理解したいという気持ちからまとめました。",
         "groups": [
-            ("Strategy", ["日本が台湾に進出する本当の目的は？", "ブランドか？", "売上か？", "アジア展開か？"]),
+            ("Strategy", ["台湾進出にあたり、本社として特に大切にされたい軸は何か", "ブランドか", "売上か", "アジア展開か"]),
             ("Store", ["1号店の位置づけは？", "旗艦店か？", "市場検証店か？"]),
             ("Governance", ["子会社か？", "支店か？", "法定代表者は？", "権限委譲制度は？"]),
             ("Product", ["全シリーズ展開か？", "一部シリーズか？", "限定商品か？"]),
@@ -376,9 +377,10 @@ OPEN_QUESTIONS = {
         ],
     },
     "en": {
-        "title": "Key Decisions (Open Questions)",
+        "title": "Points We'd Love to Align On (Open Questions)",
+        "intro": "The points below are things we would sincerely love to hear Japan HQ's thoughts on, so we can prepare more thoughtfully going forward. This isn't a request for an immediate decision — it comes from our wish to understand the brand and Japan HQ's intentions more deeply.",
         "groups": [
-            ("Strategy", ["What is Japan HQ's real objective for entering Taiwan?", "Brand?", "Revenue?", "Asia expansion?"]),
+            ("Strategy", ["What matters most to Japan HQ in entering Taiwan", "Brand?", "Revenue?", "Asia expansion?"]),
             ("Store", ["What is the positioning of the first store?", "Flagship?", "Market validation store?"]),
             ("Governance", ["Subsidiary?", "Branch office?", "Who is the legal representative?", "What delegation system?"]),
             ("Product", ["Full product range?", "Partial series?", "Limited items only?"]),
@@ -390,9 +392,10 @@ OPEN_QUESTIONS = {
         ],
     },
     "zh": {
-        "title": "關鍵決策事項（Open Questions）",
+        "title": "想與總部一起對齊的方向（Open Questions）",
+        "intro": "以下是我們希望能多了解、日後準備能更貼近總部想法的幾個方向。這不是要請總部立刻給出答案,而是我們真心想更理解品牌與總部的想法。",
         "groups": [
-            ("Strategy", ["日本進入台灣真正目的？", "品牌？", "營收？", "亞洲布局？"]),
+            ("Strategy", ["台灣進入初期，總部最重視的方向是什麼", "品牌？", "營收？", "亞洲布局？"]),
             ("Store", ["第一家店定位？", "旗艦店？", "市場驗證店？"]),
             ("Governance", ["子公司？", "分公司？", "法定負責人？", "授權制度？"]),
             ("Product", ["全部系列？", "部分系列？", "限定商品？"]),
@@ -672,6 +675,7 @@ def blueprint_body(lang):
     </div>''')
     open_questions_section = f'''  <section id="open-questions" class="chapter reveal">
     <h2 class="chapter-title">{oq['title']}</h2>
+    <p class="intent-line oq-intro">{oq['intro']}</p>
     <div class="oq-grid">
 {"".join(groups_html)}
     </div>
@@ -945,6 +949,7 @@ a{ color: inherit; }
 .matrix-table{ width: 100%; border-collapse: collapse; font-size: 14px; }
 .matrix-table td{ padding: 10px 12px; border: 1px solid var(--line); }
 
+.oq-intro{ max-width: 640px; margin-bottom: 32px !important; }
 .oq-grid{
   display: grid;
   grid-template-columns: repeat(3, minmax(0,1fr));
