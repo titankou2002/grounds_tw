@@ -626,12 +626,17 @@ def render_delegation(dele):
 
 def blueprint_body(lang):
     t = SITE[lang]
+    # NOTE: with <base href> set, a bare "#id" link resolves against the base
+    # path (i.e. it navigates to the site root), not the current document —
+    # per RFC 3986 §5.3, an empty-path reference inherits the base's path.
+    # So in-page anchors must repeat this page's own path explicitly.
+    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
     sections_nav = "\n".join(
-        f'    <a href="#{c["id"]}">{c["num"]} — {c["title"][lang]}</a>' for c in CHAPTERS
+        f'    <a href="{bp_href}#{c["id"]}">{c["num"]} — {c["title"][lang]}</a>' for c in CHAPTERS
     )
-    sections_nav += f'\n    <a href="#success-factors">{SUCCESS_FACTORS[lang]["title"]}</a>'
-    sections_nav += f'\n    <a href="#open-questions">{OPEN_QUESTIONS[lang]["title"]}</a>'
-    sections_nav += f'\n    <a href="#leadership">{LEADERSHIP[lang]["title"]}</a>'
+    sections_nav += f'\n    <a href="{bp_href}#success-factors">{SUCCESS_FACTORS[lang]["title"]}</a>'
+    sections_nav += f'\n    <a href="{bp_href}#open-questions">{OPEN_QUESTIONS[lang]["title"]}</a>'
+    sections_nav += f'\n    <a href="{bp_href}#leadership">{LEADERSHIP[lang]["title"]}</a>'
 
     chapter_sections = []
     for c in CHAPTERS:
