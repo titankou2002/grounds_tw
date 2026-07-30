@@ -5,9 +5,14 @@ import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+# The site is deployed into a subdirectory on cPanel (public_html/Grounds_TW/),
+# not the domain root. Every internal link is written relative (no leading "/")
+# and resolved against this <base href> so the site works at any mount path —
+# change this one constant if the deploy target ever moves.
+BASE_PATH = "/Grounds_TW/"
+
 LANGS = ["ja", "en", "zh"]
 LANG_LABEL = {"ja": "日本語", "en": "English", "zh": "中文"}
-LANG_PATH = {"ja": "/ja", "en": "/en", "zh": "/zh"}  # root urls (ja lives at site root as well)
 
 # ---------------------------------------------------------------------------
 # Content model
@@ -490,7 +495,7 @@ def lang_switch_html(current, page):
     # page: "index" or "blueprint"
     links = []
     for l in LANGS:
-        href = f"/{page}.html" if l == "ja" else f"/{l}/{page}.html"
+        href = f"{page}.html" if l == "ja" else f"{l}/{page}.html"
         cls = " current" if l == current else ""
         links.append(f'<a class="lang-link{cls}" href="{href}">{LANG_LABEL[l]}</a>')
     return '<div class="lang-switch">' + "".join(links) + "</div>"
@@ -498,8 +503,8 @@ def lang_switch_html(current, page):
 
 def nav_html(current, active_page):
     t = SITE[current]
-    home_href = "/index.html" if current == "ja" else f"/{current}/index.html"
-    bp_href = "/blueprint.html" if current == "ja" else f"/{current}/blueprint.html"
+    home_href = "index.html" if current == "ja" else f"{current}/index.html"
+    bp_href = "blueprint.html" if current == "ja" else f"{current}/blueprint.html"
     return f'''<header class="site-nav">
   <a class="wordmark" href="{home_href}">grounds Taiwan</a>
   <nav class="nav-links">
@@ -518,9 +523,10 @@ def html_shell(lang, active_page, body, extra_head=""):
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="{BASE_PATH}">
 <title>{t['title']}</title>
 <meta name="description" content="{t['subtitle']}">
-<link rel="stylesheet" href="/assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css">
 {extra_head}
 </head>
 <body>
@@ -529,7 +535,7 @@ def html_shell(lang, active_page, body, extra_head=""):
 <footer class="site-footer">
   <p>{t['footer_note']}</p>
 </footer>
-<script src="/assets/js/main.js"></script>
+<script src="assets/js/main.js"></script>
 </body>
 </html>
 '''
@@ -537,7 +543,7 @@ def html_shell(lang, active_page, body, extra_head=""):
 
 def index_body(lang):
     t = SITE[lang]
-    bp_href = "/blueprint.html" if lang == "ja" else f"/{lang}/blueprint.html"
+    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
     return f'''<main class="hero">
   <div class="hero-inner reveal">
     <p class="hero-eyebrow">grounds Taiwan Launch Blueprint</p>
