@@ -407,11 +407,9 @@ OPEN_QUESTIONS = {
 
 LEADERSHIP = {
     "ja": {
-        "title": "台湾責任者プロフィール",
-        "position_label": "ポジション",
-        "not": ["店長ではない。", "総務担当でもない。"],
+        "title": "薛佶姈（Hsueh Chi-Ling）",
+        "basics": "1982年1月7日生まれ　｜　高校卒業",
         "summary": "小売現場から代理店運営まで、15年にわたるオペレーション経験。ブランドのローカライズ、在庫・物流管理、店舗運営、財務諸表分析を得意とする。単独での実務遂行力とチームを牽引するリーダーシップを併せ持ち、運転免許を保有し機動力も高い。",
-        "role": "Taiwan Operations Lead",
         "sections": [
             ("タイル代理店 ― 運営管理｜15年", [
                 "数千 SKU に及ぶ在庫管理と物流スケジューリング",
@@ -432,11 +430,9 @@ LEADERSHIP = {
         ],
     },
     "en": {
-        "title": "Taiwan Lead Profile",
-        "position_label": "Position",
-        "not": ["Not a store manager.", "Not an admin role."],
+        "title": "Hsueh Chi-Ling (薛佶姈)",
+        "basics": "Born January 7, 1982　|　High School Graduate",
         "summary": "15+ years of operations experience spanning retail front-line and brand distribution. Skilled in brand localization, inventory & logistics management, store operations, and financial statement analysis. An independent operator with team leadership ability, holding a valid driver's license for high operational mobility.",
-        "role": "Taiwan Operations Lead",
         "sections": [
             ("Tile Distributor — Operations Management | 15 Years", [
                 "Inventory management and logistics scheduling across thousands of SKUs",
@@ -457,11 +453,9 @@ LEADERSHIP = {
         ],
     },
     "zh": {
-        "title": "台灣負責人履歷",
-        "position_label": "定位",
-        "not": ["不是店長。", "不是行政。"],
+        "title": "薛佶姈",
+        "basics": "1982年1月7日生　｜　高中畢業",
         "summary": "15 年營運管理經驗，橫跨第一線零售與代理商營運。擅長品牌落地、庫存物流、門市管理、財務報表分析。具備獨立作業與團隊領導能力，可自行駕駛，移動與物流調度彈性高。",
-        "role": "Taiwan Operations Lead",
         "sections": [
             ("磁磚代理商 — 營運管理｜15 年", [
                 "庫存管理與物流排程，控管數千品項 SKU",
@@ -659,7 +653,7 @@ def render_delegation(dele):
 
 def render_leadership_section(lang):
     lp = LEADERSHIP[lang]
-    lead_not = "".join(f"<p class=\"intent-line\">{l}</p>" for l in lp["not"])
+    basics_html = f'<p class="lead-basics">{lp["basics"]}</p>' if lp.get("basics") else ""
     summary_html = f'<p class="lead-summary">{lp["summary"]}</p>' if lp.get("summary") else ""
     lead_sections = []
     for name, items in lp["sections"]:
@@ -672,9 +666,8 @@ def render_leadership_section(lang):
     </div>''')
     return f'''  <section id="leadership" class="chapter reveal">
     <h2 class="chapter-title">{lp['title']}</h2>
-    {lead_not}
+    {basics_html}
     {summary_html}
-    <p class="role-tag">{lp['position_label']}: {lp['role']}</p>
     <div class="lead-grid">
 {"".join(lead_sections)}
     </div>
@@ -993,15 +986,11 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.role-tag{
-  display: inline-block;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+.lead-basics{
+  font-size: 13px;
+  letter-spacing: 0.02em;
   color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 16px;
-  margin-bottom: 32px;
+  margin: 0 0 20px;
 }
 .lead-summary{
   max-width: 640px;

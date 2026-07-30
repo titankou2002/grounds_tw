@@ -231,15 +231,11 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.role-tag{
-  display: inline-block;
-  font-size: 12px;
-  letter-spacing: 0.06em;
+.lead-basics{
+  font-size: 13px;
+  letter-spacing: 0.02em;
   color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 16px;
-  margin-bottom: 32px;
+  margin: 0 0 20px;
 }
 .lead-summary{
   max-width: 640px;
