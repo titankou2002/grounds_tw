@@ -25,9 +25,8 @@ SITE = {
         "nav_home": "ホーム",
         "nav_blueprint": "ブループリント",
         "enter": "Proposalへ進む",
-        "explore": "Explore the Blueprint",
-        "hero_line": "これは提案書ではありません。",
-        "hero_line2": "grounds Taiwan を共につくる、生きた運営設計図です。",
+        "explore": "ブループリントを見る",
+        "hero_line": "本気で、夢を実現する。",
         "footer_note": "Version 0.1 — Living Document. 内容は継続的に更新されます。",
         "toc_title": "目次",
         "back_top": "トップへ戻る",
@@ -38,9 +37,8 @@ SITE = {
         "nav_home": "Home",
         "nav_blueprint": "Blueprint",
         "enter": "Enter Proposal",
-        "explore": "Explore the Blueprint",
-        "hero_line": "This is not a proposal.",
-        "hero_line2": "It is a living blueprint for building grounds Taiwan together.",
+        "explore": "View the Blueprint",
+        "hero_line": "Committed to making the dream real.",
         "footer_note": "Version 0.1 — Living Document. Content is continuously updated.",
         "toc_title": "Table of Contents",
         "back_top": "Back to top",
@@ -51,9 +49,8 @@ SITE = {
         "nav_home": "首頁",
         "nav_blueprint": "藍圖",
         "enter": "進入 Proposal",
-        "explore": "Explore the Blueprint",
-        "hero_line": "本文件不是 Proposal。",
-        "hero_line2": "這是一份持續更新的 Living Blueprint，與日本總部共同打造 grounds Taiwan。",
+        "explore": "查看 Blueprint",
+        "hero_line": "認真實現夢想。",
         "footer_note": "Version 0.1 — Living Document，內容將持續更新。",
         "toc_title": "目錄",
         "back_top": "回到頂端",
@@ -410,46 +407,78 @@ OPEN_QUESTIONS = {
 
 LEADERSHIP = {
     "ja": {
-        "title": "台湾責任者プロフィール（Executive Leadership Profile）",
+        "title": "台湾責任者プロフィール",
         "position_label": "ポジション",
         "not": ["店長ではない。", "総務担当でもない。"],
+        "summary": "小売現場から代理店運営まで、15年にわたるオペレーション経験。ブランドのローカライズ、在庫・物流管理、店舗運営、財務諸表分析を得意とする。単独での実務遂行力とチームを牽引するリーダーシップを併せ持ち、運転免許を保有し機動力も高い。",
         "role": "Taiwan Operations Lead",
         "sections": [
-            ("小売経験 15年", ["百貨店専門カウンター", "第一線での販売", "ブランドサービス", "顧客体験"]),
-            ("企業経営 15年", ["イタリアタイル代理店", "グループ内起業", "運営管理", "総務管理", "物流", "輸入", "調達",
-                              "在庫管理", "ERP", "給与", "人事", "勤怠", "サプライチェーン", "海外オーダー", "部門横断調整"]),
-            ("ビジュアル制作力", ["Illustrator", "Canva", "カタログ", "DM", "ブランド販促物", "商品カタログ", "プレゼン資料", "ビジュアルレイアウト"]),
-            ("コアコンピテンシー", ["Operation Management", "Administration", "Inventory", "Supply Chain",
-                                 "Customer Experience", "Brand Operation", "Visual Communication", "Project Coordination"]),
+            ("タイル代理店 ― 運営管理｜15年", [
+                "数千 SKU に及ぶ在庫管理と物流スケジューリング",
+                "ERP／仕入販売在庫システムの導入と日常運用",
+                "売上レポート・財務諸表・損益分析による経営判断のサポート",
+                "カタログ・DM・販促物の制作とブランドサポート",
+                "サプライヤーとの折衝、調達・スケジュール調整",
+            ]),
+            ("小売現場での接客・販売｜10年", [
+                "店舗運営と顧客対応",
+                "商品陳列、販売転換、顧客関係の維持",
+            ]),
+            ("運営管理", ["在庫管理", "物流スケジューリング", "店舗運営"]),
+            ("財務分析", ["売上レポート", "財務諸表", "損益分析"]),
+            ("ブランドサポート", ["カタログ／DM 制作", "販促提案", "プレゼン資料"]),
+            ("システムツール", ["ERP", "仕入販売在庫システム", "Office"]),
+            ("その他", ["普通自動車運転免許を保有、機動力が高い"]),
         ],
     },
     "en": {
-        "title": "Taiwan Lead Profile (Executive Leadership Profile)",
+        "title": "Taiwan Lead Profile",
         "position_label": "Position",
         "not": ["Not a store manager.", "Not an admin role."],
+        "summary": "15+ years of operations experience spanning retail front-line and brand distribution. Skilled in brand localization, inventory & logistics management, store operations, and financial statement analysis. An independent operator with team leadership ability, holding a valid driver's license for high operational mobility.",
         "role": "Taiwan Operations Lead",
         "sections": [
-            ("15 Years in Retail", ["Department store counters", "Front-line sales", "Brand service", "Customer experience"]),
-            ("15 Years in Business Operations", ["Italian tile distribution agency", "Intrapreneurship within a group", "Operations management",
-                                                  "Administration", "Logistics", "Import", "Procurement", "Inventory", "ERP", "Payroll",
-                                                  "HR", "Attendance", "Supply chain", "Overseas orders", "Cross-department coordination"]),
-            ("Visual Production Skills", ["Illustrator", "Canva", "Catalogs", "DM", "Brand collateral", "Product catalogs", "Presentations", "Visual layout"]),
-            ("Core Competencies", ["Operation Management", "Administration", "Inventory", "Supply Chain",
-                                    "Customer Experience", "Brand Operation", "Visual Communication", "Project Coordination"]),
+            ("Tile Distributor — Operations Management | 15 Years", [
+                "Inventory management and logistics scheduling across thousands of SKUs",
+                "ERP / inventory management system implementation and daily operation",
+                "Sales reports, financial statements, and P&L analysis to support management decisions",
+                "Catalog, DM, and promotional material production, and brand support",
+                "Supplier communication, procurement, and scheduling coordination",
+            ]),
+            ("Retail Front-Line Sales | 10 Years", [
+                "Store operations and customer service",
+                "Visual merchandising, sales conversion, and client relationship management",
+            ]),
+            ("Operations", ["Inventory management", "Logistics scheduling", "Store operations"]),
+            ("Financial Analysis", ["Sales reports", "Financial statements", "P&L analysis"]),
+            ("Brand Support", ["Catalog / DM production", "Promotional proposals", "Presentations"]),
+            ("Systems", ["ERP", "Inventory management systems", "Office Suite"]),
+            ("Other", ["Valid driver's license, high mobility"]),
         ],
     },
     "zh": {
-        "title": "台灣負責人履歷（Executive Leadership Profile）",
+        "title": "台灣負責人履歷",
         "position_label": "定位",
         "not": ["不是店長。", "不是行政。"],
+        "summary": "15 年營運管理經驗，橫跨第一線零售與代理商營運。擅長品牌落地、庫存物流、門市管理、財務報表分析。具備獨立作業與團隊領導能力，可自行駕駛，移動與物流調度彈性高。",
         "role": "Taiwan Operations Lead",
         "sections": [
-            ("零售經驗 15 年", ["百貨專櫃", "第一線銷售", "品牌服務", "顧客體驗"]),
-            ("企業營運 15 年", ["義大利磁磚代理商", "集團內創業", "營運管理", "行政管理", "物流", "進口", "採購",
-                              "庫存", "ERP", "薪資", "人事", "出勤", "供應鏈", "國外訂單", "跨部門協調"]),
-            ("視覺能力", ["Illustrator", "Canva", "型錄", "DM", "品牌文宣", "產品目錄", "簡報", "視覺排版"]),
-            ("核心能力", ["Operation Management", "Administration", "Inventory", "Supply Chain",
-                        "Customer Experience", "Brand Operation", "Visual Communication", "Project Coordination"]),
+            ("磁磚代理商 — 營運管理｜15 年", [
+                "庫存管理與物流排程，控管數千品項 SKU",
+                "ERP / 進銷存系統導入與日常操作",
+                "銷售報表分析、財報分析、損益表分析，提供管理決策依據",
+                "產品型錄、DM、廣告文宣製作與品牌支援",
+                "供應商溝通、採購與排程協調",
+            ]),
+            ("零售第一線銷售｜10 年", [
+                "門市營運與顧客服務",
+                "商品陳列、銷售轉換、客戶關係維護",
+            ]),
+            ("營運管理", ["庫存管理", "物流排程", "門市營運"]),
+            ("財務分析", ["銷售報表", "財報", "損益表分析"]),
+            ("品牌支援", ["型錄 / DM 製作", "文宣提案", "簡報"]),
+            ("系統工具", ["ERP", "進銷存", "Office"]),
+            ("其他", ["具備汽車駕駛能力，移動彈性高"]),
         ],
     },
 }
@@ -509,7 +538,7 @@ def nav_html(current, active_page):
     home_href = "index.html" if current == "ja" else f"{current}/index.html"
     bp_href = "blueprint.html" if current == "ja" else f"{current}/blueprint.html"
     return f'''<header class="site-nav">
-  <a class="wordmark" href="{home_href}">grounds Taiwan</a>
+  <a class="wordmark" href="{home_href}" aria-label="grounds Taiwan"></a>
   <nav class="nav-links">
     <a href="{home_href}" class="{'active' if active_page=='index' else ''}">{t['nav_home']}</a>
     <a href="{bp_href}" class="{'active' if active_page=='blueprint' else ''}">{t['nav_blueprint']}</a>
@@ -547,16 +576,17 @@ def html_shell(lang, active_page, body, extra_head=""):
 def index_body(lang):
     t = SITE[lang]
     bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
+    leadership_section = render_leadership_section(lang)
     return f'''<main class="hero">
   <div class="hero-inner reveal">
-    <p class="hero-eyebrow">grounds Taiwan Launch Blueprint</p>
     <h1 class="hero-line">{t['hero_line']}</h1>
-    <h1 class="hero-line hero-line-2">{t['hero_line2']}</h1>
-    <p class="hero-sub">{t['subtitle']}</p>
-    <a class="cta" href="{bp_href}">{t['explore']} →</a>
   </div>
   <div class="scroll-cue reveal-delay">↓</div>
 </main>
+<div class="blueprint-content profile-page">
+{leadership_section}
+</div>
+<p class="explore-link"><a href="{bp_href}">{t['explore']} →</a></p>
 '''
 
 
@@ -627,6 +657,30 @@ def render_delegation(dele):
 '''
 
 
+def render_leadership_section(lang):
+    lp = LEADERSHIP[lang]
+    lead_not = "".join(f"<p class=\"intent-line\">{l}</p>" for l in lp["not"])
+    summary_html = f'<p class="lead-summary">{lp["summary"]}</p>' if lp.get("summary") else ""
+    lead_sections = []
+    for name, items in lp["sections"]:
+        items_html = "\n".join(f"        <li>{i}</li>" for i in items)
+        lead_sections.append(f'''    <div class="lead-group">
+      <p class="lead-group-title">{name}</p>
+      <ul class="bullet-grid compact">
+{items_html}
+      </ul>
+    </div>''')
+    return f'''  <section id="leadership" class="chapter reveal">
+    <h2 class="chapter-title">{lp['title']}</h2>
+    {lead_not}
+    {summary_html}
+    <p class="role-tag">{lp['position_label']}: {lp['role']}</p>
+    <div class="lead-grid">
+{"".join(lead_sections)}
+    </div>
+  </section>'''
+
+
 def blueprint_body(lang):
     t = SITE[lang]
     # NOTE: with <base href> set, a bare "#id" link resolves against the base
@@ -681,25 +735,7 @@ def blueprint_body(lang):
     </div>
   </section>'''
 
-    lp = LEADERSHIP[lang]
-    lead_not = "".join(f"<p class=\"intent-line\">{l}</p>" for l in lp["not"])
-    lead_sections = []
-    for name, items in lp["sections"]:
-        items_html = "\n".join(f"        <li>{i}</li>" for i in items)
-        lead_sections.append(f'''    <div class="lead-group">
-      <p class="lead-group-title">{name}</p>
-      <ul class="bullet-grid compact">
-{items_html}
-      </ul>
-    </div>''')
-    leadership_section = f'''  <section id="leadership" class="chapter reveal">
-    <h2 class="chapter-title">{lp['title']}</h2>
-    {lead_not}
-    <p class="role-tag">{lp['position_label']}: {lp['role']}</p>
-    <div class="lead-grid">
-{"".join(lead_sections)}
-    </div>
-  </section>'''
+    leadership_section = render_leadership_section(lang)
 
     cl = CLOSING[lang]
     closing_lines = "\n".join(f"    <p>{l}</p>" for l in cl["lines"])
@@ -778,11 +814,9 @@ a{ color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .wordmark{
-  font-family: var(--serif);
-  font-size: 15px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
+  display: inline-block;
+  min-width: 120px;
+  height: 1px;
 }
 .nav-links{ display: flex; gap: 20px; font-size: 13px; }
 .nav-links a{ text-decoration: none; color: var(--muted); padding-bottom: 2px; }
@@ -969,6 +1003,30 @@ a{ color: inherit; }
   padding: 6px 16px;
   margin-bottom: 32px;
 }
+.lead-summary{
+  max-width: 640px;
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+.profile-page{
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+.profile-page .chapter{ border-bottom: none; padding-top: 0; }
+.explore-link{
+  text-align: center;
+  padding: 0 24px 80px;
+}
+.explore-link a{
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+}
+.explore-link a:hover{ color: var(--fg); border-color: var(--fg); }
 .lead-grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));

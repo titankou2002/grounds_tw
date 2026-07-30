@@ -52,11 +52,9 @@ a{ color: inherit; }
   border-bottom: 1px solid var(--line);
 }
 .wordmark{
-  font-family: var(--serif);
-  font-size: 15px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  text-decoration: none;
+  display: inline-block;
+  min-width: 120px;
+  height: 1px;
 }
 .nav-links{ display: flex; gap: 20px; font-size: 13px; }
 .nav-links a{ text-decoration: none; color: var(--muted); padding-bottom: 2px; }
@@ -243,6 +241,30 @@ a{ color: inherit; }
   padding: 6px 16px;
   margin-bottom: 32px;
 }
+.lead-summary{
+  max-width: 640px;
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 24px;
+}
+.profile-page{
+  margin: 0 auto;
+  padding: 40px 32px 80px;
+}
+.profile-page .chapter{ border-bottom: none; padding-top: 0; }
+.explore-link{
+  text-align: center;
+  padding: 0 24px 80px;
+}
+.explore-link a{
+  font-size: 13px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 2px;
+}
+.explore-link a:hover{ color: var(--fg); border-color: var(--fg); }
 .lead-grid{
   display: grid;
   grid-template-columns: repeat(2, minmax(0,1fr));
