@@ -20,7 +20,7 @@ LANG_LABEL = {"ja": "日本語", "en": "English", "zh": "中文"}
 
 SITE = {
     "ja": {
-        "title": "夢想者",
+        "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "ホーム",
         "nav_blueprint": "ブループリント",
@@ -32,7 +32,7 @@ SITE = {
         "back_top": "トップへ戻る",
     },
     "en": {
-        "title": "Dreamer",
+        "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "Home",
         "nav_blueprint": "Blueprint",
@@ -44,7 +44,7 @@ SITE = {
         "back_top": "Back to top",
     },
     "zh": {
-        "title": "夢想者",
+        "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "首頁",
         "nav_blueprint": "藍圖",
@@ -408,13 +408,12 @@ OPEN_QUESTIONS = {
 LEADERSHIP = {
     "ja": {
         "title": "薛 佶姈（Hsueh Chi-Ling）",
-        "basics": "1982年1月7日生まれ　｜　最終学歴：高等学校卒業",
         "signature_role": "Taiwan Operations Candidate",
         "profile": [
-            "百貨店で約10年間、接客・販売業務に従事した後、イタリア製タイルの輸入販売会社にて約15年間、会社運営を支えるバックオフィス業務全般を担当してきました。",
-            "現在は、営業部門と連携しながら、受発注、在庫管理、物流手配、人事・総務、購買、販促資料作成など、日々のオペレーションを幅広く担当しています。",
-            "現場での実務経験を積み重ね、会社運営を支える仕組みづくりに携わってきました。",
-            "grounds Taiwanの立ち上げ段階から、店舗運営、バックオフィス体制、人材育成、在庫管理など、ブランドを長期的に成長させるための基盤づくりに貢献したいと考えています。",
+            "百貨店で約10年間、接客・販売業務に従事した後、イタリア製タイルの輸入販売会社にて約15年間、会社運営を支えるオペレーション業務全般を担当してきました。",
+            "小売現場で培った顧客対応力と、輸入代理店運営を通じて身につけた商品管理・物流・社内管理の経験を活かし、日々の業務を安定して運営する仕組みづくりに携わってきました。",
+            "現在は、受発注管理、在庫管理、物流調整、購買、総務、人事関連業務、販促資料制作など、企業運営に必要な幅広い実務を担当しています。",
+            "grounds Taiwan の立ち上げにおいて、店舗運営、バックオフィス体制、人材育成、在庫管理など、ブランドが長期的に成長するための基盤づくりに貢献したいと考えています。",
         ],
         "experience_title": "職務経歴",
         "experience": [
@@ -424,41 +423,40 @@ LEADERSHIP = {
                 "duration": "約15年",
                 "desc": "台湾におけるイタリア製タイルブランド代理店の運営に携わり、営業部門を支える管理業務全般を担当。",
                 "groups": [
-                    ("営業事務・受発注管理", ["国内受注管理", "発注書作成", "出荷手配", "納期管理", "顧客対応"]),
+                    ("受発注・営業サポート", ["国内受注管理", "発注書作成", "出荷手配", "納期管理", "顧客対応"]),
                     ("在庫管理・物流", ["在庫管理", "ERPシステム運用", "入出庫管理", "配送スケジュール調整", "運送会社との連携", "在庫データ管理"]),
                     ("購買・海外取引", ["イタリアメーカーへの発注", "輸入スケジュール管理", "サプライヤーとの連絡", "納期確認"]),
-                    ("総務・人事", ["勤怠管理", "給与計算補助", "社内事務", "社内資料管理"]),
-                    ("ブランドサポート", ["商品カタログ制作", "DM制作", "展示会資料作成", "商品資料編集", "プレゼンテーション資料制作"]),
+                    ("総務・人事管理", ["勤怠管理", "給与計算補助", "社内資料管理", "日常総務業務"]),
+                    ("ブランド・販促サポート", ["商品カタログ制作", "DM制作", "展示会資料作成", "商品資料編集", "プレゼン資料制作"]),
                 ],
             },
             {
                 "org": "百貨店ブランド販売スタッフ",
                 "role": "Retail Sales Professional",
                 "duration": "約10年",
-                "desc": "百貨店ブランドカウンターにて販売・接客業務を担当。",
+                "desc": "百貨店ブランドカウンターにて、販売・接客業務を担当。",
                 "groups": [
-                    ("主な担当業務", ["接客販売", "顧客対応", "商品管理", "商品ディスプレイ", "売場運営", "リピーター顧客対応", "ブランドイメージ維持"]),
+                    ("主な担当業務", ["接客販売", "顧客対応", "商品管理", "商品ディスプレイ", "売場運営", "顧客関係維持", "ブランドイメージ管理"]),
                 ],
             },
         ],
         "value_title": "私が grounds Taiwan に提供できる価値",
         "value": [
-            ("Retail Experience", "10年間の百貨店販売経験を通じて、ブランドがお客様にどのように伝わるかを現場で学びました。"),
-            ("Operational Experience", "15年間、輸入代理店の運営を通じて、商品・物流・在庫・社内管理など、企業運営の基盤を支えてきました。"),
-            ("Brand Support", "商品資料、販促物制作など、ブランド価値を伝えるためのコミュニケーションにも携わってきました。"),
+            ("Retail Experience", "10年間の百貨店販売経験を通じて、お客様がブランドをどのように感じ、理解し、信頼につなげるかを現場で学びました。"),
+            ("Operational Experience", "15年間、輸入代理店の運営を通じて、商品管理、物流、購買、社内業務など、企業運営を支える実務経験を積んできました。"),
+            ("Brand Support Experience", "商品資料、販促物、カタログ制作などを通じて、ブランド価値を伝えるためのコミュニケーションを支援してきました。"),
         ],
         "strengths_title": "強み",
         "strengths": [
-            ("安定したオペレーション構築", "会社全体の業務が円滑に進むよう、営業・物流・管理部門をつなぐ役割を担い、日々の運営を支えてきました。"),
-            ("実務対応力", "日常業務だけではなく、急な納期変更や配送トラブルなどにも柔軟に対応し、状況に応じて優先順位を判断しながら業務を進めることを得意としています。"),
-            ("業務改善", "ERPを活用した在庫管理や業務フローの整理を行い、継続的な業務改善にも取り組んできました。"),
-            ("ブランドサポート", "商品カタログや販促物などの制作を通じて、営業活動やブランドコミュニケーションを支援してきました。"),
+            ("安定したオペレーション構築", "営業・物流・管理部門をつなぎ、会社全体の業務が円滑に進むよう日々の運営を支えてきました。"),
+            ("実務対応力", "納期変更、物流調整、急な業務変更など、現場で発生する問題に対して優先順位を判断しながら柔軟に対応してきました。"),
+            ("業務改善", "ERPや在庫管理システムを活用し、業務フロー整理と効率化に取り組んできました。"),
         ],
         "skills_title": "スキル",
         "skills": [
             ("Business Operations", ["受発注管理", "在庫管理", "物流管理", "購買管理", "総務", "人事事務", "営業サポート"]),
             ("System", ["ERP", "在庫管理システム", "Microsoft Office"]),
-            ("Design", ["Adobe Illustrator", "Canva", "商品カタログ制作", "DM制作", "プレゼンテーション資料制作"]),
+            ("Design", ["Adobe Illustrator", "Canva", "商品カタログ制作", "DM制作", "プレゼン資料制作"]),
         ],
         "languages_title": "語学",
         "languages": [("中国語", "ネイティブ"), ("日本語", "現在学習中（継続的に向上中）"), ("英語", "基礎レベル")],
@@ -466,20 +464,24 @@ LEADERSHIP = {
         "qualifications": ["普通自動車第一種運転免許"],
         "closing_title": "grounds Taiwanで活かせる経験",
         "closing": [
-            "私はブランド運営において最も重要なのは、「毎日のオペレーションを安定して継続すること」だと考えています。",
-            "これまで15年以上にわたり、受発注、在庫管理、物流、購買、人事、総務、販促支援など、会社運営を支える実務を幅広く担当してきました。",
-            "grounds Taiwan においても、日本本社のブランドコンセプトを尊重しながら、店舗運営、バックオフィス、在庫管理、物流、事務体制など、台湾市場で長期的に安定した運営基盤を築き、ブランドの成長に貢献したいと考えています。",
+            "私はブランド運営において、最も重要な要素の一つは「毎日のオペレーションを安定して継続すること」だと考えています。",
+            "これまで15年以上にわたり、受発注、在庫管理、物流、購買、人事、総務、販促支援など、会社運営を支える幅広い実務を担当してきました。",
+            "grounds Taiwan において、日本本社のブランドコンセプトを尊重しながら、店舗運営、バックオフィス体制、在庫管理、人材育成など、台湾市場で長期的に成長できる運営基盤づくりに貢献していきたいと考えています。",
+        ],
+        "profile_info_title": "Profile Information",
+        "profile_info": [
+            ("生年月日", "1982年1月7日"),
+            ("最終学歴", "高等学校卒業"),
         ],
     },
     "en": {
         "title": "Hsueh Chi-Ling (薛佶姈)",
-        "basics": "Born January 7, 1982　|　Final education: High school graduate",
         "signature_role": "Taiwan Operations Candidate",
         "profile": [
-            "After about 10 years in customer service and sales at department stores, I spent roughly 15 years handling back-office operations supporting the overall management of an Italian tile import and distribution company.",
-            "Currently, working alongside the sales team, I handle a wide range of daily operations — order processing, inventory management, logistics coordination, HR & general affairs, procurement, and promotional material production.",
-            "I have built up hands-on, front-line experience, and have been involved in building the systems that support how a company is run.",
-            "From the very launch stage of grounds Taiwan, I hope to contribute to building the foundation the brand needs to grow over the long term — store operations, back-office systems, talent development, and inventory management.",
+            "After about 10 years in customer service and sales at department stores, I spent roughly 15 years handling the full range of operations work supporting the management of an Italian tile import and distribution company.",
+            "Drawing on the customer-facing skills built on the retail floor and the product management, logistics, and internal administration experience gained from running an import distributorship, I've been involved in building the systems that keep day-to-day operations running stably.",
+            "Currently, I handle a wide range of practical work essential to running a business — order processing, inventory management, logistics coordination, procurement, general affairs, HR-related tasks, and promotional material production.",
+            "In the launch of grounds Taiwan, I hope to contribute to building the foundation the brand needs to grow over the long term — store operations, back-office systems, talent development, and inventory management.",
         ],
         "experience_title": "Work Experience",
         "experience": [
@@ -489,11 +491,11 @@ LEADERSHIP = {
                 "duration": "~15 years",
                 "desc": "Involved in operating the Taiwan distributorship for an Italian tile brand, handling the full range of administrative work supporting the sales team.",
                 "groups": [
-                    ("Sales Administration & Order Processing", ["Domestic order management", "Purchase order creation", "Shipping arrangement", "Delivery schedule management", "Customer support"]),
+                    ("Order Processing & Sales Support", ["Domestic order management", "Purchase order creation", "Shipping arrangement", "Delivery schedule management", "Customer support"]),
                     ("Inventory & Logistics", ["Inventory management", "ERP system operation", "Inbound / outbound management", "Delivery schedule coordination", "Liaising with freight carriers", "Inventory data management"]),
                     ("Procurement & International Trade", ["Placing orders with Italian manufacturers", "Import schedule management", "Supplier communication", "Delivery confirmation"]),
-                    ("General Affairs & HR", ["Attendance management", "Payroll support", "Internal administration", "Internal document management"]),
-                    ("Brand Support", ["Product catalog production", "DM production", "Trade show material production", "Product material editing", "Presentation material production"]),
+                    ("General Affairs & HR Management", ["Attendance management", "Payroll support", "Internal document management", "Day-to-day general affairs"]),
+                    ("Brand & Promotional Support", ["Product catalog production", "DM production", "Trade show material production", "Product material editing", "Presentation material production"]),
                 ],
             },
             {
@@ -502,22 +504,21 @@ LEADERSHIP = {
                 "duration": "~10 years",
                 "desc": "Handled sales and customer service at department store brand counters.",
                 "groups": [
-                    ("Main Responsibilities", ["Customer service & sales", "Customer support", "Product management", "Visual merchandising", "Sales floor operations", "Repeat customer relations", "Maintaining brand image"]),
+                    ("Main Responsibilities", ["Customer service & sales", "Customer support", "Product management", "Visual merchandising", "Sales floor operations", "Customer relationship maintenance", "Brand image management"]),
                 ],
             },
         ],
         "value_title": "The Value I Can Bring to grounds Taiwan",
         "value": [
-            ("Retail Experience", "Through 10 years of department store sales experience, I learned first-hand how a brand is communicated to customers."),
-            ("Operational Experience", "Through 15 years of running an import distribution business, I supported the operational foundations of a company — product, logistics, inventory, and internal management."),
-            ("Brand Support", "I have also been involved in the communication work that conveys brand value, including producing product materials and promotional collateral."),
+            ("Retail Experience", "Through 10 years of department store sales experience, I learned first-hand, on the floor, how customers come to feel, understand, and ultimately trust a brand."),
+            ("Operational Experience", "Through 15 years of running an import distribution business, I built hands-on experience in product management, logistics, procurement, and internal operations that support how a company runs."),
+            ("Brand Support Experience", "Through producing product materials, promotional items, and catalogs, I have supported the communication work that conveys brand value."),
         ],
         "strengths_title": "Strengths",
         "strengths": [
-            ("Building Stable Operations", "Supported day-to-day operations by connecting sales, logistics, and administrative functions so the whole company could run smoothly."),
-            ("Hands-On Problem Solving", "Skilled at flexibly handling not just routine work but also sudden delivery changes or shipping issues, judging priorities as situations demand."),
-            ("Process Improvement", "Used ERP to organize inventory management and workflows, continuously improving operations."),
-            ("Brand Support", "Supported sales activities and brand communication through the production of catalogs and promotional materials."),
+            ("Building Stable Operations", "By connecting sales, logistics, and administrative functions, I've supported day-to-day operations so the whole company could run smoothly."),
+            ("Hands-On Problem Solving", "From delivery changes to logistics adjustments to sudden shifts in work, I've flexibly handled the problems that come up on the ground, judging priorities as needed."),
+            ("Process Improvement", "Using ERP and inventory management systems, I've worked on organizing and improving workflows."),
         ],
         "skills_title": "Skills",
         "skills": [
@@ -531,20 +532,24 @@ LEADERSHIP = {
         "qualifications": ["Class 1 driver's license (standard passenger vehicle)"],
         "closing_title": "What I Can Bring to grounds Taiwan",
         "closing": [
-            "I believe the most important thing in brand operations is keeping day-to-day operations running stably.",
+            "I believe one of the most important things in brand operations is keeping day-to-day operations running stably.",
             "For over 15 years, I have handled a wide range of work supporting company operations — order processing, inventory management, logistics, procurement, HR, general affairs, and promotional support.",
-            "At grounds Taiwan too, while respecting Japan HQ's brand concept, I hope to build a stable, long-term operational foundation in the Taiwan market — across store operations, back office, inventory, logistics, and administration — and contribute to the brand's growth.",
+            "At grounds Taiwan, while respecting Japan HQ's brand concept, I hope to contribute to building an operational foundation that lets the brand grow over the long term in the Taiwan market — across store operations, back-office systems, inventory management, and talent development.",
+        ],
+        "profile_info_title": "Profile Information",
+        "profile_info": [
+            ("Date of Birth", "January 7, 1982"),
+            ("Final Education", "High school graduate"),
         ],
     },
     "zh": {
         "title": "薛佶姈",
-        "basics": "1982年1月7日生　｜　最高學歷：高中畢業",
         "signature_role": "Taiwan Operations Candidate",
         "profile": [
-            "在百貨公司從事第一線接待與銷售工作約10年後，於義大利磁磚進口代理公司負責支援公司整體營運的後勤事務約15年。",
-            "目前與業務部門協同合作，廣泛負責訂單處理、庫存管理、物流調度、人事總務、採購、行銷文宣製作等日常營運工作。",
-            "累積了第一線的實務經驗，並參與建立支撐公司營運的制度。",
-            "希望能從 grounds Taiwan 的草創階段開始，參與建立門市營運、後勤體制、人才培育、庫存管理等能讓品牌長期成長的基礎建設。",
+            "在百貨公司從事第一線接待與銷售工作約10年後，於義大利磁磚進口代理公司負責支援公司整體營運的各項作業約15年。",
+            "運用在零售第一線累積的顧客應對能力，以及在代理商營運中培養的商品管理、物流、內部管理經驗，參與建立能讓日常業務穩定運作的機制。",
+            "目前廣泛負責訂單處理、庫存管理、物流調度、採購、總務、人事相關業務、行銷文宣製作等企業營運所需的各項實務。",
+            "在 grounds Taiwan 的草創階段，希望能參與建立門市營運、後勤體制、人才培育、庫存管理等讓品牌長期成長的基礎建設。",
         ],
         "experience_title": "職務經歷",
         "experience": [
@@ -554,11 +559,11 @@ LEADERSHIP = {
                 "duration": "約15年",
                 "desc": "參與義大利磁磚品牌在台代理營運，負責支援業務部門的各項管理工作。",
                 "groups": [
-                    ("業務行政・訂單管理", ["國內訂單管理", "訂購單製作", "出貨安排", "交期管理", "客戶應對"]),
+                    ("訂單處理與業務支援", ["國內訂單管理", "訂購單製作", "出貨安排", "交期管理", "客戶應對"]),
                     ("庫存管理・物流", ["庫存管理", "ERP系統操作", "進出貨管理", "配送排程協調", "與運輸公司聯繫", "庫存數據管理"]),
                     ("採購・國外交易", ["向義大利廠商下單", "進口排程管理", "供應商聯繫", "交期確認"]),
-                    ("總務・人事", ["出勤管理", "薪資計算協助", "內部行政事務", "內部資料管理"]),
-                    ("品牌支援", ["產品型錄製作", "DM製作", "展會資料製作", "產品資料編輯", "簡報資料製作"]),
+                    ("總務・人事管理", ["出勤管理", "薪資計算協助", "內部資料管理", "日常總務事務"]),
+                    ("品牌・行銷支援", ["產品型錄製作", "DM製作", "展會資料製作", "產品資料編輯", "簡報資料製作"]),
                 ],
             },
             {
@@ -567,22 +572,21 @@ LEADERSHIP = {
                 "duration": "約10年",
                 "desc": "於百貨公司品牌專櫃負責銷售與接待工作。",
                 "groups": [
-                    ("主要工作內容", ["接待銷售", "客戶應對", "商品管理", "商品陳列", "賣場營運", "熟客維繫", "維持品牌形象"]),
+                    ("主要工作內容", ["接待銷售", "客戶應對", "商品管理", "商品陳列", "賣場營運", "顧客關係維繫", "品牌形象管理"]),
                 ],
             },
         ],
         "value_title": "我能為 grounds Taiwan 帶來的價值",
         "value": [
-            ("Retail Experience", "透過10年百貨公司銷售經驗，在第一線學到品牌如何傳遞給顧客。"),
-            ("Operational Experience", "透過15年進口代理商的營運，支撐了企業營運的基礎——商品、物流、庫存、內部管理。"),
-            ("Brand Support", "也透過產品資料、行銷文宣製作等，參與傳遞品牌價值的溝通工作。"),
+            ("Retail Experience", "透過10年百貨公司銷售經驗，在第一線學到顧客如何感受品牌、理解品牌，進而建立信任。"),
+            ("Operational Experience", "透過15年進口代理商的營運，累積了商品管理、物流、採購、內部業務等支撐企業營運的實務經驗。"),
+            ("Brand Support Experience", "透過產品資料、行銷文宣、型錄製作等，支援傳遞品牌價值的溝通工作。"),
         ],
         "strengths_title": "強項",
         "strengths": [
-            ("建立穩定的營運機制", "扮演串連業務、物流、管理部門的角色，支撐公司整體業務順暢運作、支持每日營運。"),
-            ("實務應變能力", "不只是日常業務，面對突發的交期變更或配送問題也能靈活應對，依情況判斷優先順序推進工作。"),
-            ("業務流程改善", "運用 ERP 整理庫存管理與作業流程，持續進行營運改善。"),
-            ("品牌支援", "透過產品型錄、行銷文宣等製作，支援業務活動與品牌溝通。"),
+            ("建立穩定的營運機制", "串連業務、物流、管理部門，支撐公司整體業務順暢運作、支持每日營運。"),
+            ("實務應變能力", "面對交期變更、物流調整、突發業務變化等現場問題，能判斷優先順序並靈活應對。"),
+            ("業務流程改善", "運用 ERP 與庫存管理系統，致力於整理與優化作業流程。"),
         ],
         "skills_title": "技能",
         "skills": [
@@ -596,9 +600,14 @@ LEADERSHIP = {
         "qualifications": ["普通汽車駕照"],
         "closing_title": "能為 grounds Taiwan 帶來的經驗",
         "closing": [
-            "我認為品牌營運中最重要的，就是讓每天的營運都能穩定持續下去。",
+            "我認為品牌營運中最重要的一件事，就是讓每天的營運都能穩定持續下去。",
             "過去15年以上，我廣泛負責訂單處理、庫存管理、物流、採購、人事、總務、行銷支援等支撐公司營運的實務工作。",
-            "在 grounds Taiwan，我也希望在尊重日本總部品牌理念的前提下，建立門市營運、後勤、庫存管理、物流、行政體制等台灣市場長期穩定的營運基礎，為品牌成長做出貢獻。",
+            "在 grounds Taiwan，我也希望在尊重日本總部品牌理念的前提下，建立門市營運、後勤體制、庫存管理、人才培育等能讓品牌在台灣市場長期成長的營運基礎。",
+        ],
+        "profile_info_title": "Profile Information",
+        "profile_info": [
+            ("出生年月日", "1982年1月7日"),
+            ("最高學歷", "高中畢業"),
         ],
     },
 }
@@ -779,7 +788,7 @@ def render_delegation(dele):
 
 def render_leadership_section(lang):
     lp = LEADERSHIP[lang]
-    basics_html = f'<p class="lead-basics">{lp["basics"]}</p>' if lp.get("basics") else ""
+    role_pill_html = f'<p class="role-pill">{lp["signature_role"]}</p>' if lp.get("signature_role") else ""
     profile_html = "\n".join(f'    <p class="lead-profile-line">{p}</p>' for p in lp.get("profile", []))
 
     exp_blocks = []
@@ -832,10 +841,14 @@ def render_leadership_section(lang):
     )
     qual_items = "\n".join(f"      <li>{q}</li>" for q in lp.get("qualifications", []))
     closing_html = "\n".join(f'    <p>{p}</p>' for p in lp.get("closing", []))
+    profile_info_items = "".join(
+        f'<li><span class="lang-name">{label}</span><span class="lang-level">{value}</span></li>'
+        for label, value in lp.get("profile_info", [])
+    )
 
     return f'''  <section id="leadership" class="chapter reveal">
     <h2 class="chapter-title">{lp['title']}</h2>
-    {basics_html}
+    {role_pill_html}
 {profile_html}
 
     <p class="lead-subtitle">{lp['experience_title']}</p>
@@ -866,6 +879,9 @@ def render_leadership_section(lang):
 
     <p class="lead-subtitle">{lp['closing_title']}</p>
 {closing_html}
+
+    <p class="lead-subtitle">{lp['profile_info_title']}</p>
+    <ul class="lang-list">{profile_info_items}</ul>
 
     <div class="signature-card">
       <div class="avatar-placeholder" aria-hidden="true">薛</div>
@@ -1189,10 +1205,14 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.lead-basics{
-  font-size: 13px;
-  letter-spacing: 0.02em;
+.role-pill{
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
   color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 16px;
   margin: 0 0 24px;
 }
 .lead-profile-line{
