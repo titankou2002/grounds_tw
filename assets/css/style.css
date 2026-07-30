@@ -235,14 +235,37 @@ a{ color: inherit; }
   font-size: 13px;
   letter-spacing: 0.02em;
   color: var(--muted);
-  margin: 0 0 20px;
+  margin: 0 0 24px;
 }
-.lead-summary{
+.lead-profile-line{
   max-width: 640px;
   font-size: 16px;
   color: var(--muted);
-  margin: 0 0 24px;
+  margin: 0 0 14px;
 }
+.lead-subtitle{
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 48px 0 20px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.exp-block{ margin-bottom: 40px; }
+.exp-org{ font-family: var(--serif); font-size: 19px; margin: 0 0 4px; }
+.exp-meta{ font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.exp-desc{ font-size: 14.5px; color: var(--muted); max-width: 640px; margin: 0 0 20px; }
+.strength-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 28px;
+}
+.strength-desc{ font-size: 14px; color: var(--muted); margin: 0; }
+.lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lang-list li{ display: flex; gap: 16px; font-size: 14px; }
+.lang-name{ min-width: 90px; font-weight: 600; }
+.lang-level{ color: var(--muted); }
 .profile-page{
   margin: 0 auto;
   padding: 40px 32px 80px;

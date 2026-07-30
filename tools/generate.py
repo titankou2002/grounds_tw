@@ -407,72 +407,177 @@ OPEN_QUESTIONS = {
 
 LEADERSHIP = {
     "ja": {
-        "title": "薛佶姈（Hsueh Chi-Ling）",
-        "basics": "1982年1月7日生まれ　｜　高校卒業",
-        "summary": "小売現場から代理店運営まで、15年にわたるオペレーション経験。ブランドのローカライズ、在庫・物流管理、店舗運営、財務諸表分析を得意とする。単独での実務遂行力とチームを牽引するリーダーシップを併せ持ち、運転免許を保有し機動力も高い。",
-        "sections": [
-            ("タイル代理店 ― 運営管理｜15年", [
-                "数千 SKU に及ぶ在庫管理と物流スケジューリング",
-                "ERP／仕入販売在庫システムの導入と日常運用",
-                "売上レポート・財務諸表・損益分析による経営判断のサポート",
-                "カタログ・DM・販促物の制作とブランドサポート",
-                "サプライヤーとの折衝、調達・スケジュール調整",
-            ]),
-            ("小売現場での接客・販売｜10年", [
-                "店舗運営と顧客対応",
-                "商品陳列、販売転換、顧客関係の維持",
-            ]),
-            ("運営管理", ["在庫管理", "物流スケジューリング", "店舗運営"]),
-            ("財務分析", ["売上レポート", "財務諸表", "損益分析"]),
-            ("ブランドサポート", ["カタログ／DM 制作", "販促提案", "プレゼン資料"]),
-            ("システムツール", ["ERP", "仕入販売在庫システム", "Office"]),
-            ("その他", ["普通自動車運転免許を保有、機動力が高い"]),
+        "title": "薛 佶姈（Hsueh Chi-Ling）",
+        "basics": "1982年1月7日生まれ　｜　最終学歴：高等学校卒業",
+        "profile": [
+            "百貨店で約10年間、接客・販売業務に従事した後、イタリア製タイルの輸入販売会社にて約15年間、会社運営を支えるバックオフィス業務全般を担当してきました。",
+            "現在は、営業部門と連携しながら、受発注、在庫管理、物流手配、人事・総務、購買、販促資料作成など、日々のオペレーションを幅広く担当しています。",
+            "華やかな経歴ではありませんが、現場に寄り添いながら、会社が毎日安定して運営できる仕組みづくりと実務を積み重ねてきました。",
+            "今後はこれまで培ってきた小売業と企業運営の経験を活かし、grounds が台湾市場で長期的に成長できる運営基盤づくりに貢献したいと考えています。",
+        ],
+        "experience_title": "職務経歴",
+        "experience": [
+            {
+                "org": "イタリア製タイル輸入代理店",
+                "role": "Business Operations & Administration",
+                "duration": "約15年",
+                "desc": "台湾におけるイタリア製タイルブランド代理店の運営に携わり、営業部門を支える管理業務全般を担当。",
+                "groups": [
+                    ("営業事務・受発注管理", ["国内受注管理", "発注書作成", "出荷手配", "納期管理", "顧客対応"]),
+                    ("在庫管理・物流", ["在庫管理", "ERPシステム運用", "入出庫管理", "配送スケジュール調整", "運送会社との連携", "在庫データ管理"]),
+                    ("購買・海外取引", ["イタリアメーカーへの発注", "輸入スケジュール管理", "サプライヤーとの連絡", "納期確認"]),
+                    ("総務・人事", ["勤怠管理", "給与計算補助", "社内事務", "社内資料管理"]),
+                    ("ブランドサポート", ["商品カタログ制作", "DM制作", "展示会資料作成", "商品資料編集", "プレゼンテーション資料制作"]),
+                ],
+            },
+            {
+                "org": "百貨店ブランド販売スタッフ",
+                "role": "Retail Sales Professional",
+                "duration": "約10年",
+                "desc": "百貨店ブランドカウンターにて販売・接客業務を担当。",
+                "groups": [
+                    ("主な担当業務", ["接客販売", "顧客対応", "商品管理", "商品ディスプレイ", "売場運営", "リピーター顧客対応", "ブランドイメージ維持"]),
+                ],
+            },
+        ],
+        "strengths_title": "強み",
+        "strengths": [
+            ("安定したオペレーション構築", "会社全体の業務が円滑に進むよう、営業・物流・管理部門をつなぐ役割を担い、日々の運営を支えてきました。"),
+            ("実務対応力", "日常業務だけではなく、急な納期変更や配送トラブルなどにも柔軟に対応し、状況に応じて優先順位を判断しながら業務を進めることを得意としています。"),
+            ("業務改善", "ERPを活用した在庫管理や業務フローの整理を行い、継続的な業務改善にも取り組んできました。"),
+            ("ブランドサポート", "商品カタログや販促物などの制作を通じて、営業活動やブランドコミュニケーションを支援してきました。"),
+        ],
+        "skills_title": "スキル",
+        "skills": [
+            ("Business Operations", ["受発注管理", "在庫管理", "物流管理", "購買管理", "総務", "人事事務", "営業サポート"]),
+            ("System", ["ERP", "在庫管理システム", "Microsoft Office"]),
+            ("Design", ["Adobe Illustrator", "Canva", "商品カタログ制作", "DM制作", "プレゼンテーション資料制作"]),
+        ],
+        "languages_title": "語学",
+        "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎レベル")],
+        "qualifications_title": "資格",
+        "qualifications": ["普通自動車第一種運転免許"],
+        "closing_title": "grounds Taiwanで活かせる経験",
+        "closing": [
+            "私はブランド運営において最も重要なのは、「毎日のオペレーションを安定して継続すること」だと考えています。",
+            "これまで15年以上にわたり、受発注、在庫管理、物流、購買、人事、総務、販促支援など、会社運営を支える実務を幅広く担当してきました。",
+            "grounds Taiwan においても、日本本社のブランドコンセプトを尊重しながら、店舗運営、バックオフィス、在庫管理、物流、事務体制など、台湾市場で長期的に安定した運営基盤を築き、ブランドの成長に貢献したいと考えています。",
         ],
     },
     "en": {
         "title": "Hsueh Chi-Ling (薛佶姈)",
-        "basics": "Born January 7, 1982　|　High School Graduate",
-        "summary": "15+ years of operations experience spanning retail front-line and brand distribution. Skilled in brand localization, inventory & logistics management, store operations, and financial statement analysis. An independent operator with team leadership ability, holding a valid driver's license for high operational mobility.",
-        "sections": [
-            ("Tile Distributor — Operations Management | 15 Years", [
-                "Inventory management and logistics scheduling across thousands of SKUs",
-                "ERP / inventory management system implementation and daily operation",
-                "Sales reports, financial statements, and P&L analysis to support management decisions",
-                "Catalog, DM, and promotional material production, and brand support",
-                "Supplier communication, procurement, and scheduling coordination",
-            ]),
-            ("Retail Front-Line Sales | 10 Years", [
-                "Store operations and customer service",
-                "Visual merchandising, sales conversion, and client relationship management",
-            ]),
-            ("Operations", ["Inventory management", "Logistics scheduling", "Store operations"]),
-            ("Financial Analysis", ["Sales reports", "Financial statements", "P&L analysis"]),
-            ("Brand Support", ["Catalog / DM production", "Promotional proposals", "Presentations"]),
-            ("Systems", ["ERP", "Inventory management systems", "Office Suite"]),
-            ("Other", ["Valid driver's license, high mobility"]),
+        "basics": "Born January 7, 1982　|　Final education: High school graduate",
+        "profile": [
+            "After about 10 years in customer service and sales at department stores, I spent roughly 15 years handling back-office operations supporting the overall management of an Italian tile import and distribution company.",
+            "Currently, working alongside the sales team, I handle a wide range of daily operations — order processing, inventory management, logistics coordination, HR & general affairs, procurement, and promotional material production.",
+            "It isn't a flashy career, but by staying close to the day-to-day work, I've built the systems and practices that let a company run stably, every day.",
+            "Going forward, I hope to draw on this experience in retail and business operations to help build the operational foundation for grounds' long-term growth in the Taiwan market.",
+        ],
+        "experience_title": "Work Experience",
+        "experience": [
+            {
+                "org": "Italian Tile Import Distributor",
+                "role": "Business Operations & Administration",
+                "duration": "~15 years",
+                "desc": "Involved in operating the Taiwan distributorship for an Italian tile brand, handling the full range of administrative work supporting the sales team.",
+                "groups": [
+                    ("Sales Administration & Order Processing", ["Domestic order management", "Purchase order creation", "Shipping arrangement", "Delivery schedule management", "Customer support"]),
+                    ("Inventory & Logistics", ["Inventory management", "ERP system operation", "Inbound / outbound management", "Delivery schedule coordination", "Liaising with freight carriers", "Inventory data management"]),
+                    ("Procurement & International Trade", ["Placing orders with Italian manufacturers", "Import schedule management", "Supplier communication", "Delivery confirmation"]),
+                    ("General Affairs & HR", ["Attendance management", "Payroll support", "Internal administration", "Internal document management"]),
+                    ("Brand Support", ["Product catalog production", "DM production", "Trade show material production", "Product material editing", "Presentation material production"]),
+                ],
+            },
+            {
+                "org": "Department Store Brand Sales Staff",
+                "role": "Retail Sales Professional",
+                "duration": "~10 years",
+                "desc": "Handled sales and customer service at department store brand counters.",
+                "groups": [
+                    ("Main Responsibilities", ["Customer service & sales", "Customer support", "Product management", "Visual merchandising", "Sales floor operations", "Repeat customer relations", "Maintaining brand image"]),
+                ],
+            },
+        ],
+        "strengths_title": "Strengths",
+        "strengths": [
+            ("Building Stable Operations", "Supported day-to-day operations by connecting sales, logistics, and administrative functions so the whole company could run smoothly."),
+            ("Hands-On Problem Solving", "Skilled at flexibly handling not just routine work but also sudden delivery changes or shipping issues, judging priorities as situations demand."),
+            ("Process Improvement", "Used ERP to organize inventory management and workflows, continuously improving operations."),
+            ("Brand Support", "Supported sales activities and brand communication through the production of catalogs and promotional materials."),
+        ],
+        "skills_title": "Skills",
+        "skills": [
+            ("Business Operations", ["Order processing", "Inventory management", "Logistics management", "Procurement management", "General affairs", "HR administration", "Sales support"]),
+            ("System", ["ERP", "Inventory management systems", "Microsoft Office"]),
+            ("Design", ["Adobe Illustrator", "Canva", "Product catalog production", "DM production", "Presentation material production"]),
+        ],
+        "languages_title": "Languages",
+        "languages": [("Chinese", "Native"), ("Japanese", "Currently learning"), ("English", "Basic")],
+        "qualifications_title": "Qualifications",
+        "qualifications": ["Class 1 driver's license (standard passenger vehicle)"],
+        "closing_title": "What I Can Bring to grounds Taiwan",
+        "closing": [
+            "I believe the most important thing in brand operations is keeping day-to-day operations running stably.",
+            "For over 15 years, I have handled a wide range of work supporting company operations — order processing, inventory management, logistics, procurement, HR, general affairs, and promotional support.",
+            "At grounds Taiwan too, while respecting Japan HQ's brand concept, I hope to build a stable, long-term operational foundation in the Taiwan market — across store operations, back office, inventory, logistics, and administration — and contribute to the brand's growth.",
         ],
     },
     "zh": {
         "title": "薛佶姈",
-        "basics": "1982年1月7日生　｜　高中畢業",
-        "summary": "15 年營運管理經驗，橫跨第一線零售與代理商營運。擅長品牌落地、庫存物流、門市管理、財務報表分析。具備獨立作業與團隊領導能力，可自行駕駛，移動與物流調度彈性高。",
-        "sections": [
-            ("磁磚代理商 — 營運管理｜15 年", [
-                "庫存管理與物流排程，控管數千品項 SKU",
-                "ERP / 進銷存系統導入與日常操作",
-                "銷售報表分析、財報分析、損益表分析，提供管理決策依據",
-                "產品型錄、DM、廣告文宣製作與品牌支援",
-                "供應商溝通、採購與排程協調",
-            ]),
-            ("零售第一線銷售｜10 年", [
-                "門市營運與顧客服務",
-                "商品陳列、銷售轉換、客戶關係維護",
-            ]),
-            ("營運管理", ["庫存管理", "物流排程", "門市營運"]),
-            ("財務分析", ["銷售報表", "財報", "損益表分析"]),
-            ("品牌支援", ["型錄 / DM 製作", "文宣提案", "簡報"]),
-            ("系統工具", ["ERP", "進銷存", "Office"]),
-            ("其他", ["具備汽車駕駛能力，移動彈性高"]),
+        "basics": "1982年1月7日生　｜　最高學歷：高中畢業",
+        "profile": [
+            "在百貨公司從事第一線接待與銷售工作約10年後，於義大利磁磚進口代理公司負責支援公司整體營運的後勤事務約15年。",
+            "目前與業務部門協同合作，廣泛負責訂單處理、庫存管理、物流調度、人事總務、採購、行銷文宣製作等日常營運工作。",
+            "雖然不是華麗的經歷，但我一直貼近第一線，累積建立公司穩定營運機制的實務經驗。",
+            "未來希望運用過去在零售業與企業營運上累積的經驗，為 grounds 在台灣市場長期成長的營運基礎盡一份心力。",
+        ],
+        "experience_title": "職務經歷",
+        "experience": [
+            {
+                "org": "義大利磁磚進口代理商",
+                "role": "Business Operations & Administration",
+                "duration": "約15年",
+                "desc": "參與義大利磁磚品牌在台代理營運，負責支援業務部門的各項管理工作。",
+                "groups": [
+                    ("業務行政・訂單管理", ["國內訂單管理", "訂購單製作", "出貨安排", "交期管理", "客戶應對"]),
+                    ("庫存管理・物流", ["庫存管理", "ERP系統操作", "進出貨管理", "配送排程協調", "與運輸公司聯繫", "庫存數據管理"]),
+                    ("採購・國外交易", ["向義大利廠商下單", "進口排程管理", "供應商聯繫", "交期確認"]),
+                    ("總務・人事", ["出勤管理", "薪資計算協助", "內部行政事務", "內部資料管理"]),
+                    ("品牌支援", ["產品型錄製作", "DM製作", "展會資料製作", "產品資料編輯", "簡報資料製作"]),
+                ],
+            },
+            {
+                "org": "百貨公司品牌銷售人員",
+                "role": "Retail Sales Professional",
+                "duration": "約10年",
+                "desc": "於百貨公司品牌專櫃負責銷售與接待工作。",
+                "groups": [
+                    ("主要工作內容", ["接待銷售", "客戶應對", "商品管理", "商品陳列", "賣場營運", "熟客維繫", "維持品牌形象"]),
+                ],
+            },
+        ],
+        "strengths_title": "強項",
+        "strengths": [
+            ("建立穩定的營運機制", "扮演串連業務、物流、管理部門的角色，支撐公司整體業務順暢運作、支持每日營運。"),
+            ("實務應變能力", "不只是日常業務，面對突發的交期變更或配送問題也能靈活應對，依情況判斷優先順序推進工作。"),
+            ("業務流程改善", "運用 ERP 整理庫存管理與作業流程，持續進行營運改善。"),
+            ("品牌支援", "透過產品型錄、行銷文宣等製作，支援業務活動與品牌溝通。"),
+        ],
+        "skills_title": "技能",
+        "skills": [
+            ("Business Operations", ["訂單管理", "庫存管理", "物流管理", "採購管理", "總務", "人事事務", "業務支援"]),
+            ("System", ["ERP", "庫存管理系統", "Microsoft Office"]),
+            ("Design", ["Adobe Illustrator", "Canva", "產品型錄製作", "DM製作", "簡報資料製作"]),
+        ],
+        "languages_title": "語言能力",
+        "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
+        "qualifications_title": "證照",
+        "qualifications": ["普通汽車駕照"],
+        "closing_title": "能為 grounds Taiwan 帶來的經驗",
+        "closing": [
+            "我認為品牌營運中最重要的，就是讓每天的營運都能穩定持續下去。",
+            "過去15年以上，我廣泛負責訂單處理、庫存管理、物流、採購、人事、總務、行銷支援等支撐公司營運的實務工作。",
+            "在 grounds Taiwan，我也希望在尊重日本總部品牌理念的前提下，建立門市營運、後勤、庫存管理、物流、行政體制等台灣市場長期穩定的營運基礎，為品牌成長做出貢獻。",
         ],
     },
 }
@@ -654,23 +759,80 @@ def render_delegation(dele):
 def render_leadership_section(lang):
     lp = LEADERSHIP[lang]
     basics_html = f'<p class="lead-basics">{lp["basics"]}</p>' if lp.get("basics") else ""
-    summary_html = f'<p class="lead-summary">{lp["summary"]}</p>' if lp.get("summary") else ""
-    lead_sections = []
-    for name, items in lp["sections"]:
+    profile_html = "\n".join(f'    <p class="lead-profile-line">{p}</p>' for p in lp.get("profile", []))
+
+    exp_blocks = []
+    for job in lp.get("experience", []):
+        job_groups = []
+        for name, items in job["groups"]:
+            items_html = "\n".join(f"          <li>{i}</li>" for i in items)
+            job_groups.append(f'''      <div class="lead-group">
+        <p class="lead-group-title">{name}</p>
+        <ul class="bullet-grid compact">
+{items_html}
+        </ul>
+      </div>''')
+        exp_blocks.append(f'''    <div class="exp-block">
+      <p class="exp-org">{job['org']}</p>
+      <p class="exp-meta">{job['role']} ｜ {job['duration']}</p>
+      <p class="exp-desc">{job['desc']}</p>
+      <div class="lead-grid">
+{"".join(job_groups)}
+      </div>
+    </div>''')
+
+    strength_blocks = "".join(
+        f'''    <div class="strength-item">
+      <p class="lead-group-title">{title}</p>
+      <p class="strength-desc">{desc}</p>
+    </div>''' for title, desc in lp.get("strengths", [])
+    )
+
+    skill_blocks = []
+    for name, items in lp.get("skills", []):
         items_html = "\n".join(f"        <li>{i}</li>" for i in items)
-        lead_sections.append(f'''    <div class="lead-group">
+        skill_blocks.append(f'''    <div class="lead-group">
       <p class="lead-group-title">{name}</p>
       <ul class="bullet-grid compact">
 {items_html}
       </ul>
     </div>''')
+
+    lang_items = "".join(
+        f'<li><span class="lang-name">{name}</span><span class="lang-level">{level}</span></li>'
+        for name, level in lp.get("languages", [])
+    )
+    qual_items = "\n".join(f"      <li>{q}</li>" for q in lp.get("qualifications", []))
+    closing_html = "\n".join(f'    <p>{p}</p>' for p in lp.get("closing", []))
+
     return f'''  <section id="leadership" class="chapter reveal">
     <h2 class="chapter-title">{lp['title']}</h2>
     {basics_html}
-    {summary_html}
-    <div class="lead-grid">
-{"".join(lead_sections)}
+{profile_html}
+
+    <p class="lead-subtitle">{lp['experience_title']}</p>
+{"".join(exp_blocks)}
+
+    <p class="lead-subtitle">{lp['strengths_title']}</p>
+    <div class="strength-grid">
+{strength_blocks}
     </div>
+
+    <p class="lead-subtitle">{lp['skills_title']}</p>
+    <div class="lead-grid">
+{"".join(skill_blocks)}
+    </div>
+
+    <p class="lead-subtitle">{lp['languages_title']}</p>
+    <ul class="lang-list">{lang_items}</ul>
+
+    <p class="lead-subtitle">{lp['qualifications_title']}</p>
+    <ul class="bullet-grid compact">
+{qual_items}
+    </ul>
+
+    <p class="lead-subtitle">{lp['closing_title']}</p>
+{closing_html}
   </section>'''
 
 
@@ -990,14 +1152,37 @@ a{ color: inherit; }
   font-size: 13px;
   letter-spacing: 0.02em;
   color: var(--muted);
-  margin: 0 0 20px;
+  margin: 0 0 24px;
 }
-.lead-summary{
+.lead-profile-line{
   max-width: 640px;
   font-size: 16px;
   color: var(--muted);
-  margin: 0 0 24px;
+  margin: 0 0 14px;
 }
+.lead-subtitle{
+  font-size: 12px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 48px 0 20px;
+  padding-top: 24px;
+  border-top: 1px solid var(--line);
+}
+.exp-block{ margin-bottom: 40px; }
+.exp-org{ font-family: var(--serif); font-size: 19px; margin: 0 0 4px; }
+.exp-meta{ font-size: 13px; color: var(--muted); margin: 0 0 12px; }
+.exp-desc{ font-size: 14.5px; color: var(--muted); max-width: 640px; margin: 0 0 20px; }
+.strength-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 28px;
+}
+.strength-desc{ font-size: 14px; color: var(--muted); margin: 0; }
+.lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
+.lang-list li{ display: flex; gap: 16px; font-size: 14px; }
+.lang-name{ min-width: 90px; font-weight: 600; }
+.lang-level{ color: var(--muted); }
 .profile-page{
   margin: 0 auto;
   padding: 40px 32px 80px;
