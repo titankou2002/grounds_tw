@@ -26,7 +26,7 @@ SITE = {
         "nav_blueprint": "ブループリント",
         "enter": "Proposalへ進む",
         "explore": "ブループリントを見る",
-        "hero_line": "本気で、夢を実現する。",
+        "hero_line": "ブランドを理解し、運営で育てる。",
         "footer_note": "Version 0.1 — Living Document. 内容は継続的に更新されます。",
         "toc_title": "目次",
         "back_top": "トップへ戻る",
@@ -38,7 +38,7 @@ SITE = {
         "nav_blueprint": "Blueprint",
         "enter": "Enter Proposal",
         "explore": "View the Blueprint",
-        "hero_line": "Committed to making the dream real.",
+        "hero_line": "Understanding the Brand, Building the Operation.",
         "footer_note": "Version 0.1 — Living Document. Content is continuously updated.",
         "toc_title": "Table of Contents",
         "back_top": "Back to top",
@@ -50,7 +50,7 @@ SITE = {
         "nav_blueprint": "藍圖",
         "enter": "進入 Proposal",
         "explore": "查看 Blueprint",
-        "hero_line": "認真實現夢想。",
+        "hero_line": "理解品牌，用營運滋養它。",
         "footer_note": "Version 0.1 — Living Document，內容將持續更新。",
         "toc_title": "目錄",
         "back_top": "回到頂端",
@@ -409,11 +409,12 @@ LEADERSHIP = {
     "ja": {
         "title": "薛 佶姈（Hsueh Chi-Ling）",
         "basics": "1982年1月7日生まれ　｜　最終学歴：高等学校卒業",
+        "signature_role": "Taiwan Operations Candidate",
         "profile": [
             "百貨店で約10年間、接客・販売業務に従事した後、イタリア製タイルの輸入販売会社にて約15年間、会社運営を支えるバックオフィス業務全般を担当してきました。",
             "現在は、営業部門と連携しながら、受発注、在庫管理、物流手配、人事・総務、購買、販促資料作成など、日々のオペレーションを幅広く担当しています。",
-            "華やかな経歴ではありませんが、現場に寄り添いながら、会社が毎日安定して運営できる仕組みづくりと実務を積み重ねてきました。",
-            "今後はこれまで培ってきた小売業と企業運営の経験を活かし、grounds が台湾市場で長期的に成長できる運営基盤づくりに貢献したいと考えています。",
+            "現場での実務経験を積み重ね、会社運営を支える仕組みづくりに携わってきました。",
+            "grounds Taiwanの立ち上げ段階から、店舗運営、バックオフィス体制、人材育成、在庫管理など、ブランドを長期的に成長させるための基盤づくりに貢献したいと考えています。",
         ],
         "experience_title": "職務経歴",
         "experience": [
@@ -440,6 +441,12 @@ LEADERSHIP = {
                 ],
             },
         ],
+        "value_title": "私が grounds Taiwan に提供できる価値",
+        "value": [
+            ("Retail Experience", "10年間の百貨店販売経験を通じて、ブランドがお客様にどのように伝わるかを現場で学びました。"),
+            ("Operational Experience", "15年間、輸入代理店の運営を通じて、商品・物流・在庫・社内管理など、企業運営の基盤を支えてきました。"),
+            ("Brand Support", "商品資料、販促物制作など、ブランド価値を伝えるためのコミュニケーションにも携わってきました。"),
+        ],
         "strengths_title": "強み",
         "strengths": [
             ("安定したオペレーション構築", "会社全体の業務が円滑に進むよう、営業・物流・管理部門をつなぐ役割を担い、日々の運営を支えてきました。"),
@@ -454,7 +461,7 @@ LEADERSHIP = {
             ("Design", ["Adobe Illustrator", "Canva", "商品カタログ制作", "DM制作", "プレゼンテーション資料制作"]),
         ],
         "languages_title": "語学",
-        "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎レベル")],
+        "languages": [("中国語", "ネイティブ"), ("日本語", "現在学習中（継続的に向上中）"), ("英語", "基礎レベル")],
         "qualifications_title": "資格",
         "qualifications": ["普通自動車第一種運転免許"],
         "closing_title": "grounds Taiwanで活かせる経験",
@@ -467,11 +474,12 @@ LEADERSHIP = {
     "en": {
         "title": "Hsueh Chi-Ling (薛佶姈)",
         "basics": "Born January 7, 1982　|　Final education: High school graduate",
+        "signature_role": "Taiwan Operations Candidate",
         "profile": [
             "After about 10 years in customer service and sales at department stores, I spent roughly 15 years handling back-office operations supporting the overall management of an Italian tile import and distribution company.",
             "Currently, working alongside the sales team, I handle a wide range of daily operations — order processing, inventory management, logistics coordination, HR & general affairs, procurement, and promotional material production.",
-            "It isn't a flashy career, but by staying close to the day-to-day work, I've built the systems and practices that let a company run stably, every day.",
-            "Going forward, I hope to draw on this experience in retail and business operations to help build the operational foundation for grounds' long-term growth in the Taiwan market.",
+            "I have built up hands-on, front-line experience, and have been involved in building the systems that support how a company is run.",
+            "From the very launch stage of grounds Taiwan, I hope to contribute to building the foundation the brand needs to grow over the long term — store operations, back-office systems, talent development, and inventory management.",
         ],
         "experience_title": "Work Experience",
         "experience": [
@@ -498,6 +506,12 @@ LEADERSHIP = {
                 ],
             },
         ],
+        "value_title": "The Value I Can Bring to grounds Taiwan",
+        "value": [
+            ("Retail Experience", "Through 10 years of department store sales experience, I learned first-hand how a brand is communicated to customers."),
+            ("Operational Experience", "Through 15 years of running an import distribution business, I supported the operational foundations of a company — product, logistics, inventory, and internal management."),
+            ("Brand Support", "I have also been involved in the communication work that conveys brand value, including producing product materials and promotional collateral."),
+        ],
         "strengths_title": "Strengths",
         "strengths": [
             ("Building Stable Operations", "Supported day-to-day operations by connecting sales, logistics, and administrative functions so the whole company could run smoothly."),
@@ -512,7 +526,7 @@ LEADERSHIP = {
             ("Design", ["Adobe Illustrator", "Canva", "Product catalog production", "DM production", "Presentation material production"]),
         ],
         "languages_title": "Languages",
-        "languages": [("Chinese", "Native"), ("Japanese", "Currently learning"), ("English", "Basic")],
+        "languages": [("Chinese", "Native"), ("Japanese", "Currently learning (steadily improving)"), ("English", "Basic")],
         "qualifications_title": "Qualifications",
         "qualifications": ["Class 1 driver's license (standard passenger vehicle)"],
         "closing_title": "What I Can Bring to grounds Taiwan",
@@ -525,11 +539,12 @@ LEADERSHIP = {
     "zh": {
         "title": "薛佶姈",
         "basics": "1982年1月7日生　｜　最高學歷：高中畢業",
+        "signature_role": "Taiwan Operations Candidate",
         "profile": [
             "在百貨公司從事第一線接待與銷售工作約10年後，於義大利磁磚進口代理公司負責支援公司整體營運的後勤事務約15年。",
             "目前與業務部門協同合作，廣泛負責訂單處理、庫存管理、物流調度、人事總務、採購、行銷文宣製作等日常營運工作。",
-            "雖然不是華麗的經歷，但我一直貼近第一線，累積建立公司穩定營運機制的實務經驗。",
-            "未來希望運用過去在零售業與企業營運上累積的經驗，為 grounds 在台灣市場長期成長的營運基礎盡一份心力。",
+            "累積了第一線的實務經驗，並參與建立支撐公司營運的制度。",
+            "希望能從 grounds Taiwan 的草創階段開始，參與建立門市營運、後勤體制、人才培育、庫存管理等能讓品牌長期成長的基礎建設。",
         ],
         "experience_title": "職務經歷",
         "experience": [
@@ -556,6 +571,12 @@ LEADERSHIP = {
                 ],
             },
         ],
+        "value_title": "我能為 grounds Taiwan 帶來的價值",
+        "value": [
+            ("Retail Experience", "透過10年百貨公司銷售經驗，在第一線學到品牌如何傳遞給顧客。"),
+            ("Operational Experience", "透過15年進口代理商的營運，支撐了企業營運的基礎——商品、物流、庫存、內部管理。"),
+            ("Brand Support", "也透過產品資料、行銷文宣製作等，參與傳遞品牌價值的溝通工作。"),
+        ],
         "strengths_title": "強項",
         "strengths": [
             ("建立穩定的營運機制", "扮演串連業務、物流、管理部門的角色，支撐公司整體業務順暢運作、支持每日營運。"),
@@ -570,7 +591,7 @@ LEADERSHIP = {
             ("Design", ["Adobe Illustrator", "Canva", "產品型錄製作", "DM製作", "簡報資料製作"]),
         ],
         "languages_title": "語言能力",
-        "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
+        "languages": [("中文", "母語"), ("日文", "持續學習中（穩定進步）"), ("英文", "基礎")],
         "qualifications_title": "證照",
         "qualifications": ["普通汽車駕照"],
         "closing_title": "能為 grounds Taiwan 帶來的經驗",
@@ -781,6 +802,13 @@ def render_leadership_section(lang):
       </div>
     </div>''')
 
+    value_blocks = "".join(
+        f'''    <div class="strength-item">
+      <p class="lead-group-title">{title}</p>
+      <p class="strength-desc">{desc}</p>
+    </div>''' for title, desc in lp.get("value", [])
+    )
+
     strength_blocks = "".join(
         f'''    <div class="strength-item">
       <p class="lead-group-title">{title}</p>
@@ -813,6 +841,11 @@ def render_leadership_section(lang):
     <p class="lead-subtitle">{lp['experience_title']}</p>
 {"".join(exp_blocks)}
 
+    <p class="lead-subtitle">{lp['value_title']}</p>
+    <div class="strength-grid">
+{value_blocks}
+    </div>
+
     <p class="lead-subtitle">{lp['strengths_title']}</p>
     <div class="strength-grid">
 {strength_blocks}
@@ -833,6 +866,14 @@ def render_leadership_section(lang):
 
     <p class="lead-subtitle">{lp['closing_title']}</p>
 {closing_html}
+
+    <div class="signature-card">
+      <div class="avatar-placeholder" aria-hidden="true">薛</div>
+      <div class="signature-info">
+        <p class="signature-name">{lp['title']}</p>
+        <p class="signature-role">{lp['signature_role']}</p>
+      </div>
+    </div>
   </section>'''
 
 
@@ -1183,6 +1224,29 @@ a{ color: inherit; }
 .lang-list li{ display: flex; gap: 16px; font-size: 14px; }
 .lang-name{ min-width: 90px; font-weight: 600; }
 .lang-level{ color: var(--muted); }
+.signature-card{
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 48px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+}
+.avatar-placeholder{
+  flex: none;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--serif);
+  font-size: 22px;
+  color: var(--muted);
+}
+.signature-name{ font-size: 15px; margin: 0 0 2px; }
+.signature-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
 .profile-page{
   margin: 0 auto;
   padding: 40px 32px 80px;
