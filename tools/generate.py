@@ -20,7 +20,7 @@ LANG_LABEL = {"ja": "日本語", "en": "English", "zh": "中文"}
 
 SITE = {
     "ja": {
-        "title": "grounds Taiwan Launch Blueprint",
+        "title": "夢想者",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "ホーム",
         "nav_blueprint": "ブループリント",
@@ -32,7 +32,7 @@ SITE = {
         "back_top": "トップへ戻る",
     },
     "en": {
-        "title": "grounds Taiwan Launch Blueprint",
+        "title": "Dreamer",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "Home",
         "nav_blueprint": "Blueprint",
@@ -44,7 +44,7 @@ SITE = {
         "back_top": "Back to top",
     },
     "zh": {
-        "title": "grounds Taiwan Launch Blueprint",
+        "title": "夢想者",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "首頁",
         "nav_blueprint": "藍圖",
