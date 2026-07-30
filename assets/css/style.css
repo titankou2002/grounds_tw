@@ -1,0 +1,276 @@
+/* grounds Taiwan Launch Blueprint — design system
+   Japanese-first, minimal, white space, typography-driven, editorial, calm, premium. */
+
+:root{
+  --bg: #fdfdfc;
+  --fg: #14140f;
+  --muted: #6b6b62;
+  --line: #e4e2da;
+  --accent: #14140f;
+  --callout-bg: #f4f3ee;
+  --serif: "Georgia", "Noto Serif JP", "Noto Serif TC", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Hiragino Kaku Gothic ProN", "Noto Sans JP", "Noto Sans TC", sans-serif;
+  --max-w: 880px;
+}
+
+@media (prefers-color-scheme: dark){
+  :root{
+    --bg: #111110;
+    --fg: #ece9e2;
+    --muted: #9a978d;
+    --line: #2a2a26;
+    --accent: #ece9e2;
+    --callout-bg: #1a1a17;
+  }
+}
+
+*{ box-sizing: border-box; }
+html{ scroll-behavior: smooth; }
+body{
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--sans);
+  line-height: 1.75;
+  -webkit-font-smoothing: antialiased;
+}
+
+a{ color: inherit; }
+
+/* Nav */
+.site-nav{
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 18px 32px;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.wordmark{
+  font-family: var(--serif);
+  font-size: 15px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  text-decoration: none;
+}
+.nav-links{ display: flex; gap: 20px; font-size: 13px; }
+.nav-links a{ text-decoration: none; color: var(--muted); padding-bottom: 2px; }
+.nav-links a.active{ color: var(--fg); border-bottom: 1px solid var(--fg); }
+.lang-switch{ display: flex; gap: 12px; font-size: 12px; }
+.lang-link{ text-decoration: none; color: var(--muted); }
+.lang-link.current{ color: var(--fg); font-weight: 600; }
+
+/* Hero */
+.hero{
+  min-height: calc(100vh - 60px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 40px 24px;
+}
+.hero-inner{ max-width: 720px; }
+.hero-eyebrow{
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 28px;
+}
+.hero-line{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(28px, 4.4vw, 44px);
+  line-height: 1.45;
+  margin: 0;
+}
+.hero-line-2{ color: var(--muted); }
+.hero-sub{
+  margin-top: 28px;
+  font-size: 14px;
+  color: var(--muted);
+  letter-spacing: 0.02em;
+}
+.cta{
+  display: inline-block;
+  margin-top: 44px;
+  padding: 14px 32px;
+  border: 1px solid var(--fg);
+  border-radius: 999px;
+  text-decoration: none;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+.cta:hover{ background: var(--fg); color: var(--bg); }
+.scroll-cue{
+  margin-top: 60px;
+  color: var(--muted);
+  animation: bob 2.2s ease-in-out infinite;
+}
+@keyframes bob{
+  0%,100%{ transform: translateY(0); }
+  50%{ transform: translateY(8px); }
+}
+
+/* Blueprint layout */
+.blueprint-layout{
+  display: grid;
+  grid-template-columns: 220px minmax(0, 1fr);
+  gap: 48px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 32px 120px;
+}
+.toc{
+  position: sticky;
+  top: 76px;
+  align-self: start;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 12.5px;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+.toc-title{
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+.toc a{
+  text-decoration: none;
+  color: var(--muted);
+  padding: 2px 0;
+}
+.toc a:hover{ color: var(--fg); }
+
+.blueprint-content{ max-width: var(--max-w); }
+.chapter{
+  padding: 56px 0;
+  border-bottom: 1px solid var(--line);
+}
+.chapter:last-child{ border-bottom: none; }
+.chapter-num{
+  font-family: var(--serif);
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.1em;
+  margin: 0 0 8px;
+}
+.chapter-title{
+  font-family: var(--serif);
+  font-weight: 400;
+  font-size: clamp(24px, 3vw, 32px);
+  margin: 0 0 20px;
+}
+.intent-line{
+  font-size: 16px;
+  color: var(--muted);
+  margin: 0 0 6px;
+}
+
+.bullet-grid{
+  list-style: none;
+  margin: 24px 0 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 10px 24px;
+}
+.bullet-grid.compact{ grid-template-columns: 1fr; gap: 6px; }
+.bullet-grid li{
+  font-size: 14.5px;
+  padding: 8px 0;
+  border-bottom: 1px dotted var(--line);
+}
+
+.callout{
+  margin-top: 32px;
+  padding: 24px 28px;
+  background: var(--callout-bg);
+  border-radius: 4px;
+}
+.callout p{ margin: 0 0 4px; font-size: 14.5px; }
+.callout-title{
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 12px !important;
+}
+
+.two-col{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 12px;
+}
+.col-title{ font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+.col ul{ margin: 0; padding-left: 18px; font-size: 14px; color: var(--muted); }
+.col li{ margin-bottom: 4px; }
+
+.matrix{ margin-top: 32px; }
+.matrix-desc{ color: var(--muted); font-size: 14px; margin: 0 0 14px; }
+.matrix-table{ width: 100%; border-collapse: collapse; font-size: 14px; }
+.matrix-table td{ padding: 10px 12px; border: 1px solid var(--line); }
+
+.oq-grid{
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 28px;
+}
+.oq-group-title{ font-weight: 600; font-size: 13px; margin: 0 0 8px; }
+.oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
+.oq-group li{ margin-bottom: 6px; }
+
+.role-tag{
+  display: inline-block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 6px 16px;
+  margin-bottom: 32px;
+}
+.lead-grid{
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0,1fr));
+  gap: 32px;
+}
+.lead-group-title{ font-weight: 600; font-size: 13.5px; margin-bottom: 10px; }
+
+.closing p{ font-size: 16px; margin: 0 0 10px; }
+.closing .chapter-title{ margin-bottom: 28px; }
+
+.site-footer{
+  text-align: center;
+  padding: 40px 24px 60px;
+  color: var(--muted);
+  font-size: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* Content is always visible (opacity never hidden) — only a subtle slide-up
+   motion is deferred to scroll-in, so nothing ever depends on JS/IO timing. */
+.reveal{ transform: translateY(24px); transition: transform 0.7s ease; }
+.reveal.in-view{ transform: translateY(0); }
+.reveal-delay{ animation: slideup 0.8s ease 0.4s both; }
+@keyframes slideup{ from{ transform: translateY(10px); } to{ transform: translateY(0); } }
+
+@media (max-width: 860px){
+  .blueprint-layout{ grid-template-columns: 1fr; }
+  .toc{ position: static; flex-direction: row; flex-wrap: wrap; max-height: none; }
+  .bullet-grid{ grid-template-columns: 1fr; }
+  .two-col, .oq-grid, .lead-grid{ grid-template-columns: 1fr; }
+  .nav-links{ display: none; }
+}
