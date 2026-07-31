@@ -431,7 +431,7 @@ PROFILE_BRAND_LOGOS = {
 SECTION_LABELS = {
     "ja": {
         "about": "プロフィール", "career": "職務経歴", "expertise": "専門分野",
-        "brands": "取扱ブランド", "languages": "語学",
+        "brands": "ブランド経験", "languages": "語学",
         "profile_info": "基本情報", "philosophy": "仕事に対する考え方",
     },
     "en": {
@@ -450,27 +450,27 @@ PROFILE = {
     "ja": {
         "name_display": "薛 佶姈",
         "name_sub": "Hsueh Chi-Ling",
-        "role_title": "事業運営・管理",
-        "subtitle": ["25年の実務経験", "小売 × 事業運営 × ブランドサポート"],
-        "statement": "長年にわたり、小売現場と企業運営の両方を経験し、日々のオペレーションを支えてきました。",
+        "role_title": "事業運営・ブランドサポート",
+        "subtitle": ["25年間の実務経験", "小売 × 事業運営 × ブランドサポート"],
+        "statement": "長年にわたり、小売現場と企業運営の両面で実務経験を積み、日々のオペレーションを支えてきました。",
         "about": [
             "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
-            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など会社運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
+            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など事業運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
         ],
-        "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える最も重要な基盤であると考えています。"],
+        "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える重要な基盤であると考えています。"],
         "career": [
-            {"period": "2000–2010", "role": "販売・接客",
+            {"eyebrow": "Retail Experience", "period": "2000–2010", "role": "百貨店ブランド販売",
              "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
-            {"period": "2010–現在", "role": "事業運営",
+            {"eyebrow": "Business Experience", "period": "2010年〜現在", "role": "事業運営",
              "orgs": ["REFIN（台湾総代理店）"]},
         ],
         "expertise": [
             ("事業運営", ["受発注管理", "在庫管理", "購買管理", "物流管理", "総務"]),
-            ("店舗販売", ["接客", "顧客対応", "売場運営", "ブランド体験"]),
+            ("リテール", ["接客", "顧客対応", "売場運営", "ブランド体験"]),
             ("デザイン", ["Adobe Illustrator", "Canva", "カタログ制作", "プレゼン資料制作"]),
             ("システム", ["ERP", "在庫管理システム", "Microsoft Office"]),
         ],
-        "brand_groups": [("小売", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("事業", ["REFIN"])],
+        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("Business", ["REFIN"])],
         "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
         "refin_note": "イタリアンタイルブランド（台湾総代理店）",
@@ -714,7 +714,9 @@ def render_profile_section(lang):
     career_html = []
     for i, job in enumerate(career):
         orgs_html = "".join(f"<span>{o}</span>" for o in job["orgs"])
+        eyebrow_html = f'<p class="pf-timeline-eyebrow">{job["eyebrow"]}</p>' if job.get("eyebrow") else ""
         career_html.append(f'''      <div class="pf-timeline-node">
+        {eyebrow_html}
         <p class="pf-timeline-period">{job['period']}</p>
         <p class="pf-timeline-role">{job['role']}</p>
         <div class="pf-timeline-orgs">{orgs_html}</div>
@@ -755,7 +757,7 @@ def render_profile_section(lang):
         for label, value in p["profile_info"]
     )
 
-    quote_html = "\n".join(f'      <p>{line}</p>' for line in p["philosophy_quote"])
+    quote_html = "\n".join(f'      <p class="pf-philosophy-quote">{line}</p>' for line in p["philosophy_quote"])
 
     return f'''  <section class="pf-hero reveal">
     <div class="pf-hero-text">
@@ -811,7 +813,11 @@ def render_profile_section(lang):
   <section class="pf-philosophy reveal">
     <p class="pf-section-title">{L['philosophy']}</p>
 {quote_html}
-    <p class="pf-philosophy-name">{p['name_sub'] if lang != 'en' else p['name_display']}</p>
+    <div class="pf-philosophy-signature">
+      <p class="pf-philosophy-name">{p['name_display']}</p>
+      <p class="pf-philosophy-name-sub">{p['name_sub']}</p>
+      <p class="pf-philosophy-role">{p['role_title']}</p>
+    </div>
   </section>'''
 
 
@@ -1145,7 +1151,7 @@ a{ color: inherit; }
 .pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
 .pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
 .pf-hero-photo{
-  width: 50%;
+  width: 34%;
   margin-left: auto;
   aspect-ratio: 4 / 5;
   overflow: hidden;
@@ -1185,6 +1191,7 @@ a{ color: inherit; }
 
 .pf-timeline{ display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
 .pf-timeline-node{ flex: 1; min-width: 220px; }
+.pf-timeline-eyebrow{ font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 10px; font-weight: 500; }
 .pf-timeline-period{ font-size: 13px; color: var(--muted); margin: 0 0 8px; font-weight: 300; }
 .pf-timeline-role{ font-size: 17px; font-weight: 400; margin: 0 0 12px; }
 .pf-timeline-orgs{ display: flex; flex-direction: column; gap: 4px; }
@@ -1226,14 +1233,17 @@ a{ color: inherit; }
 .pf-section-small .pf-lang-list li{ font-size: 12.5px; }
 
 .pf-philosophy{ text-align: center; padding: 72px 0 40px; }
-.pf-philosophy p{
+.pf-philosophy-quote{
   font-size: clamp(18px, 2.2vw, 22px);
   font-weight: 300;
   line-height: 1.8;
   margin: 0;
   color: var(--fg);
 }
-.pf-philosophy-name{ margin-top: 28px !important; font-size: 13px !important; color: var(--muted); letter-spacing: 0.04em; }
+.pf-philosophy-signature{ margin-top: 40px; }
+.pf-philosophy-name{ font-size: 15px; font-weight: 400; margin: 0; color: var(--fg); }
+.pf-philosophy-name-sub{ font-size: 13px; color: var(--muted); margin: 4px 0 8px; font-weight: 300; }
+.pf-philosophy-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
 
 @media (max-width: 860px){
   .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }

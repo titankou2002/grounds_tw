@@ -249,7 +249,7 @@ a{ color: inherit; }
 .pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
 .pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
 .pf-hero-photo{
-  width: 50%;
+  width: 34%;
   margin-left: auto;
   aspect-ratio: 4 / 5;
   overflow: hidden;
@@ -289,6 +289,7 @@ a{ color: inherit; }
 
 .pf-timeline{ display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
 .pf-timeline-node{ flex: 1; min-width: 220px; }
+.pf-timeline-eyebrow{ font-size: 11px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin: 0 0 10px; font-weight: 500; }
 .pf-timeline-period{ font-size: 13px; color: var(--muted); margin: 0 0 8px; font-weight: 300; }
 .pf-timeline-role{ font-size: 17px; font-weight: 400; margin: 0 0 12px; }
 .pf-timeline-orgs{ display: flex; flex-direction: column; gap: 4px; }
@@ -330,14 +331,17 @@ a{ color: inherit; }
 .pf-section-small .pf-lang-list li{ font-size: 12.5px; }
 
 .pf-philosophy{ text-align: center; padding: 72px 0 40px; }
-.pf-philosophy p{
+.pf-philosophy-quote{
   font-size: clamp(18px, 2.2vw, 22px);
   font-weight: 300;
   line-height: 1.8;
   margin: 0;
   color: var(--fg);
 }
-.pf-philosophy-name{ margin-top: 28px !important; font-size: 13px !important; color: var(--muted); letter-spacing: 0.04em; }
+.pf-philosophy-signature{ margin-top: 40px; }
+.pf-philosophy-name{ font-size: 15px; font-weight: 400; margin: 0; color: var(--fg); }
+.pf-philosophy-name-sub{ font-size: 13px; color: var(--muted); margin: 4px 0 8px; font-weight: 300; }
+.pf-philosophy-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
 
 @media (max-width: 860px){
   .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
