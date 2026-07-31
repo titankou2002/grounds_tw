@@ -412,7 +412,6 @@ PROFILE_PHOTO = "assets/img/profile.jpg"
 # Everything ELSE — role titles, category labels, skill items, language
 # levels — must be fully localized; keeping those in English on the ja/zh
 # pages was a mistake in the first pass and read as broken, not "editorial."
-PROFILE_BRANDS = ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "REFIN"]
 # Real logo files supplied by the user, background-removed. REFIN is the
 # lesser-known of the five (an Italian tile brand, not consumer retail),
 # so it gets a one-line qualifier under its logo — see PROFILE[lang]["refin_note"].
@@ -423,24 +422,42 @@ PROFILE_BRAND_LOGOS = {
     "LEVI'S": "assets/img/brands/levis.png",
     "REFIN": "assets/img/brands/refin.png",
 }
-PROFILE_SECTION_LABELS = {
-    "about": "About", "career": "Career", "expertise": "Core Expertise",
-    "brands": "Brand Experience", "languages": "Languages",
-    "profile_info": "Profile Information", "philosophy": "Professional Philosophy",
+# Section labels are NOT shared across languages. Translating the body copy
+# while leaving section headers like "About" / "Career" in English reads as
+# "a résumé translated into Japanese," not a page designed the way a
+# Japanese company site would read. ja gets a fully native structure; en
+# stays international/concise (its native register already is English);
+# zh gets fully native Chinese labels too.
+SECTION_LABELS = {
+    "ja": {
+        "about": "プロフィール", "career": "職務経歴", "expertise": "専門分野",
+        "brands": "取扱ブランド", "languages": "語学",
+        "profile_info": "基本情報", "philosophy": "仕事に対する考え方",
+    },
+    "en": {
+        "about": "About", "career": "Career", "expertise": "Core Expertise",
+        "brands": "Brand Experience", "languages": "Languages",
+        "profile_info": "Profile Information", "philosophy": "Professional Philosophy",
+    },
+    "zh": {
+        "about": "關於我", "career": "職務經歷", "expertise": "專業領域",
+        "brands": "合作品牌經歷", "languages": "語言能力",
+        "profile_info": "基本資料", "philosophy": "工作理念",
+    },
 }
 
 PROFILE = {
     "ja": {
         "name_display": "薛 佶姈",
         "name_sub": "Hsueh Chi-Ling",
-        "role_title": "Business Operations Professional",
-        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "role_title": "事業運営・管理",
+        "subtitle": ["25年の実務経験", "小売 × 事業運営 × ブランドサポート"],
         "statement": "長年にわたり、小売現場と企業運営の両方を経験し、日々のオペレーションを支えてきました。",
         "about": [
             "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
             "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など会社運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
         ],
-        "philosophy_quote": ["安定したオペレーションは、", "ブランド価値を支える最も重要な基盤だと考えています。"],
+        "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える最も重要な基盤であると考えています。"],
         "career": [
             {"period": "2000–2010", "role": "販売・接客",
              "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
@@ -448,11 +465,12 @@ PROFILE = {
              "orgs": ["REFIN（台湾総代理店）"]},
         ],
         "expertise": [
-            ("Operations", ["受発注管理", "在庫管理", "購買", "物流", "総務"]),
-            ("Retail", ["接客対応", "ブランド体験", "ビジュアルマーチャンダイジング"]),
-            ("Design", ["Adobe Illustrator", "Canva", "カタログデザイン", "プレゼンテーションデザイン"]),
-            ("Systems", ["ERP", "在庫管理システム", "Microsoft Office"]),
+            ("事業運営", ["受発注管理", "在庫管理", "購買管理", "物流管理", "総務"]),
+            ("店舗販売", ["接客", "顧客対応", "売場運営", "ブランド体験"]),
+            ("デザイン", ["Adobe Illustrator", "Canva", "カタログ制作", "プレゼン資料制作"]),
+            ("システム", ["ERP", "在庫管理システム", "Microsoft Office"]),
         ],
+        "brand_groups": [("小売", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("事業", ["REFIN"])],
         "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
         "refin_note": "イタリアンタイルブランド（台湾総代理店）",
@@ -480,6 +498,7 @@ PROFILE = {
             ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
             ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
         ],
+        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("Business", ["REFIN"])],
         "languages": [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")],
         "profile_info": [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")],
         "refin_note": "Italian Tile Brand (Taiwan Exclusive Distributor)",
@@ -487,8 +506,8 @@ PROFILE = {
     "zh": {
         "name_display": "薛佶姈",
         "name_sub": "Hsueh Chi-Ling",
-        "role_title": "Business Operations Professional",
-        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "role_title": "營運管理專業",
+        "subtitle": ["25 年實務經驗", "零售 × 營運 × 品牌支援"],
         "statement": "多年來，我同時經歷了零售第一線與企業營運，支撐著日常營運的穩定運作。",
         "about": [
             "曾在百貨公司從事約10年的銷售與接待工作，服務過 ALBION、francfranc、Brooks Brothers、LEVI'S 等品牌。",
@@ -502,11 +521,12 @@ PROFILE = {
              "orgs": ["REFIN（台灣總代理）"]},
         ],
         "expertise": [
-            ("Operations", ["訂單管理", "庫存管理", "採購", "物流", "行政"]),
-            ("Retail", ["顧客服務", "品牌體驗", "視覺陳列"]),
-            ("Design", ["Adobe Illustrator", "Canva", "型錄設計", "簡報設計"]),
-            ("Systems", ["ERP", "庫存系統", "Microsoft Office"]),
+            ("營運", ["訂單管理", "庫存管理", "採購管理", "物流管理", "行政"]),
+            ("零售", ["接待", "顧客應對", "賣場營運", "品牌體驗"]),
+            ("設計", ["Adobe Illustrator", "Canva", "型錄製作", "簡報製作"]),
+            ("系統", ["ERP", "庫存管理系統", "Microsoft Office"]),
         ],
+        "brand_groups": [("零售", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("企業", ["REFIN"])],
         "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
         "profile_info": [("出生日期", "1982.01.07"), ("學歷", "高中畢業"), ("駕照", "普通汽車駕照")],
         "refin_note": "義大利磁磚品牌（台灣總代理）",
@@ -686,7 +706,7 @@ def render_delegation(dele):
 
 def render_profile_section(lang):
     p = PROFILE[lang]
-    L = PROFILE_SECTION_LABELS
+    L = SECTION_LABELS[lang]
 
     about_html = "\n".join(f'      <p>{line}</p>' for line in p["about"])
 
@@ -710,14 +730,20 @@ def render_profile_section(lang):
         </ul>
       </div>''' for name, items in p["expertise"])
 
-    brand_blocks = []
-    for b in PROFILE_BRANDS:
-        note_html = f'<span class="pf-brand-note">{p["refin_note"]}</span>' if b == "REFIN" else ""
-        brand_blocks.append(f'''<div class="pf-brand">
-      <img class="pf-brand-logo" src="{PROFILE_BRAND_LOGOS[b]}" alt="{b}" loading="lazy">
-      {note_html}
+    brand_group_blocks = []
+    for group_label, brands in p["brand_groups"]:
+        items_html = []
+        for b in brands:
+            note_html = f'<span class="pf-brand-note">{p["refin_note"]}</span>' if b == "REFIN" else ""
+            items_html.append(f'''<div class="pf-brand">
+        <img class="pf-brand-logo" src="{PROFILE_BRAND_LOGOS[b]}" alt="{b}" loading="lazy">
+        {note_html}
+      </div>''')
+        brand_group_blocks.append(f'''    <div class="pf-brand-group">
+      <p class="pf-brand-group-title">{group_label}</p>
+      <div class="pf-brands">{"".join(items_html)}</div>
     </div>''')
-    brands_html = "".join(brand_blocks)
+    brands_html = "\n".join(brand_group_blocks)
 
     lang_html = "".join(
         f'<li><span class="pf-lang-name">{name}</span><span class="pf-lang-level">{level}</span></li>'
@@ -769,7 +795,7 @@ def render_profile_section(lang):
 
   <section class="pf-section reveal">
     <p class="pf-section-title">{L['brands']}</p>
-    <div class="pf-brands">{brands_html}</div>
+{brands_html}
   </section>
 
   <section class="pf-section reveal">
@@ -1174,6 +1200,9 @@ a{ color: inherit; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
+.pf-brand-group{ margin-bottom: 32px; }
+.pf-brand-group:last-child{ margin-bottom: 0; }
+.pf-brand-group-title{ font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin: 0 0 16px; }
 .pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
 .pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .pf-brand-logo{

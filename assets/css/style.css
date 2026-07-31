@@ -304,6 +304,9 @@ a{ color: inherit; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
+.pf-brand-group{ margin-bottom: 32px; }
+.pf-brand-group:last-child{ margin-bottom: 0; }
+.pf-brand-group-title{ font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin: 0 0 16px; }
 .pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
 .pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .pf-brand-logo{
