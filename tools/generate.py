@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """Generates the static, trilingual grounds Taiwan Launch Blueprint site."""
+import hashlib
 import os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -549,7 +550,7 @@ def html_shell(lang, active_page, body, extra_head=""):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/css/style.css">
+<link rel="stylesheet" href="assets/css/style.css?v={CSS_VERSION}">
 {extra_head}
 </head>
 <body>
@@ -558,7 +559,7 @@ def html_shell(lang, active_page, body, extra_head=""):
 <footer class="site-footer">
   <p>{t['footer_note']}</p>
 </footer>
-<script src="assets/js/main.js"></script>
+<script src="assets/js/main.js?v={JS_VERSION}"></script>
 </body>
 </html>
 '''
@@ -1170,6 +1171,14 @@ JS = '''document.addEventListener("DOMContentLoaded", () => {
   }
 });
 '''
+
+# Content-hash cache-busting: browsers (and LiteSpeed's static-file caching)
+# can hold onto assets/css/style.css long past a deploy. Appending a hash of
+# the current content forces a fresh URL — and therefore a fresh fetch —
+# every time the CSS or JS actually changes, while still caching normally
+# when it hasn't.
+CSS_VERSION = hashlib.md5(CSS.encode("utf-8")).hexdigest()[:10]
+JS_VERSION = hashlib.md5(JS.encode("utf-8")).hexdigest()[:10]
 
 
 def write(path, content):
