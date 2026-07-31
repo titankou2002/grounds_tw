@@ -413,12 +413,15 @@ PROFILE_PHOTO = "assets/img/profile.jpg"
 # levels — must be fully localized; keeping those in English on the ja/zh
 # pages was a mistake in the first pass and read as broken, not "editorial."
 PROFILE_BRANDS = ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "REFIN"]
-# Single-letter/short monogram badges standing in for real brand logos —
-# we don't hold rights to the actual trademarked logo artwork, so a plain
-# typographic badge (Aesop/MUJI-style) is used instead. Swap in real logo
-# files later if the brands' own logos are made available.
-PROFILE_BRAND_INITIALS = {
-    "ALBION": "A", "francfranc": "f", "Brooks Brothers": "BB", "LEVI'S": "L", "REFIN": "R",
+# Real logo files supplied by the user, background-removed. REFIN is the
+# lesser-known of the five (an Italian tile brand, not consumer retail),
+# so it gets a one-line qualifier under its logo — see PROFILE[lang]["refin_note"].
+PROFILE_BRAND_LOGOS = {
+    "ALBION": "assets/img/brands/albion.png",
+    "francfranc": "assets/img/brands/francfranc.png",
+    "Brooks Brothers": "assets/img/brands/brooks-brothers.png",
+    "LEVI'S": "assets/img/brands/levis.png",
+    "REFIN": "assets/img/brands/refin.png",
 }
 PROFILE_SECTION_LABELS = {
     "about": "About", "career": "Career", "expertise": "Core Expertise",
@@ -452,6 +455,7 @@ PROFILE = {
         ],
         "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
+        "refin_note": "イタリアンタイルブランド（台湾総代理店）",
     },
     "en": {
         "name_display": "Hsueh Chi-Ling",
@@ -478,6 +482,7 @@ PROFILE = {
         ],
         "languages": [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")],
         "profile_info": [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")],
+        "refin_note": "Italian Tile Brand (Taiwan Exclusive Distributor)",
     },
     "zh": {
         "name_display": "薛佶姈",
@@ -504,6 +509,7 @@ PROFILE = {
         ],
         "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
         "profile_info": [("出生日期", "1982.01.07"), ("學歷", "高中畢業"), ("駕照", "普通汽車駕照")],
+        "refin_note": "義大利磁磚品牌（台灣總代理）",
     },
 }
 
@@ -704,10 +710,14 @@ def render_profile_section(lang):
         </ul>
       </div>''' for name, items in p["expertise"])
 
-    brands_html = "".join(
-        f'<div class="pf-brand"><span class="pf-brand-badge" aria-hidden="true">{PROFILE_BRAND_INITIALS.get(b, b[:1])}</span><span class="pf-brand-name">{b}</span></div>'
-        for b in PROFILE_BRANDS
-    )
+    brand_blocks = []
+    for b in PROFILE_BRANDS:
+        note_html = f'<span class="pf-brand-note">{p["refin_note"]}</span>' if b == "REFIN" else ""
+        brand_blocks.append(f'''<div class="pf-brand">
+      <img class="pf-brand-logo" src="{PROFILE_BRAND_LOGOS[b]}" alt="{b}" loading="lazy">
+      {note_html}
+    </div>''')
+    brands_html = "".join(brand_blocks)
 
     lang_html = "".join(
         f'<li><span class="pf-lang-name">{name}</span><span class="pf-lang-level">{level}</span></li>'
@@ -1109,7 +1119,8 @@ a{ color: inherit; }
 .pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
 .pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
 .pf-hero-photo{
-  width: 100%;
+  width: 50%;
+  margin-left: auto;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--callout-bg);
@@ -1164,21 +1175,20 @@ a{ color: inherit; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
 .pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
-.pf-brand{ display: flex; align-items: center; gap: 12px; }
-.pf-brand-badge{
-  flex: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+.pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.pf-brand-logo{
+  height: 32px;
+  max-width: 140px;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  filter: grayscale(1);
+  opacity: 0.85;
 }
-.pf-brand-name{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+:root[data-theme="dark"] .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); }
+@media (prefers-color-scheme: dark){ .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); } }
+:root[data-theme="light"] .pf-brand-logo{ filter: grayscale(1); }
+.pf-brand-note{ font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
@@ -1198,7 +1208,7 @@ a{ color: inherit; }
 
 @media (max-width: 860px){
   .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
-  .pf-hero-photo{ max-width: 360px; }
+  .pf-hero-photo{ width: 60%; max-width: 220px; margin: 0 auto; }
   .pf-expertise-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
   .pf-timeline{ flex-direction: column; }
   .pf-timeline-arrow{ display: none; }

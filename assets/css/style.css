@@ -249,7 +249,8 @@ a{ color: inherit; }
 .pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
 .pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
 .pf-hero-photo{
-  width: 100%;
+  width: 50%;
+  margin-left: auto;
   aspect-ratio: 4 / 5;
   overflow: hidden;
   background: var(--callout-bg);
@@ -304,21 +305,20 @@ a{ color: inherit; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
 .pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
-.pf-brand{ display: flex; align-items: center; gap: 12px; }
-.pf-brand-badge{
-  flex: none;
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.02em;
+.pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.pf-brand-logo{
+  height: 32px;
+  max-width: 140px;
+  width: auto;
+  object-fit: contain;
+  object-position: left center;
+  filter: grayscale(1);
+  opacity: 0.85;
 }
-.pf-brand-name{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+:root[data-theme="dark"] .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); }
+@media (prefers-color-scheme: dark){ .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); } }
+:root[data-theme="light"] .pf-brand-logo{ filter: grayscale(1); }
+.pf-brand-note{ font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
@@ -338,7 +338,7 @@ a{ color: inherit; }
 
 @media (max-width: 860px){
   .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
-  .pf-hero-photo{ max-width: 360px; }
+  .pf-hero-photo{ width: 60%; max-width: 220px; margin: 0 auto; }
   .pf-expertise-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
   .pf-timeline{ flex-direction: column; }
   .pf-timeline-arrow{ display: none; }
