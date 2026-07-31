@@ -24,7 +24,6 @@ SITE = {
         "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "ホーム",
-        "nav_blueprint": "ブループリント",
         "enter": "Proposalへ進む",
         "explore": "ブループリントを見る",
         "hero_line": "ブランドを理解し、運営で育てる。",
@@ -36,7 +35,6 @@ SITE = {
         "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "Home",
-        "nav_blueprint": "Blueprint",
         "enter": "Enter Proposal",
         "explore": "View the Blueprint",
         "hero_line": "Understanding the Brand, Building the Operation.",
@@ -48,7 +46,6 @@ SITE = {
         "title": "PROFILE",
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "首頁",
-        "nav_blueprint": "藍圖",
         "enter": "進入 Proposal",
         "explore": "查看 Blueprint",
         "hero_line": "理解品牌，用營運滋養它。",
@@ -586,12 +583,10 @@ def lang_switch_html(current, page):
 def nav_html(current, active_page):
     t = SITE[current]
     home_href = "index.html" if current == "ja" else f"{current}/index.html"
-    bp_href = "blueprint.html" if current == "ja" else f"{current}/blueprint.html"
     return f'''<header class="site-nav">
   <a class="wordmark" href="{home_href}" aria-label="grounds Taiwan"></a>
   <nav class="nav-links">
     <a href="{home_href}" class="{'active' if active_page=='index' else ''}">{t['nav_home']}</a>
-    <a href="{bp_href}" class="{'active' if active_page=='blueprint' else ''}">{t['nav_blueprint']}</a>
   </nav>
   {lang_switch_html(current, active_page)}
 </header>'''
