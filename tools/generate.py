@@ -405,210 +405,69 @@ OPEN_QUESTIONS = {
     },
 }
 
-LEADERSHIP = {
+PROFILE_PHOTO = "assets/img/profile.jpg"
+
+# Language-neutral facts reused verbatim across ja/en/zh — an editorial,
+# international-brand-style profile page keeps job titles, org names, and
+# category labels in English by design, per the requested Apple/MUJI/Aesop
+# reference direction.
+PROFILE_CAREER = [
+    {"period": "2000–2010", "role": "Retail Sales Professional",
+     "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
+    {"period": "2010–Present", "role": "Business Operations",
+     "orgs": ["Italian Tile Distributor"]},
+]
+PROFILE_EXPERTISE = [
+    ("Operations", ["Order Management", "Inventory Control", "Purchasing", "Logistics", "Administration"]),
+    ("Retail", ["Customer Service", "Brand Experience", "Visual Merchandising"]),
+    ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
+    ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
+]
+PROFILE_BRANDS = ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]
+PROFILE_LANGUAGES = [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")]
+PROFILE_INFO_ROWS = [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")]
+PROFILE_SECTION_LABELS = {
+    "about": "About", "career": "Career", "expertise": "Core Expertise",
+    "brands": "Brand Experience", "languages": "Languages",
+    "profile_info": "Profile Information", "philosophy": "Professional Philosophy",
+}
+
+PROFILE = {
     "ja": {
-        "title": "薛 佶姈（Hsueh Chi-Ling）",
-        "signature_role": "Taiwan Operations Candidate",
-        "profile": [
-            "百貨店で約10年間、接客・販売業務に従事した後、イタリア製タイルの輸入販売会社にて約15年間、会社運営を支えるオペレーション業務全般を担当してきました。",
-            "小売現場で培った顧客対応力と、輸入代理店運営を通じて身につけた商品管理・物流・社内管理の経験を活かし、日々の業務を安定して運営する仕組みづくりに携わってきました。",
-            "現在は、受発注管理、在庫管理、物流調整、購買、総務、人事関連業務、販促資料制作など、企業運営に必要な幅広い実務を担当しています。",
-            "grounds Taiwan の立ち上げにおいて、店舗運営、バックオフィス体制、人材育成、在庫管理など、ブランドが長期的に成長するための基盤づくりに貢献したいと考えています。",
+        "name_display": "薛 佶姈",
+        "name_sub": "Hsueh Chi-Ling",
+        "role_title": "Business Operations Professional",
+        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "statement": "長年にわたり、小売現場と企業運営の両方を経験し、日々のオペレーションを支えてきました。",
+        "about": [
+            "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
+            "その後、イタリア製タイル輸入代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など会社運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
         ],
-        "experience_title": "職務経歴",
-        "experience": [
-            {
-                "org": "イタリア製タイル輸入代理店",
-                "role": "Business Operations & Administration",
-                "duration": "約15年",
-                "desc": "台湾におけるイタリア製タイルブランド代理店の運営に携わり、営業部門を支える管理業務全般を担当。",
-                "groups": [
-                    ("受発注・営業サポート", ["国内受注管理", "発注書作成", "出荷手配", "納期管理", "顧客対応"]),
-                    ("在庫管理・物流", ["在庫管理", "ERPシステム運用", "入出庫管理", "配送スケジュール調整", "運送会社との連携", "在庫データ管理"]),
-                    ("購買・海外取引", ["イタリアメーカーへの発注", "輸入スケジュール管理", "サプライヤーとの連絡", "納期確認"]),
-                    ("総務・人事管理", ["勤怠管理", "給与計算補助", "社内資料管理", "日常総務業務"]),
-                    ("ブランド・販促サポート", ["商品カタログ制作", "DM制作", "展示会資料作成", "商品資料編集", "プレゼン資料制作"]),
-                ],
-            },
-            {
-                "org": "百貨店ブランド販売スタッフ",
-                "role": "Retail Sales Professional",
-                "duration": "約10年",
-                "desc": "百貨店ブランドカウンターにて、販売・接客業務を担当。",
-                "groups": [
-                    ("主な担当業務", ["接客販売", "顧客対応", "商品管理", "商品ディスプレイ", "売場運営", "顧客関係維持", "ブランドイメージ管理"]),
-                ],
-            },
-        ],
-        "value_title": "私が grounds Taiwan に提供できる価値",
-        "value": [
-            ("Retail Experience", "10年間の百貨店販売経験を通じて、お客様がブランドをどのように感じ、理解し、信頼につなげるかを現場で学びました。"),
-            ("Operational Experience", "15年間、輸入代理店の運営を通じて、商品管理、物流、購買、社内業務など、企業運営を支える実務経験を積んできました。"),
-            ("Brand Support Experience", "商品資料、販促物、カタログ制作などを通じて、ブランド価値を伝えるためのコミュニケーションを支援してきました。"),
-        ],
-        "strengths_title": "強み",
-        "strengths": [
-            ("安定したオペレーション構築", "営業・物流・管理部門をつなぎ、会社全体の業務が円滑に進むよう日々の運営を支えてきました。"),
-            ("実務対応力", "納期変更、物流調整、急な業務変更など、現場で発生する問題に対して優先順位を判断しながら柔軟に対応してきました。"),
-            ("業務改善", "ERPや在庫管理システムを活用し、業務フロー整理と効率化に取り組んできました。"),
-        ],
-        "skills_title": "スキル",
-        "skills": [
-            ("Business Operations", ["受発注管理", "在庫管理", "物流管理", "購買管理", "総務", "人事事務", "営業サポート"]),
-            ("System", ["ERP", "在庫管理システム", "Microsoft Office"]),
-            ("Design", ["Adobe Illustrator", "Canva", "商品カタログ制作", "DM制作", "プレゼン資料制作"]),
-        ],
-        "languages_title": "語学",
-        "languages": [("中国語", "ネイティブ"), ("日本語", "現在学習中（継続的に向上中）"), ("英語", "基礎レベル")],
-        "qualifications_title": "資格",
-        "qualifications": ["普通自動車第一種運転免許"],
-        "closing_title": "grounds Taiwanで活かせる経験",
-        "closing": [
-            "私はブランド運営において、最も重要な要素の一つは「毎日のオペレーションを安定して継続すること」だと考えています。",
-            "これまで15年以上にわたり、受発注、在庫管理、物流、購買、人事、総務、販促支援など、会社運営を支える幅広い実務を担当してきました。",
-            "grounds Taiwan において、日本本社のブランドコンセプトを尊重しながら、店舗運営、バックオフィス体制、在庫管理、人材育成など、台湾市場で長期的に成長できる運営基盤づくりに貢献していきたいと考えています。",
-        ],
-        "profile_info_title": "Profile Information",
-        "profile_info": [
-            ("生年月日", "1982年1月7日"),
-            ("最終学歴", "高等学校卒業"),
-        ],
+        "philosophy_quote": ["安定したオペレーションは、", "ブランド価値を支える最も重要な基盤だと考えています。"],
     },
     "en": {
-        "title": "Hsueh Chi-Ling (薛佶姈)",
-        "signature_role": "Taiwan Operations Candidate",
-        "profile": [
-            "After about 10 years in customer service and sales at department stores, I spent roughly 15 years handling the full range of operations work supporting the management of an Italian tile import and distribution company.",
-            "Drawing on the customer-facing skills built on the retail floor and the product management, logistics, and internal administration experience gained from running an import distributorship, I've been involved in building the systems that keep day-to-day operations running stably.",
-            "Currently, I handle a wide range of practical work essential to running a business — order processing, inventory management, logistics coordination, procurement, general affairs, HR-related tasks, and promotional material production.",
-            "In the launch of grounds Taiwan, I hope to contribute to building the foundation the brand needs to grow over the long term — store operations, back-office systems, talent development, and inventory management.",
+        "name_display": "Hsueh Chi-Ling",
+        "name_sub": "薛佶姈",
+        "role_title": "Business Operations Professional",
+        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "statement": "For many years, I have worked across both retail front-lines and business operations, supporting the systems that keep day-to-day work running.",
+        "about": [
+            "For about 10 years, I worked in sales and customer service at department store brands including ALBION, francfranc, Brooks Brothers, and LEVI'S.",
+            "I then spent roughly 15 years at an Italian tile import distributor, handling order processing, logistics, inventory, procurement, and HR/general affairs — the practical work that supports how a company runs. I continue to work in back-office operations that support brand management today.",
         ],
-        "experience_title": "Work Experience",
-        "experience": [
-            {
-                "org": "Italian Tile Import Distributor",
-                "role": "Business Operations & Administration",
-                "duration": "~15 years",
-                "desc": "Involved in operating the Taiwan distributorship for an Italian tile brand, handling the full range of administrative work supporting the sales team.",
-                "groups": [
-                    ("Order Processing & Sales Support", ["Domestic order management", "Purchase order creation", "Shipping arrangement", "Delivery schedule management", "Customer support"]),
-                    ("Inventory & Logistics", ["Inventory management", "ERP system operation", "Inbound / outbound management", "Delivery schedule coordination", "Liaising with freight carriers", "Inventory data management"]),
-                    ("Procurement & International Trade", ["Placing orders with Italian manufacturers", "Import schedule management", "Supplier communication", "Delivery confirmation"]),
-                    ("General Affairs & HR Management", ["Attendance management", "Payroll support", "Internal document management", "Day-to-day general affairs"]),
-                    ("Brand & Promotional Support", ["Product catalog production", "DM production", "Trade show material production", "Product material editing", "Presentation material production"]),
-                ],
-            },
-            {
-                "org": "Department Store Brand Sales Staff",
-                "role": "Retail Sales Professional",
-                "duration": "~10 years",
-                "desc": "Handled sales and customer service at department store brand counters.",
-                "groups": [
-                    ("Main Responsibilities", ["Customer service & sales", "Customer support", "Product management", "Visual merchandising", "Sales floor operations", "Customer relationship maintenance", "Brand image management"]),
-                ],
-            },
-        ],
-        "value_title": "The Value I Can Bring to grounds Taiwan",
-        "value": [
-            ("Retail Experience", "Through 10 years of department store sales experience, I learned first-hand, on the floor, how customers come to feel, understand, and ultimately trust a brand."),
-            ("Operational Experience", "Through 15 years of running an import distribution business, I built hands-on experience in product management, logistics, procurement, and internal operations that support how a company runs."),
-            ("Brand Support Experience", "Through producing product materials, promotional items, and catalogs, I have supported the communication work that conveys brand value."),
-        ],
-        "strengths_title": "Strengths",
-        "strengths": [
-            ("Building Stable Operations", "By connecting sales, logistics, and administrative functions, I've supported day-to-day operations so the whole company could run smoothly."),
-            ("Hands-On Problem Solving", "From delivery changes to logistics adjustments to sudden shifts in work, I've flexibly handled the problems that come up on the ground, judging priorities as needed."),
-            ("Process Improvement", "Using ERP and inventory management systems, I've worked on organizing and improving workflows."),
-        ],
-        "skills_title": "Skills",
-        "skills": [
-            ("Business Operations", ["Order processing", "Inventory management", "Logistics management", "Procurement management", "General affairs", "HR administration", "Sales support"]),
-            ("System", ["ERP", "Inventory management systems", "Microsoft Office"]),
-            ("Design", ["Adobe Illustrator", "Canva", "Product catalog production", "DM production", "Presentation material production"]),
-        ],
-        "languages_title": "Languages",
-        "languages": [("Chinese", "Native"), ("Japanese", "Currently learning (steadily improving)"), ("English", "Basic")],
-        "qualifications_title": "Qualifications",
-        "qualifications": ["Class 1 driver's license (standard passenger vehicle)"],
-        "closing_title": "What I Can Bring to grounds Taiwan",
-        "closing": [
-            "I believe one of the most important things in brand operations is keeping day-to-day operations running stably.",
-            "For over 15 years, I have handled a wide range of work supporting company operations — order processing, inventory management, logistics, procurement, HR, general affairs, and promotional support.",
-            "At grounds Taiwan, while respecting Japan HQ's brand concept, I hope to contribute to building an operational foundation that lets the brand grow over the long term in the Taiwan market — across store operations, back-office systems, inventory management, and talent development.",
-        ],
-        "profile_info_title": "Profile Information",
-        "profile_info": [
-            ("Date of Birth", "January 7, 1982"),
-            ("Final Education", "High school graduate"),
-        ],
+        "philosophy_quote": ["I believe stable operations are", "the most important foundation supporting a brand's value."],
     },
     "zh": {
-        "title": "薛佶姈",
-        "signature_role": "Taiwan Operations Candidate",
-        "profile": [
-            "在百貨公司從事第一線接待與銷售工作約10年後，於義大利磁磚進口代理公司負責支援公司整體營運的各項作業約15年。",
-            "運用在零售第一線累積的顧客應對能力，以及在代理商營運中培養的商品管理、物流、內部管理經驗，參與建立能讓日常業務穩定運作的機制。",
-            "目前廣泛負責訂單處理、庫存管理、物流調度、採購、總務、人事相關業務、行銷文宣製作等企業營運所需的各項實務。",
-            "在 grounds Taiwan 的草創階段，希望能參與建立門市營運、後勤體制、人才培育、庫存管理等讓品牌長期成長的基礎建設。",
+        "name_display": "薛佶姈",
+        "name_sub": "Hsueh Chi-Ling",
+        "role_title": "Business Operations Professional",
+        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "statement": "多年來，我同時經歷了零售第一線與企業營運，支撐著日常營運的穩定運作。",
+        "about": [
+            "曾在百貨公司從事約10年的銷售與接待工作，服務過 ALBION、francfranc、Brooks Brothers、LEVI'S 等品牌。",
+            "之後於義大利磁磚進口代理商任職約15年，負責訂單處理、物流、庫存管理、採購、人事總務等支撐公司營運的實務工作。目前仍持續參與支撐品牌營運的後勤事務。",
         ],
-        "experience_title": "職務經歷",
-        "experience": [
-            {
-                "org": "義大利磁磚進口代理商",
-                "role": "Business Operations & Administration",
-                "duration": "約15年",
-                "desc": "參與義大利磁磚品牌在台代理營運，負責支援業務部門的各項管理工作。",
-                "groups": [
-                    ("訂單處理與業務支援", ["國內訂單管理", "訂購單製作", "出貨安排", "交期管理", "客戶應對"]),
-                    ("庫存管理・物流", ["庫存管理", "ERP系統操作", "進出貨管理", "配送排程協調", "與運輸公司聯繫", "庫存數據管理"]),
-                    ("採購・國外交易", ["向義大利廠商下單", "進口排程管理", "供應商聯繫", "交期確認"]),
-                    ("總務・人事管理", ["出勤管理", "薪資計算協助", "內部資料管理", "日常總務事務"]),
-                    ("品牌・行銷支援", ["產品型錄製作", "DM製作", "展會資料製作", "產品資料編輯", "簡報資料製作"]),
-                ],
-            },
-            {
-                "org": "百貨公司品牌銷售人員",
-                "role": "Retail Sales Professional",
-                "duration": "約10年",
-                "desc": "於百貨公司品牌專櫃負責銷售與接待工作。",
-                "groups": [
-                    ("主要工作內容", ["接待銷售", "客戶應對", "商品管理", "商品陳列", "賣場營運", "顧客關係維繫", "品牌形象管理"]),
-                ],
-            },
-        ],
-        "value_title": "我能為 grounds Taiwan 帶來的價值",
-        "value": [
-            ("Retail Experience", "透過10年百貨公司銷售經驗，在第一線學到顧客如何感受品牌、理解品牌，進而建立信任。"),
-            ("Operational Experience", "透過15年進口代理商的營運，累積了商品管理、物流、採購、內部業務等支撐企業營運的實務經驗。"),
-            ("Brand Support Experience", "透過產品資料、行銷文宣、型錄製作等，支援傳遞品牌價值的溝通工作。"),
-        ],
-        "strengths_title": "強項",
-        "strengths": [
-            ("建立穩定的營運機制", "串連業務、物流、管理部門，支撐公司整體業務順暢運作、支持每日營運。"),
-            ("實務應變能力", "面對交期變更、物流調整、突發業務變化等現場問題，能判斷優先順序並靈活應對。"),
-            ("業務流程改善", "運用 ERP 與庫存管理系統，致力於整理與優化作業流程。"),
-        ],
-        "skills_title": "技能",
-        "skills": [
-            ("Business Operations", ["訂單管理", "庫存管理", "物流管理", "採購管理", "總務", "人事事務", "業務支援"]),
-            ("System", ["ERP", "庫存管理系統", "Microsoft Office"]),
-            ("Design", ["Adobe Illustrator", "Canva", "產品型錄製作", "DM製作", "簡報資料製作"]),
-        ],
-        "languages_title": "語言能力",
-        "languages": [("中文", "母語"), ("日文", "持續學習中（穩定進步）"), ("英文", "基礎")],
-        "qualifications_title": "證照",
-        "qualifications": ["普通汽車駕照"],
-        "closing_title": "能為 grounds Taiwan 帶來的經驗",
-        "closing": [
-            "我認為品牌營運中最重要的一件事，就是讓每天的營運都能穩定持續下去。",
-            "過去15年以上，我廣泛負責訂單處理、庫存管理、物流、採購、人事、總務、行銷支援等支撐公司營運的實務工作。",
-            "在 grounds Taiwan，我也希望在尊重日本總部品牌理念的前提下，建立門市營運、後勤體制、庫存管理、人才培育等能讓品牌在台灣市場長期成長的營運基礎。",
-        ],
-        "profile_info_title": "Profile Information",
-        "profile_info": [
-            ("出生年月日", "1982年1月7日"),
-            ("最高學歷", "高中畢業"),
-        ],
+        "philosophy_quote": ["我相信穩定的營運，", "是支撐品牌價值最重要的基礎。"],
     },
 }
 
@@ -687,6 +546,9 @@ def html_shell(lang, active_page, body, extra_head=""):
 <base href="{BASE_PATH}">
 <title>{t['title']}</title>
 <meta name="description" content="{t['subtitle']}">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 {extra_head}
 </head>
@@ -705,15 +567,9 @@ def html_shell(lang, active_page, body, extra_head=""):
 def index_body(lang):
     t = SITE[lang]
     bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
-    leadership_section = render_leadership_section(lang)
-    return f'''<main class="hero">
-  <div class="hero-inner reveal">
-    <h1 class="hero-line">{t['hero_line']}</h1>
-  </div>
-  <div class="scroll-cue reveal-delay">↓</div>
-</main>
-<div class="blueprint-content profile-page">
-{leadership_section}
+    profile_section = render_profile_section(lang)
+    return f'''<div class="pf-page">
+{profile_section}
 </div>
 <p class="explore-link"><a href="{bp_href}">{t['explore']} →</a></p>
 '''
@@ -786,110 +642,100 @@ def render_delegation(dele):
 '''
 
 
-def render_leadership_section(lang):
-    lp = LEADERSHIP[lang]
-    role_pill_html = f'<p class="role-pill">{lp["signature_role"]}</p>' if lp.get("signature_role") else ""
-    profile_html = "\n".join(f'    <p class="lead-profile-line">{p}</p>' for p in lp.get("profile", []))
+def render_profile_section(lang):
+    p = PROFILE[lang]
+    L = PROFILE_SECTION_LABELS
 
-    exp_blocks = []
-    for job in lp.get("experience", []):
-        job_groups = []
-        for name, items in job["groups"]:
-            items_html = "\n".join(f"          <li>{i}</li>" for i in items)
-            job_groups.append(f'''      <div class="lead-group">
-        <p class="lead-group-title">{name}</p>
-        <ul class="bullet-grid compact">
-{items_html}
-        </ul>
+    about_html = "\n".join(f'      <p>{line}</p>' for line in p["about"])
+
+    career_html = []
+    for i, job in enumerate(PROFILE_CAREER):
+        orgs_html = "".join(f"<span>{o}</span>" for o in job["orgs"])
+        career_html.append(f'''      <div class="pf-timeline-node">
+        <p class="pf-timeline-period">{job['period']}</p>
+        <p class="pf-timeline-role">{job['role']}</p>
+        <div class="pf-timeline-orgs">{orgs_html}</div>
       </div>''')
-        exp_blocks.append(f'''    <div class="exp-block">
-      <p class="exp-org">{job['org']}</p>
-      <p class="exp-meta">{job['role']} ｜ {job['duration']}</p>
-      <p class="exp-desc">{job['desc']}</p>
-      <div class="lead-grid">
-{"".join(job_groups)}
-      </div>
-    </div>''')
+        if i < len(PROFILE_CAREER) - 1:
+            career_html.append('      <div class="pf-timeline-arrow" aria-hidden="true">→</div>')
+    career_html = "\n".join(career_html)
 
-    value_blocks = "".join(
-        f'''    <div class="strength-item">
-      <p class="lead-group-title">{title}</p>
-      <p class="strength-desc">{desc}</p>
-    </div>''' for title, desc in lp.get("value", [])
+    expertise_html = "\n".join(f'''      <div class="pf-expertise-col">
+        <p class="pf-expertise-title">{name}</p>
+        <ul>
+{"".join(f"          <li>{i}</li>" for i in items)}
+        </ul>
+      </div>''' for name, items in PROFILE_EXPERTISE)
+
+    brands_html = "".join(f"<span>{b}</span>" for b in PROFILE_BRANDS)
+
+    lang_html = "".join(
+        f'<li><span class="pf-lang-name">{name}</span><span class="pf-lang-level">{level}</span></li>'
+        for name, level in PROFILE_LANGUAGES
     )
 
-    strength_blocks = "".join(
-        f'''    <div class="strength-item">
-      <p class="lead-group-title">{title}</p>
-      <p class="strength-desc">{desc}</p>
-    </div>''' for title, desc in lp.get("strengths", [])
+    info_html = "".join(
+        f'<li><span class="pf-lang-name">{label}</span><span class="pf-lang-level">{value}</span></li>'
+        for label, value in PROFILE_INFO_ROWS
     )
 
-    skill_blocks = []
-    for name, items in lp.get("skills", []):
-        items_html = "\n".join(f"        <li>{i}</li>" for i in items)
-        skill_blocks.append(f'''    <div class="lead-group">
-      <p class="lead-group-title">{name}</p>
-      <ul class="bullet-grid compact">
-{items_html}
-      </ul>
-    </div>''')
+    quote_html = "\n".join(f'      <p>{line}</p>' for line in p["philosophy_quote"])
 
-    lang_items = "".join(
-        f'<li><span class="lang-name">{name}</span><span class="lang-level">{level}</span></li>'
-        for name, level in lp.get("languages", [])
-    )
-    qual_items = "\n".join(f"      <li>{q}</li>" for q in lp.get("qualifications", []))
-    closing_html = "\n".join(f'    <p>{p}</p>' for p in lp.get("closing", []))
-    profile_info_items = "".join(
-        f'<li><span class="lang-name">{label}</span><span class="lang-level">{value}</span></li>'
-        for label, value in lp.get("profile_info", [])
-    )
-
-    return f'''  <section id="leadership" class="chapter reveal">
-    <h2 class="chapter-title">{lp['title']}</h2>
-    {role_pill_html}
-{profile_html}
-
-    <p class="lead-subtitle">{lp['experience_title']}</p>
-{"".join(exp_blocks)}
-
-    <p class="lead-subtitle">{lp['value_title']}</p>
-    <div class="strength-grid">
-{value_blocks}
+    return f'''  <section class="pf-hero reveal">
+    <div class="pf-hero-text">
+      <p class="pf-name">{p['name_display']}</p>
+      <p class="pf-name-sub">{p['name_sub']}</p>
+      <p class="pf-role-title">{p['role_title']}</p>
+      <p class="pf-subtitle">{p['subtitle'][0]}</p>
+      <p class="pf-subtitle">{p['subtitle'][1]}</p>
     </div>
-
-    <p class="lead-subtitle">{lp['strengths_title']}</p>
-    <div class="strength-grid">
-{strength_blocks}
+    <div class="pf-hero-photo">
+      <img src="{PROFILE_PHOTO}" alt="{p['name_display']}" loading="eager">
     </div>
+  </section>
 
-    <p class="lead-subtitle">{lp['skills_title']}</p>
-    <div class="lead-grid">
-{"".join(skill_blocks)}
+  <p class="pf-statement reveal">{p['statement']}</p>
+
+  <section class="pf-section reveal">
+    <p class="pf-section-title">{L['about']}</p>
+    <div class="pf-about">
+{about_html}
     </div>
+  </section>
 
-    <p class="lead-subtitle">{lp['languages_title']}</p>
-    <ul class="lang-list">{lang_items}</ul>
-
-    <p class="lead-subtitle">{lp['qualifications_title']}</p>
-    <ul class="bullet-grid compact">
-{qual_items}
-    </ul>
-
-    <p class="lead-subtitle">{lp['closing_title']}</p>
-{closing_html}
-
-    <p class="lead-subtitle">{lp['profile_info_title']}</p>
-    <ul class="lang-list">{profile_info_items}</ul>
-
-    <div class="signature-card">
-      <div class="avatar-placeholder" aria-hidden="true">薛</div>
-      <div class="signature-info">
-        <p class="signature-name">{lp['title']}</p>
-        <p class="signature-role">{lp['signature_role']}</p>
-      </div>
+  <section class="pf-section reveal">
+    <p class="pf-section-title">{L['career']}</p>
+    <div class="pf-timeline">
+{career_html}
     </div>
+  </section>
+
+  <section class="pf-section reveal">
+    <p class="pf-section-title">{L['expertise']}</p>
+    <div class="pf-expertise-grid">
+{expertise_html}
+    </div>
+  </section>
+
+  <section class="pf-section reveal">
+    <p class="pf-section-title">{L['brands']}</p>
+    <div class="pf-brands">{brands_html}</div>
+  </section>
+
+  <section class="pf-section reveal">
+    <p class="pf-section-title">{L['languages']}</p>
+    <ul class="pf-lang-list">{lang_html}</ul>
+  </section>
+
+  <section class="pf-section pf-section-small reveal">
+    <p class="pf-section-title">{L['profile_info']}</p>
+    <ul class="pf-lang-list">{info_html}</ul>
+  </section>
+
+  <section class="pf-philosophy reveal">
+    <p class="pf-section-title">{L['philosophy']}</p>
+{quote_html}
+    <p class="pf-philosophy-name">{p['name_sub'] if lang != 'en' else p['name_display']}</p>
   </section>'''
 
 
@@ -905,7 +751,7 @@ def blueprint_body(lang):
     )
     sections_nav += f'\n    <a href="{bp_href}#success-factors">{SUCCESS_FACTORS[lang]["title"]}</a>'
     sections_nav += f'\n    <a href="{bp_href}#open-questions">{OPEN_QUESTIONS[lang]["title"]}</a>'
-    sections_nav += f'\n    <a href="{bp_href}#leadership">{LEADERSHIP[lang]["title"]}</a>'
+    sections_nav += f'\n    <a href="{bp_href}#leadership">Profile</a>'
 
     chapter_sections = []
     for c in CHAPTERS:
@@ -947,7 +793,7 @@ def blueprint_body(lang):
     </div>
   </section>'''
 
-    leadership_section = render_leadership_section(lang)
+    leadership_section = f'<div id="leadership" class="pf-page">{render_profile_section(lang)}</div>'
 
     cl = CLOSING[lang]
     closing_lines = "\n".join(f"    <p>{l}</p>" for l in cl["lines"])
@@ -1037,59 +883,7 @@ a{ color: inherit; }
 .lang-link{ text-decoration: none; color: var(--muted); }
 .lang-link.current{ color: var(--fg); font-weight: 600; }
 
-/* Hero */
-.hero{
-  min-height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 24px;
-}
-.hero-inner{ max-width: 720px; }
-.hero-eyebrow{
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 28px;
-}
-.hero-line{
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(28px, 4.4vw, 44px);
-  line-height: 1.45;
-  margin: 0;
-}
-.hero-line-2{ color: var(--muted); }
-.hero-sub{
-  margin-top: 28px;
-  font-size: 14px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-.cta{
-  display: inline-block;
-  margin-top: 44px;
-  padding: 14px 32px;
-  border: 1px solid var(--fg);
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-.cta:hover{ background: var(--fg); color: var(--bg); }
-.scroll-cue{
-  margin-top: 60px;
-  color: var(--muted);
-  animation: bob 2.2s ease-in-out infinite;
-}
-@keyframes bob{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(8px); }
-}
+/* Editorial profile page (pf-*) styles are defined further below. */
 
 /* Blueprint layout */
 .blueprint-layout{
@@ -1205,73 +999,6 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.role-pill{
-  display: inline-block;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 16px;
-  margin: 0 0 24px;
-}
-.lead-profile-line{
-  max-width: 640px;
-  font-size: 16px;
-  color: var(--muted);
-  margin: 0 0 14px;
-}
-.lead-subtitle{
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 48px 0 20px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.exp-block{ margin-bottom: 40px; }
-.exp-org{ font-family: var(--serif); font-size: 19px; margin: 0 0 4px; }
-.exp-meta{ font-size: 13px; color: var(--muted); margin: 0 0 12px; }
-.exp-desc{ font-size: 14.5px; color: var(--muted); max-width: 640px; margin: 0 0 20px; }
-.strength-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 28px;
-}
-.strength-desc{ font-size: 14px; color: var(--muted); margin: 0; }
-.lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.lang-list li{ display: flex; gap: 16px; font-size: 14px; }
-.lang-name{ min-width: 90px; font-weight: 600; }
-.lang-level{ color: var(--muted); }
-.signature-card{
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--line);
-}
-.avatar-placeholder{
-  flex: none;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--serif);
-  font-size: 22px;
-  color: var(--muted);
-}
-.signature-name{ font-size: 15px; margin: 0 0 2px; }
-.signature-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
-.profile-page{
-  margin: 0 auto;
-  padding: 40px 32px 80px;
-}
-.profile-page .chapter{ border-bottom: none; padding-top: 0; }
 .explore-link{
   text-align: center;
   padding: 0 24px 80px;
@@ -1285,12 +1012,6 @@ a{ color: inherit; }
   padding-bottom: 2px;
 }
 .explore-link a:hover{ color: var(--fg); border-color: var(--fg); }
-.lead-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 32px;
-}
-.lead-group-title{ font-weight: 600; font-size: 13.5px; margin-bottom: 10px; }
 
 .closing p{ font-size: 16px; margin: 0 0 10px; }
 .closing .chapter-title{ margin-bottom: 28px; }
@@ -1314,8 +1035,119 @@ a{ color: inherit; }
   .blueprint-layout{ grid-template-columns: 1fr; }
   .toc{ position: static; flex-direction: row; flex-wrap: wrap; max-height: none; }
   .bullet-grid{ grid-template-columns: 1fr; }
-  .two-col, .oq-grid, .lead-grid{ grid-template-columns: 1fr; }
+  .two-col, .oq-grid{ grid-template-columns: 1fr; }
   .nav-links{ display: none; }
+}
+
+/* ---------------------------------------------------------------------
+   Editorial profile page (pf-*) — international-brand style personal
+   introduction (Apple / MUJI / Aesop reference direction). Deliberately
+   separate from the Blueprint's serif/editorial chapter styling: light
+   sans-serif type, large white space, no shadows, no progress bars.
+   --------------------------------------------------------------------- */
+:root{ --pf-sans: "Inter", "Noto Sans JP", var(--sans); }
+
+.pf-page{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 32px 100px;
+  font-family: var(--pf-sans);
+}
+.blueprint-content .pf-page{ max-width: none; padding-left: 0; padding-right: 0; }
+
+.pf-hero{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  min-height: 72vh;
+  padding: 64px 0 32px;
+}
+.pf-hero-text{ max-width: 420px; }
+.pf-name{ font-size: clamp(28px, 3.6vw, 40px); font-weight: 300; margin: 0; letter-spacing: 0.01em; }
+.pf-name-sub{ font-size: 15px; color: var(--muted); margin: 4px 0 28px; font-weight: 300; }
+.pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
+.pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
+.pf-hero-photo{
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--callout-bg);
+}
+.pf-hero-photo img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.pf-statement{
+  max-width: 560px;
+  margin: 0 auto 40px;
+  padding: 0 0 56px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.pf-section{ padding: 56px 0; border-bottom: 1px solid var(--line); }
+.pf-section-small{ padding: 32px 0; }
+.pf-section-title{
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 32px;
+}
+
+.pf-about{ max-width: 640px; }
+.pf-about p{ font-size: 15.5px; font-weight: 300; line-height: 1.9; margin: 0 0 16px; }
+
+.pf-timeline{ display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
+.pf-timeline-node{ flex: 1; min-width: 220px; }
+.pf-timeline-period{ font-size: 13px; color: var(--muted); margin: 0 0 8px; font-weight: 300; }
+.pf-timeline-role{ font-size: 17px; font-weight: 400; margin: 0 0 12px; }
+.pf-timeline-orgs{ display: flex; flex-direction: column; gap: 4px; }
+.pf-timeline-orgs span{ font-size: 14px; color: var(--muted); font-weight: 300; }
+.pf-timeline-arrow{ padding-top: 28px; color: var(--muted); font-size: 18px; }
+
+.pf-expertise-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 40px;
+}
+.pf-expertise-title{ font-size: 13px; font-weight: 500; margin: 0 0 16px; }
+.pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
+
+.pf-brands{ display: flex; flex-wrap: wrap; gap: 40px 56px; }
+.pf-brands span{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+
+.pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
+.pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
+.pf-lang-name{ color: var(--fg); }
+.pf-lang-level{ color: var(--muted); }
+.pf-section-small .pf-lang-list li{ font-size: 12.5px; }
+
+.pf-philosophy{ text-align: center; padding: 72px 0 40px; }
+.pf-philosophy p{
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 300;
+  line-height: 1.8;
+  margin: 0;
+  color: var(--fg);
+}
+.pf-philosophy-name{ margin-top: 28px !important; font-size: 13px !important; color: var(--muted); letter-spacing: 0.04em; }
+
+@media (max-width: 860px){
+  .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
+  .pf-hero-photo{ max-width: 360px; }
+  .pf-expertise-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .pf-timeline{ flex-direction: column; }
+  .pf-timeline-arrow{ display: none; }
 }
 '''
 

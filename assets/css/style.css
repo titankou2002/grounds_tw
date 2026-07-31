@@ -63,59 +63,7 @@ a{ color: inherit; }
 .lang-link{ text-decoration: none; color: var(--muted); }
 .lang-link.current{ color: var(--fg); font-weight: 600; }
 
-/* Hero */
-.hero{
-  min-height: calc(100vh - 60px);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 40px 24px;
-}
-.hero-inner{ max-width: 720px; }
-.hero-eyebrow{
-  font-size: 12px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 28px;
-}
-.hero-line{
-  font-family: var(--serif);
-  font-weight: 400;
-  font-size: clamp(28px, 4.4vw, 44px);
-  line-height: 1.45;
-  margin: 0;
-}
-.hero-line-2{ color: var(--muted); }
-.hero-sub{
-  margin-top: 28px;
-  font-size: 14px;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-}
-.cta{
-  display: inline-block;
-  margin-top: 44px;
-  padding: 14px 32px;
-  border: 1px solid var(--fg);
-  border-radius: 999px;
-  text-decoration: none;
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  transition: background 0.25s ease, color 0.25s ease;
-}
-.cta:hover{ background: var(--fg); color: var(--bg); }
-.scroll-cue{
-  margin-top: 60px;
-  color: var(--muted);
-  animation: bob 2.2s ease-in-out infinite;
-}
-@keyframes bob{
-  0%,100%{ transform: translateY(0); }
-  50%{ transform: translateY(8px); }
-}
+/* Editorial profile page (pf-*) styles are defined further below. */
 
 /* Blueprint layout */
 .blueprint-layout{
@@ -231,73 +179,6 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.role-pill{
-  display: inline-block;
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  color: var(--muted);
-  border: 1px solid var(--line);
-  border-radius: 999px;
-  padding: 6px 16px;
-  margin: 0 0 24px;
-}
-.lead-profile-line{
-  max-width: 640px;
-  font-size: 16px;
-  color: var(--muted);
-  margin: 0 0 14px;
-}
-.lead-subtitle{
-  font-size: 12px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 48px 0 20px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-}
-.exp-block{ margin-bottom: 40px; }
-.exp-org{ font-family: var(--serif); font-size: 19px; margin: 0 0 4px; }
-.exp-meta{ font-size: 13px; color: var(--muted); margin: 0 0 12px; }
-.exp-desc{ font-size: 14.5px; color: var(--muted); max-width: 640px; margin: 0 0 20px; }
-.strength-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 28px;
-}
-.strength-desc{ font-size: 14px; color: var(--muted); margin: 0; }
-.lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px; }
-.lang-list li{ display: flex; gap: 16px; font-size: 14px; }
-.lang-name{ min-width: 90px; font-weight: 600; }
-.lang-level{ color: var(--muted); }
-.signature-card{
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  margin-top: 48px;
-  padding-top: 32px;
-  border-top: 1px solid var(--line);
-}
-.avatar-placeholder{
-  flex: none;
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  border: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: var(--serif);
-  font-size: 22px;
-  color: var(--muted);
-}
-.signature-name{ font-size: 15px; margin: 0 0 2px; }
-.signature-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
-.profile-page{
-  margin: 0 auto;
-  padding: 40px 32px 80px;
-}
-.profile-page .chapter{ border-bottom: none; padding-top: 0; }
 .explore-link{
   text-align: center;
   padding: 0 24px 80px;
@@ -311,12 +192,6 @@ a{ color: inherit; }
   padding-bottom: 2px;
 }
 .explore-link a:hover{ color: var(--fg); border-color: var(--fg); }
-.lead-grid{
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0,1fr));
-  gap: 32px;
-}
-.lead-group-title{ font-weight: 600; font-size: 13.5px; margin-bottom: 10px; }
 
 .closing p{ font-size: 16px; margin: 0 0 10px; }
 .closing .chapter-title{ margin-bottom: 28px; }
@@ -340,6 +215,117 @@ a{ color: inherit; }
   .blueprint-layout{ grid-template-columns: 1fr; }
   .toc{ position: static; flex-direction: row; flex-wrap: wrap; max-height: none; }
   .bullet-grid{ grid-template-columns: 1fr; }
-  .two-col, .oq-grid, .lead-grid{ grid-template-columns: 1fr; }
+  .two-col, .oq-grid{ grid-template-columns: 1fr; }
   .nav-links{ display: none; }
+}
+
+/* ---------------------------------------------------------------------
+   Editorial profile page (pf-*) — international-brand style personal
+   introduction (Apple / MUJI / Aesop reference direction). Deliberately
+   separate from the Blueprint's serif/editorial chapter styling: light
+   sans-serif type, large white space, no shadows, no progress bars.
+   --------------------------------------------------------------------- */
+:root{ --pf-sans: "Inter", "Noto Sans JP", var(--sans); }
+
+.pf-page{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 32px 100px;
+  font-family: var(--pf-sans);
+}
+.blueprint-content .pf-page{ max-width: none; padding-left: 0; padding-right: 0; }
+
+.pf-hero{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: center;
+  min-height: 72vh;
+  padding: 64px 0 32px;
+}
+.pf-hero-text{ max-width: 420px; }
+.pf-name{ font-size: clamp(28px, 3.6vw, 40px); font-weight: 300; margin: 0; letter-spacing: 0.01em; }
+.pf-name-sub{ font-size: 15px; color: var(--muted); margin: 4px 0 28px; font-weight: 300; }
+.pf-role-title{ font-size: 16px; font-weight: 400; margin: 0 0 24px; }
+.pf-subtitle{ font-size: 13px; color: var(--muted); margin: 0 0 4px; letter-spacing: 0.02em; }
+.pf-hero-photo{
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  overflow: hidden;
+  background: var(--callout-bg);
+}
+.pf-hero-photo img{
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center top;
+  display: block;
+}
+.pf-statement{
+  max-width: 560px;
+  margin: 0 auto 40px;
+  padding: 0 0 56px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line);
+}
+
+.pf-section{ padding: 56px 0; border-bottom: 1px solid var(--line); }
+.pf-section-small{ padding: 32px 0; }
+.pf-section-title{
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 0 0 32px;
+}
+
+.pf-about{ max-width: 640px; }
+.pf-about p{ font-size: 15.5px; font-weight: 300; line-height: 1.9; margin: 0 0 16px; }
+
+.pf-timeline{ display: flex; align-items: flex-start; gap: 32px; flex-wrap: wrap; }
+.pf-timeline-node{ flex: 1; min-width: 220px; }
+.pf-timeline-period{ font-size: 13px; color: var(--muted); margin: 0 0 8px; font-weight: 300; }
+.pf-timeline-role{ font-size: 17px; font-weight: 400; margin: 0 0 12px; }
+.pf-timeline-orgs{ display: flex; flex-direction: column; gap: 4px; }
+.pf-timeline-orgs span{ font-size: 14px; color: var(--muted); font-weight: 300; }
+.pf-timeline-arrow{ padding-top: 28px; color: var(--muted); font-size: 18px; }
+
+.pf-expertise-grid{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0,1fr));
+  gap: 40px;
+}
+.pf-expertise-title{ font-size: 13px; font-weight: 500; margin: 0 0 16px; }
+.pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
+
+.pf-brands{ display: flex; flex-wrap: wrap; gap: 40px 56px; }
+.pf-brands span{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+
+.pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
+.pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
+.pf-lang-name{ color: var(--fg); }
+.pf-lang-level{ color: var(--muted); }
+.pf-section-small .pf-lang-list li{ font-size: 12.5px; }
+
+.pf-philosophy{ text-align: center; padding: 72px 0 40px; }
+.pf-philosophy p{
+  font-size: clamp(18px, 2.2vw, 22px);
+  font-weight: 300;
+  line-height: 1.8;
+  margin: 0;
+  color: var(--fg);
+}
+.pf-philosophy-name{ margin-top: 28px !important; font-size: 13px !important; color: var(--muted); letter-spacing: 0.04em; }
+
+@media (max-width: 860px){
+  .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
+  .pf-hero-photo{ max-width: 360px; }
+  .pf-expertise-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .pf-timeline{ flex-direction: column; }
+  .pf-timeline-arrow{ display: none; }
 }
