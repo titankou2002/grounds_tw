@@ -303,8 +303,22 @@ a{ color: inherit; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
-.pf-brands{ display: flex; flex-wrap: wrap; gap: 40px 56px; }
-.pf-brands span{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+.pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
+.pf-brand{ display: flex; align-items: center; gap: 12px; }
+.pf-brand-badge{
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.pf-brand-name{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }

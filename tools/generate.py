@@ -408,25 +408,18 @@ OPEN_QUESTIONS = {
 
 PROFILE_PHOTO = "assets/img/profile.jpg"
 
-# Language-neutral facts reused verbatim across ja/en/zh — an editorial,
-# international-brand-style profile page keeps job titles, org names, and
-# category labels in English by design, per the requested Apple/MUJI/Aesop
-# reference direction.
-PROFILE_CAREER = [
-    {"period": "2000–2010", "role": "Retail Sales Professional",
-     "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
-    {"period": "2010–Present", "role": "Business Operations",
-     "orgs": ["Italian Tile Distributor"]},
-]
-PROFILE_EXPERTISE = [
-    ("Operations", ["Order Management", "Inventory Control", "Purchasing", "Logistics", "Administration"]),
-    ("Retail", ["Customer Service", "Brand Experience", "Visual Merchandising"]),
-    ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
-    ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
-]
-PROFILE_BRANDS = ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]
-PROFILE_LANGUAGES = [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")]
-PROFILE_INFO_ROWS = [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")]
+# Brand names themselves are proper nouns and stay unchanged across ja/en/zh.
+# Everything ELSE — role titles, category labels, skill items, language
+# levels — must be fully localized; keeping those in English on the ja/zh
+# pages was a mistake in the first pass and read as broken, not "editorial."
+PROFILE_BRANDS = ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "REFIN"]
+# Single-letter/short monogram badges standing in for real brand logos —
+# we don't hold rights to the actual trademarked logo artwork, so a plain
+# typographic badge (Aesop/MUJI-style) is used instead. Swap in real logo
+# files later if the brands' own logos are made available.
+PROFILE_BRAND_INITIALS = {
+    "ALBION": "A", "francfranc": "f", "Brooks Brothers": "BB", "LEVI'S": "L", "REFIN": "R",
+}
 PROFILE_SECTION_LABELS = {
     "about": "About", "career": "Career", "expertise": "Core Expertise",
     "brands": "Brand Experience", "languages": "Languages",
@@ -442,9 +435,23 @@ PROFILE = {
         "statement": "長年にわたり、小売現場と企業運営の両方を経験し、日々のオペレーションを支えてきました。",
         "about": [
             "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
-            "その後、イタリア製タイル輸入代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など会社運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
+            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など会社運営を支える実務全般を担当。現在もブランド運営を支えるバックオフィス業務に携わっています。",
         ],
         "philosophy_quote": ["安定したオペレーションは、", "ブランド価値を支える最も重要な基盤だと考えています。"],
+        "career": [
+            {"period": "2000–2010", "role": "販売・接客",
+             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
+            {"period": "2010–現在", "role": "事業運営",
+             "orgs": ["REFIN（台湾総代理店）"]},
+        ],
+        "expertise": [
+            ("Operations", ["受発注管理", "在庫管理", "購買", "物流", "総務"]),
+            ("Retail", ["接客対応", "ブランド体験", "ビジュアルマーチャンダイジング"]),
+            ("Design", ["Adobe Illustrator", "Canva", "カタログデザイン", "プレゼンテーションデザイン"]),
+            ("Systems", ["ERP", "在庫管理システム", "Microsoft Office"]),
+        ],
+        "languages": [("中国語", "ネイティブ"), ("日本語", "学習中"), ("英語", "基礎")],
+        "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
     },
     "en": {
         "name_display": "Hsueh Chi-Ling",
@@ -454,9 +461,23 @@ PROFILE = {
         "statement": "For many years, I have worked across both retail front-lines and business operations, supporting the systems that keep day-to-day work running.",
         "about": [
             "For about 10 years, I worked in sales and customer service at department store brands including ALBION, francfranc, Brooks Brothers, and LEVI'S.",
-            "I then spent roughly 15 years at an Italian tile import distributor, handling order processing, logistics, inventory, procurement, and HR/general affairs — the practical work that supports how a company runs. I continue to work in back-office operations that support brand management today.",
+            "I then spent roughly 15 years at REFIN's Taiwan distributorship, the Italian tile brand, handling order processing, logistics, inventory, procurement, and HR/general affairs — the practical work that supports how a company runs. I continue to work in back-office operations that support brand management today.",
         ],
         "philosophy_quote": ["I believe stable operations are", "the most important foundation supporting a brand's value."],
+        "career": [
+            {"period": "2000–2010", "role": "Retail Sales",
+             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
+            {"period": "2010–Present", "role": "Business Operations",
+             "orgs": ["REFIN (Taiwan Distributor)"]},
+        ],
+        "expertise": [
+            ("Operations", ["Order Management", "Inventory Control", "Purchasing", "Logistics", "Administration"]),
+            ("Retail", ["Customer Service", "Brand Experience", "Visual Merchandising"]),
+            ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
+            ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
+        ],
+        "languages": [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")],
+        "profile_info": [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")],
     },
     "zh": {
         "name_display": "薛佶姈",
@@ -466,9 +487,23 @@ PROFILE = {
         "statement": "多年來，我同時經歷了零售第一線與企業營運，支撐著日常營運的穩定運作。",
         "about": [
             "曾在百貨公司從事約10年的銷售與接待工作，服務過 ALBION、francfranc、Brooks Brothers、LEVI'S 等品牌。",
-            "之後於義大利磁磚進口代理商任職約15年，負責訂單處理、物流、庫存管理、採購、人事總務等支撐公司營運的實務工作。目前仍持續參與支撐品牌營運的後勤事務。",
+            "之後於義大利磁磚品牌 REFIN 的台灣總代理任職約15年，負責訂單處理、物流、庫存管理、採購、人事總務等支撐公司營運的實務工作。目前仍持續參與支撐品牌營運的後勤事務。",
         ],
         "philosophy_quote": ["我相信穩定的營運，", "是支撐品牌價值最重要的基礎。"],
+        "career": [
+            {"period": "2000–2010", "role": "零售銷售",
+             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
+            {"period": "2010–現在", "role": "企業營運",
+             "orgs": ["REFIN（台灣總代理）"]},
+        ],
+        "expertise": [
+            ("Operations", ["訂單管理", "庫存管理", "採購", "物流", "行政"]),
+            ("Retail", ["顧客服務", "品牌體驗", "視覺陳列"]),
+            ("Design", ["Adobe Illustrator", "Canva", "型錄設計", "簡報設計"]),
+            ("Systems", ["ERP", "庫存系統", "Microsoft Office"]),
+        ],
+        "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
+        "profile_info": [("出生日期", "1982.01.07"), ("學歷", "高中畢業"), ("駕照", "普通汽車駕照")],
     },
 }
 
@@ -649,15 +684,16 @@ def render_profile_section(lang):
 
     about_html = "\n".join(f'      <p>{line}</p>' for line in p["about"])
 
+    career = p["career"]
     career_html = []
-    for i, job in enumerate(PROFILE_CAREER):
+    for i, job in enumerate(career):
         orgs_html = "".join(f"<span>{o}</span>" for o in job["orgs"])
         career_html.append(f'''      <div class="pf-timeline-node">
         <p class="pf-timeline-period">{job['period']}</p>
         <p class="pf-timeline-role">{job['role']}</p>
         <div class="pf-timeline-orgs">{orgs_html}</div>
       </div>''')
-        if i < len(PROFILE_CAREER) - 1:
+        if i < len(career) - 1:
             career_html.append('      <div class="pf-timeline-arrow" aria-hidden="true">→</div>')
     career_html = "\n".join(career_html)
 
@@ -666,18 +702,21 @@ def render_profile_section(lang):
         <ul>
 {"".join(f"          <li>{i}</li>" for i in items)}
         </ul>
-      </div>''' for name, items in PROFILE_EXPERTISE)
+      </div>''' for name, items in p["expertise"])
 
-    brands_html = "".join(f"<span>{b}</span>" for b in PROFILE_BRANDS)
+    brands_html = "".join(
+        f'<div class="pf-brand"><span class="pf-brand-badge" aria-hidden="true">{PROFILE_BRAND_INITIALS.get(b, b[:1])}</span><span class="pf-brand-name">{b}</span></div>'
+        for b in PROFILE_BRANDS
+    )
 
     lang_html = "".join(
         f'<li><span class="pf-lang-name">{name}</span><span class="pf-lang-level">{level}</span></li>'
-        for name, level in PROFILE_LANGUAGES
+        for name, level in p["languages"]
     )
 
     info_html = "".join(
         f'<li><span class="pf-lang-name">{label}</span><span class="pf-lang-level">{value}</span></li>'
-        for label, value in PROFILE_INFO_ROWS
+        for label, value in p["profile_info"]
     )
 
     quote_html = "\n".join(f'      <p>{line}</p>' for line in p["philosophy_quote"])
@@ -1124,8 +1163,22 @@ a{ color: inherit; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
-.pf-brands{ display: flex; flex-wrap: wrap; gap: 40px 56px; }
-.pf-brands span{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
+.pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
+.pf-brand{ display: flex; align-items: center; gap: 12px; }
+.pf-brand-badge{
+  flex: none;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.pf-brand-name{ font-size: 16px; font-weight: 300; letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
