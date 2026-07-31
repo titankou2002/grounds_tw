@@ -455,11 +455,11 @@ PROFILE = {
         "statement": "長年にわたり、小売現場と企業運営の両面で実務経験を積み、日々のオペレーションを支えてきました。",
         "about": [
             "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
-            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など事業運営を支える実務全般を担当。企業運営を支えるバックオフィス業務に携わってきました。",
+            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など事業運営を支える実務全般を担当。社内業務の基盤づくりや日々のオペレーション管理に携わってきました。",
         ],
         "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える重要な基盤であると考えています。"],
         "career": [
-            {"eyebrow": "リテール経験", "period": "2000–2010", "role": "百貨店ブランド販売",
+            {"eyebrow": "リテール経験", "period": "2000年〜2010年", "role": "百貨店ブランド販売",
              "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
             {"eyebrow": "事業運営経験", "period": "2010年〜現在", "role": "事業運営",
              "orgs": ["REFIN（台湾総代理店）"]},
@@ -470,7 +470,7 @@ PROFILE = {
             ("デザイン", ["Adobe Illustrator", "Canva", "カタログ制作", "プレゼン資料制作"]),
             ("システム", ["ERP", "在庫管理システム", "Microsoft Office"]),
         ],
-        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("Business", ["REFIN"])],
+        "brand_groups": [("小売ブランド", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("事業ブランド", ["REFIN"])],
         "languages": [("中国語", "母語"), ("日本語", "継続学習中"), ("英語", "基礎")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
         "refin_note": "イタリアンタイルブランド 台湾総代理店",
