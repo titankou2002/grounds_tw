@@ -437,7 +437,7 @@ SECTION_LABELS = {
         "profile_info": "Profile Information", "philosophy": "Professional Philosophy",
     },
     "zh": {
-        "about": "關於我", "career": "職務經歷", "expertise": "專業領域",
+        "about": "個人簡介", "career": "職務經歷", "expertise": "專業領域",
         "brands": "合作品牌經歷", "languages": "語言能力",
         "profile_info": "基本資料", "philosophy": "工作理念",
     },
@@ -451,14 +451,23 @@ PROFILE = {
         "subtitle": ["25年間の実務経験", "小売 × 事業運営 × ブランドサポート"],
         "statement": "長年にわたり、小売現場と企業運営の両面で実務経験を積み、日々のオペレーションを支えてきました。",
         "about": [
-            "百貨店で約10年間、ALBION、francfranc、Brooks Brothers、LEVI'Sなどのブランドにて販売・接客業務に従事。",
-            "その後、イタリアンタイルブランド REFIN の台湾総代理店にて約15年間、受発注、物流、在庫管理、購買、人事・総務など事業運営を支える実務全般を担当。社内業務の基盤づくりや日々のオペレーション管理に携わってきました。",
+            "2011年、輸入タイル代理店に加わりました。会社は投資家によって設立され、日々の運営は夫と私の二人で担っています。夫は主に営業を担当し、私は行政、人事、購買、物流出荷、在庫管理、経理、そして各部門間の調整など、社内のさまざまな業務を担当しています。",
+            "あれから15年が経ち、会社も少しずつ発展し、毎年安定して成長してきました。この間の仕事を通じて、物事を段取りよく進める習慣が身につき、問題が起きても冷静に対処すること、そして細部まで大切にすることを学びました。毎日やるべきことを一つひとつ丁寧にこなせば、会社は自然と安定して前進していくと、私はずっと信じています。",
+            "私のこれまでの職務経験はアパレル小売業ではありませんが、家族の影響もあり、以前からファッションや靴が大好きで、ブランド情報やスタイリングにもよく目を向けてきました。貴社が台湾に出店されると知り、この機会をぜひ活かして、異なる業界に挑戦してみたいと強く思っています。",
+            "小売店長の仕事と現在の業務には多くの違いがあることは承知していますが、マネジメント、人とのコミュニケーション、商品管理、突発的な状況への対応、そして物事を最後まできちんとやり遂げる姿勢は、根本では共通していると信じています。ゼロから学ぶ意欲もあり、これまで培ってきた経験を新しい仕事に活かしていきたいと考えています。",
+            "現在は主に中国語を使用しており、英語と日本語はまだ力を伸ばす必要があります。もし貴社に加わる機会をいただけましたら、時間をかけて学び続け、一日も早くブランドの文化と業務内容に慣れ、チームと共に台湾第一号店を育てていきたいと思います。そして、ブランドの成長にも寄り添っていきたいと考えています。",
         ],
         "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える重要な基盤であると考えています。"],
         "career": [
-            {"eyebrow": "リテール経験", "period": "2000年〜2010年", "role": "百貨店ブランド販売",
-             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
-            {"eyebrow": "事業運営経験", "period": "2010年〜現在", "role": "事業運営",
+            {"eyebrow": "リテール経験",
+             "orgs": [
+                 {"name": "LEVI'S", "period": "2000年〜2004年（4年）"},
+                 {"name": "KOZIOL", "period": "2005年〜2006年（2年）"},
+                 {"name": "francfranc", "period": "2006年〜2008年（2年）"},
+                 {"name": "ALBION", "period": "2008年〜2009年（1年）"},
+                 {"name": "Brooks Brothers", "period": "2009年〜2010年（1年）"},
+             ]},
+            {"eyebrow": "事業運営経験", "period": "2011年〜現在", "role": "事業運営",
              "orgs": ["REFIN（台湾総代理店）"]},
         ],
         "expertise": [
@@ -467,8 +476,8 @@ PROFILE = {
             ("デザイン", ["Adobe Illustrator", "Canva", "カタログ制作", "プレゼン資料制作"]),
             ("システム", ["ERP", "在庫管理システム", "Microsoft Office"]),
         ],
-        "brand_groups": [("小売ブランド", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("事業ブランド", ["REFIN"])],
-        "languages": [("中国語", "母語"), ("日本語", "継続学習中"), ("英語", "基礎")],
+        "brand_groups": [("小売ブランド", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("事業ブランド", ["REFIN"])],
+        "languages": [("中国語", "母語")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
         "refin_note": "イタリアンタイルブランド 台湾総代理店",
     },
@@ -479,14 +488,23 @@ PROFILE = {
         "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
         "statement": "For many years, I have worked across both retail front-lines and business operations, supporting the systems that keep day-to-day work running.",
         "about": [
-            "For about 10 years, I worked in sales and customer service at department store brands including ALBION, francfranc, Brooks Brothers, and LEVI'S.",
-            "I then spent roughly 15 years at REFIN's Taiwan distributorship, the Italian tile brand, handling order processing, logistics, inventory, procurement, and HR/general affairs — the practical work that supports how a company runs. I continue to work in back-office operations that support brand management today.",
+            "In 2011, I joined an import tile distribution company. The company was founded by investors, and day-to-day operations have been run jointly by my husband and me — he mainly handles sales, while I'm responsible for everything on the internal side: administration, HR, procurement, logistics and shipping, inventory management, accounting, and coordination across departments.",
+            "Fifteen years in, the company has grown steadily from its early days to where it is now, with stable growth every year. This work has taught me to keep things organized, to stay calm when problems arise, and to care about every detail. I've always believed that if you take care of what needs doing each day, the company will naturally keep moving forward steadily.",
+            "My work experience isn't in apparel retail, but because of my family, I've always loved fashion and shoes, and I regularly follow brand news and styling. Seeing that your company is about to open a store in Taiwan, I'd really like to take this opportunity to challenge myself in a different industry.",
+            "I know a retail store manager's job is quite different from what I do now, but I believe management, communicating with people, organizing merchandise, handling the unexpected, and the attitude of seeing things through to completion are, at their core, the same. I'm willing to learn from the ground up and apply what I've built up over the years to this new role.",
+            "Right now I mainly work in Chinese, and my English and Japanese still need improvement. But if I have the opportunity to join your company, I'm willing to put in the time to keep learning, so I can get up to speed on the brand's culture and the work as quickly as possible — growing Taiwan's first store together with the team, and growing alongside the brand.",
         ],
         "philosophy_quote": ["I believe stable operations are", "the most important foundation supporting a brand's value."],
         "career": [
-            {"period": "2000–2010", "role": "Retail Sales",
-             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
-            {"period": "2010–Present", "role": "Business Operations",
+            {"eyebrow": "Retail Experience",
+             "orgs": [
+                 {"name": "LEVI'S", "period": "2000–2004 (4 years)"},
+                 {"name": "KOZIOL", "period": "2005–2006 (2 years)"},
+                 {"name": "francfranc", "period": "2006–2008 (2 years)"},
+                 {"name": "ALBION", "period": "2008–2009 (1 year)"},
+                 {"name": "Brooks Brothers", "period": "2009–2010 (1 year)"},
+             ]},
+            {"eyebrow": "Business Experience", "period": "2011–Present", "role": "Business Operations",
              "orgs": ["REFIN (Taiwan Distributor)"]},
         ],
         "expertise": [
@@ -495,8 +513,8 @@ PROFILE = {
             ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
             ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
         ],
-        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("Business", ["REFIN"])],
-        "languages": [("Chinese", "Native"), ("Japanese", "Learning"), ("English", "Basic")],
+        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("Business", ["REFIN"])],
+        "languages": [("Chinese", "Native")],
         "profile_info": [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")],
         "refin_note": "Italian Tile Brand (Taiwan Exclusive Distributor)",
     },
@@ -507,14 +525,23 @@ PROFILE = {
         "subtitle": ["25 年實務經驗", "零售 × 營運 × 品牌支援"],
         "statement": "多年來，我同時經歷了零售第一線與企業營運，支撐著日常營運的穩定運作。",
         "about": [
-            "曾在百貨公司從事約10年的銷售與接待工作，服務過 ALBION、francfranc、Brooks Brothers、LEVI'S 等品牌。",
-            "之後於義大利磁磚品牌 REFIN 的台灣總代理任職約15年，負責訂單處理、物流、庫存管理、採購、人事總務等支撐公司營運的實務工作。目前仍持續參與支撐品牌營運的後勤事務。",
+            "2011年，我加入一間進口磁磚代理公司。公司是由投資者成立，平時的營運則由我和先生一起負責，先生主要負責業務，我則負責公司內部的大小事，像是行政、人事、採購、物流出貨、庫存管理、帳務，以及各部門之間的協調。",
+            "一路走來已經十五年，公司也從剛開始慢慢發展到現在，每年都穩定成長。這些年的工作，讓我習慣把事情安排好，也學會遇到問題時冷靜處理，並且重視每一個細節。我一直認為，只要把每天該做的事情做好，公司自然就會穩定向前。",
+            "雖然我的工作經驗不是服飾零售業，但因為家人的關係，我一直很喜歡流行服飾和鞋子，也常常關注品牌資訊和穿搭。看到貴公司即將在台灣展店，我真的很想把握這次機會，挑戰自己到不同的產業發展。",
+            "我知道零售店長和現在的工作有很多不同，但我相信管理、人員溝通、商品整理、處理突發狀況，以及把事情做好、做完整的態度，其實是共通的。我也願意從頭開始學習，把過去累積的經驗運用在新的工作上。",
+            "目前我主要使用中文，英文和日文還需要加強，但如果有機會加入貴公司，我願意花時間持續學習，希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
         ],
         "philosophy_quote": ["我相信穩定的營運，", "是支撐品牌價值最重要的基礎。"],
         "career": [
-            {"period": "2000–2010", "role": "零售銷售",
-             "orgs": ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]},
-            {"period": "2010–現在", "role": "企業營運",
+            {"eyebrow": "零售經驗",
+             "orgs": [
+                 {"name": "LEVI'S", "period": "2000年～2004年（4年）"},
+                 {"name": "KOZIOL", "period": "2005年～2006年（2年）"},
+                 {"name": "francfranc", "period": "2006年～2008年（2年）"},
+                 {"name": "ALBION", "period": "2008年～2009年（1年）"},
+                 {"name": "Brooks Brothers", "period": "2009年～2010年（1年）"},
+             ]},
+            {"eyebrow": "企業營運經驗", "period": "2011年～現在", "role": "企業營運",
              "orgs": ["REFIN（台灣總代理）"]},
         ],
         "expertise": [
@@ -523,8 +550,8 @@ PROFILE = {
             ("設計", ["Adobe Illustrator", "Canva", "型錄製作", "簡報製作"]),
             ("系統", ["ERP", "庫存管理系統", "Microsoft Office"]),
         ],
-        "brand_groups": [("零售", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S"]), ("企業", ["REFIN"])],
-        "languages": [("中文", "母語"), ("日文", "學習中"), ("英文", "基礎")],
+        "brand_groups": [("零售品牌", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("事業品牌", ["REFIN"])],
+        "languages": [("中文", "母語")],
         "profile_info": [("出生日期", "1982.01.07"), ("學歷", "高中畢業"), ("駕照", "普通汽車駕照")],
         "refin_note": "義大利磁磚品牌（台灣總代理）",
     },
@@ -708,12 +735,23 @@ def render_profile_section(lang):
     career = p["career"]
     career_html = []
     for i, job in enumerate(career):
-        orgs_html = "".join(f"<span>{o}</span>" for o in job["orgs"])
+        orgs = job["orgs"]
+        if orgs and isinstance(orgs[0], dict):
+            # Each org carries its own employment period (e.g. multiple short
+            # retail roles) rather than sharing one period across the node.
+            orgs_html = "".join(
+                f'<div class="pf-timeline-org-row"><span>{o["name"]}</span><span class="pf-timeline-org-period">{o["period"]}</span></div>'
+                for o in orgs
+            )
+        else:
+            orgs_html = "".join(f"<span>{o}</span>" for o in orgs)
         eyebrow_html = f'<p class="pf-timeline-eyebrow">{job["eyebrow"]}</p>' if job.get("eyebrow") else ""
+        period_html = f'<p class="pf-timeline-period">{job["period"]}</p>' if job.get("period") else ""
+        role_html = f'<p class="pf-timeline-role">{job["role"]}</p>' if job.get("role") else ""
         career_html.append(f'''      <div class="pf-timeline-node">
         {eyebrow_html}
-        <p class="pf-timeline-period">{job['period']}</p>
-        <p class="pf-timeline-role">{job['role']}</p>
+        {period_html}
+        {role_html}
         <div class="pf-timeline-orgs">{orgs_html}</div>
       </div>''')
         if i < len(career) - 1:
@@ -732,8 +770,11 @@ def render_profile_section(lang):
         items_html = []
         for b in brands:
             note_html = f'<span class="pf-brand-note">{p["refin_note"]}</span>' if b == "REFIN" else ""
+            logo_path = PROFILE_BRAND_LOGOS.get(b)
+            mark_html = (f'<img class="pf-brand-logo" src="{logo_path}" alt="{b}" loading="lazy">'
+                         if logo_path else f'<span class="pf-brand-textmark">{b}</span>')
             items_html.append(f'''<div class="pf-brand">
-        <img class="pf-brand-logo" src="{PROFILE_BRAND_LOGOS[b]}" alt="{b}" loading="lazy">
+        {mark_html}
         {note_html}
       </div>''')
         brand_group_blocks.append(f'''    <div class="pf-brand-group">
@@ -769,6 +810,11 @@ def render_profile_section(lang):
 
   <p class="pf-statement reveal">{p['statement']}</p>
 
+  <section class="pf-section pf-section-small reveal">
+    <p class="pf-section-title">{L['profile_info']}</p>
+    <ul class="pf-lang-list">{info_html}</ul>
+  </section>
+
   <section class="pf-section reveal">
     <p class="pf-section-title">{L['about']}</p>
     <div class="pf-about">
@@ -798,11 +844,6 @@ def render_profile_section(lang):
   <section class="pf-section reveal">
     <p class="pf-section-title">{L['languages']}</p>
     <ul class="pf-lang-list">{lang_html}</ul>
-  </section>
-
-  <section class="pf-section pf-section-small reveal">
-    <p class="pf-section-title">{L['profile_info']}</p>
-    <ul class="pf-lang-list">{info_html}</ul>
   </section>
 
   <section class="pf-philosophy reveal">
@@ -1192,6 +1233,9 @@ a{ color: inherit; }
 .pf-timeline-role{ font-size: 17px; font-weight: 400; margin: 0 0 12px; }
 .pf-timeline-orgs{ display: flex; flex-direction: column; gap: 4px; }
 .pf-timeline-orgs span{ font-size: 14px; color: var(--muted); font-weight: 300; }
+.pf-timeline-org-row{ display: flex; justify-content: space-between; gap: 12px; padding: 6px 0; border-bottom: 1px dotted var(--line); font-size: 14px; font-weight: 300; }
+.pf-timeline-org-row span:first-child{ color: var(--fg); }
+.pf-timeline-org-period{ color: var(--muted); white-space: nowrap; }
 .pf-timeline-arrow{ padding-top: 28px; color: var(--muted); font-size: 18px; }
 
 .pf-expertise-grid{
@@ -1220,6 +1264,7 @@ a{ color: inherit; }
 :root[data-theme="dark"] .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); }
 @media (prefers-color-scheme: dark){ .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); } }
 :root[data-theme="light"] .pf-brand-logo{ filter: grayscale(1); }
+.pf-brand-textmark{ height: 32px; display: inline-flex; align-items: center; font-size: 16px; font-weight: 400; letter-spacing: 0.02em; color: var(--fg); opacity: 0.85; }
 .pf-brand-note{ font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
