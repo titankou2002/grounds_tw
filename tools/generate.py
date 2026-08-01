@@ -418,6 +418,7 @@ PROFILE_BRAND_LOGOS = {
     "Brooks Brothers": "assets/img/brands/brooks-brothers.png",
     "LEVI'S": "assets/img/brands/levis.png",
     "REFIN": "assets/img/brands/refin.png",
+    "KOZIOL": "assets/img/brands/koziol.svg",
 }
 # Section labels are NOT shared across languages. Translating the body copy
 # while leaving section headers like "About" / "Career" in English reads as

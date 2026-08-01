@@ -1,0 +1,12 @@
+# Business documents should never live in this repo, wherever they land.
+*.xlsx
+
+# Raw/stray files that sometimes get dropped into this Drive-synced
+# project folder from outside the site build (source logo downloads,
+# etc.) — the processed versions live under assets/img/.
+/ALBION LOGO.jpeg
+/Brooks-Brothers-Logo.png
+/LEVIS LOGO.webp
+/francfranc-logo-black.webp
+/koziol.svg
+/png-transparent-refin-ceramiche-hd-logo.png
