@@ -1,5 +1,6 @@
 # Business documents should never live in this repo, wherever they land.
 *.xlsx
+.DS_Store
 
 # Raw/stray files that sometimes get dropped into this Drive-synced
 # project folder from outside the site build (source logo downloads,
@@ -10,3 +11,4 @@
 /francfranc-logo-black.webp
 /koziol.svg
 /png-transparent-refin-ceramiche-hd-logo.png
+/LOGO.jpg
