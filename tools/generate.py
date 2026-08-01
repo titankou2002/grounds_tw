@@ -430,17 +430,17 @@ SECTION_LABELS = {
     "ja": {
         "about": "プロフィール", "career": "職務経歴", "expertise": "専門分野",
         "brands": "ブランド経験", "languages": "語学",
-        "profile_info": "基本情報", "philosophy": "仕事に対する考え方",
+        "profile_info": "基本情報",
     },
     "en": {
         "about": "About", "career": "Career", "expertise": "Core Expertise",
         "brands": "Brand Experience", "languages": "Languages",
-        "profile_info": "Profile Information", "philosophy": "Professional Philosophy",
+        "profile_info": "Profile Information",
     },
     "zh": {
         "about": "個人簡介", "career": "職務經歷", "expertise": "專業領域",
         "brands": "合作品牌經歷", "languages": "語言能力",
-        "profile_info": "基本資料", "philosophy": "工作理念",
+        "profile_info": "基本資料",
     },
 }
 
@@ -450,7 +450,6 @@ PROFILE = {
         "name_sub": "Hsueh Chi-Ling",
         "role_title": "事業運営・ブランドサポート",
         "subtitle": ["25年間の実務経験", "小売 × 事業運営 × ブランドサポート"],
-        "statement": "長年にわたり、小売現場と企業運営の両面で実務経験を積み、日々のオペレーションを支えてきました。",
         "about": [
             "2011年、輸入タイル代理店に加わりました。会社は投資家によって設立され、日々の運営は夫と私の二人で担っています。夫は主に営業を担当し、私は行政、人事、購買、物流出荷、在庫管理、経理、そして各部門間の調整など、社内のさまざまな業務を担当しています。",
             "あれから15年が経ち、会社も少しずつ発展し、毎年安定して成長してきました。この間の仕事を通じて、物事を段取りよく進める習慣が身につき、問題が起きても冷静に対処すること、そして細部まで大切にすることを学びました。毎日やるべきことを一つひとつ丁寧にこなせば、会社は自然と安定して前進していくと、私はずっと信じています。",
@@ -458,7 +457,6 @@ PROFILE = {
             "小売店長の仕事と現在の業務には多くの違いがあることは承知していますが、マネジメント、人とのコミュニケーション、商品管理、突発的な状況への対応、そして物事を最後まできちんとやり遂げる姿勢は、根本では共通していると信じています。ゼロから学ぶ意欲もあり、これまで培ってきた経験を新しい仕事に活かしていきたいと考えています。",
             "現在は主に中国語を使用しており、英語と日本語はまだ力を伸ばす必要があります。もし貴社に加わる機会をいただけましたら、時間をかけて学び続け、一日も早くブランドの文化と業務内容に慣れ、チームと共に台湾第一号店を育てていきたいと思います。そして、ブランドの成長にも寄り添っていきたいと考えています。",
         ],
-        "philosophy_quote": ["日々の安定したオペレーションこそ、ブランド価値を支える重要な基盤であると考えています。"],
         "career": [
             {"eyebrow": "リテール経験",
              "orgs": [
@@ -487,7 +485,6 @@ PROFILE = {
         "name_sub": "薛佶姈",
         "role_title": "Business Operations Professional",
         "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
-        "statement": "For many years, I have worked across both retail front-lines and business operations, supporting the systems that keep day-to-day work running.",
         "about": [
             "In 2011, I joined an import tile distribution company. The company was founded by investors, and day-to-day operations have been run jointly by my husband and me — he mainly handles sales, while I'm responsible for everything on the internal side: administration, HR, procurement, logistics and shipping, inventory management, accounting, and coordination across departments.",
             "Fifteen years in, the company has grown steadily from its early days to where it is now, with stable growth every year. This work has taught me to keep things organized, to stay calm when problems arise, and to care about every detail. I've always believed that if you take care of what needs doing each day, the company will naturally keep moving forward steadily.",
@@ -495,7 +492,6 @@ PROFILE = {
             "I know a retail store manager's job is quite different from what I do now, but I believe management, communicating with people, organizing merchandise, handling the unexpected, and the attitude of seeing things through to completion are, at their core, the same. I'm willing to learn from the ground up and apply what I've built up over the years to this new role.",
             "Right now I mainly work in Chinese, and my English and Japanese still need improvement. But if I have the opportunity to join your company, I'm willing to put in the time to keep learning, so I can get up to speed on the brand's culture and the work as quickly as possible — growing Taiwan's first store together with the team, and growing alongside the brand.",
         ],
-        "philosophy_quote": ["I believe stable operations are", "the most important foundation supporting a brand's value."],
         "career": [
             {"eyebrow": "Retail Experience",
              "orgs": [
@@ -524,7 +520,6 @@ PROFILE = {
         "name_sub": "Hsueh Chi-Ling",
         "role_title": "營運管理專業",
         "subtitle": ["25 年實務經驗", "零售 × 營運 × 品牌支援"],
-        "statement": "多年來，我同時經歷了零售第一線與企業營運，支撐著日常營運的穩定運作。",
         "about": [
             "2011年，我加入一間進口磁磚代理公司。公司是由投資者成立，平時的營運則由我和先生一起負責，先生主要負責業務，我則負責公司內部的大小事，像是行政、人事、採購、物流出貨、庫存管理、帳務，以及各部門之間的協調。",
             "一路走來已經十五年，公司也從剛開始慢慢發展到現在，每年都穩定成長。這些年的工作，讓我習慣把事情安排好，也學會遇到問題時冷靜處理，並且重視每一個細節。我一直認為，只要把每天該做的事情做好，公司自然就會穩定向前。",
@@ -532,7 +527,6 @@ PROFILE = {
             "我知道零售店長和現在的工作有很多不同，但我相信管理、人員溝通、商品整理、處理突發狀況，以及把事情做好、做完整的態度，其實是共通的。我也願意從頭開始學習，把過去累積的經驗運用在新的工作上。",
             "目前我主要使用中文，英文和日文還需要加強，但如果有機會加入貴公司，我願意花時間持續學習，希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
         ],
-        "philosophy_quote": ["我相信穩定的營運，", "是支撐品牌價值最重要的基礎。"],
         "career": [
             {"eyebrow": "零售經驗",
              "orgs": [
@@ -794,8 +788,6 @@ def render_profile_section(lang):
         for label, value in p["profile_info"]
     )
 
-    quote_html = "\n".join(f'      <p class="pf-philosophy-quote">{line}</p>' for line in p["philosophy_quote"])
-
     return f'''  <section class="pf-hero reveal">
     <div class="pf-hero-text">
       <p class="pf-name">{p['name_display']}</p>
@@ -808,8 +800,6 @@ def render_profile_section(lang):
       <img src="{PROFILE_PHOTO}" alt="{p['name_display']}" loading="eager">
     </div>
   </section>
-
-  <p class="pf-statement reveal">{p['statement']}</p>
 
   <section class="pf-section pf-section-small reveal">
     <p class="pf-section-title">{L['profile_info']}</p>
@@ -845,16 +835,6 @@ def render_profile_section(lang):
   <section class="pf-section reveal">
     <p class="pf-section-title">{L['languages']}</p>
     <ul class="pf-lang-list">{lang_html}</ul>
-  </section>
-
-  <section class="pf-philosophy reveal">
-    <p class="pf-section-title">{L['philosophy']}</p>
-{quote_html}
-    <div class="pf-philosophy-signature">
-      <p class="pf-philosophy-name">{p['name_display']}</p>
-      <p class="pf-philosophy-name-sub">{p['name_sub']}</p>
-      <p class="pf-philosophy-role">{p['role_title']}</p>
-    </div>
   </section>'''
 
 
@@ -1202,17 +1182,6 @@ a{ color: inherit; }
   object-position: center top;
   display: block;
 }
-.pf-statement{
-  max-width: 560px;
-  margin: 0 auto 40px;
-  padding: 0 0 56px;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 300;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-}
-
 .pf-section{ padding: 56px 0; border-bottom: 1px solid var(--line); }
 .pf-section-small{ padding: 32px 0; }
 .pf-section-title{
@@ -1273,19 +1242,6 @@ a{ color: inherit; }
 .pf-lang-name{ color: var(--fg); }
 .pf-lang-level{ color: var(--muted); }
 .pf-section-small .pf-lang-list li{ font-size: 12.5px; }
-
-.pf-philosophy{ text-align: center; padding: 72px 0 40px; }
-.pf-philosophy-quote{
-  font-size: clamp(18px, 2.2vw, 22px);
-  font-weight: 300;
-  line-height: 1.8;
-  margin: 0;
-  color: var(--fg);
-}
-.pf-philosophy-signature{ margin-top: 40px; }
-.pf-philosophy-name{ font-size: 15px; font-weight: 400; margin: 0; color: var(--fg); }
-.pf-philosophy-name-sub{ font-size: 13px; color: var(--muted); margin: 4px 0 8px; font-weight: 300; }
-.pf-philosophy-role{ font-size: 12px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
 
 @media (max-width: 860px){
   .pf-hero{ grid-template-columns: 1fr; min-height: auto; gap: 40px; padding-top: 40px; }
