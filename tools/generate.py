@@ -25,9 +25,7 @@ SITE = {
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "ホーム",
         "enter": "Proposalへ進む",
-        "explore": "ブループリントを見る",
         "hero_line": "ブランドを理解し、運営で育てる。",
-        "footer_note": "2026 VERSION.1",
         "toc_title": "目次",
         "back_top": "トップへ戻る",
     },
@@ -36,9 +34,7 @@ SITE = {
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "Home",
         "enter": "Enter Proposal",
-        "explore": "View the Blueprint",
         "hero_line": "Understanding the Brand, Building the Operation.",
-        "footer_note": "2026 VERSION.1",
         "toc_title": "Table of Contents",
         "back_top": "Back to top",
     },
@@ -47,9 +43,7 @@ SITE = {
         "subtitle": "Building the Official Taiwan Operation Together.",
         "nav_home": "首頁",
         "enter": "進入 Proposal",
-        "explore": "查看 Blueprint",
         "hero_line": "理解品牌，用營運滋養它。",
-        "footer_note": "2026 VERSION.1",
         "toc_title": "目錄",
         "back_top": "回到頂端",
     },
@@ -597,9 +591,14 @@ def nav_html(current, active_page):
 </header>'''
 
 
-def html_shell(lang, active_page, body, extra_head="", extra_footer=""):
+def html_shell(lang, active_page, body, extra_head=""):
     t = SITE[lang]
     html_lang = {"ja": "ja", "en": "en", "zh": "zh-Hant"}[lang]
+    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
+    # The only path into the Blueprint document is hidden in plain sight here:
+    # "AUG" is a real link (styled identically to the surrounding text, no
+    # underline/color/cursor change), "2026" is inert. Nothing should read as
+    # a clickable "view the blueprint" prompt anywhere on the page.
     return f'''<!doctype html>
 <html lang="{html_lang}">
 <head>
@@ -621,8 +620,7 @@ def html_shell(lang, active_page, body, extra_head="", extra_footer=""):
 {nav_html(lang, active_page)}
 {body}
 <footer class="site-footer">
-  <p>{t['footer_note']}</p>
-  {extra_footer}
+  <p>2026 <a href="{bp_href}" class="stealth-link">AUG</a></p>
 </footer>
 <script src="assets/js/main.js?v={JS_VERSION}"></script>
 </body>
@@ -636,12 +634,6 @@ def index_body(lang):
 {profile_section}
 </div>
 '''
-
-
-def index_footer_extra(lang):
-    t = SITE[lang]
-    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
-    return f'<p class="explore-link"><a href="{bp_href}">{t["explore"]}</a></p>'
 
 
 def render_bullets(items):
@@ -1065,15 +1057,10 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.explore-link{ margin: 6px 0 0; }
-.explore-link a{
-  font-size: 10px;
-  letter-spacing: 0.03em;
-  color: var(--muted);
+.stealth-link, .stealth-link:hover, .stealth-link:visited{
+  color: inherit;
   text-decoration: none;
-  opacity: 0.5;
 }
-.explore-link a:hover{ color: var(--fg); opacity: 1; }
 
 .closing p{ font-size: 16px; margin: 0 0 10px; }
 .closing .chapter-title{ margin-bottom: 28px; }
@@ -1236,7 +1223,7 @@ def main():
     write("assets/js/main.js", JS)
 
     for lang in LANGS:
-        idx = html_shell(lang, "index", index_body(lang), extra_footer=index_footer_extra(lang))
+        idx = html_shell(lang, "index", index_body(lang))
         bp = html_shell(lang, "blueprint", blueprint_body(lang))
         if lang == "ja":
             write("index.html", idx)
