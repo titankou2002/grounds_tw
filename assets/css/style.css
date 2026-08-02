@@ -180,7 +180,7 @@ a{ color: inherit; }
 .oq-group li{ margin-bottom: 6px; }
 
 .stealth-link, .stealth-link:hover, .stealth-link:visited{
-  color: inherit;
+  color: var(--bg);
   text-decoration: none;
 }
 
