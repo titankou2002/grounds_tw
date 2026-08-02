@@ -432,13 +432,13 @@ PROFILE = {
         "name_display": "薛 佶姈",
         "name_sub": "Hsueh Chi-Ling",
         "role_title": "事業運営・ブランドサポート",
-        "subtitle": ["25年間の実務経験", "小売 × 事業運営 × ブランドサポート"],
+        "subtitle": "小売 × 事業運営 × ブランドサポート",
         "about": [
             "2011年、輸入タイル代理店に加わりました。会社は主にイタリア製の高級タイルを取り扱っており、日々の運営は夫と私の二人で担っています。夫は主に営業面を担当し、私は行政、人事、購買、物流出荷、在庫管理、経理、そして各部門間の調整など、社内のさまざまな業務を担当しています。",
             "あれから15年が経ち、会社も少しずつ発展し、毎年安定して成長してきました。この間の仕事を通じて、物事を段取りよく進める習慣が身につき、問題が起きても冷静に対処すること、そして細部まで大切にすることを学びました。毎日やるべきことを一つひとつ丁寧にこなせば、会社は自然と安定して前進していくと、私はずっと信じています。",
             "私のこれまでの職務経験はアパレル小売業ではありませんが、家族の影響もあり、以前からファッションや靴が大好きで、ブランド情報やスタイリングにもよく目を向けてきました。貴社が台湾に出店されると知り、この機会をぜひ活かして、異なる業界に挑戦してみたいと強く思っています。",
             "小売店長の仕事と現在の業務には多くの違いがあることは承知していますが、マネジメント、人とのコミュニケーション、商品管理、突発的な状況への対応、そして物事を最後まできちんとやり遂げる姿勢は、根本では共通していると信じています。ゼロから学ぶ意欲もあり、これまで培ってきた経験を新しい仕事に活かしていきたいと考えています。",
-            "現在は主に中国語を使用しており、英語と日本語はまだ力を伸ばす必要があります。もし貴社に加わる機会をいただけましたら、時間をかけて学び続け、一日も早くブランドの文化と業務内容に慣れ、チームと共に台湾第一号店を育てていきたいと思います。そして、ブランドの成長にも寄り添っていきたいと考えています。",
+            "現在の業務では主に中国語を使用していますが、継続的な学習と実務経験を積み重ねることで語学力を高めていきたいと考えています。将来的には日本本社やチームの皆さまとより円滑に連携できるようになりたいと思います。一日も早くブランドの文化と業務内容に慣れ、チームと共に台湾第一号店を育てていきたいと思います。そして、ブランドの成長にも寄り添っていきたいと考えています。",
         ],
         "career": [
             {"eyebrow": "リテール経験",
@@ -465,13 +465,13 @@ PROFILE = {
         "name_display": "Hsueh Chi-Ling",
         "name_sub": "薛佶姈",
         "role_title": "Business Operations Professional",
-        "subtitle": ["25 Years of Experience", "Retail × Operations × Brand Support"],
+        "subtitle": "Retail × Operations × Brand Support",
         "about": [
             "In 2011, I joined an import tile distribution company. The company mainly distributes premium Italian tiles, and day-to-day operations have been run jointly by my husband and me — he mainly handles the sales side, while I'm responsible for everything on the internal side: administration, HR, procurement, logistics and shipping, inventory management, accounting, and coordination across departments.",
             "Fifteen years in, the company has grown steadily from its early days to where it is now, with stable growth every year. This work has taught me to keep things organized, to stay calm when problems arise, and to care about every detail. I've always believed that if you take care of what needs doing each day, the company will naturally keep moving forward steadily.",
             "My work experience isn't in apparel retail, but because of my family, I've always loved fashion and shoes, and I regularly follow brand news and styling. Seeing that your company is about to open a store in Taiwan, I'd really like to take this opportunity to challenge myself in a different industry.",
             "I know a retail store manager's job is quite different from what I do now, but I believe management, communicating with people, organizing merchandise, handling the unexpected, and the attitude of seeing things through to completion are, at their core, the same. I'm willing to learn from the ground up and apply what I've built up over the years to this new role.",
-            "Right now I mainly work in Chinese, and my English and Japanese still need improvement. But if I have the opportunity to join your company, I'm willing to put in the time to keep learning, so I can get up to speed on the brand's culture and the work as quickly as possible — growing Taiwan's first store together with the team, and growing alongside the brand.",
+            "Right now I mainly work in Chinese, and I want to keep building my language ability through ongoing study and hands-on work experience, so I can collaborate more smoothly with Japan HQ and the team in the future. I want to get up to speed on the brand's culture and the work as quickly as possible — growing Taiwan's first store together with the team, and growing alongside the brand.",
         ],
         "career": [
             {"eyebrow": "Retail Experience",
@@ -498,13 +498,13 @@ PROFILE = {
         "name_display": "薛佶姈",
         "name_sub": "Hsueh Chi-Ling",
         "role_title": "營運管理專業",
-        "subtitle": ["25 年實務經驗", "零售 × 營運 × 品牌支援"],
+        "subtitle": "零售 × 營運 × 品牌支援",
         "about": [
             "2011年，我加入一間進口磁磚代理公司。公司主要是代理義大利精品磁磚，平時的營運是由我和先生一起負責，先生主要負責業務方面，我則負責公司內部整體營運，並管理約15位員工，工作涵蓋行政、人事、採購、物流出貨、庫存管理、帳務，以及各部門間的溝通協調。",
             "一路走來已經十五年，公司也從剛開始慢慢發展到現在，每年都穩定成長。這些年的工作，讓我習慣把事情安排好，也學會遇到問題時冷靜處理，並且重視每一個細節。我一直認為，只要把每天該做的事情做好，公司自然就會穩定向前。",
             "雖然我的工作經驗不是服飾零售業，但因為家人的關係，我一直很喜歡流行服飾和鞋子，也常常關注品牌資訊和穿搭。看到貴公司即將在台灣展店，我真的很想把握這次機會，挑戰自己到不同的產業發展。",
             "我知道零售店長和現在的工作有很多不同，但我相信管理、人員溝通、商品整理、處理突發狀況，以及把事情做好、做完整的態度，其實是共通的。我也願意從頭開始學習，把過去累積的經驗運用在新的工作上。",
-            "目前工作主要使用中文，英文與日文仍持續學習中。雖然目前還無法流利使用，但我希望透過持續學習與實際工作累積經驗，不斷提升自己的語言能力，期許未來能更順利地與日本總部及團隊合作。希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
+            "目前工作主要使用中文，我希望透過持續學習與實際工作累積經驗，同時不斷提升自己的語言能力，期許未來能更順利地與日本總部及團隊合作。希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
         ],
         "career": [
             {"eyebrow": "零售經驗",
@@ -757,8 +757,7 @@ def render_profile_section(lang):
       <p class="pf-name">{p['name_display']}</p>
       <p class="pf-name-sub">{p['name_sub']}</p>
       <p class="pf-role-title">{p['role_title']}</p>
-      <p class="pf-subtitle">{p['subtitle'][0]}</p>
-      <p class="pf-subtitle">{p['subtitle'][1]}</p>
+      <p class="pf-subtitle">{p['subtitle']}</p>
     </div>
     <div class="pf-hero-photo">
       <img src="{PROFILE_PHOTO}" alt="{p['name_display']}" loading="eager">
