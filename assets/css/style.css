@@ -179,18 +179,13 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.explore-link{
-  max-width: 1080px;
-  margin: 0 auto;
-  text-align: right;
-  padding: 0 32px 40px;
-}
+.explore-link{ margin: 6px 0 0; }
 .explore-link a{
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.03em;
   color: var(--muted);
   text-decoration: none;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 .explore-link a:hover{ color: var(--fg); opacity: 1; }
 
@@ -297,26 +292,6 @@ a{ color: inherit; }
 .pf-expertise-title{ font-size: 13px; font-weight: 500; margin: 0 0 16px; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
-
-.pf-brand-group{ margin-bottom: 32px; }
-.pf-brand-group:last-child{ margin-bottom: 0; }
-.pf-brand-group-title{ font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin: 0 0 16px; }
-.pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
-.pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.pf-brand-logo{
-  height: 32px;
-  max-width: 140px;
-  width: auto;
-  object-fit: contain;
-  object-position: left center;
-  filter: grayscale(1);
-  opacity: 0.85;
-}
-:root[data-theme="dark"] .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); }
-@media (prefers-color-scheme: dark){ .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); } }
-:root[data-theme="light"] .pf-brand-logo{ filter: grayscale(1); }
-.pf-brand-textmark{ height: 32px; display: inline-flex; align-items: center; font-size: 16px; font-weight: 400; letter-spacing: 0.02em; color: var(--fg); opacity: 0.85; }
-.pf-brand-note{ font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
 
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }

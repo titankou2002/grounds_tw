@@ -27,7 +27,7 @@ SITE = {
         "enter": "Proposalへ進む",
         "explore": "ブループリントを見る",
         "hero_line": "ブランドを理解し、運営で育てる。",
-        "footer_note": "Version 0.1 — Living Document. 内容は継続的に更新されます。",
+        "footer_note": "2026 VERSION.1",
         "toc_title": "目次",
         "back_top": "トップへ戻る",
     },
@@ -38,7 +38,7 @@ SITE = {
         "enter": "Enter Proposal",
         "explore": "View the Blueprint",
         "hero_line": "Understanding the Brand, Building the Operation.",
-        "footer_note": "Version 0.1 — Living Document. Content is continuously updated.",
+        "footer_note": "2026 VERSION.1",
         "toc_title": "Table of Contents",
         "back_top": "Back to top",
     },
@@ -49,7 +49,7 @@ SITE = {
         "enter": "進入 Proposal",
         "explore": "查看 Blueprint",
         "hero_line": "理解品牌，用營運滋養它。",
-        "footer_note": "Version 0.1 — Living Document，內容將持續更新。",
+        "footer_note": "2026 VERSION.1",
         "toc_title": "目錄",
         "back_top": "回到頂端",
     },
@@ -409,17 +409,6 @@ PROFILE_PHOTO = "assets/img/profile.jpg"
 # Everything ELSE — role titles, category labels, skill items, language
 # levels — must be fully localized; keeping those in English on the ja/zh
 # pages was a mistake in the first pass and read as broken, not "editorial."
-# Real logo files supplied by the user, background-removed. REFIN is the
-# lesser-known of the five (an Italian tile brand, not consumer retail),
-# so it gets a one-line qualifier under its logo — see PROFILE[lang]["refin_note"].
-PROFILE_BRAND_LOGOS = {
-    "ALBION": "assets/img/brands/albion.png",
-    "francfranc": "assets/img/brands/francfranc.png",
-    "Brooks Brothers": "assets/img/brands/brooks-brothers.png",
-    "LEVI'S": "assets/img/brands/levis.png",
-    "REFIN": "assets/img/brands/refin.png",
-    "KOZIOL": "assets/img/brands/koziol.svg",
-}
 # Section labels are NOT shared across languages. Translating the body copy
 # while leaving section headers like "About" / "Career" in English reads as
 # "a résumé translated into Japanese," not a page designed the way a
@@ -429,17 +418,17 @@ PROFILE_BRAND_LOGOS = {
 SECTION_LABELS = {
     "ja": {
         "about": "プロフィール", "career": "職務経歴", "expertise": "専門分野",
-        "brands": "ブランド経験", "languages": "語学",
+        "languages": "語学",
         "profile_info": "基本情報",
     },
     "en": {
         "about": "About", "career": "Career", "expertise": "Core Expertise",
-        "brands": "Brand Experience", "languages": "Languages",
+        "languages": "Languages",
         "profile_info": "Profile Information",
     },
     "zh": {
         "about": "個人簡介", "career": "職務經歷", "expertise": "專業領域",
-        "brands": "合作品牌經歷", "languages": "語言能力",
+        "languages": "語言能力",
         "profile_info": "基本資料",
     },
 }
@@ -475,10 +464,8 @@ PROFILE = {
             ("デザイン", ["Adobe Illustrator", "Canva", "カタログ制作", "プレゼン資料制作"]),
             ("システム", ["ERP", "在庫管理システム", "Microsoft Office"]),
         ],
-        "brand_groups": [("小売ブランド", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("事業ブランド", ["REFIN"])],
         "languages": [("中国語", "母語")],
         "profile_info": [("生年月日", "1982.01.07"), ("学歴", "高等学校卒業"), ("免許", "普通自動車第一種運転免許")],
-        "refin_note": "イタリアンタイルブランド 台湾総代理店",
     },
     "en": {
         "name_display": "Hsueh Chi-Ling",
@@ -510,10 +497,8 @@ PROFILE = {
             ("Design", ["Adobe Illustrator", "Canva", "Catalog Design", "Presentation Design"]),
             ("Systems", ["ERP", "Inventory System", "Microsoft Office"]),
         ],
-        "brand_groups": [("Retail", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("Business", ["REFIN"])],
         "languages": [("Chinese", "Native")],
         "profile_info": [("Date of Birth", "1982.01.07"), ("Education", "High School"), ("License", "Driver's License")],
-        "refin_note": "Italian Tile Brand (Taiwan Exclusive Distributor)",
     },
     "zh": {
         "name_display": "薛佶姈",
@@ -521,11 +506,11 @@ PROFILE = {
         "role_title": "營運管理專業",
         "subtitle": ["25 年實務經驗", "零售 × 營運 × 品牌支援"],
         "about": [
-            "2011年，我加入一間進口磁磚代理公司。公司主要是代理義大利精品磁磚，平時的營運是由我和先生一起負責，先生主要負責業務方面，我則負責公司內部的大小事，像是行政、人事、採購、物流出貨、庫存管理、帳務，以及各部門之間的協調。",
+            "2011年，我加入一間進口磁磚代理公司。公司主要是代理義大利精品磁磚，平時的營運是由我和先生一起負責，先生主要負責業務方面，我則負責公司內部整體營運，並管理約15位員工，工作涵蓋行政、人事、採購、物流出貨、庫存管理、帳務，以及各部門間的溝通協調。",
             "一路走來已經十五年，公司也從剛開始慢慢發展到現在，每年都穩定成長。這些年的工作，讓我習慣把事情安排好，也學會遇到問題時冷靜處理，並且重視每一個細節。我一直認為，只要把每天該做的事情做好，公司自然就會穩定向前。",
             "雖然我的工作經驗不是服飾零售業，但因為家人的關係，我一直很喜歡流行服飾和鞋子，也常常關注品牌資訊和穿搭。看到貴公司即將在台灣展店，我真的很想把握這次機會，挑戰自己到不同的產業發展。",
             "我知道零售店長和現在的工作有很多不同，但我相信管理、人員溝通、商品整理、處理突發狀況，以及把事情做好、做完整的態度，其實是共通的。我也願意從頭開始學習，把過去累積的經驗運用在新的工作上。",
-            "目前我主要使用中文，英文和日文還需要加強，但如果有機會加入貴公司，我願意花時間持續學習，希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
+            "目前工作主要使用中文，英文與日文仍持續學習中。雖然目前還無法流利使用，但我希望透過持續學習與實際工作累積經驗，不斷提升自己的語言能力，期許未來能更順利地與日本總部及團隊合作。希望能盡快熟悉品牌文化與工作內容，和團隊一起把台灣第一間店經營好，也希望能陪著品牌一起成長。",
         ],
         "career": [
             {"eyebrow": "零售經驗",
@@ -545,10 +530,8 @@ PROFILE = {
             ("設計", ["Adobe Illustrator", "Canva", "型錄製作", "簡報製作"]),
             ("系統", ["ERP", "庫存管理系統", "Microsoft Office"]),
         ],
-        "brand_groups": [("零售品牌", ["ALBION", "francfranc", "Brooks Brothers", "LEVI'S", "KOZIOL"]), ("事業品牌", ["REFIN"])],
         "languages": [("中文", "母語")],
         "profile_info": [("出生日期", "1982.01.07"), ("學歷", "高中畢業"), ("駕照", "普通汽車駕照")],
-        "refin_note": "義大利磁磚品牌（台灣總代理）",
     },
 }
 
@@ -614,7 +597,7 @@ def nav_html(current, active_page):
 </header>'''
 
 
-def html_shell(lang, active_page, body, extra_head=""):
+def html_shell(lang, active_page, body, extra_head="", extra_footer=""):
     t = SITE[lang]
     html_lang = {"ja": "ja", "en": "en", "zh": "zh-Hant"}[lang]
     return f'''<!doctype html>
@@ -639,6 +622,7 @@ def html_shell(lang, active_page, body, extra_head=""):
 {body}
 <footer class="site-footer">
   <p>{t['footer_note']}</p>
+  {extra_footer}
 </footer>
 <script src="assets/js/main.js?v={JS_VERSION}"></script>
 </body>
@@ -647,14 +631,17 @@ def html_shell(lang, active_page, body, extra_head=""):
 
 
 def index_body(lang):
-    t = SITE[lang]
-    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
     profile_section = render_profile_section(lang)
     return f'''<div class="pf-page">
 {profile_section}
 </div>
-<p class="explore-link"><a href="{bp_href}">{t['explore']} →</a></p>
 '''
+
+
+def index_footer_extra(lang):
+    t = SITE[lang]
+    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
+    return f'<p class="explore-link"><a href="{bp_href}">{t["explore"]}</a></p>'
 
 
 def render_bullets(items):
@@ -763,24 +750,6 @@ def render_profile_section(lang):
         </ul>
       </div>''' for name, items in p["expertise"])
 
-    brand_group_blocks = []
-    for group_label, brands in p["brand_groups"]:
-        items_html = []
-        for b in brands:
-            note_html = f'<span class="pf-brand-note">{p["refin_note"]}</span>' if b == "REFIN" else ""
-            logo_path = PROFILE_BRAND_LOGOS.get(b)
-            mark_html = (f'<img class="pf-brand-logo" src="{logo_path}" alt="{b}" loading="lazy">'
-                         if logo_path else f'<span class="pf-brand-textmark">{b}</span>')
-            items_html.append(f'''<div class="pf-brand">
-        {mark_html}
-        {note_html}
-      </div>''')
-        brand_group_blocks.append(f'''    <div class="pf-brand-group">
-      <p class="pf-brand-group-title">{group_label}</p>
-      <div class="pf-brands">{"".join(items_html)}</div>
-    </div>''')
-    brands_html = "\n".join(brand_group_blocks)
-
     lang_html = "".join(
         f'<li><span class="pf-lang-name">{name}</span><span class="pf-lang-level">{level}</span></li>'
         for name, level in p["languages"]
@@ -828,11 +797,6 @@ def render_profile_section(lang):
     <div class="pf-expertise-grid">
 {expertise_html}
     </div>
-  </section>
-
-  <section class="pf-section reveal">
-    <p class="pf-section-title">{L['brands']}</p>
-{brands_html}
   </section>
 
   <section class="pf-section reveal">
@@ -1101,18 +1065,13 @@ a{ color: inherit; }
 .oq-group ul{ margin: 0; padding-left: 18px; font-size: 13.5px; color: var(--muted); }
 .oq-group li{ margin-bottom: 6px; }
 
-.explore-link{
-  max-width: 1080px;
-  margin: 0 auto;
-  text-align: right;
-  padding: 0 32px 40px;
-}
+.explore-link{ margin: 6px 0 0; }
 .explore-link a{
-  font-size: 11px;
+  font-size: 10px;
   letter-spacing: 0.03em;
   color: var(--muted);
   text-decoration: none;
-  opacity: 0.7;
+  opacity: 0.5;
 }
 .explore-link a:hover{ color: var(--fg); opacity: 1; }
 
@@ -1220,26 +1179,6 @@ a{ color: inherit; }
 .pf-expertise-col ul{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
 .pf-expertise-col li{ font-size: 14px; font-weight: 300; color: var(--muted); }
 
-.pf-brand-group{ margin-bottom: 32px; }
-.pf-brand-group:last-child{ margin-bottom: 0; }
-.pf-brand-group-title{ font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; margin: 0 0 16px; }
-.pf-brands{ display: flex; flex-wrap: wrap; gap: 32px 56px; }
-.pf-brand{ display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
-.pf-brand-logo{
-  height: 32px;
-  max-width: 140px;
-  width: auto;
-  object-fit: contain;
-  object-position: left center;
-  filter: grayscale(1);
-  opacity: 0.85;
-}
-:root[data-theme="dark"] .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); }
-@media (prefers-color-scheme: dark){ .pf-brand-logo{ filter: grayscale(1) invert(1) brightness(1.6); } }
-:root[data-theme="light"] .pf-brand-logo{ filter: grayscale(1); }
-.pf-brand-textmark{ height: 32px; display: inline-flex; align-items: center; font-size: 16px; font-weight: 400; letter-spacing: 0.02em; color: var(--fg); opacity: 0.85; }
-.pf-brand-note{ font-size: 11.5px; color: var(--muted); letter-spacing: 0.02em; }
-
 .pf-lang-list{ list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; max-width: 320px; }
 .pf-lang-list li{ display: flex; justify-content: space-between; font-size: 14px; font-weight: 300; }
 .pf-lang-name{ color: var(--fg); }
@@ -1297,7 +1236,7 @@ def main():
     write("assets/js/main.js", JS)
 
     for lang in LANGS:
-        idx = html_shell(lang, "index", index_body(lang))
+        idx = html_shell(lang, "index", index_body(lang), extra_footer=index_footer_extra(lang))
         bp = html_shell(lang, "blueprint", blueprint_body(lang))
         if lang == "ja":
             write("index.html", idx)
