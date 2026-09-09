@@ -77,6 +77,16 @@ SHELL_TAIL = """
 </body>
 </html>""" % JS_VERSION
 
+# Per-page accent overrides so key docs stand out from the monochrome default.
+# Keyed by md filename.
+PAGE_ACCENTS = {
+    "商標事務所洽談_QA.md": {
+        "accent": "#a5521f",
+        "accent_soft": "#f6ece2",
+        "accent_soft_dark": "#2a1d12",
+    },
+}
+
 
 def inline(text):
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
@@ -245,6 +255,25 @@ for fname, title, desc in DOCS:
         mdtext = f.read()
     body = md_to_html(mdtext)
     page = SHELL_HEAD.replace("__TITLE__", html.escape(title)).replace("__DESC__", html.escape(desc)).replace("__CSSV__", CSS_VERSION)
+    if fname in PAGE_ACCENTS:
+        a = PAGE_ACCENTS[fname]
+        page = page.replace("</style>",
+            f"""
+.docs-body{{}}
+.docs-body h2{{border-bottom-color:{a['accent']}}}
+.docs-body h2::before{{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:{a['accent']};margin-right:8px;vertical-align:2px}}
+.docs-body blockquote{{background:var(--callout-bg);border-left:3px solid {a['accent']}}}
+.docs-body th{{background:{a['accent_soft']}}}
+.docs-body code{{background:{a['accent_soft']}}}
+.docs-tag{{color:{a['accent']};border-color:{a['accent']}}}
+.task li.done::before{{color:{a['accent']}}}
+.docs-body a{{color:{a['accent']}}}
+@media(prefers-color-scheme:dark){{
+.docs-body th{{background:{a['accent_soft_dark']}}}
+.docs-body code{{background:{a['accent_soft_dark']}}}
+.docs-body a{{color:{a['accent_soft']}}}
+}}
+</style>""", 1)
     page += '<div class="docs-layout">'
     page += '<nav class="docs-nav">'
     page += f'<a href="index.html">← 全部文件</a>'

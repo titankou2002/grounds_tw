@@ -38,6 +38,21 @@
 .task li{padding-left:22px;position:relative}
 .task li::before{content:"☐";position:absolute;left:0;color:var(--muted)}
 .task li.done::before{content:"☑";color:var(--accent)}
+
+.docs-body{}
+.docs-body h2{border-bottom-color:#a5521f}
+.docs-body h2::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:#a5521f;margin-right:8px;vertical-align:2px}
+.docs-body blockquote{background:var(--callout-bg);border-left:3px solid #a5521f}
+.docs-body th{background:#f6ece2}
+.docs-body code{background:#f6ece2}
+.docs-tag{color:#a5521f;border-color:#a5521f}
+.task li.done::before{color:#a5521f}
+.docs-body a{color:#a5521f}
+@media(prefers-color-scheme:dark){
+.docs-body th{background:#2a1d12}
+.docs-body code{background:#2a1d12}
+.docs-body a{color:#f6ece2}
+}
 </style>
 </head>
 <body>
