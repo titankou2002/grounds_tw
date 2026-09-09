@@ -99,6 +99,10 @@ details.module .mod-body{padding:6px 18px 18px; border-top:1px solid var(--line)
 .chip.tw{background:#7fe3c8}
 .chip.jp{background:#7fb3ff}
 .chip.both{background:#d299ff}
+.chip.p0{background:var(--r0)}
+.chip.p1{background:var(--r1)}
+.chip.p2{background:var(--r2)}
+.urg{margin-left:auto; font-size:12px; font-weight:800; padding:3px 12px; border-radius:20px; color:#0e1116; white-space:nowrap; flex-shrink:0}
 .task{list-style:none}
 .task li{list-style:none; padding-left:22px; position:relative; margin-bottom:6px; font-size:14px}
 .task li:before{content:"☐"; position:absolute; left:0; color:var(--do)}
@@ -133,6 +137,7 @@ footer{margin-top:40px; color:var(--muted); font-size:12.5px; border-top:1px sol
 
 def inline(text):
     text = re.sub(r"`([^`]+)`", r"<code>\1</code>", text)
+    text = re.sub(r"\[([^\]]+)\]\(([^)\s]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
     text = re.sub(r"\*\*([^*]+)\*\*", r"<strong>\1</strong>", text)
     text = re.sub(r"\*([^*\s][^*]*?)\*", r"<em>\1</em>", text)
     return text
@@ -252,7 +257,22 @@ def block_kind(name):
         return "watch"
     if "主責" in name or "負責歸屬" in name:
         return "owner"
+    if "急迫" in name:
+        return "urgency"
     return "other"
+
+
+def urgency_badge(raw):
+    """Parse 急迫度 line like 'P0（公司沒成立，什麼都簽不了）' into a colored badge."""
+    m = re.search(r"(P[012])", raw)
+    if not m:
+        return ""
+    lvl = m.group(1)
+    note = re.sub(r"^\s*P[012]\s*[（(]?(.*?)[)）]?\s*$", r"\1", raw).strip()
+    if not note:
+        note = {"P0": "最急", "P1": "該做", "P2": "可後"}[lvl]
+    color = {"P0": "var(--r0)", "P1": "var(--r1)", "P2": "var(--r2)"}[lvl]
+    return f'<span class="urg" style="background:{color}" title="急迫度">{lvl}｜{html.escape(note)}</span>'
 
 
 def owner_chips(text):
@@ -397,10 +417,13 @@ def build():
             blocks = split_blocks(body_lines)
             blks = []
             chips = []
+            urg = ""
             for name, blines in blocks:
                 kind = block_kind(name)
                 raw = blines[0].strip() if blines else ""
-                if kind == "do":
+                if kind == "urgency":
+                    urg = urgency_badge(raw)
+                elif kind == "do":
                     items = render_do_actions(blines)
                     blks.append(f'<div class="blk do"><div class="lbl">✔ 先做什麼</div>{items}</div>')
                 elif kind == "watch":
@@ -421,7 +444,7 @@ def build():
                 ch = "".join(f'<span class="chip {c}">{inline(l)}</span>' for l, c in chips)
                 chip_html = f'<span class="chips">{ch}</span>'
             card = f"""<details class="module" id="ch{cnum}">
-  <summary><span class="mnum">CH {cnum}</span><h3>{inline(clean_title)}</h3>{chip_html}<span class="arrow">▼</span></summary>
+  <summary><span class="mnum">CH {cnum}</span><h3>{inline(clean_title)}</h3>{chip_html}{urg}<span class="arrow">▼</span></summary>
   <div class="mod-body">{"".join(blks)}</div>
 </details>"""
             chapters[phase].append((cnum, clean_title, pcolor, card))

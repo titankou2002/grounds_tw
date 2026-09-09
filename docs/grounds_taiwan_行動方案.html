@@ -92,6 +92,10 @@ details.module .mod-body{padding:6px 18px 18px; border-top:1px solid var(--line)
 .chip.tw{background:#7fe3c8}
 .chip.jp{background:#7fb3ff}
 .chip.both{background:#d299ff}
+.chip.p0{background:var(--r0)}
+.chip.p1{background:var(--r1)}
+.chip.p2{background:var(--r2)}
+.urg{margin-left:auto; font-size:12px; font-weight:800; padding:3px 12px; border-radius:20px; color:#0e1116; white-space:nowrap; flex-shrink:0}
 .task{list-style:none}
 .task li{list-style:none; padding-left:22px; position:relative; margin-bottom:6px; font-size:14px}
 .task li:before{content:"☐"; position:absolute; left:0; color:var(--do)}
@@ -152,15 +156,9 @@ footer{margin-top:40px; color:var(--muted); font-size:12.5px; border-top:1px sol
 <div class="nav-link" onclick="scrollToId('ch14')"><span class="mp" style="background:var(--phase2)"></span>Ch14 願景</div>
 </div>
 <div class="nav-head">專題</div>
-<div class="nav-link" onclick="scrollToId('topic-0')"><span class="mp" style="background:var(--phase3)"></span>商標佈局調查結果（2026-09-08 更新）</div>
-<div class="nav-link" onclick="scrollToId('topic-1')"><span class="mp" style="background:var(--phase3)"></span>子公司 vs 分公司 完整比較（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-2')"><span class="mp" style="background:var(--phase3)"></span>台灣選品店通路策略（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-3')"><span class="mp" style="background:var(--phase3)"></span>進口路線比較：日本 vs 印尼直接進口（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-4')"><span class="mp" style="background:var(--phase3)"></span>商標擴大建議（2026-09-08 更新）</div>
-<div class="nav-link" onclick="scrollToId('topic-5')"><span class="mp" style="background:var(--phase3)"></span>電商三階段策略（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-6')"><span class="mp" style="background:var(--phase3)"></span>快閃活動：歷史記錄與下次規劃（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-7')"><span class="mp" style="background:var(--phase3)"></span>開店前置合規 Checklist（2026-09-08 新增）</div>
-<div class="nav-link" onclick="scrollToId('topic-8')"><span class="mp" style="background:var(--phase3)"></span>待補充</div>
+<div class="nav-link" onclick="scrollToId('topic-0')"><span class="mp" style="background:var(--phase3)"></span>專題文件庫（詳細內容在各自檔案）</div>
+<div class="nav-link" onclick="scrollToId('topic-1')"><span class="mp" style="background:var(--phase3)"></span>本文件怎麼活著（工作流程）</div>
+<div class="nav-link" onclick="scrollToId('topic-2')"><span class="mp" style="background:var(--phase3)"></span>待補充</div>
   </nav>
   <main>
     <div class="h1">執行行動方案</div>
@@ -187,265 +185,82 @@ footer{margin-top:40px; color:var(--muted); font-size:12.5px; border-top:1px sol
   <div class="section-head"><span class="ph" style="background:var(--phase0)">PHASE 0 對齊</span><h2>Phase 0 對齊</h2></div>
   <div class="section-desc">先跟日本把話說開、把基礎文件定案</div>
   <details class="module" id="ch01">
-  <summary><span class="mnum">CH 01</span><h3>專案概要</h3><span class="chips"><span class="chip tw">台灣主責（文件維護）</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把整體藍圖（網站＋本文件）定案，作為台日共同版本</b></div><div class="kw"><span class="kwl">目的</span><span>讓台灣端和日本總部從同一份文件出發，避免兩邊各自改版、訊息對不上</span></div><ol class="steps"><li>確認本文件的最終版本編號與發布位置（存放於檔案庫與網站文件區）</li><li>把 14 章逐一過一遍，每一章標註目前狀態：已定案／待日本確認／台灣自行推動</li><li>把「版本規則」寫進文件開頭：每次跟日本開會後同日更新，並註記改動摘要</li><li>存成一份固定網址的線上版本，讓日本總部永遠看得到最新的那一份</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>建立決策紀錄表</b></div><div class="kw"><span class="kwl">目的</span><span>每筆關鍵決定都有「誰、何時、決定了什麼」，幾個月後不會各說各話</span></div><ol class="steps"><li>建一份共用工作表，欄位：日期／決定事項／參與者／決策內容／後續動作／誰負責／下次確認日</li><li>本週就回填目前已做成的決定（商標採日本母公司名義、送三類、標準程序送件等）</li><li>訂成固定習慣：每次跟日本對話後 24 小時內補上紀錄</li><li>每週五會議前，把「本週新增決定」列印出來當開會第一頁</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>把所有執行時程集中在一份「開店倒數行事曆」：裝修、進貨、系統上線、招募、開幕每一項都有日期與負責人，避免各做各的</li><li>文件只有一份總表、其餘全部連結引用，改版要在同一處改，避免出現兩份內容打架</li><li>每週固定一個檢視時點（例如週五）確認哪些到期、哪些延誤，延誤就要立刻標註影響到哪一章</li></ul></div></div>
+  <summary><span class="mnum">CH 01</span><h3>專案概要</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜行事曆是排程樞紐，本週就要起頭，但不卡開店本身</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把 14 章的執行項目排進一份「開店倒數行事曆」</b></div><div class="kw"><span class="kwl">目的</span><span>裝修、進貨、系統、招募、開幕每件事都有日期和負責人，才看得出輕重、不會各做各的</span></div><ol class="steps"><li>把 14 章所有「先做什麼」動作按依賴關係排序，寫成第一版行事曆（月份＋里程碑）</li><li>標出會卡住別的的事（商標送件、公司成立、消防）優先往前排</li><li>每項標負責人（台灣端此刻就能指定到人）</li><li>每週五檢視一次：哪些到期、哪些延誤，延誤就標註影響到哪一章</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>不排行事曆 → 各做各的、到期沒人知道，延誤也不對外警覺，開幕從這裡開始失控</li><li>每章只有一份正本，其他地方一律用連結引用，改版在同一處改，避免出現兩份內容打架</li><li>每週五用行事曆當檢視點：哪些到期、哪些延誤，延誤立刻標註影響到哪一章</li></ul></div></div>
 </details><details class="module" id="ch02">
-  <summary><span class="mnum">CH 02</span><h3>品牌哲學</h3><span class="chips"><span class="chip jp">日本主責（品牌內容原始資料）</span><span class="chip tw">台灣執行在地化</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>向日本索取品牌原始素材</b></div><div class="kw"><span class="kwl">目的</span><span>品牌歷史、設計理念、型錄這類原始資料在日本人手上，不開口索取不會自己過來</span></div><ol class="steps"><li>列出需要的素材清單：官網與社群帳號、品牌歷史與理念文件、Mikio Sakabe設計概念、LEAP GRAVITY素材、型錄與公關資料</li><li>把清單整理成一頁「素材索取表」，逐項標明用途（店內陳列／教育訓練／社群文案）與使用期限</li><li>透過週五會議正式提出，並請日本指定一位素材窗口</li><li>索取到的素材統一存放，並註明授權範圍（能否商業使用、能否中文改製）</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把素材翻譯與在地化，建立共用素材庫</b></div><div class="kw"><span class="kwl">目的</span><span>日本原文直接拿來台灣消費者看不懂，需要翻成台灣人熟悉的語言</span></div><ol class="steps"><li>優先翻譯第一批：品牌故事、設計理念、主力鞋款介紹</li><li>建立「共用詞彙表」：把日文專有名詞統一翻譯成台灣說法（例如保留日文原名的、需要意譯的各列一行）</li><li>把檔案分類建檔：品牌故事／商品介紹／形象照／影片，供陳列、訓練、社群取用</li><li>在素材庫首頁放使用規範說明，避免有人誤用未授權素材</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>品牌名稱與 Logo 的規範先寫死：中文怎麼標示（「GROUNDS／grounds」用哪一個）、字型、配色、Logo 版位，全店統一，亂了品牌感就跑掉</li><li>素材授權範圍一定先問清楚並寫下來：能不能進店內放大輸出、能不能印在袋子／名片／社群，誰可以改製，使用期限到何時——這些不寫清楚，店開到一半才發現不能商用就麻煩</li><li>翻譯用語一致性：建立共用詞彙表的原因就在這，同一個日文名詞店內招牌、IG、官網、客人話術四處不能講不同版本</li><li>素材檔案規格統一收集：原始檔（AI/PDF/高解析圖）和輸出用檔分開放，避免店內輸出時找不到大圖</li></ul></div></div>
+  <summary><span class="mnum">CH 02</span><h3>品牌哲學</h3><span class="chips"><span class="chip jp">日本主責（品牌內容原始資料）</span><span class="chip tw">台灣執行在地化</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜素材與翻譯要提早動手，開幕前內容才齊得出</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>向日本索取品牌原始素材</b></div><div class="kw"><span class="kwl">目的</span><span>品牌歷史、設計理念、型錄這類原始資料在日本人手上，不開口索取不會自己過來</span></div><ol class="steps"><li>列出需要的素材清單：官網與社群帳號、品牌歷史與理念文件、Mikio Sakabe設計概念、LEAP GRAVITY素材、型錄與公關資料</li><li>把清單整理成一頁「素材索取表」，逐項標明用途（店內陳列／教育訓練／社群文案）與使用期限</li><li>透過週五會議正式提出，並請日本指定一位素材窗口</li><li>索取到的素材統一存放，並註明授權範圍（能否商業使用、能否中文改製）</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把素材翻譯與在地化，建立共用素材庫</b></div><div class="kw"><span class="kwl">目的</span><span>日本原文直接拿來台灣消費者看不懂，需要翻成台灣人熟悉的語言</span></div><ol class="steps"><li>優先翻譯第一批：品牌故事、設計理念、主力鞋款介紹</li><li>建立「共用詞彙表」：把日文專有名詞統一翻譯成台灣說法（例如保留日文原名的、需要意譯的各列一行）</li><li>把檔案分類建檔：品牌故事／商品介紹／形象照／影片，供陳列、訓練、社群取用</li><li>在素材庫首頁放使用規範說明，避免有人誤用未授權素材</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>品牌不統一 → 店裡和 IG 講兩個版本，消費者對「grounds 是什麼」更困惑，教育式試穿的賣點直接破功</li><li>素材授權沒確認就印刷上架 → 店開到一半被通知不能商用，看板、袋子、社群全部重來</li><li>翻譯用語一致性：建立共用詞彙表的原因就在這，同一個日文名詞店內招牌、IG、官網、客人話術四處不能講不同版本</li><li>素材檔案規格統一收集：原始檔（AI/PDF/高解析圖）和輸出用檔分開放，避免店內輸出時找不到大圖</li></ul></div></div>
 </details><details class="module" id="ch03">
-  <summary><span class="mnum">CH 03</span><h3>商品哲學</h3><span class="chips"><span class="chip jp">日本核准商品線</span><span class="chip tw">台灣提出市場建議</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定初期引進全系列還是部分系列</b></div><div class="kw"><span class="kwl">目的</span><span>不先決定引進範圍，進貨、庫存、店面陳列空間全都無法往下走</span></div><ol class="steps"><li>盤點日本全系列清單，列成表格：系列名稱／定位／在台灣的預估接受度／價格帶</li><li>按「台灣市場契合度高→低」排序，圈出台灣側建議優先引進的系列</li><li>每組系列附一行推薦理由，做成「建議清單」，送日本裁示</li><li>日本回覆後回填決策紀錄表，並據此後續排進貨順序</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>取得各系列的產品知識教材</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿要能講出故事與材質，需要日本原本的產品知識當原料</span></div><ol class="steps"><li>向日本索取每個系列的：故事、材質、技術說明</li><li>整理成「商品知識卡」：一卡一款（故事／材質／技術／適合對象／話術提示）</li><li>標記優先順序：首批主打系列先做</li><li>成品當作教育訓練教材，同時放進共用素材庫供社群取用</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>台灣的尺碼分布和日本不一定一樣：女鞋主流集中在哪些日碼／歐碼要比對台灣市場實際銷售數據，首批不要平均鋪碼，抓主要的 3-4 個尺碼下重</li><li>鞋底（泡棉／厚底）在台灣高溫多雨環境的磨耗與發霉風險要先問清保養方式，並在話術／售後說明裡寫清楚</li><li>庫存週轉：鞋類過季幾乎無法原價賣，引進的量要保守、多批少進，寧可缺貨也不要囤死貨</li><li>台灣沒有明顯的冬季長靴需求，季節分界跟日本不同，進貨月份要對照台灣的換季節奏而不是日本的</li></ul></div></div>
+  <summary><span class="mnum">CH 03</span><h3>商品哲學</h3><span class="chips"><span class="chip jp">日本核准商品線</span><span class="chip tw">台灣提出市場建議</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜引進範圍不定，進貨就卡在起點，但可先排市場建議</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定初期引進全系列還是部分系列</b></div><div class="kw"><span class="kwl">目的</span><span>不先決定引進範圍，進貨、庫存、店面陳列空間全都無法往下走</span></div><ol class="steps"><li>盤點日本全系列清單，列成表格：系列名稱／定位／在台灣的預估接受度／價格帶</li><li>按「台灣市場契合度高→低」排序，圈出台灣側建議優先引進的系列</li><li>每組系列附一行推薦理由，做成「建議清單」，送日本裁示</li><li>日本回覆後據此排進貨順序</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>取得各系列的產品知識教材</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿要能講出故事與材質，需要日本原本的產品知識當原料</span></div><ol class="steps"><li>向日本索取每個系列的：故事、材質、技術說明</li><li>整理成「商品知識卡」：一卡一款（故事／材質／技術／適合對象／話術提示）</li><li>標記優先順序：首批主打系列先做</li><li>成品當作教育訓練教材，同時放進共用素材庫供社群取用</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>商品結構不先定 → 進了賣不動的貨，整批卡庫存、季末只能打折，毛利直接被吃掉</li><li>尺碼分布抓錯 → 主力尺寸缺貨、冷門尺寸滯銷，來客試穿沒碼就走人</li><li>鞋底（泡棉／厚底）在台灣高溫多雨環境的磨耗與發霉風險要先問清保養方式，並在話術／售後說明裡寫清楚</li><li>庫存週轉：鞋類過季幾乎無法原價賣，引進的量要保守、多批少進，寧可缺貨也不要囤死貨</li><li>台灣沒有明顯的冬季長靴需求，季節分界跟日本不同，進貨月份要對照台灣的換季節奏而不是日本的</li></ul></div></div>
 </details><details class="module" id="ch04">
-  <summary><span class="mnum">CH 04</span><h3>台灣市場分析</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成台灣市場分析</b></div><div class="kw"><span class="kwl">目的</span><span>定位、消費力、日本品牌接受度、競爭態勢這塊不需等日本，台灣自己就能做完</span></div><ol class="steps"><li>先寫市場定位與消費能力：蒐集台灣鞋類市場規模、機能性鞋款／設計師鞋款在台的價格帶與銷售結構，整理成一段結論</li><li>分析台灣消費者對日本設計師品牌的接受度：用捷運站點人流、網路討論聲量、競品定價三個面向交叉看</li><li>盤點直接競爭者（含與 GROUNDS 定位最接近的 GROUND FIVE）：比較價格帶、通路型態、社群經營方式</li><li>收尾成優劣勢分析（優勢／劣勢／機會／威脅），完成後送日本備查，並把關鍵數據回填到決策紀錄表</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>產出「品牌教育」計畫初稿</b></div><div class="kw"><span class="kwl">目的</span><span>最大挑戰不是價錢／商圈／競爭者，而是消費者不知道 GROUNDS 是什麼——要先讓大家認識品牌</span></div><ol class="steps"><li>定溝通主軸：日本設計師品牌、獨特厚底、教育式試穿（先把一句話講清楚）</li><li>規劃內容管道與各自任務：官網（品牌故事落點）、IG（每日視覺）、LINE（會員通知）、接觸美妝／鞋類 KOL（發文與試穿開箱）、門市體驗（現場教育）</li><li>排出第一季的內容／活動節奏草案：一星期一篇主內容、每月一篇系列深度文、每季一支形象影片</li><li>每項內容定出「衡量指標」：貼文觀看數、互動數、導至官網人數，作為第一季檢討依據</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出第一年關鍵指標草案</b></div><div class="kw"><span class="kwl">目的</span><span>第一年不能只看營收，品牌曝光與顧客理解更重要</span></div><ol class="steps"><li>定義五個面向：品牌曝光、會員數、社群互動、品牌理解度、回購率</li><li>每個面向寫出可衡量的目標與量測方式（例如品牌理解度＝試穿後填問卷的正確回答率）</li><li>先訂「目標值」（營運第十二個月的月數字），第二季開始逐月檢視</li><li>與日本對齊後回填決策紀錄表</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>市場數據要標註來源與年份，引用舊資料會讓整個分析失真；至少引用近 1-2 年內可查證的來源</li><li>人流數據要分平日／假日、雨天／晴天看，只看假日高峰會高估銷售</li><li>消費力評估不要只按行政區的「平均收入」，要對應到實際會走進店裡的那群人（年齡、消費習慣、是否會買設計師品牌）</li><li>GROUND FIVE 是近似的直接競品，除了價格帶也要比它怎麼鋪通路、怎麼做社群、評價如何，那是台灣市場最真實的參考</li><li>商圈的四個數字都要實際拿到再下結論：租金、坪數、人流、周邊競品，缺一個就別拍板</li></ul></div></div>
+  <summary><span class="mnum">CH 04</span><h3>台灣市場分析</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜定位靠數據，但現在就能用「本案待確認」往日本送，不必等分析完整</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成台灣市場分析</b></div><div class="kw"><span class="kwl">目的</span><span>定位、消費力、日本品牌接受度、競爭態勢這塊不需等日本，台灣自己就能做完</span></div><ol class="steps"><li>先寫市場定位與消費能力：蒐集台灣鞋類市場規模、機能性鞋款／設計師鞋款在台的價格帶與銷售結構，整理成一段結論</li><li>分析台灣消費者對日本設計師品牌的接受度：用捷運站點人流、網路討論聲量、競品定價三個面向交叉看</li><li>盤點直接競爭者（含與 GROUNDS 定位最接近的 GROUND FIVE）：比較價格帶、通路型態、社群經營方式</li><li>收尾成優劣勢分析（優勢／劣勢／機會／威脅），完成後送日本備查</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>產出「品牌教育」計畫初稿</b></div><div class="kw"><span class="kwl">目的</span><span>最大挑戰不是價錢／商圈／競爭者，而是消費者不知道 GROUNDS 是什麼——要先讓大家認識品牌</span></div><ol class="steps"><li>定溝通主軸：日本設計師品牌、獨特厚底、教育式試穿（先把一句話講清楚）</li><li>規劃內容管道與各自任務：官網（品牌故事落點）、IG（每日視覺）、LINE（會員通知）、接觸美妝／鞋類 KOL（意見領袖，社群上有影響力的人，發文與試穿開箱）、門市體驗（現場教育）</li><li>排出第一季的內容／活動節奏草案：一星期一篇主內容、每月一篇系列深度文、每季一支形象影片</li><li>每項內容定出「衡量指標」：貼文觀看數、互動數、導至官網人數，作為第一季檢討依據</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出第一年關鍵指標草案</b></div><div class="kw"><span class="kwl">目的</span><span>第一年不能只看營收，品牌曝光與顧客理解更重要</span></div><ol class="steps"><li>定義五個面向：品牌曝光、會員數、社群互動、品牌理解度、回購率</li><li>每個面向寫出可衡量的目標與量測方式（例如品牌理解度＝試穿後填問卷的正確回答率）</li><li>先訂「目標值」（營運第十二個月的月數字），第二季開始逐月檢視</li><li>與日本對齊後再更新目標值</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>市場分析只用感覺、不拿數據 → 定位講錯、首批貨進錯，後面第五章到第十二章全部跟著錯</li><li>數據不標年份來源 → 引用舊資料會讓整個分析失真，至少用近 1-2 年內可查證的來源</li><li>人流數據要分平日／假日、雨天／晴天看，只看假日高峰會高估銷售</li><li>消費力評估不要只按行政區的「平均收入」，要對應到實際會走進店裡的那群人（年齡、消費習慣、是否會買設計師品牌）</li><li>GROUND FIVE 是近似的直接競品，除了價格帶也要比它怎麼鋪通路、怎麼做社群、評價如何，那是台灣市場最真實的參考</li><li>商圈的四個數字都要實際拿到再下結論：租金、坪數、人流、周邊競品，缺一個就別拍板</li></ul></div></div>
 </details>
 </div><div class="section" id="ph-p1">
   <div class="section-head"><span class="ph" style="background:var(--phase1)">PHASE 1 籌備</span><h2>Phase 1 籌備</h2></div>
   <div class="section-desc">公司、供應鏈、系統、選址裝修、教育</div>
   <details class="module" id="ch05">
-  <summary><span class="mnum">CH 05</span><h3>門市策略</h3><span class="chips"><span class="chip jp">日本決定定位</span><span class="chip tw">台灣執行選址與裝修</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點可能店址，做出 2-3 個候選方案</b></div><div class="kw"><span class="kwl">目的</span><span>先有具體候選清單，日本才能從中選，而不是空談定位</span></div><ol class="steps"><li>列出候選區域（優先考慮中山北路二段36巷現址、附近商圈）</li><li>每個候選做比較表：租金、坪數、人流、曝光、裝修難度，各標一顆星到三顆星</li><li>每處候選拍現場照片＋畫粗略動線圖（入口在哪、主力陳列牆在哪）</li><li>產出一頁比較表，作為週五會議討論的基礎</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把店鋪概念寫成具體構想書</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到台灣對店面想像的具體輪廓，加速拍板第一家店定位</span></div><ol class="steps"><li>寫一版店鋪概念：品牌調性（想傳達的氛圍）、空間感（大小、挑高、光線）、顧客進店後的體驗順序</li><li>勾勒視覺陳列重點：主力鞋牆怎麼排、教育式試穿區放哪、走道與動線怎麼留</li><li>標出「品牌旗艦店」與「市場驗證店」兩種設定的差異：前者重品牌形象（地點更核心、空間更大、裝修預算高），後者重力省成本快速驗證銷量</li><li>附 2-3 張參考圖（日本店鋪或類似店鋪）讓日本直覺了解台灣的想法</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>做一份店鋪裝修與設備的粗估預算表</b></div><div class="kw"><span class="kwl">目的</span><span>定位一確定就能馬上動工，不用重新估，替日本省一輪來回</span></div><ol class="steps"><li>列出項目：木作／陳列架、地板牆面、燈光、試穿椅與鏡、結帳櫃台、招牌</li><li>先用「每坪裝修單價 × 坪數」估出總價區間</li><li>標註變數：坪數越大、挑高越高，費用越高；要不要改水電消防也寫清</li><li>兩種設定各出一版數字（旗艦店一版、驗證店一版）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>租約細節</strong>：押金幾倍、租期長短、有無漲租條款與幅度、能否轉租／變更承租人、裝修期租金怎麼算、仲介費誰出——這些在簽約前逐條寫進合約</li><li><strong>消防與安檢</strong>：開店前一定要通過消防設備檢查，沒通過不能營業；幾坪以上要辦理「建築物使用執照變更」？店面有無既有消防設備（滅火器、緊急照明、避難指示）？電容量夠不夠（鞋店燈多、冷氣＋刷卡機＋收銀）？</li><li><strong>水電</strong>：確認有獨立電錶、水電管線位置與容量，裝修後才發現跳電／拉線不足是常見大雷</li><li><strong>動線</strong>：店面入門→鞋牆→試穿區→結帳櫃台的流線先在平面圖上畫順，試穿區要有椅子和鏡子，別讓客人站著脫鞋</li><li><strong>庫存空間</strong>：後場或倉儲夠不夠放整季安全庫存，鞋盒多大、一季幾百雙要塞哪，別讓賣場堆紙箱</li><li><strong>招牌與廣告物</strong>：台北市對招牌、廣告物有申請規定，先確認店面外露招牌要不要申請許可，亂掛會被罰</li><li><strong>天氣</strong>：台灣夏天高溫多雨，騎樓或入口的防滑、冷氣夠不夠、下雨天鞋盒會不會受潮都要想</li></ul></div></div>
+  <summary><span class="mnum">CH 05</span><h3>門市策略</h3><span class="chips"><span class="chip jp">日本決定定位</span><span class="chip tw">台灣執行選址與裝修</span></span><span class="urg" style="background:var(--r0)" title="急迫度">P0｜消防沒過不能營業；選址不定，後面的裝修、預算全部懸空</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點可能店址，做出 2-3 個候選方案</b></div><div class="kw"><span class="kwl">目的</span><span>先有具體候選清單，日本才能從中選，而不是空談定位</span></div><ol class="steps"><li>列出候選區域（優先考慮中山北路二段36巷現址、附近商圈）</li><li>每個候選做比較表：租金、坪數、人流、曝光、裝修難度，各標一顆星到三顆星</li><li>每處候選拍現場照片＋畫粗略動線圖（入口在哪、主力陳列牆在哪）</li><li>產出一頁比較表，作為週五會議討論的基礎</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把店鋪概念寫成具體構想書</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到台灣對店面想像的具體輪廓，加速拍板第一家店定位</span></div><ol class="steps"><li>寫一版店鋪概念：品牌調性（想傳達的氛圍）、空間感（大小、挑高、光線）、顧客進店後的體驗順序</li><li>勾勒視覺陳列重點：主力鞋牆怎麼排、教育式試穿區放哪、走道與動線怎麼留</li><li>標出「品牌旗艦店」與「市場驗證店」兩種設定的差異：前者重品牌形象（地點更核心、空間更大、裝修預算高），後者重力省成本快速驗證銷量</li><li>附 2-3 張參考圖（日本店鋪或類似店鋪）讓日本直覺了解台灣的想法</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>做一份店鋪裝修與設備的粗估預算表</b></div><div class="kw"><span class="kwl">目的</span><span>定位一確定就能馬上動工，不用重新估，替日本省一輪來回</span></div><ol class="steps"><li>列出項目：木作／陳列架、地板牆面、燈光、試穿椅與鏡、結帳櫃台、招牌</li><li>先用「每坪裝修單價 × 坪數」估出總價區間</li><li>標註變數：坪數越大、挑高越高，費用越高；要不要改水電消防也寫清</li><li>兩種設定各出一版數字（旗艦店一版、驗證店一版）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>消防沒過 → 不能營業，開幕日直接跳票，最嚴重的一項</li><li>租約沒逐條看清 → 漲租、不能轉租、裝修期照收全租，簽下去就被綁死</li><li><strong>消防與安檢</strong>：開店前一定要通過消防設備檢查，沒通過不能營業；幾坪以上要辦理「建築物使用執照變更」？店面有無既有消防設備（滅火器、緊急照明、避難指示）？電容量夠不夠（鞋店燈多、冷氣＋刷卡機＋收銀）？</li><li><strong>水電</strong>：確認有獨立電錶、水電管線位置與容量，裝修後才發現跳電／拉線不足是常見大雷</li><li><strong>動線</strong>：店面入門→鞋牆→試穿區→結帳櫃台的流線先在平面圖上畫順，試穿區要有椅子和鏡子，別讓客人站著脫鞋</li><li><strong>庫存空間</strong>：後場或倉儲夠不夠放整季安全庫存，鞋盒多大、一季幾百雙要塞哪，別讓賣場堆紙箱</li><li><strong>招牌與廣告物</strong>：台北市對招牌、廣告物有申請規定，先確認店面外露招牌要不要申請許可，亂掛會被罰</li><li><strong>天氣</strong>：台灣夏天高溫多雨，騎樓或入口的防滑、冷氣夠不夠、下雨天鞋盒會不會受潮都要想</li></ul></div></div>
 </details><details class="module" id="ch06">
-  <summary><span class="mnum">CH 06</span><h3>台灣營運架構</h3><span class="chips"><span class="chip tw">雙方共同確認，之後台灣依此執行</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把權責分工做成正式文件</b></div><div class="kw"><span class="kwl">目的</span><span>誰決定什麼，白紙黑字定下來，避免日後灰色地帶</span></div><ol class="steps"><li>把日本保留的（品牌方向／年度預算／重大投資／品牌合作／第二店／重大設計／重大採購）與台灣負責的（門市／人事／排班／行政／日常營運／庫存／會員／活動／預算內執行）整理成左右對照表，並附「誰拍板、誰執行、誰知會」三欄</li><li>加上金額授權表：50 萬以下台灣核准、50 萬以上日本核准，並把「下列事項即使金額低也要日本核准」的清單列出來</li><li>定義例外處理：碰到表上沒寫到的事，先問哪一方、多久內回覆</li><li>正式送日本簽署確認，回填決策紀錄表</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>畫出台灣端組織圖草案</b></div><div class="kw"><span class="kwl">目的</span><span>先定職位與權責架構，之後找人不慌</span></div><ol class="steps"><li>定職位：店長、正職、兼職、行銷／營運支援</li><li>標出每個職位的負責範圍與對應的權責分工權限</li><li>標出入職順序假設：第一家店開幕前先到位的職位、開幕後才補的職位</li><li>註明「先抓職位，人之後再補」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>勞基法令</strong>：排班、加班、特休、勞健保、勞退都要按台灣規定走，門市雙週工時（一例一休）在排班表上就要對好，被抓到罰鍰以外人事成本會被逼高</li><li><strong>門市 SOP</strong>：開店／閉店檢查清單、交接（現金、庫存、客人資訊）、異常回報流程，一張白紙黑字寫下來，不然每個人做法都不同</li><li><strong>現金與金流</strong>：收銀、刷卡、電子支付的每日對帳流程，現金短少誰負責、多久結一次，這是門市最容易出問題的地方之一</li><li><strong>盤點制度</strong>：多久盤一次、盤差怎麼處理，庫存數字不準，補貨和管銷全部失真</li><li><strong>保險</strong>：公共意外責任險、火險、竊盜險在開店前投保，發生事情才不會獨自吞</li><li><strong>後勤支援</strong>：店長之外誰負責叫修、補貨、帳務，有事時要有明確的聯絡網而不是只靠一個人</li></ul></div></div>
+  <summary><span class="mnum">CH 06</span><h3>台灣營運架構</h3><span class="chips"><span class="chip tw">雙方共同確認，之後台灣依此執行</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜權責不清會讓後續每個決定卡住，但還不卡開幕</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把權責分工做成正式文件</b></div><div class="kw"><span class="kwl">目的</span><span>誰決定什麼，白紙黑字定下來，避免日後灰色地帶</span></div><ol class="steps"><li>把日本保留的（品牌方向／年度預算／重大投資／品牌合作／第二店／重大設計／重大採購）與台灣負責的（門市／人事／排班／行政／日常營運／庫存／會員／活動／預算內執行）整理成左右對照表，並附「誰拍板、誰執行、誰知會」三欄</li><li>加上金額授權表：50 萬以下台灣核准、50 萬以上日本核准，並把「下列事項即使金額低也要日本核准」的清單列出來</li><li>定義例外處理：碰到表上沒寫到的事，先問哪一方、多久內回覆</li><li>正式送日本簽署確認</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>畫出台灣端組織圖草案</b></div><div class="kw"><span class="kwl">目的</span><span>先定職位與權責架構，之後找人不慌</span></div><ol class="steps"><li>定職位：店長、正職、兼職、行銷／營運支援</li><li>標出每個職位的負責範圍與對應的權責分工權限</li><li>標出入職順序假設：第一家店開幕前先到位的職位、開幕後才補的職位</li><li>註明「先抓職位，人之後再補」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>權責沒先簽好 → 店開起來，5 成的決定會卡在半空中沒人拍板，日本也怕你一意孤行</li><li><strong>勞基法令</strong>：排班、加班、特休、勞健保、勞退都要按台灣規定走，門市雙週工時（一例一休）在排班表上就要對好，被抓到罰鍰以外人事成本會被逼高</li><li><strong>門市 SOP（標準作業流程，把做法寫成固定步驟的文件）</strong>：開店／閉店檢查清單、交接（現金、庫存、客人資訊）、異常回報流程，一張白紙黑字寫下來，不然每個人做法都不同</li><li><strong>現金與金流</strong>：收銀、刷卡、電子支付的每日對帳流程，現金短少誰負責、多久結一次，這是門市最容易出問題的地方之一</li><li><strong>盤點制度</strong>：多久盤一次、盤差怎麼處理，庫存數字不準，補貨和管銷全部失真</li><li><strong>保險</strong>：公共意外責任險、火險、竊盜險在開店前投保，發生事情才不會獨自吞</li><li><strong>後勤支援</strong>：店長之外誰負責叫修、補貨、帳務，有事時要有明確的聯絡網而不是只靠一個人</li></ul></div></div>
 </details><details class="module" id="ch07">
-  <summary><span class="mnum">CH 07</span><h3>公司成立</h3><span class="chips"><span class="chip jp">日本決策</span><span class="chip tw">台灣執行設立流程</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把「100%日本持股台灣子公司」建議整理成給日本拍的方案</b></div><div class="kw"><span class="kwl">目的</span><span>日本看到清楚的建議＋理由，才好下決策，避免回覆「再看看」</span></div><ol class="steps"><li>整理子公司 vs 分公司比較表：品牌控制（子公司可留日本母公司名義）、治理、展店彈性、未來發展——每項寫一行利弊</li><li>寫出台灣建議用子公司的一頁理由，並預先補上日本可能問的三個反問（資本額多少、盈餘怎麼匯回、稅務怎麼處理）</li><li>列出子公司設立的時程預估（名稱預查→備文件→送件→登記約需幾週），讓日本知道拖一天就晚一天開店</li><li>排進週五會議正式請日本拍板</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先聯繫會計師／律師事務所詢價</b></div><div class="kw"><span class="kwl">目的</span><span>設立流程、時間、成本這類資訊現在就能問，不用等日本選子公司或分公司（兩種都需要類似資訊）</span></div><ol class="steps"><li>找 2-3 家會計師／律師事務所，準備同一份問題清單當面問取得報價</li><li>問清楚：外資來台設立流程、所需時間、費用明細、後續每年記帳費用</li><li>每家問完當天補一行重點摘要，整理成比較表</li><li>會議附給日本參考，並標出台灣側建議的選擇</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>★ <strong>台灣商標未註冊</strong>（2026-09-08確認）：台灣目前完全沒有 grounds 的商標保護，任何人可以搶先註冊。台灣採先申請主義，務必在開店前把商標送件（至少第25類鞋類＋第35類零售服務），送件愈慢風險愈高。詳見「商標佈局調查結果」章節</li><li><strong>公司名稱</strong>：先用經濟部商工登記資料查詢，名稱預查避開與既有公司近似（含 GROUND FIVE），名稱或地址跟實際營業不符後續帳務、報稅都會卡</li><li><strong>銀行開戶</strong>：公司帳戶、刷卡收單帳戶要提早申辦，銀行審核需要時間，別等開幕前一週才辦</li><li><strong>平台登記</strong>：營業登記、稅籍登記、統一發票購票證在開業前完成，未登記不得營業、也無法開電子發票</li><li><strong>外資金流</strong>：外資股本匯入、結匯都有申報程序，資金不到位會延後一堆工作，先排資金時程表</li></ul></div></div>
+  <summary><span class="mnum">CH 07</span><h3>公司成立</h3><span class="chips"><span class="chip jp">日本決策</span><span class="chip tw">台灣執行設立流程</span></span><span class="urg" style="background:var(--r0)" title="急迫度">P0｜公司沒成立，簽約、進貨、匯錢全部無法進行；商標先申請主義，愈快愈好</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把「100%日本持股台灣子公司」建議整理成給日本拍的方案</b></div><div class="kw"><span class="kwl">目的</span><span>日本看到清楚的建議＋理由，才好下決策，避免回覆「再看看」</span></div><ol class="steps"><li>整理子公司 vs 分公司比較表：品牌控制（子公司可留日本母公司名義）、治理、展店彈性、未來發展——每項寫一行利弊</li><li>寫出台灣建議用子公司的一頁理由，並預先補上日本可能問的三個反問（資本額多少、盈餘怎麼匯回、稅務怎麼處理）</li><li>列出子公司設立的時程預估（名稱預查→備文件→送件→登記約需幾週），讓日本知道拖一天就晚一天開店</li><li>排進週五會議正式請日本拍板</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先聯繫會計師／律師事務所詢價</b></div><div class="kw"><span class="kwl">目的</span><span>設立流程、時間、成本這類資訊現在就能問，不用等日本選子公司或分公司（兩種都需要類似資訊）</span></div><ol class="steps"><li>找 2-3 家會計師／律師事務所，準備同一份問題清單當面問取得報價</li><li>問清楚：外資來台設立流程、所需時間、費用明細、後續每年記帳費用</li><li>每家問完當天補一行重點摘要，整理成比較表</li><li>會議附給日本參考，並標出台灣側建議的選擇</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>★ <strong>台灣商標未註冊</strong>（2026-09-08確認）→ 任何人現在就能搶先註冊，搶走品牌名，等於替別人開店；台灣採先申請主義（註冊權先送先贏，不看誰先用），務必在開店前送件（品牌核心 3 件：GROUNDS／LEAP GRAVITY／圖片LOGO，至少各送第25＋35類），送件愈慢風險愈高。完整標的清單與費用見「商標佈局調查結果」章節</li><li><strong>公司名稱</strong>：先用經濟部商工登記資料查詢，名稱預查避開與既有公司近似（含 GROUND FIVE），名稱或地址跟實際營業不符後續帳務、報稅都會卡</li><li><strong>銀行開戶</strong>：公司帳戶、刷卡收單帳戶要提早申辦，銀行審核需要時間，別等開幕前一週才辦</li><li><strong>平台登記</strong>：營業登記、稅籍登記（向國稅局申請營業稅籍，等同稅務上的營業身份）、統一發票購票證在開業前完成，未登記不得營業、也無法開電子發票（發票以電子檔上傳國稅局的省紙化發票，台灣法規強制）</li><li><strong>外資金流</strong>：外資股本匯入、結匯都有申報程序，資金不到位會延後一堆工作，先排資金時程表</li></ul></div></div>
 </details><details class="module" id="ch08">
-  <summary><span class="mnum">CH 08</span><h3>進口與物流</h3><span class="chips"><span class="chip jp">日本決定出貨模式</span><span class="chip tw">台灣執行在地報關與倉儲</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>研究鞋類進口的稅則號列、稅率與報關流程</b></div><div class="kw"><span class="kwl">目的</span><span>進口成本算得出來，定價與庫存才有依據</span></div><ol class="steps"><li>透過海關「稅則稅率查詢系統」查鞋類（海關稅則第64章）的稅則號列與關稅稅率（約6~10%）</li><li>把「船運到港→報關→放行→入倉」的流程與所需文件（商業發票、裝箱單、提單、報關委任書）列成檢查表</li><li>記錄台灣零售標示法規：中文標示、鞋類尺碼標示規定，先確認第一批貨要貼什麼</li><li>就第一批進貨試算一次完整的進口成本，含運費分攤、關稅、營業稅、報關手續費</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>詢價 2-3 家進口物流／報關代理商</b></div><div class="kw"><span class="kwl">目的</span><span>抓出大概的物流成本結構，避免事後暴雷</span></div><ol class="steps"><li>找出 2-3 家台灣進口物流／報關代理</li><li>各拿一份報價（海運、空運、報關費、倉儲），確認報價含哪些項目、哪些另計</li><li>整理成成本比較表，附上各自回覆速度與服務窗口</li><li>選定一家後把合作條件回填決策紀錄表</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>前置時間與安全庫存</strong>：從下單到到店要幾週，把安全庫存天數設足，開幕週＋旺季（周年慶、百貨檔期）前兩個月就要下單，不然很容易斷貨</li><li><strong>進口成本別漏算</strong>：關稅、營業稅、報關費、運輸、倉儲、國內配送逐筆加總，才不會店裡賣價訂錯、毛利被吃掉</li><li><strong>標示法規</strong>：中文標籤、鞋類尺碼標示、材質／產地標示要符合台灣規定，進口報關時就要備齊</li><li><strong>驗貨</strong>：到貨要抽驗（數量、尺碼、瑕疵、鞋盒狀況），瑕疵退換貨的規則先講好，不驗貨，開箱才發現整批有問題就晚了</li><li><strong>倉儲與配送</strong>：台灣潮濕，鞋子存放要防潮防蟲；如果電商要做店到倉，物流商的服務水準先測過</li><li><strong>換季與滯銷</strong>：賣不動的鞋款要提前想好處理方式（折扣、回銷日本、轉電商），壓在倉裡就是現金卡死</li></ul></div></div>
+  <summary><span class="mnum">CH 08</span><h3>進口與物流</h3><span class="chips"><span class="chip jp">日本決定出貨模式</span><span class="chip tw">台灣執行在地報關與倉儲</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜進貨前置期最長，越晚談越容易斷貨，但可先用詢價起頭</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>研究鞋類進口的稅則號列、稅率與報關流程</b></div><div class="kw"><span class="kwl">目的</span><span>進口成本算得出來，定價與庫存才有依據</span></div><ol class="steps"><li>透過海關「稅則稅率查詢系統」查鞋類（海關稅則第64章）的稅則號列與關稅稅率（約6~10%）</li><li>把「船運到港→報關→放行→入倉」的流程與所需文件（商業發票、裝箱單、提單、報關委任書）列成檢查表</li><li>記錄台灣零售標示法規：中文標示、鞋類尺碼標示規定，先確認第一批貨要貼什麼</li><li>就第一批進貨試算一次完整的進口成本，含運費分攤、關稅、營業稅、報關手續費</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>詢價 2-3 家進口物流／報關代理商</b></div><div class="kw"><span class="kwl">目的</span><span>抓出大概的物流成本結構，避免事後暴雷</span></div><ol class="steps"><li>找出 2-3 家台灣進口物流／報關代理</li><li>各拿一份報價（海運、空運、報關費、倉儲），確認報價含哪些項目、哪些另計</li><li>整理成成本比較表，附上各自回覆速度與服務窗口</li><li>選定一家後簽約</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>貨到不驗 → 開箱才發現整批瑕疵，退貨時程把開幕週打亂</li><li>前置期算錯 → 開幕週＋旺季（周年慶、百貨檔期）前沒下單，架上空給客人看</li><li><strong>進口成本別漏算</strong>：關稅、營業稅、報關費、運輸、倉儲、國內配送逐筆加總，才不會店裡賣價訂錯、毛利被吃掉</li><li><strong>標示法規</strong>：中文標籤、鞋類尺碼標示、材質／產地標示要符合台灣規定，進口報關時就要備齊</li><li><strong>驗貨</strong>：到貨要抽驗（數量、尺碼、瑕疵、鞋盒狀況），瑕疵退換貨的規則先講好，不驗貨，開箱才發現整批有問題就晚了</li><li><strong>倉儲與配送</strong>：台灣潮濕，鞋子存放要防潮防蟲；如果電商要做店到倉，物流商的服務水準先測過</li><li><strong>換季與滯銷</strong>：賣不動的鞋款要提前想好處理方式（折扣、回銷日本、轉電商），壓在倉裡就是現金卡死</li></ul></div></div>
 </details><details class="module" id="ch09">
-  <summary><span class="mnum">CH 09</span><h3>數位系統</h3><span class="chips"><span class="chip jp">日本決定是否統一系統</span><span class="chip tw">台灣提出在地系統需求（尤其電子發票，這是台灣法規強制項目）</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點台灣本地的銷售／庫存／會員系統選項</b></div><div class="kw"><span class="kwl">目的</span><span>電子發票是台灣法規強制的，日本系統不一定支援，要及早確認台灣選項</span></div><ol class="steps"><li>列出本地候選系統（重點看電子發票串接能力），一系統一行：功能／月費／串接成本</li><li>篩出 2-3 家可支援電子發票＋刷卡收單的</li><li>預約每家一次試用說明，實際操作結帳、退貨、開電子發票流程各一次</li><li>整理成比較表（功能／月費／串接成本／客服回應速度），供決策</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>列「必須跟日本同步」vs「台灣可獨立採用」清單</b></div><div class="kw"><span class="kwl">目的</span><span>哪些系統要跟日本連線、哪些台灣自己選就行，先劃清楚才好談</span></div><ol class="steps"><li>逐項盤點：銷售系統／庫存／會員／電子發票／顧客關係管理，逐項標「同步日本」或「台灣獨立」的建議與理由</li><li>對「要同步日本」的項目，寫明同步什麼資料（庫存量？會員資料？）、多久同步一次</li><li>送日本確認同步範圍，回覆後回填決策紀錄表</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>電子發票是法規強制</strong>：台灣零售一定要開電子發票（每二個月申報一次營業稅），系統不支援就不能合法營業——這是選系統的硬條件，不是加分項</li><li><strong>刷卡收單要提早申請</strong>：信用卡／行動支付收單銀行審核耗時，簽約到開通可能要數週，最晚在開幕前 1 個月辦好</li><li><strong>斷電／斷網的備援</strong>：POS 是不是雲端？網頁不穩時能不能離線結帳？要有紙本備援流程，進店第一天就遇到伺服器掛掉的狀況要想過</li><li><strong>資料備份</strong>：會員、銷售、庫存資料每天備份，異地／雲端一份，硬碟壞了不用從零開始</li><li><strong>個資法</strong>：會員資料、LINE 好友名單的蒐集利用要遵守台灣個資法，隱私權說明寫清楚，不要被投訴</li><li><strong>系統銜接</strong>：POS、庫存、會員、電子發票如果不同廠商，串接與測試要留時間，別到開幕才發現報表打不開</li></ul></div></div>
+  <summary><span class="mnum">CH 09</span><h3>數位系統</h3><span class="chips"><span class="chip jp">日本決定是否統一系統</span><span class="chip tw">台灣提出在地系統需求（尤其電子發票，這是台灣法規強制項目）</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜刷卡收單簽約到開通要數週，開幕前 1 個月就要辦好，別拖到最後</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點台灣本地的銷售／庫存／會員系統選項</b></div><div class="kw"><span class="kwl">目的</span><span>電子發票是台灣法規強制，日本系統不一定支援，要及早確認台灣選項</span></div><ol class="steps"><li>列出本地候選系統（重點看電子發票串接能力），一系統一行：功能／月費／串接成本</li><li>篩出 2-3 家可支援電子發票＋刷卡收單的</li><li>預約每家一次試用說明，實際操作結帳、退貨、開電子發票流程各一次</li><li>整理成比較表（功能／月費／串接成本／客服回應速度），供決策</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>列「必須跟日本同步」vs「台灣可獨立採用」清單</b></div><div class="kw"><span class="kwl">目的</span><span>哪些系統要跟日本連線、哪些台灣自己選就行，先劃清楚才好談</span></div><ol class="steps"><li>逐項盤點：銷售系統／庫存／會員／電子發票／顧客關係管理，逐項標「同步日本」或「台灣獨立」的建議與理由</li><li>對「要同步日本」的項目，寫明同步什麼資料（庫存量？會員資料？）、多久同步一次</li><li>送日本確認同步範圍，回覆後照辦</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>電子發票是法規強制</strong> → 台灣零售一定要開電子發票（每二個月申報一次營業稅），系統不支援就不能合法營業——這是選系統的硬條件，不是加分項</li><li><strong>刷卡收單要提早申請</strong>：信用卡／行動支付收單銀行審核耗時，簽約到開通可能要數週，最晚在開幕前 1 個月辦好</li><li><strong>斷電／斷網的備援</strong>：POS（銷售結帳系統）是不是雲端？網頁不穩時能不能離線結帳？要有紙本備援流程，進店第一天就遇到伺服器掛掉的狀況要想過</li><li><strong>資料備份</strong>：會員、銷售、庫存資料每天備份，異地／雲端一份，硬碟壞了不用從零開始</li><li><strong>個資法</strong>：會員資料、LINE 好友名單的蒐集利用要遵守台灣個資法，隱私權說明寫清楚，不要被投訴</li><li><strong>系統銜接</strong>：POS、庫存、會員、電子發票如果不同廠商，串接與測試要留時間，別到開幕才發現報表打不開</li></ul></div></div>
 </details>
 </div><div class="section" id="ph-p2">
   <div class="section-head"><span class="ph" style="background:var(--phase2)">PHASE 2 開店</span><h2>Phase 2 開店</h2></div>
   <div class="section-desc">招募、訓練、行銷、Launch、營運</div>
   <details class="module" id="ch10">
-  <summary><span class="mnum">CH 10</span><h3>品牌策略</h3><span class="chips"><span class="chip tw">台灣主責在地執行</span><span class="chip jp">日本核准品牌調性與素材使用</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃 IG／LINE／官網的內容架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>社群是有累積性的，先有架構再發文，不會發散</span></div><ol class="steps"><li>定義帳號定位與目標受眾（台灣、女生鞋類為主），寫成一句定位聲明</li><li>規劃內容支柱：品牌故事／商品知識／穿搭靈感／門市訊息，各配固定欄目名稱</li><li>排出每週發布節奏（IG 幾篇、LINE 幾則），並註明每則配圖／影片的素材來源</li><li>列出開幕前 6 週的內容行事曆表格，每週一格：主題、素材、負責人</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>提出「品牌教育優先於促銷」的內容策略</b></div><div class="kw"><span class="kwl">目的</span><span>第一階段重點是讓台灣人理解 GROUNDS 是什麼，不是打折</span></div><ol class="steps"><li>規劃品牌故事系列貼文：設計師、獨特厚底、教育式試穿，每篇定一個主視覺與一句標語</li><li>擬 KOL 合作方向：以品牌認知為目的（開箱、試穿體驗、形象合作），非折扣導向，先列 3-5 位候選並標明各自合作形式</li><li>每一項都標出需要日本提供或核准的素材，併入素材索取清單</li><li>訂第一季檢核點：按第四章的曝光／互動指標逐月檢討</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃開幕活動初步構想</b></div><div class="kw"><span class="kwl">目的</span><span>開幕活動是第一次大規模曝光，先抓時間與預算級距</span></div><ol class="steps"><li>定活動時間（配合開店時程），抓出與開幕日的間隔天數</li><li>定形式：媒體日／VIP 場／開幕限定企劃，各估所需人力與合作廠商</li><li>估預算級距（低／中／高三案），供日本核可</li><li>列出開幕當週的完整時程表：佈展、彩排、當日流程、撤場</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>廣告法規</strong>：台灣對不實廣告、誇大效果、促銷標示有規範，折扣價「原價／特價」的標示要照規定來，文案別踩紅線</li><li><strong>社群帳號安全</strong>：IG／LINE／官網帳號設管理員雙重驗證，權限只給該給的人，帳號被盜、員工離職亂發文都是真實風險</li><li><strong>KOL 合作</strong>：合作前把內容授權、貼文次數、檔期、費用寫進合約，避免按讚數／曝光量達不到預期的爭議；肖像、圖檔授權範圍也要載明</li><li><strong>行銷數據要追</strong>：投入的曝光、互動、導流每天看，跑的差的內容趕快換，別等一季結束才發現效果低</li><li><strong>開幕活動的人流與控管</strong>：媒體日／VIP 場／公開場的人數控管、排隊動線、現場補貨與收銀負荷要先排演，開幕當天爆單的備援（第二台收銀、加派人手）要先準備</li><li><strong>活動保險</strong>：非公開活動只要有人流就有責任風險，活動保險在活動前投保</li></ul></div></div>
+  <summary><span class="mnum">CH 10</span><h3>品牌策略</h3><span class="chips"><span class="chip tw">台灣主責在地執行</span><span class="chip jp">日本核准品牌調性與素材使用</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜開幕前 6 週的內容行事曆要能配合進度產出，不能等開幕才開始</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃 IG／LINE／官網的內容架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>社群是有累積性的，先有架構再發文，不會發散</span></div><ol class="steps"><li>定義帳號定位與目標受眾（台灣、女生鞋類為主），寫成一句定位聲明</li><li>規劃內容支柱：品牌故事／商品知識／穿搭靈感／門市訊息，各配固定欄目名稱</li><li>排出每週發布節奏（IG 幾篇、LINE 幾則），並註明每則配圖／影片的素材來源</li><li>列出開幕前 6 週的內容行事曆表格，每週一格：主題、素材、負責人</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>提出「品牌教育優先於促銷」的內容策略</b></div><div class="kw"><span class="kwl">目的</span><span>第一階段重點是讓台灣人理解 GROUNDS 是什麼，不是打折</span></div><ol class="steps"><li>規劃品牌故事系列貼文：設計師、獨特厚底、教育式試穿，每篇定一個主視覺與一句標語</li><li>擬 KOL 合作方向：以品牌認知為目的（開箱、試穿體驗、形象合作），非折扣導向，先列 3-5 位候選並標明各自合作形式</li><li>每一項都標出需要日本提供或核准的素材，併入素材索取清單</li><li>訂第一季檢核點：按第四章的曝光／互動指標逐月檢討</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃開幕活動初步構想</b></div><div class="kw"><span class="kwl">目的</span><span>開幕活動是第一次大規模曝光，先抓時間與預算級距</span></div><ol class="steps"><li>定活動時間（配合開店時程），抓出與開幕日的間隔天數</li><li>定形式：媒體日／VIP 場／開幕限定企劃，各估所需人力與合作廠商</li><li>估預算級距（低／中／高三案），供日本核可</li><li>列出開幕當週的完整時程表：佈展、彩排、當日流程、撤場</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>文案踩廣告紅線 → 「原價／特價」標示不合規被罰，社群好不容易累積的信譽一次歸零</li><li>帳號被盜／離職員工亂發文 → 品牌帳號從開幕前就要設雙重驗證</li><li><strong>廣告法規</strong>：台灣對不實廣告、誇大效果、促銷標示有規範，折扣價「原價／特價」的標示要照規定來，文案別踩紅線</li><li><strong>社群帳號安全</strong>：IG／LINE／官網帳號設管理員雙重驗證，權限只給該給的人，帳號被盜、員工離職亂發文都是真實風險</li><li><strong>KOL 合作</strong>：合作前把內容授權、貼文次數、檔期、費用寫進合約，避免按讚數／曝光量達不到預期的爭議；肖像、圖檔授權範圍也要載明</li><li><strong>行銷數據要追</strong>：投入的曝光、互動、導流每天看，跑的差的內容趕快換，別等一季結束才發現效果低</li><li><strong>開幕活動的人流與控管</strong>：媒體日／VIP 場／公開場的人數控管、排隊動線、現場補貨與收銀負荷要先排演，開幕當天爆單的備援（第二台收銀、加派人手）要先準備</li><li><strong>活動保險</strong>：非公開活動只要有人流就有責任風險，活動保險在活動前投保</li></ul></div></div>
 </details><details class="module" id="ch11">
-  <summary><span class="mnum">CH 11</span><h3>教育訓練</h3><span class="chips"><span class="chip tw">台灣主責建置</span><span class="chip jp">日本提供認證標準</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>建立「GROUNDS 台灣教育學院」課程架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿是賣點，課程架構要先成形，訓練才能執行</span></div><ol class="steps"><li>列課程模組：品牌文化／產品知識／服務流程／結帳系統操作／店長認證，每個模組標出時數、對象、評核方式</li><li>寫出每個模組的「學完要會什麼」清單（例如服務流程模組＝能獨立完成一次教育式試穿並帶出加購）</li><li>訂課程教材產出方式：哪些直接用日本教材翻譯、哪些台灣自製</li><li>排出第一批受訓時程表（配合開店前招募），並訂「通過標準」驗收表</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定教育訓練是否赴日受訓／取日本認證</b></div><div class="kw"><span class="kwl">目的</span><span>是否赴日、是否由日本認證，直接影響預算與時程，要先有結論</span></div><ol class="steps"><li>列出「赴日受訓」與「日本教材＋台灣在地訓練」的比較，含費用、時間、成效三欄</li><li>台灣端提出建議方案（含選誰去、去多久、返台後怎麼傳承）</li><li>送日本確認認證標準與是否派人支援</li><li>結論回填決策紀錄表</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>試穿的衛生與體驗</strong>：鞋櫃、試穿襪、清潔噴霧、噴霧擦拭布要備齊，客人試穿前有沒有檢查鞋內乾淨度？一次教育式試穿的標準流程要在開店前練到每個店員都一樣</li><li><strong>教育是賣點也是風險</strong>：店員講錯材質／故事＝品牌損傷，產品知識卡的內容要定期更新、離職交接時把教材留下</li><li><strong>訓練排班要錯開</strong>：受訓期間人力會同時變少，開幕前兩週人力要雙倍、後台支援要上，別訓練做完人力接不上</li><li><strong>店長不在的維護</strong>：店長休假、離職時誰補位？SOP 手冊和經營資料不能只存在店長腦子裡</li><li><strong>語言與術語</strong>：日文教材如果直接轉給員工用，至少要把關鍵術語中文化做一份速查表，不然員工永遠背不起來</li></ul></div></div>
+  <summary><span class="mnum">CH 11</span><h3>教育訓練</h3><span class="chips"><span class="chip tw">台灣主責建置</span><span class="chip jp">日本提供認證標準</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜教育式試穿是賣點，開幕前要練到每個店員一致，跟招募時程綁定</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>建立「GROUNDS 台灣教育學院」課程架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿是賣點，課程架構要先成形，訓練才能執行</span></div><ol class="steps"><li>列課程模組：品牌文化／產品知識／服務流程／結帳系統操作／店長認證，每個模組標出時數、對象、評核方式</li><li>寫出每個模組的「學完要會什麼」清單（例如服務流程模組＝能獨立完成一次教育式試穿並帶出加購）</li><li>訂課程教材產出方式：哪些直接用日本教材翻譯、哪些台灣自製</li><li>排出第一批受訓時程表（配合開店前招募），並訂「通過標準」驗收表</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定教育訓練是否赴日受訓／取日本認證</b></div><div class="kw"><span class="kwl">目的</span><span>是否赴日、是否由日本認證，直接影響預算與時程，要先有結論</span></div><ol class="steps"><li>列出「赴日受訓」與「日本教材＋台灣在地訓練」的比較，含費用、時間、成效三欄</li><li>台灣端提出建議方案（含選誰去、去多久、返台後怎麼傳承）</li><li>送日本確認認證標準與是否派人支援</li><li>結論出來後照辦</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>店員講錯材質／故事 → 教育式試穿反過來傷品牌，客人一聽就知道不專業，賣點變扣分</li><li>受訓時間排錯 → 開幕前兩週人力接不上，練出來的兵不能上場</li><li><strong>試穿的衛生與體驗</strong>：鞋櫃、試穿襪、清潔噴霧、噴霧擦拭布要備齊，客人試穿前有沒有檢查鞋內乾淨度？一次教育式試穿的標準流程要在開店前練到每個店員都一樣</li><li><strong>教育是賣點也是風險</strong>：店員講錯材質／故事＝品牌損傷，產品知識卡的內容要定期更新、離職交接時把教材留下</li><li><strong>訓練排班要錯開</strong>：受訓期間人力會同時變少，開幕前兩週人力要雙倍、後台支援要上，別訓練做完人力接不上</li><li><strong>店長不在的維護</strong>：店長休假、離職時誰補位？SOP 手冊和經營資料不能只存在店長腦子裡</li><li><strong>語言與術語</strong>：日文教材如果直接轉給員工用，至少要把關鍵術語中文化做一份速查表，不然員工永遠背不起來</li></ul></div></div>
 </details><details class="module" id="ch12">
-  <summary><span class="mnum">CH 12</span><h3>財務計畫</h3><span class="chips"><span class="chip tw">台灣提出草案</span><span class="chip jp">日本核准年度預算（超過授權金額）</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先抓資本支出與營運支出的粗估區間</b></div><div class="kw"><span class="kwl">目的</span><span>給日本一個可審的數字範圍，不用等第五章／第七章完全定案就能先對齊方向</span></div><ol class="steps"><li>資本支出：裝修＋設備連同器具的粗估區間（低／中／高三案），列出主要項目與單價來源</li><li>營運支出：租金、人事、行銷、雜費逐項列出區間，標明每月／每季</li><li>把「會影響數字的重要假設」列成腳註（例如坪數、店員人數、行銷預算佔比）</li><li>標明「待第五章定案後收斂」，送日本審年度預算用</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出損益平衡點的三種假設情境</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到「最壞到最好」的損益邊界，方便決定投入規模</span></div><ol class="steps"><li>樂觀情境：高來客、高回購的參數（來客數／客單價／回購率各自給數字）</li><li>中性情境：保守一點的參數</li><li>保守情境：最低存活線，算出每月要賣幾雙才打平，並標出對應的固定成本控制重點</li><li>三案各附一行「達成條件」與「若未達成要砍的項目」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>現金流比帳面盈餘重要</strong>：租金、人事、進貨是每月固定流出，第一批進貨＋裝修＋押金一次墊很大，先把「還能撐幾個月」算清楚</li><li><strong>資金分配</strong>：裝修超支是常態，預留 10-15% 備用金；行銷預算要能隨時加碼（開幕期曝光是關鍵），別把預算全部綁死在固定成本</li><li><strong>淡旺季</strong>：台灣鞋類有季節性，旺季錢進得快、淡季要看庫存水位，別用旺季的樂觀數字回頭算年度預算</li><li><strong>匯率</strong>：向日本進貨用日圓計價，匯率波動會直接改動成本，備妥兩種幣別的走勢假設</li><li><strong>稅務時點</strong>：營業稅每二個月申報、年度營所稅申報、發票與帳務要留對，帳記錯補稅罰款比省的成本還多</li><li><strong>損益要和庫存一起看</strong>：賣出去的毛利片面的盈餘不可信，庫存積壓、呆滯貨要每月攤出來看</li></ul></div></div>
+  <summary><span class="mnum">CH 12</span><h3>財務計畫</h3><span class="chips"><span class="chip tw">台灣提出草案</span><span class="chip jp">日本核准年度預算（超過授權金額）</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜數字範圍現在就能估，先給日本方向，不必等全案定案</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先抓資本支出與營運支出的粗估區間</b></div><div class="kw"><span class="kwl">目的</span><span>給日本一個可審的數字範圍，不用等第五章／第七章完全定案就能先對齊方向</span></div><ol class="steps"><li>資本支出：裝修＋設備連同器具的粗估區間（低／中／高三案），列出主要項目與單價來源</li><li>營運支出：租金、人事、行銷、雜費逐項列出區間，標明每月／每季</li><li>把「會影響數字的重要假設」列成腳註（例如坪數、店員人數、行銷預算佔比）</li><li>標明「待第五章定案後收斂」，送日本審年度預算用</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出損益平衡點的三種假設情境</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到「最壞到最好」的損益邊界，方便決定投入規模</span></div><ol class="steps"><li>樂觀情境：高來客、高回購的參數（來客數／客單價／回購率各自給數字）</li><li>中性情境：保守一點的參數</li><li>保守情境：最低存活線，算出每月要賣幾雙才打平，並標出對應的固定成本控制重點</li><li>三案各附一行「達成條件」與「若未達成要砍的項目」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>現金流斷了 → 店開著但發不出下個月薪水，帳面有盈餘也救不了</li><li>帳記錯 → 補稅罰款比省下的成本還多</li><li><strong>現金流比帳面盈餘重要</strong>：租金、人事、進貨是每月固定流出，第一批進貨＋裝修＋押金一次墊很大，先把「還能撐幾個月」算清楚</li><li><strong>資金分配</strong>：裝修超支是常態，預留 10-15% 備用金；行銷預算要能隨時加碼（開幕期曝光是關鍵），別把預算全部綁死在固定成本</li><li><strong>淡旺季</strong>：台灣鞋類有季節性，旺季錢進得快、淡季要看庫存水位，別用旺季的樂觀數字回頭算年度預算</li><li><strong>匯率</strong>：向日本進貨用日圓計價，匯率波動會直接改動成本，備妥兩種幣別的走勢假設</li><li><strong>稅務時點</strong>：營業稅每二個月申報、年度營所稅申報、發票與帳務要留對，帳記錯補稅罰款比省的成本還多</li><li><strong>損益要和庫存一起看</strong>：賣出去的毛利片面的盈餘不可信，庫存積壓、呆滯貨要每月攤出來看</li></ul></div></div>
 </details><details class="module" id="ch13">
-  <summary><span class="mnum">CH 13</span><h3>風險與因應</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>為六大風險各寫 1-2 個因應動作草案</b></div><div class="kw"><span class="kwl">目的</span><span>風險先想過、先有解法，出狀況時不會措手不及</span></div><ol class="steps"><li>六大風險逐條列：品牌知名度不足、決策過慢、補貨、人才、現金流、品牌理解錯誤</li><li>每個風險寫出 1-2 個具體因應動作，並註明「偵測訊號」：出現什麼前兆就要啟動因應（例如補貨→安全庫存到水準以下即補）</li><li>依因應動作排優先順序與負責人</li><li>建一張風險表，欄位：風險／前兆訊號／因應動作／負責人／多久檢視一次</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成風險章節初稿</b></div><div class="kw"><span class="kwl">目的</span><span>這章台灣主責就能完成，趁早做完送日本備查</span></div><ol class="steps"><li>把六大風險＋因應草案整理成單一文件</li><li>完成後送日本備查</li><li>回填決策紀錄表</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>六大風險的前兆訊號要寫成「看得出來的數字」：例如補貨風險＝安全庫存跌破水位、現金流風險＝帳上剩幾個月營運金，不要等到出事才發現</li><li>風險表要有人定期看、定期更新，不是寫一次就放著；至少每月檢視一次，情況變了就重排優先序</li><li>出狀況時的聯絡網先建好：誰決策、誰執行、多久內回覆，突發（倉庫淹水、社群負評爆量、店員集體離職）才不會當下慌</li><li>備援先做最痛的兩個：<strong>庫存與現金流</strong>，其他風險可以邊做邊補</li></ul></div></div>
+  <summary><span class="mnum">CH 13</span><h3>風險與因應</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r2)" title="急迫度">P2｜風險表寫起來放著沒用，定期檢視才生效，不急著一口氣做完</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>為六大風險各寫 1-2 個因應動作草案</b></div><div class="kw"><span class="kwl">目的</span><span>風險先想過、先有解法，出狀況時不會措手不及</span></div><ol class="steps"><li>六大風險逐條列：品牌知名度不足、決策過慢、補貨、人才、現金流、品牌理解錯誤</li><li>每個風險寫出 1-2 個具體因應動作，並註明「偵測訊號」：出現什麼前兆就要啟動因應（例如補貨→安全庫存到水準以下即補）</li><li>依因應動作排優先順序與負責人</li><li>建一張風險表，欄位：風險／前兆訊號／因應動作／負責人／多久檢視一次</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成風險章節初稿</b></div><div class="kw"><span class="kwl">目的</span><span>這章台灣主責就能完成，趁早做完送日本備查</span></div><ol class="steps"><li>把六大風險＋因應草案整理成單一文件</li><li>完成後送日本備查</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>風險表寫完就放著 → 等出事才發現前兆早就出現，備援全都來不及</li><li>六大風險的前兆訊號要寫成「看得出來的數字」：例如補貨風險＝安全庫存跌破水位、現金流風險＝帳上剩幾個月營運金，不要等到出事才發現</li><li>風險表要有人定期看、定期更新，不是寫一次就放著；至少每月檢視一次，情況變了就重排優先序</li><li>出狀況時的聯絡網先建好：誰決策、誰執行、多久內回覆，突發（倉庫淹水、社群負評爆量、店員集體離職）才不會當下慌</li><li>備援先做最痛的兩個：<strong>庫存與現金流</strong>，其他風險可以邊做邊補</li></ul></div></div>
 </details><details class="module" id="ch14">
-  <summary><span class="mnum">CH 14</span><h3>願景</h3><span class="chips"><span class="chip both">雙方共同</span></span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>寫出願景方向性敘述</b></div><div class="kw"><span class="kwl">目的</span><span>先有方向（為什麼在台灣做 grounds），細節等有數據再補</span></div><ol class="steps"><li>寫 3-5 句的願景方向（品牌精神、在台使命）</li><li>註明「待第一階段有實際數據後具體化 3/5/10 年願景」</li><li>排定下次檢討時間（例如第一年財報出爐時）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>願景是要拿來做決定用的，不是掛在牆上的口號：寫完後，對應到「這一年要先做到哪幾件事」要有具體對應</li><li>第一年的檢討點先排好（例如：開幕後 3 個月、半年、一年各看一次），時間到了就對照實際數據回顧，不要等「有空」才看</li><li>把願景翻成店員聽得懂的方向（品牌精神一句話），不然教育訓練和日常服務會跟願景脫節</li></ul></div></div>
+  <summary><span class="mnum">CH 14</span><h3>願景</h3><span class="chips"><span class="chip both">雙方共同</span></span><span class="urg" style="background:var(--r2)" title="急迫度">P2｜願景是方向不是時程，先寫方向性敘述即可，不卡任何里程碑</span><span class="arrow">▼</span></summary>
+  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>寫出願景方向性敘述</b></div><div class="kw"><span class="kwl">目的</span><span>先有方向（為什麼在台灣做 grounds），細節等有數據再補</span></div><ol class="steps"><li>寫 3-5 句的願景方向（品牌精神、在台使命）</li><li>註明「待第一階段有實際數據後具體化 3/5/10 年願景」</li><li>排定下次檢討時間（例如第一年財報出爐時）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>願景只有口號、不連到決定 → 遇到沒答案的事大家各自解讀，方向感從開店第一週就散了</li><li>願景是要拿來做決定用的，不是掛在牆上的口號：寫完後，對應到「這一年要先做到哪幾件事」要有具體對應</li><li>第一年的檢討點先排好（例如：開幕後 3 個月、半年、一年各看一次），時間到了就對照實際數據回顧，不要等「有空」才看</li><li>把願景翻成店員聽得懂的方向（品牌精神一句話），不然教育訓練和日常服務會跟願景脫節</li></ul></div></div>
 </details>
 </div>
     <div class="section" id="topics">
   <div class="section-head"><span class="ph" style="background:var(--phase3)">TOPICS</span><h2>專題調查與策略</h2></div>
   <div class="section-desc">商標佈局、子公司vs分公司、選品店、進口路線、電商、快閃、合規清單等。</div>
   <details class="module" id="topic-0">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>商標佈局調查結果（2026-09-08 更新）</h3></summary>
-  <div class="mod-body"><table><thead><tr><th>類別</th><th>結果</th><th>說明</th></tr></thead><tbody><tr><td>第25類（鞋類/服裝）</td><td>❌ 未註冊</td><td>近似有 GROUND FIVE（新北海企業，有效至2031）</td></tr><tr><td>第35類（零售/批發）</td><td>❌ 未註冊</td><td>—</td></tr><tr><td>第18類（皮革/包袋）</td><td>❌ 未註冊</td><td>近似有 LITTLEGROUND（韓商，有效至2033）</td></tr></tbody></table>
-<p><strong>風險</strong>：台灣採先申請主義，grounds 已有選品店販售且有媒體報導（品牌有知名度），但商標完全無保護。任何人可隨時搶註。</p>
-<table><thead><tr><th>註冊番號</th><th>申請/註冊</th><th>類別</th><th>商標</th></tr></thead><tbody><tr><td>#6264712</td><td>2019/09 → 2020/06</td><td>第25類</td><td>GROUNDS</td></tr><tr><td>#6444281</td><td>2021/03 → 2021/09</td><td>第25類</td><td>LEAP GRAVITY + GROUNDS</td></tr><tr><td>#6502599</td><td>2021/08 → 2022/01</td><td>第3、9、14、18、26類</td><td>GROUNDS</td></tr><tr><td>#6507410</td><td>2021/08 → 2022/02</td><td>第3、9、14、18類</td><td>LEAP GRAVITY + GROUNDS</td></tr><tr><td>#6901510</td><td>2024/05 → 2025/02</td><td>第25類</td><td>GROUNDS + WALKING ON JEWELS</td></tr></tbody></table>
-<p><strong>發現</strong>：日本有商標意識（第25類、第18類已註冊），但<strong>第35類（零售服務）在日本也未註冊</strong>，且完全沒有國際佈局。</p>
-<p>根據商標法第6條，在台灣境內無住所或營業所的外國人（如株式會社FOOLS），<strong>必須委任台灣境內的商標代理人辦理，不能自辦</strong>。但若由台灣子公司（台灣法人）名義申請，則可自辦。</p>
-<table><thead><tr><th>比較項目</th><th>方案A：日本母公司申請</th><th>方案B：台灣子公司申請</th></tr></thead><tbody><tr><td>申請人</td><td>株式會社FOOLS（外國人）</td><td>台灣子公司（台灣法人）</td></tr><tr><td>代理人</td><td><strong>強制委任</strong>，每類 NT$3,000~10,000</td><td><strong>不需要</strong>，可自辦</td></tr><tr><td>第25+35類合計</td><td>NT$16,000~30,000</td><td><strong>NT$10,400</strong>（僅官費）</td></tr><tr><td>第25+35+18類合計</td><td>NT$25,000~46,000</td><td><strong>NT$15,600</strong>（僅官費）</td></tr><tr><td>可送件時間</td><td><strong>現在就能送</strong></td><td>要等公司設立完成（約 2~4 個月）</td></tr><tr><td>商標權歸屬</td><td>日本母公司</td><td>台灣子公司</td></tr></tbody></table>
-<table><thead><tr><th>項目</th><th>費用</th><th>備註</th></tr></thead><tbody><tr><td>申請規費（第1~34類）</td><td>每類 NT$3,000</td><td>20項以內不加費，超過每項加 NT$200</td></tr><tr><td>申請規費（第35~45類）</td><td>每類 NT$3,000</td><td>特定零售服務超過5項，每項加 NT$500</td></tr><tr><td>電子申請減免</td><td>每件 -NT$300</td><td>—</td></tr><tr><td>引用參考名稱減免</td><td>每類 -NT$300</td><td>全部商品名稱須完全引用系統參考名稱</td></tr><tr><td>註冊費（領證費）</td><td>每類 NT$2,500</td><td>核准後 2 個月內繳納，逾期商標不成立</td></tr><tr><td>加速審查</td><td>每類加 NT$6,000</td><td>可縮短至 2 個月內審查</td></tr><tr><td>延展註冊費</td><td>每類 NT$4,000</td><td>每 10 年一次，寬限期內加倍</td></tr><tr><td>移轉登記</td><td>每件 NT$2,000</td><td>商標權移轉時使用</td></tr><tr><td>變更登記</td><td>每件 NT$500</td><td>名稱/地址變更</td></tr></tbody></table>
-<p>考量台灣子公司設立需要 2~4 個月，但商標採先申請主義，建議兩邊同時進行：</p>
-<ol>
-<li>1. <strong>現在</strong> → 請台灣代理人先以日本母公司名義送件（搶申請日），花代理費但搶時間</li>
-<li>2. <strong>同步</strong> → 進行台灣子公司設立</li>
-<li>3. <strong>公司設立完成後</strong> → 把商標從日本母公司<strong>移轉登記</strong>給台灣子公司（移轉費每件 NT$2,000）</li>
-</ol>
-<p><strong>費用估算（2類：第25+35類）：</strong></p>
-<ul>
-<li>代理人送件：NT$16,000~30,000</li>
-<li>移轉登記：NT$2,000</li>
-<li><strong>合計：NT$18,000~32,000</strong></li>
-</ul>
-<p>比全程委託代理人省下長期管理費，比等公司設立完成再送件早 2~4 個月取得優先日。</p>
-<ol>
-<li>1. <strong>外國人一定要找台灣代理人</strong> — 法律規定，不是選擇</li>
-<li>2. <strong>優先權</strong> — 日本最近一次註冊是 2024年5月（#6901510），已超過 6 個月，無法主張巴黎公約優先權</li>
-<li>3. <strong>第35類的陷阱</strong> — 特定零售服務超過5項每項加收 NT$500，要精確指定</li>
-<li>4. <strong>註冊費期限</strong> — 核准後 2 個月內沒繳費，商標不成立，審查全白費</li>
-<li>5. <strong>10年有效期</strong> — 每 10 年要延展（每類 NT$4,000），逾期 6 個月內可加倍補辦</li>
-<li>6. <strong>商標同一性</strong> — 申請的圖樣和實際使用要一致，不能擅自更改</li>
-<li>7. <strong>加速審查條件</strong> — 需符合要件（已實際使用或有侵權風險等），不是有錢就能用</li>
-<li>8. <strong>商標歸屬決策</strong> — 移轉後商標權歸台灣子公司，日本母公司失去台灣商標權。需在會議中確認：台灣商標要放在日本母公司還是台灣子公司？</li>
-</ol>
-<ul class="task">
-<li class="">★ <strong>在週五會議中主動提出商標風險</strong>，建議日本總部盡快在台灣送件（<strong>一次送第25＋35＋18類</strong>，第35類保護零售/電商服務本身）</li>
-<li class="">★ <strong>確認商標申請人名義</strong>：日本母公司（需找代理人）或台灣子公司（可自辦但要等設立）？建議先以日本母公司送件，之後移轉</li>
-<li class="">確認費用由誰負擔（代理費 + 官費 + 移轉費）</li>
-<li class="">台灣商標審查約 6–12 個月，但「申請日」即取得優先地位——趕快送件是重點</li>
-<li class="">開店可以同時進行，但商標一定要先送</li>
-<li class="">聯繫 2~3 家台灣商標事務所報價（建議找有跨國經驗的，方便跟日本溝通）</li>
-</ul></div>
+  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>專題文件庫（詳細內容在各自檔案）</h3></summary>
+  <div class="mod-body"><blockquote><p>調查、策略與清單的細節全部拆到獨立檔案，每份只有一份正本；本行動方案只留入口，不再重複內容。</p></blockquote>
+<table><thead><tr><th>文件</th><th>內容</th><th>急迫度</th></tr></thead><tbody><tr><td><a href="知識_商標佈局調查結果.html" target="_blank" rel="noopener">知識_商標佈局調查結果.html</a></td><td>台灣/日本商標狀況、要註冊的標的清單、方案與費用、先送件再移轉、第35類擴大</td><td><strong>P0</strong>（先申請主義）</td></tr><tr><td><a href="知識_子公司vs分公司.html" target="_blank" rel="noopener">知識_子公司vs分公司.html</a></td><td>兩種結構完整比較與建議</td><td><strong>P0</strong>（公司沒成立什麼都卡）</td></tr><tr><td><a href="策略_選品店通路.html" target="_blank" rel="noopener">策略_選品店通路.html</a></td><td>選品店四種處理模式與建議（模式C）</td><td>P1</td></tr><tr><td><a href="策略_進口路線比較.html" target="_blank" rel="noopener">策略_進口路線比較.html</a></td><td>日本 vs 印尼進口：關稅、交期、MOQ（最小訂購量）、寄售（先鋪貨後結算）</td><td>P1</td></tr><tr><td><a href="策略_電商三階段.html" target="_blank" rel="noopener">策略_電商三階段.html</a></td><td>品牌型電商三階段，初期不上量販平台</td><td>P1</td></tr><tr><td><a href="記錄_快閃活動.html" target="_blank" rel="noopener">記錄_快閃活動.html</a></td><td>2026-07 快閃歷史與下次規劃</td><td>P1</td></tr><tr><td><a href="檢查_開店前置合規.html" target="_blank" rel="noopener">檢查_開店前置合規.html</a></td><td>A~I 九大類合規勾選清單</td><td><strong>P0</strong>（★項目卡營業）</td></tr></tbody></table></div>
 </details><details class="module" id="topic-1">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>子公司 vs 分公司 完整比較（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><blockquote><p>給週五會議用。兩種結構都適用於 100% 日本持股，但權利義務差異很大。</p></blockquote>
-<table><thead><tr><th>比較項目</th><th><strong>子公司</strong></th><th><strong>分公司</strong></th></tr></thead><tbody><tr><td>法人資格</td><td>✅ 獨立法人</td><td>❌ 無獨立法人，是母公司的延伸</td></tr><tr><td>法律責任</td><td>母公司以<strong>出資額為限</strong>負責</td><td>母公司負<strong>連帶無限責任</strong></td></tr><tr><td>設立時間</td><td>約 2~3 個月（需投審會審查）</td><td>約 1~2 個月（免投審會，除非陸資）</td></tr><tr><td>設立流程</td><td>名稱預查 → 投審會核准 → 開籌備戶 → 匯入資金 → 投資審定 → 公司登記</td><td>名稱預查 → 經濟部認許 → 分公司登記</td></tr><tr><td>主管機關</td><td>投審司（外資投資）＋ 商業司（登記）</td><td>商業司（外國公司認許）</td></tr><tr><td>營所稅</td><td>20%</td><td>20%</td></tr><tr><td>匯回盈餘稅負</td><td>扣繳 <strong>21%</strong> ＋ 未分配盈餘加徵 5%</td><td><strong>0%</strong>（直接匯回免稅）</td></tr><tr><td>轉投資股利</td><td>台灣境內轉投資股利不重複課稅</td><td>轉投資股利要扣繳 <strong>21%</strong></td></tr><tr><td>商標申請</td><td>✅ 可自辦（台灣法人）</td><td>✅ 可自辦（台灣境內營業所）</td></tr><tr><td>銀行開戶</td><td>較容易（獨立法人）</td><td>較難（非獨立法人）</td></tr><tr><td>簽約能力</td><td>以自己名義簽約</td><td>以母公司名義簽約</td></tr><tr><td>展店彈性</td><td>✅ 可自行增資、轉投資、開二店</td><td>❌ 要母公司授權</td></tr><tr><td>未來退出</td><td>可直接出售股權</td><td>要撤銷分公司登記</td></tr><tr><td>會計獨立</td><td>獨立帳冊、獨立申報</td><td>與母公司合併（台灣仍需獨立記帳）</td></tr><tr><td>適合理性</td><td>長期經營、有展店計畫、需獨立決策</td><td>短期試水溫、規模小、不需獨立決策</td></tr></tbody></table>
-<p>grounds 的情境：100% 日本持股、要開實體門市、未來可能展店、需要簽租約/開銀行帳戶/僱員工、需要持有台灣商標。</p>
-<p><strong>建議用子公司</strong>，理由：</p>
-<ol>
-<li>1. <strong>獨立法人</strong> → 租約、銀行帳戶、商標都掛在子公司名下，日本母公司風險隔離</li>
-<li>2. <strong>展店彈性</strong> → 第二家店可直接增資或轉投資</li>
-<li>3. <strong>商標歸屬</strong> → 子公司持有台灣商標，未來要賣台灣業務或引入股東都方便</li>
-<li>4. <strong>稅務</strong> → 雖然匯回盈餘要扣 21%，但台灣營所稅僅 20%，實際差異不大</li>
-<li>5. <strong>獨立決策</strong> → 台灣端日常營運不需每次回日本批准</li>
-</ol>
-<p><strong>需在會議中確認的子項目：</strong></p>
-<ul class="task">
-<li class="">子公司還是分公司？日本是否認同子公司方案？</li>
-<li class="">法定負責人由誰擔任？</li>
-<li class="">資本額多少？資金何時到位？</li>
-<li class="">若採子公司，台灣商標登記在誰名下（見商標章節）</li>
+  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>本文件怎麼活著（工作流程）</h3></summary>
+  <div class="mod-body"><blockquote><p>這節說明怎麼管理這份文件，是「工作」的管理，不是開店本身。</p></blockquote>
+<ul>
+<li>每次開會／重大決定後當天更新，並在開頭標註版號＋一行改動摘要</li>
+<li>一個主題只有一份正本，其他地方一律連結引用，避免兩份內容打架</li>
+<li>檔案更新後同步發布到網站（docs 文件庫），讓大家都看同一份</li>
+</ul>
+<ul>
+<li>每一筆關鍵決定記進共用工作表：日期／決定事項／參與者／決策內容／後續動作／誰負責／下次確認日</li>
+<li>跟日本對話後 24 小時內補上紀錄</li>
+<li>每週五會議前，把「本週新增決定」列印出來當開會第一頁</li>
+</ul>
+<ul>
+<li>打開第一章的開店倒數行事曆：哪些到期、哪些延誤</li>
+<li>延誤立即標註「影響到哪一章、下一個里程碑何時」</li>
 </ul></div>
 </details><details class="module" id="topic-2">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>台灣選品店通路策略（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><table><thead><tr><th>選品店</th><th>狀態</th><th>關係</th></tr></thead><tbody><tr><td>Plain-me</td><td>有販售 grounds</td><td>台灣知名選品店，多店經營</td></tr><tr><td>NE.SENSE</td><td>有販售 grounds</td><td>台灣選品店，強調日本品牌</td></tr><tr><td>UJNG</td><td>有販售 grounds</td><td>台灣選品店</td></tr></tbody></table>
-<p>開店後終止所有選品店供貨，只在自己的直營店與官網販售。</p>
-<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody><tr><td>價格完全控制</td><td>失去現有通路曝光量</td></tr><tr><td>消費者資料全在自己手上</td><td>選品店客人可能不知道開了新店</td></tr><tr><td>利潤全拿</td><td>短期營收可能下降</td></tr><tr><td>品牌形象統一管理</td><td>跟選品店關係破裂，口碑受影響</td></tr></tbody></table>
-<p>直營店開了之後選品店繼續賣，但統一建議售價。</p>
-<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody><tr><td>通路覆蓋率最大</td><td>價格難真正統一（選品店可能偷打折）</td></tr><tr><td>選品店客人=免費品牌曝光</td><td>直營店與選品店互相搶客人</td></tr><tr><td>保留合作關係</td><td>難以控制陳列與服務品質</td></tr></tbody></table>
-<p>開店後 6~12 個月內逐步減少選品店供貨，等直營店站穩後完全收回。</p>
-<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody><tr><td>平穩過渡，不影響營收</td><td>需精準控制退場時間表</td></tr><tr><td>給選品店緩衝期，保持關係</td><td>管理複雜度高</td></tr><tr><td>直營店有時間建立客源</td><td>可能拖太久導致進退兩難</td></tr></tbody></table>
-<p>不收回，改成「正式經銷商」模式，簽訂經銷合約（最低售價、陳列標準、退換貨規則）。</p>
-<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody><tr><td>通路覆蓋最大</td><td>控制力比直營弱</td></tr><tr><td>選品店有動力推廣</td><td>經銷商管理需人力</td></tr><tr><td>減少平行輸入/水貨風險</td><td>價格體系複雜</td></tr></tbody></table>
-<p>考量 grounds 是新品牌在台灣：</p>
-<ol>
-<li>1. <strong>第一年</strong> → 選品店是重要品牌曝光來源（消費者不知道 grounds 是什麼，選品店能教育市場）</li>
-<li>2. <strong>開店後</strong> → 直營店建立品牌體驗，選品店繼續維持通路覆蓋</li>
-<li>3. <strong>6~12 個月後</strong> → 若直營店業績穩定，開始減少選品店供貨</li>
-<li>4. <strong>第二年</strong> → 評估完全收回，或保留 1~2 家最重要的選品店作為「經銷夥伴」</li>
-</ol>
-<ul class="task">
-<li class="">日本總部怎麼看台灣選品店通路？威脅還是幫忙？</li>
-<li class="">若繼續供貨給選品店，價格條件由誰定？（日本→選品店，還是日本→台灣子公司→選品店？）</li>
-<li class="">選品店的陳列標準、品牌展示規範，日本有無要求？</li>
-<li class="">選品店打折促銷，日本能接受嗎？會否影響品牌形象？</li>
-<li class="">日本在其他國家（韓國、香港）的選品店通路如何處理？有無先例？</li>
-</ul></div>
-</details><details class="module" id="topic-3">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>進口路線比較：日本 vs 印尼直接進口（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><blockquote><p><strong>背景</strong>：grounds 鞋在<strong>印尼／中國</strong>的工廠生產（已確認，非日本製造）。因此比較「從日本進口」vs「從印尼直送」。</p></blockquote>
-<ul>
-<li>台灣與印尼<strong>沒有自由貿易協定</strong>（台灣非 ASEAN 成員，所以 ATIGA／Form E 免關稅<strong>不適用</strong>於印尼→台灣）</li>
-<li>鞋類（海關稅則第64章）進口關稅約 <strong>6~10%</strong>（依材質），再加 <strong>5% 營業稅</strong></li>
-<li>從日本轉口 → 原產地仍為印尼（<strong>不可偽報成日本製</strong>，違反《海關緝私條例》）</li>
-<li><strong>結論：關稅面日本 vs 印尼幾乎無差別</strong>（都是 6~10% + 5%）；真正差別在交期、庫存、控制權</li>
-</ul>
-<table><thead><tr><th>比較項目</th><th>從日本進口（經 FOOLS 日本倉）</th><th>從印尼直送（工廠直出）</th></tr></thead><tbody><tr><td>關稅＋營業稅</td><td>6~10% + 5%（原產地=印尼）</td><td>6~10% + 5%（同）</td></tr><tr><td>交期（海運）</td><td>日本→台灣 約 <strong>2~4 天</strong></td><td>印尼→台灣 約 <strong>7~14 天</strong></td></tr><tr><td>交期（空運）</td><td>日本→台灣 <strong>1~2 天</strong></td><td>印尼→台灣 <strong>3~7 天</strong></td></tr><tr><td>最小訂購量 (MOQ)</td><td>低，可少量多次補貨</td><td>高，工廠有最低起訂</td></tr><tr><td>前置期（下單到到貨）</td><td>短（FOOLS 有庫存可立即出）</td><td>長（配合工廠排產，數週~數月）</td></tr><tr><td>庫存風險</td><td>低（日方扛庫存）</td><td>高（一次進大量壓資金）</td></tr><tr><td>換季/滯銷彈性</td><td>好（可小量試）</td><td>差（量大難退）</td></tr><tr><td>價格</td><td>較貴（日本端加拉利潤/物流費）</td><td>較便宜（省中間層）</td></tr><tr><td>品質/標籤控管</td><td>由日本統一整合</td><td>台灣端要自己盯中文標、BSMI</td></tr><tr><td>付款/匯率</td><td>付日幣（與日方月結）</td><td>付美金/印尼盾（風險自負）</td></tr><tr><td>供應鏈控制權</td><td>完全交給日本</td><td>台灣介入了訂貨決策</td></tr></tbody></table>
-<ol>
-<li>1. <strong>開店第一階段（第一、二階段為主）→ 全走日本進口</strong>：交期短、小量多補、日方扛庫存、換季彈性大，最適合新品牌試水溫</li>
-<li>2. <strong>銷量穩定後（6~12 個月後）→ 用銷量數據與日本談部分熱銷款印尼直送</strong>：壓低成本，需有明確訂單量才划算（MOQ 效益）</li>
-<li>3. <strong>交易條件建議</strong>：初期談「寄售（Consignment）」或「買斷但小量高頻」，打通庫存與現金流，別一次押大量</li>
-</ol>
-<p><strong>會議重點</strong>：直接問日本——FOOLS 目前是「日本倉庫庫存出貨」還是「印尼/中國工廠指定品項出貨」？這決定台灣端庫存天數設定。</p></div>
-</details><details class="module" id="topic-4">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>商標擴大建議（2026-09-08 更新）</h3></summary>
-  <div class="mod-body"><blockquote><p>除第25類（鞋）之外，建議擴大註冊以完整保護品牌。</p></blockquote>
-<table><thead><tr><th>類別</th><th>對應業務</th><th>台灣現況</th><th>是否註冊</th></tr></thead><tbody><tr><td><strong>第25類</strong></td><td>鞋/服裝</td><td>❌ 未註冊</td><td><strong>必註</strong></td></tr><tr><td><strong>第35類</strong></td><td>零售/電商/批發</td><td>❌ 未註冊</td><td><strong>必註</strong>★</td></tr><tr><td><strong>第18類</strong></td><td>包袋/皮件</td><td>❌ 未註冊</td><td>建議註</td></tr><tr><td><strong>第14類</strong></td><td>飾品/珠寶</td><td>❌ 未註冊</td><td>視產品線</td></tr><tr><td><strong>第3/9/26類</strong></td><td>化妝品/眼鏡/配件</td><td>—</td><td>視未來產品</td></tr></tbody></table>
-<ul>
-<li>第35類保護「<strong>開店、電商販售 grounds</strong>」這件<strong>服務</strong>本身，不只保護商品</li>
-<li>日本 FOOLS <strong>連日本國內都沒註冊第35類</strong>（上次調查確認）——是<strong>台日共同缺口</strong></li>
-<li>只註商品類不註零售類 → 別人可註冊「grounds 零售/電商服務」再主張權利</li>
-</ul>
-<ul>
-<li>台灣<strong>一次送第 25+35+18 三類</strong>（費用/時程見商標章節）</li>
-<li>會議<strong>主動提醒日本</strong>：日本自己的第35類也漏了，建議台日並行補齊</li>
-<li>用「先送件再移轉」策略（日本母公司先送、公司成立後移轉台灣子公司）</li>
-</ul></div>
-</details><details class="module" id="topic-5">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>電商三階段策略（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><blockquote><p>核心原則：grounds 是設計師品牌，電商必須「<strong>品牌型</strong>」而非「折扣型」。<strong>第一年避開蝦皮/MOMO</strong>（量販平台、折扣文化，會吃掉品牌定位與門市價差）。</p></blockquote>
-<ul>
-<li>日本有官方線上商店（grounds-fw.jp）</li>
-<li>台灣無本地電商，消費者透過選品店或日本官網購買</li>
-</ul>
-<table><thead><tr><th>階段</th><th>做法</th><th>理由</th></tr></thead><tbody><tr><td><strong>初期（開店前~半年）</strong></td><td>走日本官網國際配送（DTC）或直營店，不開台灣電商</td><td>避免折扣文化，保品牌；門市建立認知</td></tr><tr><td><strong>中期（半年~一年）</strong></td><td>開台灣自有官網（品牌型電商）</td><td>門市品牌基礎後，電商承接會員/回購；風格可控</td></tr><tr><td><strong>後期</strong></td><td>視需要評估百貨/其他平台</td><td>等品牌立足後再看，不為早期折扣犧牲形象</td></tr></tbody></table>
-<ul class="task">
-<li class="">台灣電商自行開官網，還是日本官網國際配送直送台灣？</li>
-</ul>
-<ul>
-<li>日本官網直送 → 初期零庫存，但個資跨境（台灣個資法）+ 電子發票、退換貨責任複雜</li>
-<li>台灣官網 → 綁電子發票、本地物流、需庫存</li>
-<li>[ ] 電商貨從台灣庫存出，還是日本直寄？定價與庫存邊界怎麼切？</li>
-<li>[ ] 平台策略：是否認同「初期不上蝦皮/MOMO」？</li>
-</ul></div>
-</details><details class="module" id="topic-6">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>快閃活動：歷史記錄與下次規劃（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><blockquote><p>資料來源：TVBS女人我最大 2026/07/15 報導。</p></blockquote>
-<ul>
-<li><strong>時間</strong>：2026/07/10–07/21（12 天），12:00–20:00（最後一天至 18:00）</li>
-<li><strong>地點</strong>：台北市中山區林森北路 107 巷 10 號 3 樓（三樓空間，非街邊店）</li>
-<li><strong>形式</strong>：限時快閃店，主打可試穿＋品牌世界觀陳列</li>
-<li><strong>商品</strong>：經典系列＋人氣配色＋最新款；主推 MOOPIE、MOOPIE KNIT PUMPS（瑪莉珍）</li>
-<li><strong>行銷</strong>：主流媒體報導（女人我最大），強調「免飛日本」＋「厚底鞋趨勢回歸」</li>
-<li><strong>賣點</strong>：泡泡鞋底「踩棉花糖」腳感；韓星/時尚編輯赴日必買清單敘事</li>
-</ul>
-<ul>
-<li>與直營店時序、主導權責、能否沿用前次媒體合作/場地模式、設計師是否來台——見《週五會議_提問清單》第十一節</li>
-</ul></div>
-</details><details class="module" id="topic-7">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>開店前置合規 Checklist（2026-09-08 新增）</h3></summary>
-  <div class="mod-body"><blockquote><p>開店落地有硬性時效、會影響營業時程的法規與行政面，逐一勾選。★ = 有硬性時效或會延誤營業，一定要提前。</p></blockquote>
-<ul class="task">
-<li class="">★ 子公司設立（名稱預查→投審會→籌備戶→匯資→投資審定→公司登記）</li>
-<li class="">★ 商業登記＋<strong>稅籍登記</strong>（開業前完成，未登記不得營業）</li>
-<li class="">關務登錄：取得<strong>進口人身分</strong>（報關用，決定關稅/營業稅繳納主體）</li>
-<li class="">印鑑登記、大小章</li>
-</ul>
-<ul class="task">
-<li class="">★ 開設公司帳戶（外資：一般帳戶＋OBU／日圓、美金帳戶評估）</li>
-<li class="">★ <strong>刷卡收單</strong>（零售銷售系統綁定金流，需提早申辦審核）</li>
-<li class="">第三方金流／電子支付評估（LINE Pay、街口等台灣常用）</li>
-<li class="">外幣匯款與匯率避險安排（尤其日本/印尼進貨付款）</li>
-</ul>
-<ul class="task">
-<li class="">★ 委任<strong>記帳士／會計師</strong>（記帳、申報）</li>
-<li class="">★ 電子發票申請（加值型營業稅，每二個月申報一次）</li>
-<li class="">營業稅稅籍、統一發票購票證</li>
-<li class="">營所稅：暫繳、結算申報、未分配盈餘</li>
-<li class="">扣繳申報：員工薪資、房租扣繳 10%、給付外國人（日本）扣繳</li>
-<li class="">資本額查核簽證</li>
-</ul>
-<ul class="task">
-<li class="">★ <strong>室內裝修許可</strong>申請（動工前，需送審）</li>
-<li class="">★ <strong>建築物使用執照／用途變更</strong>（土屋鞄現址含藝文空間，複合使用需確認）</li>
-<li class="">★ <strong>消防會勘</strong>（消防檢查通過才能營業）</li>
-<li class="">★ <strong>公共安全檢查（公安申報）</strong>（零售店面定期申報）</li>
-<li class="">電器檢查、逃生標示、滅火器配置</li>
-<li class="">★ <strong>招牌廣告物管理</strong>（北市需申請、部分需雜項執照）</li>
-<li class="">樓地板/逃生動線符合零售規定</li>
-</ul>
-<ul class="task">
-<li class="">★ <strong>公共意外責任險</strong>（營業場所，多數縣市強制 + 消防審查會看）</li>
-<li class="">貨物/水險（進口途中）、火險（店面設備）</li>
-<li class="">員工團險（雇主責任、意外）</li>
-</ul>
-<ul class="task">
-<li class="">★ <strong>勞健保、勞退、職災保險、就業保險</strong>投保申報</li>
-<li class="">勞動契約書（僱用前簽署）</li>
-<li class="">工作規則（受僱勞工達 30 人以上需報備）</li>
-<li class="">排班/加班費/特休/工時上限（零售業排班法規）</li>
-<li class="">給付薪資依勞基法（薪資扣繳、加班費）</li>
-<li class="">員工個資蒐集同意</li>
-</ul>
-<ul class="task">
-<li class="">會員資料（個資法）、監視器設置、員工資料保管</li>
-<li class="">跨境傳輸（若會員資料回傳日本，需個資法同意＋可能的跨境傳輸機制）</li>
-</ul>
-<ul class="task">
-<li class="">★ 台灣商標（第25+35+18類）送件——優先於開店</li>
-<li class="">侵害風險盤點（品牌視覺、陳列、販售物是否用到他人權利）</li>
-</ul>
-<ul class="task">
-<li class="">銷售／庫存／會員系統（含電子發票串接、刷卡收單）</li>
-<li class="">進口合規：中文標示、BSMI（見進口章節）</li>
-<li class="">庫存、物流倉儲、警報/保全</li>
-</ul></div>
-</details><details class="module" id="topic-8">
   <summary><span class="arrow" style="margin-right:2px">▼</span><h3>待補充</h3></summary>
   <div class="mod-body"><ul>
 <li>各章負責人（目前多數標「台灣主責」，實際執行時需要指定到人）</li>

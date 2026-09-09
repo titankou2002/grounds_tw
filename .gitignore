@@ -17,7 +17,16 @@
 # negotiation notes). The repo is PUBLIC — these must never be committed.
 # The published site is generated from tools/generate.py into
 # index.html / blueprint.html only.
+/notebooks/*
 /grounds_taiwan_行動方案.md
+/一頁版_給決策者.md
+/知識_商標佈局調查結果.md
+/知識_子公司vs分公司.md
+/策略_選品店通路.md
+/策略_進口路線比較.md
+/策略_電商三階段.md
+/記錄_快閃活動.md
+/檢查_開店前置合規.md
 /週五會議_提問清單.md
 /門市地點分析_中山北路二段36巷.md
 /過程框架_決策總表.md
