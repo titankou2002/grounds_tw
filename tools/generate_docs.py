@@ -239,7 +239,6 @@ def md_to_html(mdtext):
 
 DOCS = [
     ("過程框架_決策總表.md", "過程框架 — 決策總表", "grounds Taiwan 全過程決策框架 6 階段 30 模組"),
-    ("grounds_taiwan_行動方案.md", "台灣執行行動方案", "grounds Taiwan Launch Blueprint 實務執行清單"),
     ("週五會議_提問清單.md", "與日本總部會議提問清單", "週五會議與日本總部對齊的決策點與台灣市場情報"),
     ("門市地點分析_中山北路二段36巷.md", "門市地點分析（中山北路二段36巷）", "土屋鞄台北店店面分析"),
     ("商標事務所洽談_QA.md", "商標事務所洽談 QA", "與宏景智權洽談的問題清單"),
@@ -277,6 +276,7 @@ for fname, title, desc in DOCS:
     page += '<div class="docs-layout">'
     page += '<nav class="docs-nav">'
     page += f'<a href="index.html">← 全部文件</a>'
+    page += f'<a href="grounds_taiwan_行動方案.html">台灣執行行動方案（互動版）</a>'
     for f2, t2, _ in DOCS:
         page += f'<a href="{os.path.splitext(f2)[0]}.html">{t2}</a>'
     page += '</nav>'
@@ -289,7 +289,11 @@ for fname, title, desc in DOCS:
 
 # Hub page
 hub = SHELL_HEAD.replace("__TITLE__", "工作文件").replace("__DESC__", "grounds Taiwan 工作文件庫").replace("__CSSV__", CSS_VERSION)
-cards = []
+interactive_card = '''      <a class="doc-card reveal" href="grounds_taiwan_行動方案.html">
+        <p class="doc-card-title">台灣執行行動方案（互動版）</p>
+        <p class="doc-card-desc">grounds Taiwan Launch Blueprint 執行清單 · 深色互動閱讀版</p>
+      </a>'''
+cards = [interactive_card]
 for slug, title, desc in LINKS:
     cards.append(f'''      <a class="doc-card reveal" href="{slug}.html">
         <p class="doc-card-title">{title}</p>
