@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>grounds Taiwan｜全過程決策框架</title>
+<style>
+  :root{
+    --bg:#0e1116; --bg2:#151a22; --card:#1b222c; --card2:#202a36;
+    --line:#2c3a4d; --txt:#e8eef6; --muted:#8fa0b5;
+    --accent:#7fb3ff; --accent2:#ffd075;
+    --do:#ffd075; --ask:#7fb3ff; --ans:#7fe3c8; --next:#d299ff; --pit:#ff8f8f;
+    --phase0:#66b3ff; --phase1:#ff9f5c; --phase2:#78d17f; --phase3:#5cc8ff;
+    --phase4:#ffb86b; --phase5:#c58cff;
+    --r0:#ff5c5c; --r1:#ff9f5c; --r2:#ffd075; --r3:#8fa0b5;
+    --radius:14px;
+  }
+  *{box-sizing:border-box; margin:0; padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg); color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.7; font-size:16px}
+  ::selection{background:var(--accent); color:#000}
+
+  .app{display:flex; min-height:100vh}
+  /* Sidebar */
+  nav.side{
+    width:290px; flex-shrink:0; background:var(--bg2); border-right:1px solid var(--line);
+    position:sticky; top:0; height:100vh; overflow-y:auto; padding:22px 18px; z-index:20;
+  }
+  nav.side .brand{font-weight:800; font-size:18px; margin-bottom:2px}
+  nav.side .brand span{color:var(--accent)}
+  nav.side .sub{color:var(--muted); font-size:12px; margin-bottom:16px}
+  .prio-guide{margin-bottom:16px; border:1px solid var(--line); border-radius:10px; padding:10px 12px; font-size:12px}
+  .prio-guide .pg{display:flex; gap:8px; align-items:center; margin:4px 0}
+  .prio-guide .pg .pdot{width:9px;height:9px;border-radius:3px;flex-shrink:0}
+  .nav-group{margin-bottom:4px}
+  .nav-phase{display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; cursor:pointer; font-weight:700; font-size:13px}
+  .nav-phase:hover{background:var(--card)}
+  .nav-phase .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+  .nav-module{margin-left:20px; padding:5px 8px; border-left:1px solid var(--line); color:var(--muted); font-size:12.5px; cursor:pointer; border-radius:0 7px 7px 0; display:flex; gap:6px; align-items:center}
+  .nav-module:hover{color:var(--txt); background:var(--card)}
+  .nav-module.active{color:var(--accent); font-weight:700}
+  .nav-module .mp{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+  main{flex:1; min-width:0; padding:30px 40px 80px; max-width:980px; margin:0 auto}
+  .h1{font-size:30px; font-weight:800; margin-bottom:6px}
+  .tagline{color:var(--muted); margin-bottom:6px}
+  .vtag{font-size:12px; color:var(--muted); margin:0 0 20px}
+  .one-liner{background:var(--card2); border-left:4px solid var(--accent2); border-radius:10px; padding:14px 18px; margin:18px 0; font-size:15px; font-weight:600}
+
+  .flow{display:flex; flex-direction:column; margin:18px 0 26px}
+  .flow .node{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; cursor:pointer; font-weight:700; display:flex; align-items:center; gap:12px; transition:transform .15s}
+  .flow .node:hover{transform:translateX(4px)}
+  .flow .node .num{font-size:12px; opacity:.7; flex-shrink:0}
+  .flow .node .d{color:var(--muted); font-weight:400; font-size:13px}
+  .flow .bar{height:2px;width:100%;background:var(--line)}
+
+  .section{margin-top:34px; scroll-margin-top:20px}
+  .section-head{display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--line); padding-bottom:10px; margin-bottom:6px; flex-wrap:wrap}
+  .section-head .ph{font-size:13px; font-weight:800; letter-spacing:1px; padding:4px 10px; border-radius:7px; color:#0e1116}
+  .section-head h2{font-size:24px}
+  .section-desc{color:var(--muted); margin-bottom:4px}
+
+  .module{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); margin-bottom:16px; overflow:hidden}
+  .module .mod-head{display:flex; align-items:center; gap:10px; padding:14px 18px; cursor:pointer; user-select:none}
+  .module .mod-head .mnum{font-size:12px; color:var(--muted); font-weight:800}
+  .module .mod-head h3{font-size:17px; flex:1}
+  .module .mod-head .chev{transition:transform .25s; color:var(--muted)}
+  .module.open .mod-head .chev{transform:rotate(180deg)}
+  .module .mod-body{display:none; padding:6px 18px 18px; border-top:1px solid var(--line)}
+  .module.open .mod-body{display:block}
+
+  .prio-tag{font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; color:#0e1116; white-space:nowrap}
+  .explain{background:var(--card2); border-radius:11px; padding:12px 14px; margin:12px 0; font-size:15px; border-left:3px solid var(--accent)}
+
+  .qgrid{display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:12px}
+  @media(max-width:720px){.qgrid{grid-template-columns:1fr}}
+  .cell{background:var(--card2); border-radius:11px; padding:13px 15px}
+  .cell .lbl{font-size:11px; letter-spacing:1px; font-weight:800; margin-bottom:8px}
+  .cell li{list-style:none; padding-left:16px; position:relative; margin-bottom:6px; font-size:14px}
+  .cell li:before{content:"▸"; position:absolute; left:0}
+  .cell.do .lbl{color:var(--do)} .cell.do li:before{color:var(--do)}
+  .cell.ask .lbl{color:var(--ask)} .cell.ask li:before{color:var(--ask)}
+  .cell.ans .lbl{color:var(--ans)} .cell.ans li:before{color:var(--ans)}
+  .cell.ans .tag{display:inline-block; background:rgba(127,227,200,.12); color:var(--ans); font-size:11px; padding:1px 7px; border-radius:5px; margin:2px 4px 2px 0; font-weight:600}
+  .cell.next .lbl{color:var(--next)} .cell.next li:before{color:var(--next)}
+
+  .pit{margin-top:12px; background:rgba(255,143,143,.06); border:1px solid rgba(255,143,143,.25); border-radius:11px; padding:13px 15px}
+  .pit .plbl{color:var(--pit); font-size:11px; letter-spacing:1px; font-weight:800; margin-bottom:8px}
+  .pit li{list-style:none; padding-left:18px; position:relative; margin-bottom:6px; font-size:14px}
+  .pit li:before{content:"⚠"; position:absolute; left:0; color:var(--pit)}
+
+  .timeline{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:12px; margin-top:14px}
+  .tl-card{background:var(--card2); border-radius:11px; padding:14px 16px; border-top:3px solid var(--accent)}
+  .tl-card .tl-ph{font-size:11px; font-weight:800; letter-spacing:1px; color:var(--muted)}
+  .tl-card .tl-time{font-size:15px; font-weight:800; margin:4px 0}
+  .tl-card .tl-what{font-size:13px; color:var(--muted)}
+
+  .prio-summary{margin-top:22px; background:var(--card2); border-radius:var(--radius); padding:18px 20px}
+  .prio-summary h3{margin-bottom:10px; font-size:18px}
+  .ps-row{display:flex; gap:10px; margin-bottom:10px; align-items:flex-start}
+  .ps-row .ps-dot{width:11px;height:11px;border-radius:3px;flex-shrink:0;margin-top:6px}
+  .ps-row .ps-t{font-weight:700}
+  .ps-row .ps-d{color:var(--muted); font-size:14px}
+  .gold{background:var(--card2); border-left:4px solid var(--accent2); border-radius:10px; padding:14px 18px; margin-top:16px; font-weight:700; font-size:16px}
+
+  footer{margin-top:40px; color:var(--muted); font-size:12.5px; border-top:1px solid var(--line); padding-top:18px}
+  .progress{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:50}
+
+  .mobile-menu{display:none}
+  @media(max-width:860px){
+    nav.side{position:fixed; left:-100%; transition:left .3s; width:320px}
+    nav.side.show{left:0}
+    main{padding:20px 18px 70px}
+    .mobile-menu{display:flex; align-items:center; gap:10px; padding:14px 18px; position:sticky; top:0; background:var(--bg); z-index:15; border-bottom:1px solid var(--line)}
+    .mobile-menu button{background:var(--card); border:1px solid var(--line); color:var(--txt); padding:6px 12px; border-radius:8px; cursor:pointer}
+  }
+  .menu-overlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:18}
+  @media(max-width:860px){ .menu-overlay.show{display:block} }
+</style>
+</head>
+<body>
+<div class="progress" id="progress"></div>
+<div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
+
+<div class="app">
+  <nav class="side" id="side">
+    <div class="brand">grounds <span>Taiwan</span></div>
+    <div class="sub">全過程決策框架 · 白話版</div>
+    <div class="prio-guide">
+      <div class="pg"><span class="pdot" style="background:var(--r0)"></span>🔴 現在立刻 · 不做會卡</div>
+      <div class="pg"><span class="pdot" style="background:var(--r1)"></span>🟠 這週啟動 · 有前置期</div>
+      <div class="pg"><span class="pdot" style="background:var(--r2)"></span>🟡 開店前 · 可排程</div>
+      <div class="pg"><span class="pdot" style="background:var(--r3)"></span>⚪ 慢慢來 · 營運後</div>
+    </div>
+    <div id="navList"></div>
+  </nav>
+
+  <main>
+    <div class="h1">grounds Taiwan 全過程決策框架</div>
+    <div class="tagline">每一塊：白話講你該做什麼、急不急、問日本什麼、日本怎麼答你怎麼接、以及要小心的坑。</div>
+    <div class="vtag">版本 v2.0 · 2026-09-08</div>
+
+    <div class="one-liner">一句話記住全案輕重：<b>商標最急（先申請主義）、公司最關鍵、快閃是眼前、消防沒過不能營業、定價要防代購。</b></div>
+
+    <div class="flow" id="flow"></div>
+
+    <div class="section" id="sec-p0">
+      <div class="section-head"><span class="ph" style="background:var(--phase0)">PHASE 0</span><h2>對齊（先跟日本把話說開）</h2></div>
+      <div class="section-desc">先敲定溝通與決策機制，並用台灣情報建立信任。</div>
+      <div id="mod-p0"></div>
+    </div>
+    <div class="section" id="sec-p1">
+      <div class="section-head"><span class="ph" style="background:var(--phase1)">PHASE 1</span><h2>快閃（2027-03）</h2></div>
+      <div class="section-desc">前次（2026-07）辦過，這次是直營店前的暖身／驗證。</div>
+      <div id="mod-p1"></div>
+    </div>
+    <div class="section" id="sec-p2">
+      <div class="section-head"><span class="ph" style="background:var(--phase2)">PHASE 2</span><h2>公司設立與商標（最重要地基）</h2></div>
+      <div class="section-desc">公司越早成立、商標越早送件，後面越順。</div>
+      <div id="mod-p2"></div>
+    </div>
+    <div class="section" id="sec-p3">
+      <div class="section-head"><span class="ph" style="background:var(--phase3)">PHASE 3</span><h2>進口與供應鏈</h2></div>
+      <div class="section-desc">進貨路線、關稅、定價、銷售分析、過季、保固、倉儲、轉讓定價。</div>
+      <div id="mod-p3"></div>
+    </div>
+    <div class="section" id="sec-p4">
+      <div class="section-head"><span class="ph" style="background:var(--phase4)">PHASE 4</span><h2>開店（直營店）</h2></div>
+      <div class="section-desc">店址租約、裝修消防、首批進貨、人力訓練、POS 系統。</div>
+      <div id="mod-p4"></div>
+    </div>
+    <div class="section" id="sec-p5">
+      <div class="section-head"><span class="ph" style="background:var(--phase5)">PHASE 5</span><h2>營運・行銷・會員・成長</h2></div>
+      <div class="section-desc">會員制度、公關客訴、品牌教育、KPI 與總體時間表。</div>
+      <div id="mod-p5"></div>
+    </div>
+
+    <footer>這是內部決策與溝通框架，非對外文件。互動版內容與《過程框架_決策總表.md》v2.0 同步。</footer>
+  </main>
+</div>
+
+<script>
+/* ======= DATA ======= */
+/* prio: 0=🔴現在 / 1=🟠這週 / 2=🟡開店前 / 3=⚪慢慢
+   k code: do=做 / ask=問日本 / ans=日本可能怎麼答 / next=下一步 */
+const PRIO=[
+  {t:"現在立刻", c:"#ff5c5c", e:"現在立刻"},
+  {t:"這週啟動", c:"#ff9f5c", e:"這週啟動"},
+  {t:"開店前",   c:"#ffd075", e:"開店前"},
+  {t:"慢慢來",   c:"#8fa0b5", e:"慢慢來"},
+];
+
+const PHASES = [
+  {id:"p0", label:"Phase 0 對齊", color:"var(--phase0)", desc:"先跟日本把話說開"},
+  {id:"p1", label:"Phase 1 快閃", color:"var(--phase1)", desc:"2027-03，直營店前暖身"},
+  {id:"p2", label:"Phase 2 公司/商標", color:"var(--phase2)", desc:"最重要地基"},
+  {id:"p3", label:"Phase 3 進口/供應鏈", color:"var(--phase3)", desc:"關稅/定價/庫存"},
+  {id:"p4", label:"Phase 4 開店", color:"var(--phase4)", desc:"店址/裝修/人力"},
+  {id:"p5", label:"Phase 5 營運/成長", color:"var(--phase5)", desc:"會員/公關/KPI"},
+];
+
+const MODULES = {
+p0:[
+  {num:"M0-1", prio:0, t:"建立溝通與決策機制",
+    explain:"還沒開始做事前，先確定「以後跟日本人怎麼開會、誰能拍板、多久給答案」。不然後面所有事都卡在「等日本回覆」。",
+    cells:[
+      {k:"do", v:["確認跟日本的對口、開會頻率（每週例會／月報）","確認誰有權決定——窗口能定的 vs 要上報東京","建立決策紀錄（誰、何時、決定了什麼）"]},
+      {k:"ask", v:["今天講的這些，日本大概多久能給正式答覆？","之後我們直接跟誰對口？多久開一次會？","哪些事你（窗口）就能定，哪些要送東京董事會？"]},
+      {k:"ans", v:[["通常說「內部討論後回覆」","你就追一句：那我什麼時候可以收到回覆——把「回覆時間承諾」當最重要產出"],["若說「窗口就能定」→ 鎖定窗口加快速度","若說「要上報」→ 預留日本內部跑流程時間（常一週以上）"]]},
+      {k:"next", v:["每一題記錄誰答、答什麼、何時給書面","會後 24 小時內寄會議紀錄請日本確認"]},
+    ],
+    pit:["日本公司很少當場拍板，現場問不到答案很正常，重點是拿到「回覆時間承諾」","沒做決策紀錄，幾個月後會各說各話——一定要記下來"]},
+  {num:"M0-2", prio:1, t:"台灣市場情報的主動提供",
+    explain:"不是你問日本，而是你主動告訴日本台灣市場的事，這是在建立你在日本人眼中的價值——你懂台灣、你不是來要東西的。",
+    cells:[
+      {k:"do", v:["準備台灣情報：啦啦隊文化（據情報已有啦啦隊在穿，泡泡鞋底舞台超吸睛）、選品店現況、厚底鞋趨勢、電子發票法規"]},
+      {k:"ask", v:["不是「問」，是「主動給」","講完順勢問：這塊台灣能不能自己規劃提案？"]},
+      {k:"ans", v:[["日本會對「啦啦隊在穿」這種第一手情報很感興趣→證明你懂市場、是談判籌碼"]]},
+      {k:"next", v:["會議中安排時間講，不要只當被動答題者"]},
+    ],
+    pit:["別讓會議變成「台灣一直問、日本一直答」的單向場——你要當帶來情報的人才能平起平坐"]},
+],
+p1:[
+  {num:"M1-1", prio:0, t:"快閃目的與定位",
+    explain:"2027-03 快閃到底是「開直營店前先試水溫、收集數據」，還是「就辦個短期活動刷曝光」？方向差很多：前者要認真設計數據收集，後者投資小、重點放媒體。",
+    cells:[
+      {k:"do", v:["先內部想清楚：這快閃為直營店暖身，還是獨立活動？","照前次（2026-07）規模，還是要升級？"]},
+      {k:"ask", v:["這次快閃主要想驗證什麼？跟前次一樣還不同？","快閃跟直營店哪個先哪個後？關係是？"]},
+      {k:"ans", v:[["若說「當直營店前測」→ 快閃要認真收集數據（來客/試穿/成交/會員）直接當直營選品定價依據"],["若說「短期曝光」→ 投資壓低、重點媒體+會員，別砸大錢布展"],["若反問你意見→ 把兩選項利弊攤開給建議（通常暖身+收集數據）讓日本選"]]},
+      {k:"next", v:["把快閃目標（來客數、售罄率、會員數）定出來當衡量基準"]},
+    ],
+    pit:["目的不明是快閃失敗主因——沒明確目的就訂貨、訂預算最浪費"]},
+  {num:"M1-2", prio:1, t:"快閃商品與庫存",
+    explain:"快閃要賣哪些款式、進多少貨、沒賣完的貨怎麼辦。貨單要提前跟日本確定，否則趕不上場。",
+    cells:[
+      {k:"do", v:["列要帶的系列（經典款MOOPIE、新季、或限定款）","貨量用前次2026-07銷量數據推估，別拍腦袋","跟日本談剩貨最後怎麼處理（退回/併直營/出清）"]},
+      {k:"ask", v:["帶哪些系列？新季還既有款？有沒有限定款或配色？","貨量誰決定？貨從日本倉發還台灣自己備？","剩貨最後怎麼處理？"]},
+      {k:"ans", v:[["多從日本倉小量出貨→對你有利（不扛庫存），順著走"],["剩貨多半可退回或併直營→那台灣不怕滯銷，可放心進貨"]]},
+      {k:"next", v:["用前次銷量當預估基準，避免過度採購"]},
+    ],
+    pit:["別一次性進爆大量。第一次快閃寧可少進、寧可缺貨，比積一堆庫存好——缺貨頂多少賺，積貨是賠錢+占倉"]},
+  {num:"M1-3", prio:2, t:"快閃定價與金流",
+    explain:"快閃售價怎麼訂、刷卡與電子發票誰負責。刷卡和電子發票需要公司登記+稅籍才能辦，這更凸顯公司要早點成立。",
+    cells:[
+      {k:"do", v:["確認快閃售價跟正式通路/日本是否一致，或有限定優惠","確認刷卡收單+電子發票誰負責（需公司登記+稅籍）"]},
+      {k:"ask", v:["快閃售價跟正式通路一致嗎？有限定價或組合？","前次快閃的刷卡、發票是怎麼處理的？"]},
+      {k:"ans", v:[["價格多半台灣提建議、日本核准","金流由台灣公司負責→更印證「公司越早成立快閃越順」"]]},
+      {k:"next", v:["見 Phase 2 公司設立——電子發票/刷卡都要公司成立後才能辦"]},
+    ],
+    pit:["台灣強制開電子發票、日本POS不支援——前次快閃怎麼結帳的？先問清楚別以為沿用就好"]},
+  {num:"M1-4", prio:2, t:"快閃場地與合規",
+    explain:"快閃開哪、臨時營業登記、公共意外險等合規。多數短期快閃不用完整消防會勘，但公共意外險通常要有。",
+    cells:[
+      {k:"do", v:["確認場地（沿用林森北路3樓模式、或換地點）","處理短期活動合規（營業登記、公意外險）"]},
+      {k:"ask", v:["場地誰找、誰出錢？沿用前次三樓空間嗎？"]},
+      {k:"ans", v:[["場地多半台灣端規劃、日本付或預算內執行"]]},
+      {k:"next", v:["場地簽約、保險提前處理，別拖到最後一週"]},
+    ],
+    pit:["別等到快閃前一週才弄場地跟保險——簽約與保險都要提前"]},
+  {num:"M1-5", prio:1, t:"快閃行銷與日本資源",
+    explain:"快閃的素材、媒體、KOL、設計師能不能來台。尤其「設計師來台」一定要提前2-3個月確認，否則排不上檔期、也趕不上媒體。",
+    cells:[
+      {k:"do", v:["索取日本素材（海報/影片/社群/LOGO規範）","談媒體合作（前次有女人我最大報導，能否加碼/沿用）","問設計師 Sakabe 能否來台站台"]},
+      {k:"ask", v:["日本能提供哪些快閃素材？","★★ 設計師 Mikio Sakabe 有機會來台灣站台嗎？（大加分，提前確認）","前次的媒體合作能再談嗎？預算誰出？","日本官方IG/LINE一起曝光？台灣能開台灣官方帳號？"]},
+      {k:"ans", v:[["素材可提供→台灣做在地化（中文字幕/翻譯）"],["設計師來台「要看檔期」→ 主動提出時間+預算方案，別只等日本決定"],["帳號：傾向台灣開獨立帳號、日本轉發→台灣有自己社群資產，好"]]},
+      {k:"next", v:["設計師若能來台，務必提前2-3個月確認並鎖定媒體檔期"]},
+    ],
+    pit:["設計師來台是稀缺資源，若日本同意，一定要綁定媒體專訪、開幕活動放大效益——不要只是人來了逛逛"]},
+  {num:"M1-6", prio:2, t:"快閃人力",
+    explain:"快閃櫃位要人顧，人力哪來、要不要訓練。快閃也是「試人力」的好機會——表現好的兼職可以留著當直營店店員。",
+    cells:[
+      {k:"do", v:["決定快閃人力（店長+兼職）、要不要先受訓練"]},
+      {k:"ask", v:["快閃人力是台灣臨時找，還是日本派人？"]},
+      {k:"ans", v:[["多半台灣招募兼職+短期、用日本教材訓練→順勢觀察誰適合當直營店員"]]},
+      {k:"next", v:["用快閃篩選未來直營店店員"]},
+    ],
+    pit:["快閃人員若沒受「教育式試穿」訓練，服務品質會差——grounds核心賣點是「試穿才懂腳感」，訓練不能省"]},
+],
+p2:[
+  {num:"M2-1", prio:0, t:"子公司 vs 分公司",
+    explain:"決定台灣用子公司還是分公司。這是最關鍵的卡點——銀行開戶、簽租約、商標、員工報到全都要等它。建議子公司。",
+    cells:[
+      {k:"do", v:["建議「100%日本持股的台灣子公司」","白話：子公司是獨立公司，租約/銀行/商標掛台灣名下，日本母公司風險有限隔離；展店靈活（第二家店自己就能增資）；商標好放子公司未來要賣台灣業務方便"]},
+      {k:"ask", v:["子公司還是分公司？我們建議子公司（治理/展店/商標/風險隔離）","法定負責人（董事長）由誰當？影響開戶/簽約/稅務責任","資本額多少？資金什麼時候到位？"]},
+      {k:"ans", v:[["多數接受子公司→直接往下"],["謹慎日本會問「分公司匯回盈餘免21%？」→ 你要能解釋：子公司帶來的展店彈性+風險隔離+商標歸屬，價值遠大於那點稅差；分公司等於母公司一隻手，將來想獨立經營很麻煩"]]},
+      {k:"next", v:["確定子公司後立即啟動投審會流程（見M2-3）"]},
+    ],
+    pit:["別卡在這題太久。子公司/分公司沒定，開戶租約全卡——但「詢價」可先做，不必等","法定負責人外國人還台灣人，影響簽約與開戶流程，要一併想清楚"]},
+  {num:"M2-2", prio:0, t:"商標（★全案最急）",
+    explain:"台灣商標「完全沒註冊」但品牌已有知名度，是被搶註的高風險。台灣採「先申請主義」，誰先申請誰贏，一刻都不能等，應優先於開店和快閃。",
+    cells:[
+      {k:"do", v:["一次送第25類（鞋）+35類（零售/電商）+18類（包袋）","第35類特別重要：保護「販售grounds」這件服務本身，不只保護鞋子","採「先送件、再移轉」：先用日本母公司名義送，公司成立後移轉給台灣子公司"]},
+      {k:"ask", v:["日本總部已委託事務所處理台灣商標了嗎？沒有就誰負責？","申請人用日本母公司名義還是未來台灣子公司？","範圍送哪幾類？（建議25+35+18）","★ 日本自己連第35類也沒註冊，要不要台日一起補齊？","費用誰出？"]},
+      {k:"ans", v:[["若說「已有日本事務所」→ 要盯進度：是真的送件不是只諮詢，要送件日和進度回報"],["若說「要評估」→ 強調風險：「台灣是先申請主義，今天不送明天可能被別人搶走『grounds』，連開店招牌都不能掛自己名字」"]]},
+      {k:"next", v:["催促立刻送件","同時聯繫2-3家台灣事務所報價（有跨國經驗）當備案"]},
+    ],
+    pit:["台灣商標審查6~12個月，但重點是「申請日」——搶的是申請日，不是等核准","外國人申請台灣商標一定要委任台灣代理人（法律規定，不能自己辦），費用另計","核准後2個月內要付註冊費，沒付商標就沒了"]},
+  {num:"M2-3", prio:0, t:"公司成立流程與時間",
+    explain:"把台灣子公司實際「辦出來」。流程有硬性時間（約2~3個月），不早啟動會拖垮整個開店時程。",
+    cells:[
+      {k:"do", v:["流程：名稱預查→投審會核准→開籌備戶→匯資金→投資審定→公司登記（約2~3個月）"]},
+      {k:"ask", v:["資金能不能按投審會時程到位？法定負責人能不能指定？"]},
+      {k:"ans", v:[["資金可依時程到位；負責人尊重台灣建議或由日本指派"]]},
+      {k:"next", v:["「詢價」現在就能做——就算日本還沒拍板子公司/分公司，先聯繫會計師/律師事務所問費用與時間，不需等日本同意"]},
+    ],
+    pit:["銀行、租約、進口、商標移轉都要等「公司成立」——別低估這2~3個月的硬時間"]},
+  {num:"M2-4", prio:1, t:"銀行與金流",
+    explain:"開公司帳戶、辦刷卡收單、第三方金流。公司一成立就要辦，因為刷卡收單審核要時間，開店前要弄好。",
+    cells:[
+      {k:"do", v:["開外資公司帳戶（一般+OBU/日圓美金）、辦刷卡收單、評估LINE Pay/街口"]},
+      {k:"ask", v:["進貨付款的幣別跟方式？（跟Phase 3連動）"]},
+      {k:"ans", v:[["幣別配合交易條件；台灣金流與電子發票由台灣端綁定"]]},
+      {k:"next", v:["公司成立後立刻辦銀行、刷卡收單"]},
+    ],
+    pit:["刷卡收單不是當天申請當天好，要提前——否則店開了不能刷卡就糗了"]},
+  {num:"M2-5", prio:1, t:"會計與稅務",
+    explain:"委任記帳士/會計師、電子發票、各種稅務申報。公司成立後儘快，開店報稅前弄好。",
+    cells:[
+      {k:"do", v:["委任記帳士/會計師、申請電子發票、設定營所稅/營業稅/扣繳"]},
+      {k:"ask", v:["盈餘匯回日本要扣21%稅，日本端要知道並接受"]},
+      {k:"ans", v:[["多半知悉接受；也可能問能否用費用沖抵降低匯回→那就是會計師要處理的"]]},
+      {k:"next", v:["電子發票是台灣強制、日本系統不支援——與Phase 4 POS一起想清楚"]},
+    ],
+    pit:["電子發票是台灣強制，別等開店當天才發現系統不能開"]},
+],
+p3:[
+  {num:"M3-1", prio:0, t:"進貨路線：日本 vs 印尼",
+    explain:"grounds鞋在印尼/中國工廠做的。你要決定第一年貨從「日本倉」進還是「印尼工廠」直送。關鍵：關稅看「原產地」不看「出貨地」——台灣跟印尼沒自由貿易協定，不管日本轉口還是印尼直送，鞋類關稅都一樣（約6~10%）+營業稅5%。真正差別在交期與庫存。",
+    cells:[
+      {k:"do", v:["先懂關鍵觀念：關稅看原產地不看出貨地","決定初期從日本倉還是印尼直送"]},
+      {k:"ask", v:["現在是日本倉庫庫存出貨，還是印尼/中國工廠指定品項出貨？","交易是買斷還寄售？付款條件？幣別？"]},
+      {k:"ans", v:[["初期多半日本倉小量出貨（交期2~4天、可小量多補）→ 第一年全走日本，不扛庫存風險"],["量穩定後才談印尼直送壓成本（有MOQ、前置期長）"]]},
+      {k:"next", v:["初期日本倉小量高頻、談寄售或買斷小量，別押大量庫存"]},
+    ],
+    pit:["別第一年就玩印尼直送——MOQ高、前置期長、一次押大量資金，新品牌試水溫太冒險"]},
+  {num:"M3-2", prio:2, t:"關稅與成本",
+    explain:"弄懂買鞋進口要付多少稅，算進成本。台灣進口鞋類關稅約6~10%（依材質）+營業稅5%；關稅看原產地；印尼非ASEAN、跟台灣無FTA。",
+    cells:[
+      {k:"do", v:["關稅約6~10%+營業稅5%","關稅看原產地；印尼直送或日本轉口關稅相同"]},
+      {k:"ask", v:["提供正確的「原產地」跟HS Code，確保報關正確、別偽標日本製"]},
+      {k:"ans", v:[["日本會提供產地證明；多數鞋印尼/中國製"]]},
+      {k:"next", v:["詢價2-3家報關物流；確認中文標示、BSMI是否適用"]},
+    ],
+    pit:["絕不能把印尼製偽標成日本製——違反海關緝私條例會補稅+罰款+沒入","中文標示（品名/材質/產地/進口商）是台灣法規強制；標籤日本出貨前貼好還是台灣貼，要跟日本講清楚誰負責"]},
+  {num:"M3-3", prio:0, t:"價格定價（★防價差套利）",
+    explain:"訂台灣售價。最怕：台灣訂太貴，消費者直接去日本官網或代購買，還有人靠價差轉賣賺錢——「價差套利」會打爛你的定價體系。",
+    cells:[
+      {k:"do", v:["建立定價試算表：日本售價→CIF→關稅→營業稅→毛利→台灣建議售價","把台灣售價跟「日本官網價+匯率+代購價」比一比，確保不會貴到讓消費者跑去日本買"]},
+      {k:"ask", v:["日本各款當地售價（日幣）？台灣定價決定權在誰？","日本對水貨/代購/破盤價什麼態度？（能一起防嗎）"]},
+      {k:"ans", v:[["日本提供建議售價、台灣提案日本核准","若台灣價含稅比日本貴→ 靠教育式試穿+限款抵銷價差，並協調日本官網要不要限寄台灣/海外"]]},
+      {k:"next", v:["做定價試算表，對齊日本與代購價，防價差套利"]},
+    ],
+    pit:["定價不是成本加成就好，還要對齊日本市場價——台灣售價若比日本官網+代購成本還貴，消費者不買單","台灣標價習慣含稅，日本是本體+消費稅，定價邏輯要對齊"]},
+  {num:"M3-4", prio:1, t:"銷售分析（★請日本給數據）",
+    explain:"跟日本要「在日賣得好的鞋款、男女比例、熱門款、尺碼分布」，拿來當台灣選品與進貨依據。",
+    cells:[
+      {k:"do", v:["跟日本要銷售數據","用它+前次台灣快閃銷量，排台灣該進哪些款、各進多少、什麼尺碼"]},
+      {k:"ask", v:["日本各系列/鞋款賣最好的是哪些？","日本男女客群比例？台灣適用嗎？","台灣女生尺碼分布，進貨要不要調整？"]},
+      {k:"ans", v:[["日本多半願意給銷售數據（很有價值）→ 直接拿來用別自己猜"]]},
+      {k:"next", v:["用日本數據+前次快閃台灣銷量，建台灣選品備貨模型"]},
+    ],
+    pit:["別只抄日本熱門款——台灣有女鞋、啦啦隊、厚底趨勢，可能偏好不同。日本數據當起點，再用台灣快閃數據校正"]},
+  {num:"M3-5", prio:2, t:"過季商品與員購",
+    explain:"過季賣不完的鞋怎麼清？日本有個好機制叫「員工限時員購」——定期讓員工用優惠價買自家貨，是福利也是庫存去化。",
+    cells:[
+      {k:"do", v:["跟日本學過季處理+員購制度","設計成台灣員工福利（招募誘因）+過季庫存去化雙重用途"]},
+      {k:"ask", v:["日本過季商品怎麼處理？折扣/員購/退回？","★ 日本員工限時員購制度怎麼運作？頻率、打幾折？"]},
+      {k:"ans", v:[["日本確實有定期員購，會分享機制跟折扣→直接複製到台灣稍調"]]},
+      {k:"next", v:["把員購制設計進台灣員工福利，同時當過季去化管道"]},
+    ],
+    pit:["員購是福利也是庫存去化，但要設「員工轉售套利」防線（限購數量、限本人），別讓員工便宜進貨再轉賣"]},
+  {num:"M3-6", prio:2, t:"宅配與倉儲",
+    explain:"客人網購/電商的宅配物流，跟台灣的小型倉庫（簡易倉儲）——不用大倉庫，小空間+現貨為主即可。",
+    cells:[
+      {k:"do", v:["找台灣宅配（順豐、黑貓…）、規劃簡易倉儲"]},
+      {k:"ask", v:["日本走哪家物流？包裝方式跟運費？"]},
+      {k:"ans", v:[["日本分享物流包裝經驗；台灣端自己找本地宅配"]]},
+      {k:"next", v:["接洽台灣物流，規劃簡易倉儲"]},
+    ],
+    pit:["別為了省運費把前置期拉到一兩個月導致斷貨——剛開店寧可付多一點運費換補貨速度"]},
+  {num:"M3-7", prio:2, t:"保固與常見問題（★客服必備）",
+    explain:"客人鞋壞了、有品質問題，台灣要給什麼保固？日本最常遇到的客訴/損壞是什麼？開店前要把保固規則、客服話術備好，客人一問馬上能用。",
+    cells:[
+      {k:"do", v:["跟日本要保固政策+常見問題清單，做成客服FAQ跟保固規則"]},
+      {k:"ask", v:["日本保固範圍？多久？","★ 最常遇到的客訴/損壞問題有哪些？（泡泡鞋底磨耗、膠合、尺寸…）","售後維修是日本處理還台灣？流程？"]},
+      {k:"ans", v:[["日本會給保固政策跟常見問題清單（對教育訓練超有用）","維修多半原廠（日本）處理或寄回→ 預留維修物流管道（貨寄回日本的成本與流程）"]]},
+      {k:"next", v:["把日本常見問題做成台灣客服FAQ與保固規則，預留維修物流管道"]},
+    ],
+    pit:["保固範圍要寫清楚——泡棉鞋底磨耗算不算保固？這種模糊地帶最容易跟客人起爭執，先定義好"]},
+  {num:"M3-8", prio:3, t:"轉讓定價（Transfer Pricing）",
+    explain:"日本賣貨給台灣子公司時，「內部進貨價」要合理——台灣跟日本稅務機關都會查母子公司是不是亂訂價逃稅。現在不用急，但要知道有這件事。",
+    cells:[
+      {k:"do", v:["確認進貨價符合「常規交易」原則（跟市場行情差不多）"]},
+      {k:"ask", v:["進貨價的訂價邏輯跟文件，有沒有符合跨國常規交易？"]},
+      {k:"ans", v:[["日企多半已有全球移轉定價政策，會配合→交給會計師確認即可"]]},
+      {k:"next", v:["與會計師確認移轉定價文件與申報"]},
+    ],
+    pit:["現在不用急，但別完全忽略——否則未來補稅罰款很麻煩"]},
+],
+p4:[
+  {num:"M4-1", prio:0, t:"店址與租約細節",
+    explain:"確認到底用不用土屋鞄台北店（中山北路二段36巷8號1樓），租約細節怎麼談。租約是「法律主體」問題，沒簽好後面裝修、營業全卡，開店前3~4個月就要處理。",
+    cells:[
+      {k:"do", v:["確認店面實際狀況：土屋鞄結束整間給、還是共用？（同址有藝文空間）","租約細節：在誰名下？剩多久？租金？押金？能不能轉租/變更承租人？","特別注意退場/轉租/續約/漲租條款"]},
+      {k:"ask", v:["這個店面最後整間給我們還是共用？","★ 租約在誰名下？剩多久？能不能轉租或換成台灣子公司承租？","★ 退場、轉租、續約、漲租怎麼切？"]},
+      {k:"ans", v:[["因股東（土屋鞄）關係可能有優惠，但租約主體要釐清","強烈建議以台灣子公司名義承租，別掛日本母/土屋鞄名下，否則法律與稅務會亂"]]},
+      {k:"next", v:["確認租約法律主體、用途可否變更（藝文→零售）、裝修消防送審排程"]},
+    ],
+    pit:["現址有藝文空間，用途變更可能比想像複雜，影響使用執照跟消防","別只看租金便宜就簽——「退場條款」跟「能不能轉租」更重要，萬一經營不如預期要能漂亮退"]},
+  {num:"M4-2", prio:0, t:"裝修與消防公安",
+    explain:"店面裝修、消防檢查、公安申報。消防沒過不能營業，這是最硬的時間卡點，開店前2~3個月就要送審。",
+    cells:[
+      {k:"do", v:["室內裝修許可、使用執照用途變更、消防會勘、公安申報、招牌申請"]},
+      {k:"ask", v:["店鋪設計圖/規範日本提供還台灣設計？裝修預算上限、誰付？"]},
+      {k:"ans", v:[["日本有店鋪規範、台灣執行裝修、日本核准預算→照辦，重點是排程預留消防送審時間"]]},
+      {k:"next", v:["開幕前2-3個月啟動消防會勘與裝修送審"]},
+    ],
+    pit:["消防會勘最容易卡關，很多人「以為店就開了」結果消防沒過——當成跟開幕綁死的硬時間往前推2~3個月安排","同址複雜（藝文空間），用途變更可能比想像麻煩"]},
+  {num:"M4-3", prio:1, t:"首批進貨與庫存設定",
+    explain:"開店第一批要進多少鞋、什麼款式、尺碼、安全庫存抓多少。用日本銷售分析+快閃數據算出。",
+    cells:[
+      {k:"do", v:["定首批進貨量、品項、尺碼、庫存天數"]},
+      {k:"ask", v:["首批建議的數量跟組合誰決定？補貨週期？"]},
+      {k:"ans", v:[["日本給建議、尊重台灣數據決策→你用M3-4數據去排"]]},
+      {k:"next", v:["建庫存模型（安全庫存、補貨點）"]},
+    ],
+    pit:["庫存是錢——進太多積壓資金，進太少斷貨被嫌。開店初期寧可稍偏保守+補貨快，別一口氣壓一大批"]},
+  {num:"M4-4", prio:1, t:"人力招募與教育訓練",
+    explain:"招店長+正職+兼職、設計薪資獎金、執行教育訓練。開店前2~3個月就要開始招人跟訓練（招募+受訓都要時間）。",
+    cells:[
+      {k:"do", v:["招募人力、訂薪資獎金制度（台灣慣例底薪+團體+個人混合）、執行訓練"]},
+      {k:"ask", v:["★ 日本門市員工訓練方式/教材/認證制度怎麼做？流程多長？要不要赴日？","薪資獎金怎麼設計？","制服日本統一提供還台灣自製？"]},
+      {k:"ans", v:[["日本多半有現成教材跟SOP可提供；認證制度日本訂標準→台灣做在地化"],["薪資獎金台灣設計、日本核准；制服日本規範+台灣製作"]]},
+      {k:"next", v:["把日本教材在地化；設計薪資獎金與訓練課表；勞健保納入預算"]},
+    ],
+    pit:["教育式試穿是核心——店員要能教客人針織款輕盈、皮革款有支撐、版型差異，需要訓練，不能省","台灣有勞健保、勞退等法定成本，日本可能不熟，要抓進人事預算並跟日本講清楚"]},
+  {num:"M4-5", prio:1, t:"系統與 IT（POS／電子發票／CRM）",
+    explain:"店裡用什麼結帳系統、電子發票、庫存怎麼跟日本同步、會員資料庫。開店前要把POS+刷卡+電子發票接通。",
+    cells:[
+      {k:"do", v:["決定POS用日本還台灣在地、電子發票、刷卡、庫存同步、會員CRM"]},
+      {k:"ask", v:["POS沿用日本還台灣在地？（★★ 台灣強制電子發票，日本系統通常不支援）","庫存要不要跟日本即時同步？會員資料共用還獨立？（★★ 台灣個資法，跨境傳輸要同意）"]},
+      {k:"ans", v:[["日本希望統一系統利全球數據，但理解電子發票需在地系統→多半「台灣在地POS+用API跟日本庫存對接」雙軌方案"]]},
+      {k:"next", v:["盤點台灣POS（含電子發票+刷卡）選項詢價，與日本確認資料同步邊界"]},
+    ],
+    pit:["電子發票是台灣強制、日本系統做不到，是硬需求，別等開店當天才發現","會員資料回傳日本涉及個資法，要問清楚、設計好同意機制"]},
+],
+p5:[
+  {num:"M5-1", prio:2, t:"會員制度（★設計台灣版）",
+    explain:"設計台灣的會員/CRM制度（點數、等級、LINE官方帳號、回購）。快閃就先收集種子會員，開店後正式設計優化。",
+    cells:[
+      {k:"do", v:["設計台灣會員制度+LINE OA，快閃檔就開始收集名單"]},
+      {k:"ask", v:["日本有會員制度嗎？台灣可以獨立設計嗎？資料跨境怎麼規範？"]},
+      {k:"ans", v:[["日本若有會員制會分享參考；台灣可依在地習慣（LINE OA、電子發票載具）設計","資料傾向台灣獨立→台灣有自己資產，好"]]},
+      {k:"next", v:["快閃期間先收集種子會員"]},
+    ],
+    pit:["會員制度別為衝量設計太複雜——先求收集到名單+能連絡回購，再慢慢加等級、點數"]},
+  {num:"M5-2", prio:2, t:"公關與客訴處理",
+    explain:"客人客訴、網路負評、甚至媒體危機怎麼處理。品牌認知度低時，一次爆雷傷害很大。開店前把SOP跟話術備好。",
+    cells:[
+      {k:"do", v:["訂客訴/負評/危機處理流程與話術、退換貨規則、網路聲量監測"]},
+      {k:"ask", v:["日本怎麼處理客訴/負評？有SOP嗎？退換貨責任歸屬？"]},
+      {k:"ans", v:[["日本提供客服SOP；瑕疵退換原廠處理→台灣端設計反應流程+監測聲量"]]},
+      {k:"next", v:["建台灣客服FAQ（含日本常見問題）、負評回應SOP、退換貨流程"]},
+    ],
+    pit:["負評回應要快、要誠懇、要有「我怎麼補救」而不是「推給日本」——客人要的是解決，不是聽你解釋這不是你的錯"]},
+  {num:"M5-3", prio:2, t:"行銷與品牌教育",
+    explain:"IG/LINE/官網內容、KOL、媒體、開幕活動。「品牌教育優先於折扣」是核心策略。開店前規劃、開店後持續。",
+    cells:[
+      {k:"do", v:["做內容、談KOL/媒體、辦Launch Event、把啦啦隊等台灣機會排進內容"]},
+      {k:"ask", v:["素材、核准流程、預算；認不認同「教育式、非折扣式」行銷？"]},
+      {k:"ans", v:[["日本提供素材、核准調性，多數認同品牌先行教育式行銷→台灣就放心做內容經營"]]},
+      {k:"next", v:["把啦啦隊等台灣特有機會排進內容策略"]},
+    ],
+    pit:["別手癢上蝦皮/MOMO打折衝量（除非後期品牌立足）——那會把設計師品牌做low、跟門市價格打架。第一年用品牌教育換忠實客群"]},
+  {num:"M5-4", prio:2, t:"財務、KPI 與時間表",
+    explain:"訂第一年KPI、營業目標、損益平衡點、月報；更重要的是做一份「總體時間表」告訴日本每個階段要多久——這是對日本最有說服力的工具。",
+    cells:[
+      {k:"do", v:["訂第一年KPI（不只看營收，還有品牌曝光/會員/社群/回購率）","建總體Timeline：跟日本說每階段預估多久、何時完成"]},
+      {k:"ask", v:["第一年KPI/成功定義？","★ 日本需要台灣端每階段預估多久、何時完成，才能排資源跟預算——台灣要準備一份Timeline"]},
+      {k:"ans", v:[["日企極重視排程與進度，會要一份明確時程表→回扣整個框架：你用這份文件講解每件事要多久，日本才信你是有備而來"]]},
+      {k:"next", v:["建立總體Gantt/Timeline，對齊每狀況需多久"]},
+    ],
+    pit:["時間表要務實、不畫大餅——寧可保守多預留時間，也不要承諾了做不到，失信於日本人最傷"]},
+],
+};
+
+/* ======= RENDER ======= */
+const keyLbl={do:"◆ 要做什麼",ask:"◆ 要問日本",ans:"◆ 日本可能怎麼答 · 你怎麼接",next:"◆ 下一步"};
+function renderCell(c){
+  const items=c.v.map(x=>Array.isArray(x)?`<li>${x.map((s,i)=>i?'<br><span class="tag">→ </span>'+s:s).join('')}</li>`:`<li>${x}</li>`).join("");
+  return `<div class="cell ${c.k}"><div class="lbl">${keyLbl[c.k]}</div><ul>${items}</ul></div>`;
+}
+function renderModule(m){
+  const p=PRIO[m.prio];
+  return `<div class="module" data-id="${m.num}">
+    <div class="mod-head" onclick="toggleMod(this)">
+      <span class="mnum">${m.num}</span>
+      <h3>${m.t}</h3>
+      <span class="prio-tag" style="background:${p.c}">${p.e}</span>
+      <span class="chev">▼</span>
+    </div>
+    <div class="mod-body">
+      <div class="explain">${m.explain}</div>
+      <div class="qgrid">${m.cells.map(renderCell).join("")}</div>
+      <div class="pit"><div class="plbl">⚠ 要注意的坑</div><ul>${m.pit.map(x=>`<li>${x}</li>`).join("")}</ul></div>
+    </div>
+  </div>`;
+}
+function renderModules(phaseId){
+  document.getElementById("mod-"+phaseId).innerHTML=MODULES[phaseId].map(renderModule).join("");
+}
+function renderNav(){
+  let html="";
+  PHASES.forEach(p=>{
+    html+=`<div class="nav-group">
+      <div class="nav-phase" onclick="scrollToId('sec-${p.id}')"><span class="dot" style="background:${p.color}"></span>${p.label}</div>`;
+    MODULES[p.id].forEach(m=>{
+      const pc=PRIO[m.prio].c;
+      html+=`<div class="nav-module" data-num="${m.num}" onclick="scrollToMod('${m.num}')"><span class="mp" style="background:${pc}"></span>${m.num} ${m.t}</div>`;
+    });
+    html+=`</div>`;
+  });
+  document.getElementById("navList").innerHTML=html;
+}
+function renderFlow(){
+  document.getElementById("flow").innerHTML=PHASES.map((p,i)=>`
+    <div class="node" onclick="scrollToId('sec-${p.id}')">
+      <span class="dot" style="width:12px;height:12px;border-radius:50%;background:${p.color};flex-shrink:0"></span>
+      <span class="num">${p.id.toUpperCase()}</span><span>${p.label}</span><span class="d">${p.desc}</span>
+    </div>${i<PHASES.length-1?'<div class="bar"></div>':''}`).join("");
+}
+
+/* ======= INTERACTION ======= */
+function toggleMod(head){
+  const mod=head.closest(".module");
+  const open=mod.classList.contains("open");
+  document.querySelectorAll(".module").forEach(m=>m.classList.remove("open"));
+  if(!open) mod.classList.add("open");
+}
+function scrollToId(id){ document.getElementById(id).scrollIntoView({behavior:"smooth"}); closeMenu(); }
+function scrollToMod(num){
+  const el=document.querySelector(`.module[data-id="${num}"]`);
+  if(el){ if(!el.classList.contains("open")) el.classList.add("open"); el.scrollIntoView({behavior:"smooth"}); }
+  closeMenu();
+}
+function toggleMenu(){ document.getElementById("side").classList.toggle("show"); document.getElementById("overlay").classList.toggle("show"); }
+function closeMenu(){ document.getElementById("side").classList.remove("show"); document.getElementById("overlay").classList.remove("show"); }
+
+window.addEventListener("scroll",()=>{
+  const h=document.documentElement;
+  document.getElementById("progress").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";
+  let cur="";
+  document.querySelectorAll(".module").forEach(m=>{ if(m.getBoundingClientRect().top<=90) cur=m.dataset.id; });
+  document.querySelectorAll(".nav-module").forEach(n=>{
+    n.classList.toggle("active", n.dataset.num===cur);
+  });
+});
+
+/* INIT */
+renderNav(); renderFlow();
+Object.keys(MODULES).forEach(renderModules);
+document.querySelectorAll(".module").forEach((m,i)=>{ if(i<6) m.classList.add("open"); });
+</script>
+</body>
+</html>

@@ -1,0 +1,558 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/Grounds_TW/">
+<title>過程框架 — 決策總表｜grounds Taiwan 工作文件</title>
+<meta name="description" content="grounds Taiwan 全過程決策框架 6 階段 30 模組">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="../assets/img/favicon.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=162f86dd72">
+<style>
+.docs-layout{max-width:900px;margin:0 auto;padding:56px 32px 120px}
+.docs-nav{display:flex;gap:18px;font-size:13px;margin-bottom:40px;flex-wrap:wrap}
+.docs-nav a{text-decoration:none;color:var(--muted)}
+.docs-nav a:hover{color:var(--fg)}
+.docs-body h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);margin:0 0 8px}
+.docs-body h2{font-size:18px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.docs-body h3{font-size:15px;margin:24px 0 8px}
+.docs-body h4{font-size:14px;margin:18px 0 6px}
+.docs-body p{font-size:14.5px;margin:0 0 12px}
+.docs-body ul,.docs-body ol{margin:0 0 16px;padding-left:22px;font-size:14px}
+.docs-body li{margin-bottom:5px}
+.docs-body li p{display:inline}
+.docs-body table{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.docs-body th,.docs-body td{padding:8px 10px;border:1px solid var(--line);text-align:left;vertical-align:top}
+.docs-body th{background:var(--callout-bg);font-weight:600}
+.docs-body blockquote{margin:16px 0;padding:14px 18px;background:var(--callout-bg);border-radius:4px;font-size:13.5px;color:var(--muted)}
+.docs-body blockquote p{margin:0 0 6px;font-size:13.5px}
+.docs-body hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+.docs-body code{background:var(--callout-bg);padding:1px 5px;border-radius:3px;font-size:12.5px}
+.docs-tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:20px;margin:0 0 8px}
+.task{list-style:none;padding-left:2px}
+.task li{padding-left:22px;position:relative}
+.task li::before{content:"☐";position:absolute;left:0;color:var(--muted)}
+.task li.done::before{content:"☑";color:var(--accent)}
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <a class="wordmark" href="../zh/index.html" aria-label="grounds Taiwan"></a>
+  <nav class="nav-links">
+    <a href="../zh/index.html">首頁</a>
+    <a href="../zh/blueprint.html">Blueprint</a>
+    <a href="../zh/trademark.html">商標</a>
+    <a href="../docs/index.html" class="active">文件</a>
+  </nav>
+  <div class="lang-switch"><a class="lang-link" href="../index.html">日本語</a><a class="lang-link" href="../en/index.html">English</a><a class="lang-link current" href="../zh/index.html">中文</a></div>
+</header>
+<div class="docs-layout"><nav class="docs-nav"><a href="index.html">← 全部文件</a><a href="過程框架_決策總表.html">過程框架 — 決策總表</a><a href="grounds_taiwan_行動方案.html">台灣執行行動方案</a><a href="週五會議_提問清單.html">與日本總部會議提問清單</a><a href="門市地點分析_中山北路二段36巷.html">門市地點分析（中山北路二段36巷）</a><a href="商標事務所洽談_QA.html">商標事務所洽談 QA</a><a href="商標事務所報價_宏景.html">商標報價整理（宏景）</a><a href="商標申請回覆Sharon.html">商標申請回覆（Sharon）</a><a href="給宏景的初期資料.html">給宏景的初期資料</a></nav><div class="docs-body"><h1>grounds Taiwan｜全過程決策框架（白話版・含輕重緩急）</h1>
+<blockquote><p>這份文件把 grounds Taiwan 從「對齊日本」到「開店落地、營運成長」拆成 <strong>6 個階段、30 個模組</strong>。</p><p>每個模組都用<strong>白話</strong>講清楚：<strong>在做什麼／要不要急／問日本什麼／日本可能怎麼答、你怎麼接／要注意的坑</strong>。</p><p>版本：v2.0（2026-09-08）— 大幅精修，加輕重緩急＋注意事項。互動網頁同步更新。</p></blockquote>
+<hr>
+<h2>先讀這頁：輕重緩急的四種顏色</h2>
+<table><thead><tr><th>顏色</th><th>意思</th><th>什麼時候該動手</th></tr></thead><tbody>
+   <tr><td>🔴 <strong>現在立刻</strong></td><td>不做會出事、會卡死後面</td><td>這週就要啟動，越快越好</td></tr>
+   <tr><td>🟠 <strong>這週啟動</strong></td><td>重要，有前置期，拖不得太久</td><td>這週到下週內要有動作</td></tr>
+   <tr><td>🟡 <strong>開店前</strong></td><td>需要但可以排程，不用現在慌</td><td>開店前 2~3 個月處理好即可</td></tr>
+   <tr><td>⚪ <strong>慢慢來</strong></td><td>營運後再優化，現在不用管</td><td>開店、店穩了以後再弄</td></tr>
+</tbody></table>
+<blockquote><p><strong>一句話記住全案輕重</strong>：<strong>商標最急（先申請主義）、公司最關鍵（一切法律行為的地基）、快閃是眼前（2027-03）、定價要防代購、消防沒過不能營業。</strong></p></blockquote>
+<hr>
+<h2>全案總覽</h2>
+<p>``` Phase0 對齊 ──► Phase1 快閃 ──► Phase2 公司/商標 ──► Phase3 進口/供應鏈 ──► Phase4 開店 ──► Phase5 營運/成長 (1-2週)    (2027-03前)         (地基,最重要)           (關稅/定價/庫存)        (2-3個月) ``` 
+<blockquote><p>實際上這些<strong>大量重疊進行</strong>，尤其公司設立、商標送件、快閃「同時跑」才會快。</p></blockquote>
+<hr>
+<h1>Phase 0｜對齊（先跟日本把話說開）</h1>
+<h2>M0-1 建立溝通與決策機制　【🔴 現在立刻】</h2>
+<p><strong>這塊在忙什麼</strong>：還沒開始做事前，先確定「以後跟日本人怎麼開會、誰能拍板、多久給答案」。不然後面所有事都卡在「等日本回覆」。 
+<p><strong>輕重緩急</strong>：🔴 第一件要做的事。沒有決策機制，後面全動不了。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>確認跟日本的溝通窗口（固定的聯絡人）、開會頻率（每週例會還是月報）</li>
+<li>確認「誰有權決定」——窗口能定的事、要上報東京的事</li>
+<li>建立一份「決策紀錄」：每次會議誰說了什麼、決定了什麼，白紙黑字記下來</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「今天講的這些，日本大概多久能給正式答覆？」</li>
+<li>「之後我們直接跟誰對口？多久開一次會？」</li>
+<li>「哪些事你（窗口）就能定，哪些要送東京董事會？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>日本通常會說「我們內部討論後回覆」→ <strong>你就追一句「那我什麼時候可以收到回覆？」</strong>，把「承諾回覆時間」當成最重要的產出。日本企業很吃「你尊重他們的決策流程、但要求明確時程」這一套。</li>
+<li>若對方說「窗口就能定」，就把窗口當主要對口，加快速度；若說「要上報」，就要預留日本內部跑流程的時間（通常一週以上）。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>日本公司<strong>很少當場拍板</strong>，你現場問不到答案很正常，別失落，重點是拿到「回覆時間承諾」。</li>
+<li>沒做決策紀錄，幾個月後會「各說各話」——一定要記下來。</li>
+</ul>
+<hr>
+<h2>M0-2 台灣市場情報的主動提供　【🟠 這週啟動】</h2>
+<p><strong>這塊在忙什麼</strong>：不是你問日本，而是<strong>你主動告訴日本台灣市場的事</strong>。這是在建立你在日本人眼中的價值。 
+<p><strong>輕重緩急</strong>：🟠 每次會議穿插著講，累積信任。 
+<p><strong>要做什麼</strong>：準備台灣的在地情報，例如： 
+<ul>
+<li><strong>啦啦隊文化</strong>：台灣職棒／職籃啦啦隊聲量超大，據第一線情報已有不少啦啦隊在穿 grounds（泡泡鞋底在舞台上超吸睛）——這是<strong>日本不知道的台灣特有機會</strong></li>
+<li>台灣選品店現況（Plain-me、NE.SENSE 等）、厚底鞋趨勢回歸、電子發票法規等</li>
+</ul>
+<p><strong>要問日本</strong>：不是「問」，是「<strong>主動給</strong>」。 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本會對「啦啦隊在穿」這種第一手情報很感興趣——這證明「你懂台灣、你不是來要東西的」，是談判籌碼。講完順勢問：「這塊台灣能不能自己規劃提案？」 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>別讓會議變成「台灣一直問、日本一直答」的單向場——你要當「帶來情報的人」才能平起平坐。</li>
+</ul>
+<hr>
+<h1>Phase 1｜快閃（2027-03，前次辦過 2026-07）</h1>
+<h2>M1-1 快閃目的與定位　【🔴 現在立刻，決定一切】</h2>
+<p><strong>這塊在忙什麼</strong>：2027-03 的快閃，到底是「開直營店前先試水溫、收集數據」，還是「就辦個短期活動刷刷曝光」？這兩個方向差很多——前者要認真設計數據收集、後者投資小、重點放媒體。 
+<p><strong>輕重緩急</strong>：🔴 四大方向（目的、形式、時序、主導權）不先想清楚，後面貨量、場地、預算全部沒有依歸。 
+<p><strong>要做什麼</strong>：先自己內部想清楚兩個問題，再拿去問日本： 
+<ul>
+<li>這快閃是為直營店「暖身」，還是獨立活動？</li>
+<li>照前次（2026-07，12天、林森北路3樓）的規模，還是要升級？</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「這次快閃主要是想驗證什麼？跟前次一樣，還是不同？」</li>
+<li>「快閃跟即將開的直營店，哪個先哪個後？關係是？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>若說「當直營店前測」→ 那快閃就要<strong>認真收集數據</strong>（來客、試穿、成交、會員），直接當直營店選品定價依據。</li>
+<li>若說「就是短期曝光」→ <strong>投資壓低</strong>，重點放媒體報導＋收集會員，別砸大錢布展。</li>
+<li>若日本反問你「你覺得呢」→ 你就把這兩個選項的利弊攤開，給你的建議（通常是暖身＋收集數據），讓日本選。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>快閃「目的不明」是所有快閃失敗的主因——沒明確目的就訂貨、訂預算，最容易浪費。</li>
+</ul>
+<hr>
+<h2>M1-2 快閃商品與庫存　【🟠 要提前 2~3 個月訂】</h2>
+<p><strong>這塊在忙什麼</strong>：快閃要賣哪些款式、進多少貨、沒賣完的貨怎麼辦。 
+<p><strong>輕重緩急</strong>：🟠 快閃前 2~3 個月就要跟日本確定貨單，否則趕不上。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>列出要帶的系列（經典款如 MOOPIE、新季、或快閃限定款）</li>
+<li>決定貨量——<strong>用前次 2026-07 的銷量數據來推估</strong>，別拍腦袋</li>
+<li>跟日本談「沒賣完的貨最後怎麼處理」：退回日本？併入直營店？出清？</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「帶哪些系列？新季還是既有款？有沒有快閃限定的款式或配色？」</li>
+<li>「貨量誰決定？貨從日本倉發，還是台灣自己備？」</li>
+<li>「剩貨最後怎麼處理？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>日本通常會「從日本倉小量出貨」→ 對你有利（不用扛庫存），就順著走。</li>
+<li>剩貨多半可「退回或併直營」→ 那台灣就不怕滯銷，可以放心進貨。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>別一次性進爆大量</strong>。新品牌第一次快閃，寧可少進、寧可缺貨，比積一堆庫存好——缺貨頂多少賺，積貨是賠錢＋占倉。</li>
+</ul>
+<hr>
+<h2>M1-3 快閃定價與金流　【🟡 開店前處理好即可】</h2>
+<p><strong>這塊在忙什麼</strong>：快閃售價怎麼訂、刷卡／電子發票誰負責。 
+<p><strong>輕重緩急</strong>：🟡 快閃真的開跑前弄好就行（約提前 1~2 個月）。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>確認快閃售價跟正式通路／日本是否一致，還是快閃有限定優惠</li>
+<li>確認刷卡收單＋電子發票怎麼開——<strong>這需要公司登記＋稅籍才能辦</strong>（見 Phase 2）</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「快閃售價跟正式通路一致嗎？有沒有限定價或組合？」</li>
+<li>「前次快閃的刷卡、發票是怎麼處理的？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：價格多半是「台灣提建議、日本核准」；金流由台灣公司負責。→ 這更印證「<strong>公司越早成立，快閃越順</strong>」。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>台灣<strong>強制開電子發票</strong>，日本的 POS 不支援——前次快閃是用什麼結帳的？這個要先問清楚，別以為沿用就好。</li>
+</ul>
+<hr>
+<h2>M1-4 快閃場地與合規　【🟡 開店前】</h2>
+<p><strong>這塊在忙什麼</strong>：快閃開在哪、臨時營業登記、公共意外險等合規。 
+<p><strong>輕重緩急</strong>：🟡 快閃前處理好即可。 
+<p><strong>要做什麼</strong>：確認場地（沿用林森北路模式、還是換地點）、處理短期活動的合規（多數短期快閃不用完整消防會勘，但公共意外險通常要有）。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「場地誰找、誰出錢？沿用前次的三樓空間嗎？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：場地多半「台灣端規劃、日本付或預算內執行」。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>別等到快閃前一週才弄場地跟保險——場地簽約、保險都要提前。</li>
+</ul>
+<hr>
+<h2>M1-5 快閃行銷與日本資源　【🟠 提前 2~3 個月談】</h2>
+<p><strong>這塊在忙什麼</strong>：快閃的素材、媒體、KOL、設計師能不能來台。 
+<p><strong>輕重緩急</strong>：🟠 尤其「設計師來台」<strong>一定要提前 2~3 個月</strong>確認，否則排不上檔期、也趕不上媒體。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>索取日本素材（海報、影片、社群圖檔、LOGO 規範）</li>
+<li>談媒體合作（前次有女人我最大報導，<strong>能不能加碼／沿用</strong>）</li>
+<li>問設計師 Mikio Sakabe 能不能來台站台</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本能提供哪些快閃素材？」</li>
+<li>「★★ 設計師 Sakabe 有機會來台灣站台嗎？」（這是大加分，但要提前敲定）</li>
+<li>「前次的媒體合作能不能再談？預算誰出？」</li>
+<li>「日本官方 IG／LINE 一起曝光？台灣能不能開台灣自己的官方帳號？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>素材可提供 → 台灣做在地化（中文字幕、翻譯）</li>
+<li>設計師來台「要看檔期」→ <strong>主動提出一個時間與預算方案</strong>，別只等日本決定</li>
+<li>帳號：傾向「台灣開獨立帳號、日本轉發」→ 這樣台灣有自己的社群資產，好</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>設計師來台是<strong>稀缺資源</strong>，若日本同意，一定要綁定媒體專訪、開幕活動，把效益放大——不要只是「人來了逛逛」。</li>
+</ul>
+<hr>
+<h2>M1-6 快閃人力　【🟡 開店前】</h2>
+<p><strong>這塊在忙什麼</strong>：快閃櫃位需要人顧，人力哪來、要不要訓練。 
+<p><strong>輕重緩急</strong>：🟡 快閃前 1 個月左右。 
+<p><strong>要做什麼</strong>：決定快閃人力（店長＋兼職）、要不要先接受產品訓練。 
+<p><strong>要問日本</strong>：「快閃的人力是台灣臨時找，還是日本派人？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：多半「台灣招募兼職＋短期，用日本教材訓練」→ 快閃也是一次「<strong>試人力</strong>」的機會，表現好的兼職可以留著當直營店店員。 
+<p><strong>⚠️ 要注意的坑</strong>：快閃人員若沒受過「教育式試穿」訓練，服务质量會差——grounds 的核心賣點就是「試穿才懂腳感差異」，人力訓練不能省。 
+<hr>
+<h1>Phase 2｜公司設立與商標（最重要地基）</h1>
+<h2>M2-1 子公司 vs 分公司　【🔴 現在立刻，卡住一切】</h2>
+<p><strong>這塊在忙什麼</strong>：決定台灣用「子公司」還是「分公司」。<strong>這個決定卡住後面所有事</strong>——銀行開戶、簽租約、商標申請、員工報到，全都要等它。 
+<p><strong>輕重緩急</strong>：🔴 <strong>最關鍵的一個卡點</strong>，沒定這個，後面全部動不了。 
+<p><strong>要做什麼</strong>：建議「<strong>100% 日本持股的台灣子公司</strong>」。白話原因： 
+<ul>
+<li><strong>子公司是獨立公司</strong> → 租約、銀行、商標都掛台灣公司名下，日本母公司風險有限隔離（最多賠掉出資額）</li>
+<li><strong>展店靈活</strong> → 要開第二家店，台灣子公司自己就能增資、轉投資</li>
+<li><strong>商標好放</strong> → 台灣商標放子公司名下，未來要賣台灣業務或找股東都方便</li>
+<li>缺點：盈餘匯回日本要扣 21%（vs 分公司 0%），但台灣營所稅只有 20%，差異其實不大</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「子公司還是分公司？我們建議子公司，理由是治理、展店、商標、風險隔離。」</li>
+<li>「法定負責人（董事長）由誰當？」——這影響開戶、簽約、稅務責任</li>
+<li>「資本額多少？資金什麼時候到位？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>多數接受子公司（上述理由合理）→ 直接往下。</li>
+<li>比較謹慎的日本會問「分公司匯回盈餘不是免 21% 稅嗎？」→ <strong>你要能解釋</strong>：子公司帶來的展店彈性＋風險隔離＋商標歸屬，價值遠大於那點稅差；而且分公司等於是「母公司的一隻手」，將來想獨立經營很麻煩。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>別卡在這題太久。</strong> 子公司/分公司沒定，連「聯繫會計師詢價」都還定不下來——但其實「詢價」可以先做，不必等。</li>
+<li>法定負責人是外國人還台灣人，會影響後續簽約與開戶流程，要一併想清楚。</li>
+</ul>
+<hr>
+<h2>M2-2 商標（★全案最急）　【🔴 現在立刻，先申請主義】</h2>
+<p><strong>這塊在忙什麼</strong>：<strong>台灣商標「完全沒註冊」</strong>，但品牌已經有知名度和選品店在賣——這是被搶註的高風險。台灣採「<strong>先申請主義</strong>」，誰先申請誰贏，所以<strong>一刻都不能等</strong>。 
+<p><strong>輕重緩急</strong>：🔴 <strong>全案最急的一件事</strong>，應優先於開店、優先於快閃。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>一次送<strong>第 25 類（鞋）+ 35 類（零售/電商）+ 18 類（包袋）</strong>三類</li>
+<li>第 35 類特別重要：它保護「開店／電商販售 grounds」這件「服務」本身，不只保護鞋子</li>
+<li>採「<strong>先送件、再移轉</strong>」：先用日本母公司名義送（現在就能送），公司成立後移轉給台灣子公司</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本總部已經委託事務所處理台灣商標了嗎？如果還沒有，誰來負責？」</li>
+<li>「申請人用日本母公司名義，還是之後的台灣子公司？」</li>
+<li>「範圍要送哪幾類？（建議 25+35+18）」</li>
+<li>「★ 日本自己連第 35 類也沒有註冊，要不要台日一起補齊？」</li>
+<li>「費用誰出？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>若說「已有日本事務所會處理」→ <strong>要盯進度</strong>：確認是「真的送件」不是「只諮詢」，要一個送件日期跟後續進度回報。</li>
+<li>若說「要評估」→ <strong>強調風險</strong>：「台灣是先申請主義，今天不送，明天可能就被別人搶走『grounds』這三個字，那你連開店招牌都不能掛自己名字。」——這是很有力的說法。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>台灣商標審查要 6~12 個月，但<strong>重點是「申請日」</strong>——搶的是申請日，不是等核准。</li>
+<li>外國人申請台灣商標<strong>一定要委任台灣代理人</strong>（法律規定，不能自己辦），費用另計。</li>
+<li>核准後 2 個月內要付註冊費，沒付商標就沒了。</li>
+</ul>
+<hr>
+<h2>M2-3 公司成立流程與時間　【🔴 現在啟動】</h2>
+<p><strong>這塊在忙什麼</strong>：把台灣子公司實際「辦出來」。這流程有硬性時間（約 2~3 個月），不早啟動會拖垮整個開店時程。 
+<p><strong>輕重緩急</strong>：🔴 越早啟動越好——很多事（銀行、租約、進口、商標移轉）都要等「公司成立」。 
+<p><strong>要做什麼</strong>（台灣端流程）：名稱預查 → 投審會核准 → 開籌備戶 → 匯入資金 → 投資審定 → 公司登記。（約 2~3 個月） 
+<p><strong>要問日本</strong>：「資金能不能按投審會時程到位？法定負責人能不能指定？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：資金可依時程到位；負責人尊重台灣建議或由日本指派。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>「詢價」現在就能做</strong>——就算日本還沒拍板子公司/分公司，你也可以先聯繫會計師、律師事務所，問「外資來台設立子公司要多少錢、多久」。這不需等日本同意。</li>
+</ul>
+<hr>
+<h2>M2-4 銀行與金流　【🟠 公司成立後立刻】</h2>
+<p><strong>這塊在忙什麼</strong>：開公司銀行帳戶、辦刷卡收單、第三方金流。 
+<p><strong>輕重緩急</strong>：🟠 公司一旦成立就要辦，因為<strong>刷卡收單審核要時間</strong>，開店前要弄好。 
+<p><strong>要做什麼</strong>：開外資公司帳戶（一般帳戶＋OBU／日圓美金帳戶評估）、辦刷卡收單、評估 LINE Pay／街口等台灣金流。 
+<p><strong>要問日本</strong>：「進貨付款的幣別跟方式？」（跟 Phase 3 連動） 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：幣別配合交易條件；台灣金流與電子發票由台灣端綁定。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li>刷卡收單不是當天申請當天好，<strong>要提前</strong>，否則店開了不能刷卡就糗了。</li>
+</ul>
+<hr>
+<h2>M2-5 會計與稅務　【🟠 公司成立後】</h2>
+<p><strong>這塊在忙什麼</strong>：委任記帳士／會計師、電子發票、各種稅務申報。 
+<p><strong>輕重緩急</strong>：🟠 公司成立後儘快，開店報稅前弄好。 
+<p><strong>要做什麼</strong>：委任記帳士／會計師、申請電子發票、設定營所稅／營業稅／扣繳。 
+<p><strong>要問日本</strong>：「盈餘匯回日本要扣 21% 稅，日本端要知道並接受。」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：多半知悉接受，也可能問「能不能用費用沖抵降低匯回」→ 那就是會計師要處理的。 
+<p><strong>⚠️ 要注意的坑</strong>：電子發票是<strong>台灣強制</strong>，日本系統不支援——這塊要跟 Phase 4 的 POS 一起想清楚。 
+<hr>
+<h1>Phase 3｜進口與供應鏈</h1>
+<h2>M3-1 進貨路線：日本 vs 印尼　【🔴 影響庫存與資金】</h2>
+<p><strong>這塊在忙什麼</strong>：grounds 鞋在<strong>印尼／中國工廠</strong>做的。你要決定第一年貨從「日本倉」進，還是「印尼工廠」直送。 
+<p><strong>輕重緩急</strong>：🔴 會影響庫存、資金、交期，第一批進貨前就要定。 
+<p><strong>要做什麼</strong>（先懂一個關鍵觀念）：<strong>關稅看「原產地」不看「出貨地」</strong>。台灣跟印尼沒有自由貿易協定，所以不管從日本轉口還是印尼直送，<strong>鞋類關稅都一樣（約 6~10%）</strong>＋營業稅 5%。真正差別在交期與庫存。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「現在是日本倉庫庫存出貨，還是印尼／中國工廠指定品項出貨？」</li>
+<li>「交易是買斷還是寄售？付款條件？幣別？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>初期多半「日本倉小量出貨」（交期 2~4 天、可小量多補）→ <strong>建議第一年全走日本</strong>，不扛庫存風險。</li>
+<li>等量穩定後，才談「印尼直送壓成本」（有最低訂購量 MOQ）。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>別第一年就玩印尼直送</strong>。MOQ 高、前置期長、一次押大量資金——新品牌試水溫階段，那太冒險。</li>
+</ul>
+<hr>
+<h2>M3-2 關稅與成本　【🟡 進第一批貨前弄懂】</h2>
+<p><strong>這塊在忙什麼</strong>：弄懂買鞋進口要付多少稅，算進成本裡。 
+<p><strong>輕重緩急</strong>：🟡 第一批進貨前弄懂即可，但一定要懂。 
+<p><strong>要做什麼</strong>：台灣進口鞋類關稅約 6~10%（依材質）＋營業稅 5%；<strong>關稅看原產地</strong>；印尼非 ASEA、跟台灣無 FTA，印尼直送或日本轉口關稅相同。 
+<p><strong>要問日本</strong>：「提供正確的『原產地』跟 HS Code，確保報關正確、別偽標日本製。」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本會提供產地證明；多數鞋是印尼／中國製。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>絕不能把印尼製偽標成日本製</strong>——違反《海關緝私條例》會補稅＋罰款＋沒入，得不償失。中文標示（品名、材質、產地、進口商）是台灣法規強制。</li>
+<li>中文標籤要「日本出貨前貼好」還是「台灣自己貼」，要跟日本講清楚誰負責。</li>
+</ul>
+<hr>
+<h2>M3-3 價格定價（★防止價差套利）　【🔴 開店/快閃前定案】</h2>
+<p><strong>這塊在忙什麼</strong>：訂台灣售價。<strong>最怕的是：台灣訂太貴，消費者直接去日本官網或代購買，還有人靠價差轉賣賺錢</strong>——這就是「價差套利」，會打爛你的定價體系。 
+<p><strong>輕重緩急</strong>：🔴 開店跟快閃前就要把定價邏輯定案。 
+<p><strong>要做什麼</strong>：建立「定價試算表」：日本售價 → CIF（含運費保險）→ 關稅 → 營業稅 → 毛利 → 台灣建議售價。然後把台灣售價跟「日本官網價＋匯率＋代購價」比一比，確保不會貴到讓消費者跑去日本買。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本各款當地售價（日幣）？台灣定價決定權在誰？」</li>
+<li>「日本對『水貨／代購／破盤價』是什麼態度？（能不能一起防）」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本提供建議售價，但「台灣定價台灣提案、日本核准」。若台灣價含稅比日本貴，就得靠「教育式試穿＋快閃限定款」抵銷價差，並跟日本協調「日本官網要不要限制寄送台灣／海外」。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>定價不是「成本加成」就好</strong>，還要「對齊日本市場價」。台灣售價若比「日本官網＋代購成本」還貴，消費者不會買單。</li>
+<li>台灣標價習慣是「含稅價」，日本是「本體＋消費稅」，定價邏輯要對齊。</li>
+</ul>
+<hr>
+<h2>M3-4 銷售分析（★請日本給數據）　【🟠 選品前要】</h2>
+<p><strong>這塊在忙什麼</strong>：跟日本要「他們在日本賣得好的鞋款、男女比例、熱門款、尺碼分布」，拿來當台灣選品、進貨的依據。 
+<p><strong>輕重緩急</strong>：🟠 快閃跟首批進貨選品前要拿到。 
+<p><strong>要做什麼</strong>：跟日本要銷售數據，用它＋前次台灣快閃的銷量，排台灣該進哪些款、各進多少、什麼尺碼。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本各系列／鞋款賣得最好的是哪些？」</li>
+<li>「日本男女客群比例大概多少？台灣適用嗎？」</li>
+<li>「台灣女生腳型／尺碼分布，進貨要不要調整？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本多半願意給銷售數據（這對你很有價值）→ 直接拿來用，別自己猜。 
+<p><strong>⚠️ 要注意的坑</strong>：別只抄日本熱門款——台灣市場加上女鞋、啦啦隊、厚底趨勢可能有不同偏好，<strong>拿日本數據當「起點」，再用台灣快閃數據校正</strong>。 
+<hr>
+<h2>M3-5 過季商品與員購　【🟡 營運後】</h2>
+<p><strong>這塊在忙什麼</strong>：過季賣不完的鞋怎麼清？日本有個好機制叫「<strong>員工限時員購</strong>」——定期讓員工用優惠價買自家貨。 
+<p><strong>輕重緩急</strong>：🟡 開店營運一陣子後，有庫存才需要。 
+<p><strong>要做什麼</strong>：跟日本學過季處理＋員購制度，把它設計成「台灣員工福利（也是招募誘因）＋過季庫存去化」雙重用途。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本過季商品怎麼處理？折扣／員購／退回？」</li>
+<li>「★ 日本『員工限時員購』的制度怎麼運作？大概多頻率、打幾折？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本確實有定期員購，會分享機制跟折扣幅度 → 直接複製到台灣，稍作調整。 
+<p><strong>⚠️ 要注意的坑</strong>：員購是福利也是庫存去化，但要設「員工轉售套利」防線（例如限購數量、限本人），別讓員工便宜進貨再轉賣。 
+<hr>
+<h2>M3-6 宅配與倉儲　【🟡 營運後】</h2>
+<p><strong>這塊在忙什麼</strong>：客人網購／電商的宅配物流，跟台灣的小型倉庫（簡易倉儲）。 
+<p><strong>輕重緩急</strong>：🟡 等電商開跑、或開店後有庫存才需要。 
+<p><strong>要做什麼</strong>：找台灣宅配（順豐、黑貓…）、規劃「簡易倉儲」——不用大倉庫，小空間＋現貨為主即可。 
+<p><strong>要問日本</strong>：「日本走哪家物流？包裝方式跟運費？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本分享物流包裝經驗；台灣端自己找本地宅配。 
+<p><strong>⚠️ 要注意的坑</strong>：別為了省運費把前置期拉到一兩個月導致斷貨——剛開店，寧可付多一點運費換補貨速度。 
+<hr>
+<h2>M3-7 保固與常見問題（★客服必備）　【🟡 開店前】</h2>
+<p><strong>這塊在忙什麼</strong>：客人鞋壞了、有品質問題，台灣要給什麼保固？日本最常遇到的客訴／損壞是什麼？ 
+<p><strong>輕重緩急</strong>：🟡 開店前要把保固規則、客服話術備好，客人一問馬上能用。 
+<p><strong>要做什麼</strong>：跟日本要保固政策＋常見問題清單，做成台灣客服 FAQ 跟保固規則。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「日本保固範圍？多久？」</li>
+<li>「★ 最常遇到的客訴／損壞問題有哪些？」（泡泡鞋底磨耗、膠合、尺寸…）</li>
+<li>「售後維修是日本處理還是台灣？流程？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本會給保固政策跟常見問題清單（對教育訓練超有用）；維修多半原廠（日本）處理或寄回 → 你要預留維修物流管道（貨寄回日本的成本與流程）。 
+<p><strong>⚠️ 要注意的坑</strong>：保固範圍要寫<strong>清楚</strong>——泡棉鞋底磨耗算不算保固？這類模糊地帶最容易跟客人起爭執，先定義好。 
+<hr>
+<h2>M3-8 轉讓定價（Transfer Pricing）　【⚪ 慢慢來，但要知道】</h2>
+<p><strong>這塊在忙什麼</strong>：日本賣貨給台灣子公司時，「內部進貨價」要合理——台灣跟日本稅務機關都會查「母子公司之間是不是亂訂價來逃稅」。 
+<p><strong>輕重緩急</strong>：⚪ 開店營運後跟會計師一起處理即可，但要知道有這件事。 
+<p><strong>要做什麼</strong>：確認進貨價符合「常規交易」原則（跟市場行情差不多）。 
+<p><strong>要問日本</strong>：「進貨價的訂價邏輯跟文件，有沒有符合跨國常規交易？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日企多半已有全球移轉定價政策，會配合 → 交給會計師確認即可。 
+<p><strong>⚠️ 要注意的坑</strong>：現在不用急，但別完全忽略——否則未來補稅罰款很麻煩。 
+<hr>
+<h1>Phase 4｜開店（直營店）</h1>
+<h2>M4-1 店址與租約細節（★）　【🔴 開店前 3~4 個月】</h2>
+<p><strong>這塊在忙什麼</strong>：確認到底用不用土屋鞄台北店（中山北路二段36巷8號1樓），租約細節怎麼談。 
+<p><strong>輕重緩急</strong>：🔴 租約是「法律主體」問題，沒簽好，後面裝修、營業全卡。開店前 3~4 個月就要處理。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>確認店面實際狀況：土屋鞄會結束、整間給 grounds，還是共用？（<strong>同址還有藝文空間，要注意</strong>）</li>
+<li><strong>租約細節</strong>：在誰名下？剩多久？租金？押金？可不可以轉租／變更承租人？</li>
+<li><strong>退場／轉租／續約／漲租條款</strong>——不要只看租金，要看這些但書</li>
+</ul>
+<p><strong>要問日本</strong>（因是股東關係要問清楚）： 
+<ul>
+<li>「這個店面最後是整間給我們，還是共用？」</li>
+<li>「★ 租約在誰名下？剩多久？能不能轉租或換成台灣子公司承租？」</li>
+<li>「★ 退場、轉租、續約、漲租是怎麼切的？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：因是股東（土屋鞄）關係，價格可能有優惠，但<strong>租約主體要釐清</strong>——強烈建議「以台灣子公司名義承租」，別掛在日本母公司或土屋鞄名下，否則法律關係跟稅務會亂。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>用途變更</strong>：現址有藝文空間，能不能改成「零售」？這會影響使用執照跟消防，要提早確認。</li>
+<li>別只看租金便宜就簽——「退場條款」跟「能不能轉租」更重要，萬一經營不如預期要能漂亮退。</li>
+</ul>
+<hr>
+<h2>M4-2 裝修與消防公安　【🔴 開店前 2~3 個月】</h2>
+<p><strong>這塊在忙什麼</strong>：店面裝修、消防檢查、公安申報。 
+<p><strong>輕重緩急</strong>：🔴 ★★ <strong>消防沒過不能營業</strong>，這是最硬的時間卡點，開店前 2~3 個月就要啟動送審。 
+<p><strong>要做什麼</strong>：室內裝修許可、使用執照用途變更、消防會勘、公安申報、招牌申請。 
+<p><strong>要問日本</strong>：「店鋪設計圖／規範是日本提供還是台灣設計？裝修預算上限、誰付？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本有店鋪規範、台灣執行裝修、日本核准預算 → 那就照辦，重點是<strong>排程要預留消防送審時間</strong>。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>消防會勘是最容易卡關的一環</strong>，很多人「以為店就開了」結果消防沒過——一定要把它當成「跟開幕綁死的硬時間」，往前推 2~3 個月安排。</li>
+<li>同址複雜（藝文空間），用途變更可能比想像麻煩。</li>
+</ul>
+<hr>
+<h2>M4-3 首批進貨與庫存設定　【🟠 開店前】</h2>
+<p><strong>這塊在忙什麼</strong>：開店第一批要進多少鞋、什麼款式、什麼尺碼、安全庫存抓多少。 
+<p><strong>輕重緩急</strong>：🟠 開店前用「日本銷售分析＋快閃數據」算出。 
+<p><strong>要做什麼</strong>：定首批進貨量、品項、尺碼、庫存天數。 
+<p><strong>要問日本</strong>：「首批建議的數量跟組合誰決定？補貨週期？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本給建議，尊重台灣數據決策 → 你就用 M3-4 的數據去排。 
+<p><strong>⚠️ 要注意的坑</strong>：庫存是「錢」——進太多積壓資金，進太少斷貨被客人罵。開店初期寧可「稍偏保守＋補貨快」，別一口氣壓一大批。 
+<hr>
+<h2>M4-4 人力招募與教育訓練（★）　【🟠 開店前 2~3 個月】</h2>
+<p><strong>這塊在忙什麼</strong>：招店長＋正職＋兼職、設計薪資獎金、執行教育訓練。 
+<p><strong>輕重緩急</strong>：🟠 開店前 2~3 個月要開始招人跟訓練（招募＋受訓都要時間）。 
+<p><strong>要做什麼</strong>：招募人力、訂薪資獎金制度（台灣慣例「底薪＋團體＋個人業績」混合）、執行訓練。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「★ 日本門市的員工訓練方式／教材／認證制度怎麼做？流程多長？要不要赴日？」</li>
+<li>「薪資獎金怎麼設計？」</li>
+<li>「制服是日本統一提供還是台灣自製？」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>： 
+<ul>
+<li>日本多半有現成教材跟 SOP 可提供；認證制度由日本訂標準 → 台灣做在地化。</li>
+<li>薪資獎金台灣設計、日本核准；制服日本規範＋台灣製作。</li>
+</ul>
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>教育式試穿是核心</strong>——店員要能教客人「針織款輕盈、皮革款有支撐、版型差異」等，這需要訓練，不能省。</li>
+<li>台灣有<strong>勞健保、勞退等法定成本</strong>，日本可能不熟，要抓進人事預算並跟日本講清楚。</li>
+</ul>
+<hr>
+<h2>M4-5 系統與 IT（POS／電子發票／CRM）　【🟠 開店前】</h2>
+<p><strong>這塊在忙什麼</strong>：店裡用什麼結帳系統、電子發票、庫存怎麼跟日本同步、會員資料庫。 
+<p><strong>輕重緩急</strong>：🟠 開店前要把 POS＋刷卡＋電子發票接通。 
+<p><strong>要做什麼</strong>：決定 POS 用日本還是台灣在地系統、電子發票、刷卡、庫存同步、會員 CRM。 
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「POS 沿日本還是台灣在地？（★★ 台灣強制電子發票，日本系統通常不支援）」</li>
+<li>「庫存要不要跟日本即時同步？會員資料共用還獨立？（★★ 台灣有個人資料保護法，跨境傳輸要同意）」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本希望統一系統利全球數據，但會理解電子發票需在地系統 → 最後多半是「台灣在地 POS + 用 API 跟日本庫存對接」的雙軌方案。 
+<p><strong>⚠️ 要注意的坑</strong>： 
+<ul>
+<li><strong>電子發票是台灣強制、日本系統做不到</strong>，這是硬需求，別等開店當天才發現。</li>
+<li>會員資料回傳日本涉及個資法，要問清楚、設計好同意機制。</li>
+</ul>
+<hr>
+<h1>Phase 5｜營運・行銷・會員・成長</h1>
+<h2>M5-1 會員制度（★設計台灣版）　【🟡 開店後優化】</h2>
+<p><strong>這塊在忙什麼</strong>：設計台灣的會員/CRM 制度（點數、等級、LINE 官方帳號、回購）。 
+<p><strong>輕重緩急</strong>：🟡 快閃就先收集種子會員，開店後正式設計優化。 
+<p><strong>要做什麼</strong>：設計台灣會員制度＋LINE OA，快閃檔就開始收集名單。 
+<p><strong>要問日本</strong>：「日本有會員制度嗎？台灣可以獨立設計嗎？資料跨境怎麼規範？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本若有會員制會分享參考；台灣可依在地習慣（LINE OA、電子發票載具）設計；資料傾向台灣獨立 → 這樣台灣有自己資產，好。 
+<p><strong>⚠️ 要注意的坑</strong>：會員制度別為了衝量設計太複雜——先求「收集到名單＋能連絡回購」，再慢慢加等級、點數等功能。 
+<hr>
+<h2>M5-2 公關與客訴處理（★）　【🟡 開店前備好】</h2>
+<p><strong>這塊在忙什麼</strong>：客人客訴、網路負評、甚至媒體危機，怎麼處理——品牌認知度低時，一次爆雷傷害很大。 
+<p><strong>輕重緩急</strong>：🟡 開店前把 SOP 跟話術備好。 
+<p><strong>要做什麼</strong>：訂客訴／負評／危機的處理流程與話術、退換貨規則、網路聲量監測。 
+<p><strong>要問日本</strong>：「日本怎麼處理客訴／負評？有 SOP 嗎？退換貨責任歸屬？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本提供客服 SOP；瑕疵退換原廠處理 → 台灣端設計反應流程＋監測聲量。 
+<p><strong>⚠️ 要注意的坑</strong>：負評回應要快、要誠懇、要有「我怎麼補救」而不是「推給日本」——客人要的是解決，不是聽你解釋這不是你的錯。 
+<hr>
+<h2>M5-3 行銷與品牌教育　【🟡 開店後持續】</h2>
+<p><strong>這塊在忙什麼</strong>：IG／LINE／官網內容、KOL、媒體、開幕活動。「品牌教育優先於折扣」是核心策略。 
+<p><strong>輕重緩急</strong>：🟡 開店前規劃、開店後持續跑。 
+<p><strong>要做什麼</strong>：做內容、談 KOL／媒體、辦 Launch Event、把啦啦隊等台灣機會排進內容。 
+<p><strong>要問日本</strong>：「素材、核准流程、預算；認不認同『教育式、非折扣式』行銷？」 
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日本提供素材、核准調性，多數認同品牌先行的教育式行銷（這跟我們的建議一致）→ 那台灣就能放心做內容經營。 
+<p><strong>⚠️ 要注意的坑</strong>：<strong>別手癢上蝦皮 / MOMO 打折衝量</strong>（除非後期品牌立足）——那會把設計師品牌做low、跟門市價格打架。第一年用「品牌教育」換「忠實客群」。 
+<hr>
+<h2>M5-4 財務、KPI 與時間表（★）　【🟡 開店後，但時間表現在就要建】</h2>
+<p><strong>這塊在忙什麼</strong>：訂第一年 KPI、營業目標、損益平衡點、月報；更重要的是<strong>做一份「總體時間表」告訴日本每個階段要多久</strong>。 
+<p><strong>輕重緩急</strong>：🟡 時間表現在就要開始建（因為日本要看）；KPI 開店後確立。 
+<p><strong>要做什麼</strong>： 
+<ul>
+<li>訂第一年 KPI（不只看營收，還有品牌曝光、會員數、社群、回購率）</li>
+<li><strong>建總體 Timeline</strong>：跟日本說「每階段預估多久、何時完成」，這是最有說服力的溝通工具</li>
+</ul>
+<p><strong>要問日本</strong>： 
+<ul>
+<li>「第一年 KPI／成功定義？」</li>
+<li>「★ 日本需要台灣端每個階段預估多久、何時完成，才能排資源跟預算——台灣要準備一份 Timeline。」</li>
+</ul>
+<p><strong>日本可能怎麼答 ＋ 你怎麼接</strong>：日企極重視排程與進度，會要一份明確的時程表 → 這就回扣到整個框架：<strong>你用這份文件講解「每件事要多久」，日本才會信你是有備而來。</strong> 
+<p><strong>⚠️ 要注意的坑</strong>：時間表要「務實、不畫大餅」——寧可保守多預留時間，也不要承諾了做不到，失信於日本人是最傷的。 
+<hr>
+<h1>總體時間表（Timeline 草案）</h1>
+<table><thead><tr><th>階段</th><th>內容</th><th>估計時間</th><th>關鍵里程碑</th></tr></thead><tbody>
+   <tr><td>Phase 0 對齊</td><td>跟日本確認決策</td><td>1~2 週</td><td>拿到決策時程承諾</td></tr>
+   <tr><td>Phase 1 快閃</td><td>2027-03 籌備→執行</td><td>2~3 個月前置＋12天</td><td>快閃辦成、數據收集</td></tr>
+   <tr><td>Phase 2 公司</td><td>子公司＋商標＋銀行</td><td>2~4 個月</td><td>公司登記、商標送件日、刷卡開通</td></tr>
+   <tr><td>Phase 3 進口</td><td>首批進貨、定價、保固</td><td>與 Phase 2 並行</td><td>首批到貨、定價表定案</td></tr>
+   <tr><td>Phase 4 開店</td><td>裝修、招募、POS</td><td>2~3 個月</td><td>消防通過、開幕</td></tr>
+   <tr><td>Phase 5 營運</td><td>行銷、會員、KPI</td><td>持續</td><td>損益平衡、二店評估</td></tr>
+</tbody></table>
+<hr>
+<h1>優先順序一頁速記</h1>
+<p><strong>🔴 立刻</strong>（這週）：商標送件、子公司拍板、對齊決策機制、快閃目的定位、建總體時間表 <strong>🟠 這週</strong>：公司詢價啟動、快閃設計師/媒體、台灣情報溝通、銷售數據索取、進貨路線確認、定價、人力招募 <strong>🟡 開店前</strong>：租約、裝修消防、首批進貨、POS、保固、客服、員購、倉儲 <strong>⚪ 慢慢來</strong>：轉讓定價、會員制度、行銷優化 
+<p><strong>一句話</strong>：<strong>「商標最急、公司最關鍵、快閃是眼前、消防不能拖、定價要防代購。」</strong> </div></div>
+<footer class="site-footer">
+  <p>2026 <a href="../zh/blueprint.html" class="stealth-link">AUG</a></p>
+</footer>
+<script src="../assets/js/main.js?v=e0a8d70253"></script>
+</body>
+</html>

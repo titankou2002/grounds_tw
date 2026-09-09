@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<base href="/Grounds_TW/">
+<title>台灣執行行動方案｜grounds Taiwan 工作文件</title>
+<meta name="description" content="grounds Taiwan Launch Blueprint 實務執行清單">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="../assets/img/favicon.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=162f86dd72">
+<style>
+.docs-layout{max-width:900px;margin:0 auto;padding:56px 32px 120px}
+.docs-nav{display:flex;gap:18px;font-size:13px;margin-bottom:40px;flex-wrap:wrap}
+.docs-nav a{text-decoration:none;color:var(--muted)}
+.docs-nav a:hover{color:var(--fg)}
+.docs-body h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);margin:0 0 8px}
+.docs-body h2{font-size:18px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.docs-body h3{font-size:15px;margin:24px 0 8px}
+.docs-body h4{font-size:14px;margin:18px 0 6px}
+.docs-body p{font-size:14.5px;margin:0 0 12px}
+.docs-body ul,.docs-body ol{margin:0 0 16px;padding-left:22px;font-size:14px}
+.docs-body li{margin-bottom:5px}
+.docs-body li p{display:inline}
+.docs-body table{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.docs-body th,.docs-body td{padding:8px 10px;border:1px solid var(--line);text-align:left;vertical-align:top}
+.docs-body th{background:var(--callout-bg);font-weight:600}
+.docs-body blockquote{margin:16px 0;padding:14px 18px;background:var(--callout-bg);border-radius:4px;font-size:13.5px;color:var(--muted)}
+.docs-body blockquote p{margin:0 0 6px;font-size:13.5px}
+.docs-body hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+.docs-body code{background:var(--callout-bg);padding:1px 5px;border-radius:3px;font-size:12.5px}
+.docs-tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:20px;margin:0 0 8px}
+.task{list-style:none;padding-left:2px}
+.task li{padding-left:22px;position:relative}
+.task li::before{content:"☐";position:absolute;left:0;color:var(--muted)}
+.task li.done::before{content:"☑";color:var(--accent)}
+</style>
+</head>
+<body>
+<header class="site-nav">
+  <a class="wordmark" href="../zh/index.html" aria-label="grounds Taiwan"></a>
+  <nav class="nav-links">
+    <a href="../zh/index.html">首頁</a>
+    <a href="../zh/blueprint.html">Blueprint</a>
+    <a href="../zh/trademark.html">商標</a>
+    <a href="../docs/index.html" class="active">文件</a>
+  </nav>
+  <div class="lang-switch"><a class="lang-link" href="../index.html">日本語</a><a class="lang-link" href="../en/index.html">English</a><a class="lang-link current" href="../zh/index.html">中文</a></div>
+</header>
+<div class="docs-layout"><nav class="docs-nav"><a href="index.html">← 全部文件</a><a href="過程框架_決策總表.html">過程框架 — 決策總表</a><a href="grounds_taiwan_行動方案.html">台灣執行行動方案</a><a href="週五會議_提問清單.html">與日本總部會議提問清單</a><a href="門市地點分析_中山北路二段36巷.html">門市地點分析（中山北路二段36巷）</a><a href="商標事務所洽談_QA.html">商標事務所洽談 QA</a><a href="商標事務所報價_宏景.html">商標報價整理（宏景）</a><a href="商標申請回覆Sharon.html">商標申請回覆（Sharon）</a><a href="給宏景的初期資料.html">給宏景的初期資料</a></nav><div class="docs-body"><h1>grounds Taiwan 執行行動方案</h1>
+<blockquote><p>依據《grounds Taiwan Launch Blueprint》14個Chapter整理而成的實務執行清單。</p><p>每章標示：<strong>現在能做什麼</strong>（台灣可自行推進）／<strong>卡在哪裡</strong>（需要日本總部回覆才能繼續，對應Open Questions）／<strong>負責歸屬</strong>（依Chapter 06的Governance / Delegation Matrix）。</p><p>版本：v0.7（2026-09-08 更新：新增「快閃活動歷史記錄（2026-07）與下次規劃（2027-03）」章節）— 隨執行進度持續更新。</p></blockquote>
+<hr>
+<h2>總覽：三個階段</h2>
+<table><thead><tr><th>階段</th><th>內容</th><th>大致依賴</th></tr></thead><tbody>
+   <tr><td><strong>Phase 0　對齊期</strong></td><td>確認Open Questions、拿到日本總部初步回覆</td><td>無，現在就能做</td></tr>
+   <tr><td><strong>Phase 1　籌備期</strong></td><td>公司設立、供應鏈、系統建置、第一家店選址裝修、教育制度</td><td>需要Phase 0部分答案</td></tr>
+   <tr><td><strong>Phase 2　開店期</strong></td><td>招募、教育訓練、行銷曝光、Launch Event、正式營運</td><td>需要Phase 1完成</td></tr>
+</tbody></table>
+<hr>
+<h2>Chapter 01｜Project Overview（專案概要）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">把這份Blueprint（網站+本文件）定案，作為之後每次跟日本總部溝通的共同基礎</li>
+<li class="">建立一份「決策紀錄」（誰、何時、決定了什麼），從現在開始每次跟日本對話都記錄進去</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 無，這章是總論，不卡人 
+<p><strong>負責歸屬：</strong> 台灣主責（文件維護） 
+<hr>
+<h2>Chapter 02｜Brand Philosophy（品牌哲學）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">跟日本索取品牌歷史、Mikio Sakabe設計理念、LEAP GRAVITY等現成品牌素材（官網、Lookbook、PR資料）</li>
+<li class="">把拿到的素材翻譯／在地化，作為店內陳列、教育訓練、社群文案的共用素材庫</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>日本能提供哪些品牌素材？（對應Open Questions／Marketing）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本主責（品牌內容原始資料）／台灣執行在地化 
+<hr>
+<h2>Chapter 03｜Product Philosophy（商品哲學）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">確認初期要引進「全部系列」還是「部分系列」（先列出台灣團隊的建議清單，供日本裁示）</li>
+<li class="">取得各系列的Series Story、Material、Technology等商品知識資料，作為教育訓練教材雛形</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>全部系列／部分系列／限定商品？（Open Questions／Product）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本核准商品線／台灣提出市場建議 
+<hr>
+<h2>Chapter 04｜Taiwan Market（台灣市場分析）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣可自行完成：市場定位、消費能力、日本品牌接受度、競爭品牌分析、SWOT（這章幾乎不卡人，台灣主責）</li>
+<li class="">產出一份「品牌教育」計畫初稿（因為我們認定最大挑戰不是價格/商圈/競爭者，而是消費者不知道grounds是什麼）</li>
+<li class="">訂出第一年KPI草案：品牌曝光、會員數、社群互動、品牌理解度、回購率（非只有營收）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 無，台灣可獨立完成，完成後送日本備查 
+<p><strong>負責歸屬：</strong> 台灣主責 
+<hr>
+<h2>Chapter 05｜Store Experience（門市策略）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣先盤點可能店址（百貨專櫃／街邊店），列出2-3個候選方案的優缺點</li>
+<li class="">準備Store Concept、Visual Merchandising、Customer Journey的初步構想，供日本討論</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>第一家店定位：Brand Flagship 還是 Market Validation Store？（這個答案會直接決定店址等級、坪數、裝修預算，是目前最關鍵的一個卡點）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本決定定位／台灣執行選址與裝修 
+<hr>
+<h2>Chapter 06｜Taiwan Operation（台灣營運架構）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">把已經提出的Governance分工（日本保留：品牌方向/年度預算/重大投資/品牌合作/第二店/重大設計/重大採購；台灣負責：門市/人事/排班/行政/日常營運/庫存/會員/活動/預算內執行）做成正式文件請日本簽署確認</li>
+<li class="">把Delegation Matrix的金額門檻（50萬以下台灣核准、50萬以上日本核准）也一併定案</li>
+<li class="">畫出台灣端組織圖草案（先抓職位，不用先抓人）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>子公司或分公司？法定負責人是誰？（Open Questions／Governance，跟Chapter 07共用）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 雙方共同確認，之後台灣依此執行 
+<hr>
+<h2>Chapter 07｜Company Setup（公司成立）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣已提出初步建議：100%日本持股成立台灣子公司（理由：品牌控制/治理/展店/未來發展較有彈性）——需要日本正式拍板</li>
+<li class="">先聯繫會計師事務所／律師事務所，了解外資來台設立子公司的實際流程、時間、成本估算（這部分台灣現在就能先問，不需要等日本決定子公司/分公司，因為兩種都需要類似的盡職調查資訊）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>子公司 vs 分公司最終決定？法定代表人人選？（最優先的卡點之一，會卡住銀行開戶、租約簽署等後續一切法律行為）</li>
+<li>★ <strong>台灣商標未註冊</strong>（2026-09-08確認）：台灣完全沒有 grounds 商標保護，但日本FOOLS已有日本國內註冊（第25、18類）。建議優先於開店在台灣送件（至少第25類＋第35類）。詳見「商標佈局調查結果」章節。</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本決策／台灣執行設立流程 
+<hr>
+<h2>Chapter 08｜Import & Logistics（物流）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣先research 鞋類商品的 HS Code 分類（海關稅則第64章）、關稅稅率、進口報關流程、常見標示法規（中文標示、鞋類尺碼標示規定）</li>
+<li class="">詢價2-3家台灣進口物流／報關代理商，抓大概的物流成本結構</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>日本出貨？工廠直送？還是透過日本物流中心？（會直接影響前置期、安全庫存天數設定）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本決定出貨模式／台灣執行在地報關與倉儲 
+<hr>
+<h2>Chapter 09｜IT Infrastructure（數位系統）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣先盤點本地可用的POS/ERP/CRM系統選項（含電子發票串接需求，這是台灣法規特有的，日本系統不一定支援，需要及早確認）</li>
+<li class="">列出「哪些系統必須跟日本總部同步」vs「哪些可以台灣獨立採用在地系統」的清單草案</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>沿用日本POS還是採用台灣系統？是否要求全球數據同步？（Open Questions／Digital）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 日本決定是否統一系統／台灣提出在地系統需求（尤其電子發票，這是台灣法規強制項目） 
+<hr>
+<h2>Chapter 10｜Marketing Strategy（品牌策略）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣先規劃IG／LINE官方帳號／官網的內容架構草案</li>
+<li class="">提出第一年「品牌教育優先於促銷」的具體內容策略（例如：品牌故事系列貼文、KOL品牌認知合作，而非折扣導向）</li>
+<li class="">規劃Launch Event的初步構想（時間、形式、預算級距）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>日本能提供哪些行銷素材／哪些需要日本核准（Open Questions／Marketing）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 台灣主責在地執行／日本核准品牌調性與素材使用 
+<hr>
+<h2>Chapter 11｜Training Academy（教育訓練）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">建立「grounds Taiwan Academy」的課程架構草案：品牌文化／產品知識／服務流程／POS操作／店長認證</li>
+<li class="">決定教育訓練是否需要赴日受訓、或日本認證（先提出台灣的建議方案）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>是否需要日本認證？是否需要赴日受訓？（Open Questions／Training，會影響訓練預算與時程規劃）</li>
+</ul>
+<p><strong>負責歸屬：</strong> 台灣主責建置／日本提供認證標準 
+<hr>
+<h2>Chapter 12｜Financial Plan（財務計畫）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">台灣先抓CAPEX（裝修、設備）與OPEX（租金、人事、行銷）的粗估區間，供日本審核年度預算</li>
+<li class="">訂出Break-even的假設情境（樂觀/中性/保守三種）</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 
+<ul>
+<li>這章高度依賴Chapter 05（店的定位/坪數）跟Chapter 07（公司設立成本）的答案，屬於下游章節，建議放在這兩章有初步答案後再細化</li>
+</ul>
+<p><strong>負責歸屬：</strong> 台灣提出草案／日本核准年度預算（超過授權金額） 
+<hr>
+<h2>Chapter 13｜Risk（風險）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">針對六大風險（品牌知名度不足、決策過慢、補貨、人才、現金流、品牌理解錯誤）各自列出1-2個具體的Mitigation Plan草案</li>
+<li class="">這章不卡人，可以現在就完成初稿</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 無 
+<p><strong>負責歸屬：</strong> 台灣主責 
+<hr>
+<h2>Chapter 14｜Vision（願景）</h2>
+<p><strong>現在能做：</strong> 
+<ul class="task">
+<li class="">先擱置，等Phase 1實際跑起來、有第一年數據後再具體化3年/5年/10年願景，現階段維持方向性敘述即可</li>
+</ul>
+<p><strong>卡在哪裡：</strong> 依賴前面所有章節的實際執行結果 
+<p><strong>負責歸屬：</strong> 雙方共同 
+<hr>
+<h2>立即行動清單（本週就能推進的5件事）</h2>
+<ol>
+<li>☐ 把「關鍵決策事項（Open Questions）」整理成正式清單，發送給日本總部（尤其優先：第一家店定位、子公司/分公司、出貨模式）</li>
+<li>☐ 聯繫會計師/律師事務所詢問子公司設立流程與成本</li>
+<li>☐ 完成Chapter 04（台灣市場分析）與Chapter 13（風險）兩個不卡人的章節初稿</li>
+<li>☐ 詢價2-3家物流／報關代理商</li>
+<li>☐ 把Chapter 06的Governance/Delegation Matrix做成正式文件，請日本簽署確認</li>
+</ol>
+<hr>
+<h2>商標佈局調查結果（2026-09-08 更新）</h2>
+<h3>台灣商標狀況</h3>
+<table><thead><tr><th>類別</th><th>結果</th><th>說明</th></tr></thead><tbody>
+   <tr><td>第25類（鞋類/服裝）</td><td>❌ 未註冊</td><td>近似有 GROUND FIVE（新北海企業，有效至2031）</td></tr>
+   <tr><td>第35類（零售/批發）</td><td>❌ 未註冊</td><td>—</td></tr>
+   <tr><td>第18類（皮革/包袋）</td><td>❌ 未註冊</td><td>近似有 LITTLEGROUND（韓商，有效至2033）</td></tr>
+</tbody></table>
+<p><strong>風險</strong>：台灣採先申請主義，grounds 已有選品店販售且有媒體報導（品牌有知名度），但商標完全無保護。任何人可隨時搶註。 
+<h3>日本商標狀況（株式會社FOOLS 已註冊）</h3>
+<table><thead><tr><th>註冊番號</th><th>申請/註冊</th><th>類別</th><th>商標</th></tr></thead><tbody>
+   <tr><td>#6264712</td><td>2019/09 → 2020/06</td><td>第25類</td><td>GROUNDS</td></tr>
+   <tr><td>#6444281</td><td>2021/03 → 2021/09</td><td>第25類</td><td>LEAP GRAVITY + GROUNDS</td></tr>
+   <tr><td>#6502599</td><td>2021/08 → 2022/01</td><td>第3、9、14、18、26類</td><td>GROUNDS</td></tr>
+   <tr><td>#6507410</td><td>2021/08 → 2022/02</td><td>第3、9、14、18類</td><td>LEAP GRAVITY + GROUNDS</td></tr>
+   <tr><td>#6901510</td><td>2024/05 → 2025/02</td><td>第25類</td><td>GROUNDS + WALKING ON JEWELS</td></tr>
+</tbody></table>
+<p><strong>發現</strong>：日本有商標意識（第25類、第18類已註冊），但<strong>第35類（零售服務）在日本也未註冊</strong>，且完全沒有國際佈局。 
+<h3>台灣商標申請方式與費用</h3>
+<h4>重要前提：外國人申請台灣商標</h4>
+<p>根據商標法第6條，在台灣境內無住所或營業所的外國人（如株式會社FOOLS），<strong>必須委任台灣境內的商標代理人辦理，不能自辦</strong>。但若由台灣子公司（台灣法人）名義申請，則可自辦。 
+<h4>方案比較</h4>
+<table><thead><tr><th>比較項目</th><th>方案A：日本母公司申請</th><th>方案B：台灣子公司申請</th></tr></thead><tbody>
+   <tr><td>申請人</td><td>株式會社FOOLS（外國人）</td><td>台灣子公司（台灣法人）</td></tr>
+   <tr><td>代理人</td><td><strong>強制委任</strong>，每類 NT$3,000~10,000</td><td><strong>不需要</strong>，可自辦</td></tr>
+   <tr><td>第25+35類合計</td><td>NT$16,000~30,000</td><td><strong>NT$10,400</strong>（僅官費）</td></tr>
+   <tr><td>第25+35+18類合計</td><td>NT$25,000~46,000</td><td><strong>NT$15,600</strong>（僅官費）</td></tr>
+   <tr><td>可送件時間</td><td><strong>現在就能送</strong></td><td>要等公司設立完成（約 2~4 個月）</td></tr>
+   <tr><td>商標權歸屬</td><td>日本母公司</td><td>台灣子公司</td></tr>
+</tbody></table>
+<h4>官費明細（經濟部智慧財產局，113年5月起生效）</h4>
+<table><thead><tr><th>項目</th><th>費用</th><th>備註</th></tr></thead><tbody>
+   <tr><td>申請規費（第1~34類）</td><td>每類 NT$3,000</td><td>20項以內不加費，超過每項加 NT$200</td></tr>
+   <tr><td>申請規費（第35~45類）</td><td>每類 NT$3,000</td><td>特定零售服務超過5項，每項加 NT$500</td></tr>
+   <tr><td>電子申請減免</td><td>每件 -NT$300</td><td>—</td></tr>
+   <tr><td>引用參考名稱減免</td><td>每類 -NT$300</td><td>全部商品名稱須完全引用系統參考名稱</td></tr>
+   <tr><td>註冊費（領證費）</td><td>每類 NT$2,500</td><td>核准後 2 個月內繳納，逾期商標不成立</td></tr>
+   <tr><td>加速審查</td><td>每類加 NT$6,000</td><td>可縮短至 2 個月內審查</td></tr>
+   <tr><td>延展註冊費</td><td>每類 NT$4,000</td><td>每 10 年一次，寬限期內加倍</td></tr>
+   <tr><td>移轉登記</td><td>每件 NT$2,000</td><td>商標權移轉時使用</td></tr>
+   <tr><td>變更登記</td><td>每件 NT$500</td><td>名稱/地址變更</td></tr>
+</tbody></table>
+<h4>建議策略：先送件再移轉</h4>
+<p>考量台灣子公司設立需要 2~4 個月，但商標採先申請主義，建議兩邊同時進行： 
+<ol>
+<li><strong>現在</strong> → 請台灣代理人先以日本母公司名義送件（搶申請日），花代理費但搶時間</li>
+<li><strong>同步</strong> → 進行台灣子公司設立</li>
+<li><strong>公司設立完成後</strong> → 把商標從日本母公司<strong>移轉登記</strong>給台灣子公司（移轉費每件 NT$2,000）</li>
+</ol>
+<p><strong>費用估算（2類：第25+35類）：</strong> 
+<ul>
+<li>代理人送件：NT$16,000~30,000</li>
+<li>移轉登記：NT$2,000</li>
+<li><strong>合計：NT$18,000~32,000</strong></li>
+</ul>
+<p>比全程委託代理人省下長期管理費，比等公司設立完成再送件早 2~4 個月取得優先日。 
+<h4>要注意的事項</h4>
+<ol>
+<li><strong>外國人一定要找台灣代理人</strong> — 法律規定，不是選擇</li>
+<li><strong>優先權</strong> — 日本最近一次註冊是 2024年5月（#6901510），已超過 6 個月，無法主張巴黎公約優先權</li>
+<li><strong>第35類的陷阱</strong> — 特定零售服務超過5項每項加收 NT$500，要精確指定</li>
+<li><strong>註冊費期限</strong> — 核准後 2 個月內沒繳費，商標不成立，審查全白費</li>
+<li><strong>10年有效期</strong> — 每 10 年要延展（每類 NT$4,000），逾期 6 個月內可加倍補辦</li>
+<li><strong>商標同一性</strong> — 申請的圖樣和實際使用要一致，不能擅自更改</li>
+<li><strong>加速審查條件</strong> — 需符合要件（已實際使用或有侵權風險等），不是有錢就能用</li>
+<li><strong>商標歸屬決策</strong> — 移轉後商標權歸台灣子公司，日本母公司失去台灣商標權。需在會議中確認：台灣商標要放在日本母公司還是台灣子公司？</li>
+</ol>
+<h3>行動建議</h3>
+<ul class="task">
+<li class="">★ <strong>在週五會議中主動提出商標風險</strong>，建議日本總部盡快在台灣送件（<strong>一次送第25＋35＋18類</strong>，第35類保護零售/電商服務本身）</li>
+<li class="">★ <strong>確認商標申請人名義</strong>：日本母公司（需找代理人）或台灣子公司（可自辦但要等設立）？建議先以日本母公司送件，之後移轉</li>
+<li class="">確認費用由誰負擔（代理費 + 官費 + 移轉費）</li>
+<li class="">台灣商標審查約 6–12 個月，但「申請日」即取得優先地位——趕快送件是重點</li>
+<li class="">開店可以同時進行，但商標一定要先送</li>
+<li class="">聯繫 2~3 家台灣商標事務所報價（建議找有跨國經驗的，方便跟日本溝通）</li>
+</ul>
+<hr>
+<hr>
+<h2>子公司 vs 分公司 完整比較（2026-09-08 新增）</h2>
+<blockquote><p>給週五會議用。兩種結構都適用於 100% 日本持股，但權利義務差異很大。</p></blockquote>
+<table><thead><tr><th>比較項目</th><th><strong>子公司</strong></th><th><strong>分公司</strong></th></tr></thead><tbody>
+   <tr><td>法人資格</td><td>✅ 獨立法人</td><td>❌ 無獨立法人，是母公司的延伸</td></tr>
+   <tr><td>法律責任</td><td>母公司以<strong>出資額為限</strong>負責</td><td>母公司負<strong>連帶無限責任</strong></td></tr>
+   <tr><td>設立時間</td><td>約 2~3 個月（需投審會審查）</td><td>約 1~2 個月（免投審會，除非陸資）</td></tr>
+   <tr><td>設立流程</td><td>名稱預查 → 投審會核准 → 開籌備戶 → 匯入資金 → 投資審定 → 公司登記</td><td>名稱預查 → 經濟部認許 → 分公司登記</td></tr>
+   <tr><td>主管機關</td><td>投審司（外資投資）＋ 商業司（登記）</td><td>商業司（外國公司認許）</td></tr>
+   <tr><td>營所稅</td><td>20%</td><td>20%</td></tr>
+   <tr><td>匯回盈餘稅負</td><td>扣繳 <strong>21%</strong> ＋ 未分配盈餘加徵 5%</td><td><strong>0%</strong>（直接匯回免稅）</td></tr>
+   <tr><td>轉投資股利</td><td>台灣境內轉投資股利不重複課稅</td><td>轉投資股利要扣繳 <strong>21%</strong></td></tr>
+   <tr><td>商標申請</td><td>✅ 可自辦（台灣法人）</td><td>✅ 可自辦（台灣境內營業所）</td></tr>
+   <tr><td>銀行開戶</td><td>較容易（獨立法人）</td><td>較難（非獨立法人）</td></tr>
+   <tr><td>簽約能力</td><td>以自己名義簽約</td><td>以母公司名義簽約</td></tr>
+   <tr><td>展店彈性</td><td>✅ 可自行增資、轉投資、開二店</td><td>❌ 要母公司授權</td></tr>
+   <tr><td>未來退出</td><td>可直接出售股權</td><td>要撤銷分公司登記</td></tr>
+   <tr><td>會計獨立</td><td>獨立帳冊、獨立申報</td><td>與母公司合併（台灣仍需獨立記帳）</td></tr>
+   <tr><td>適合理性</td><td>長期經營、有展店計畫、需獨立決策</td><td>短期試水溫、規模小、不需獨立決策</td></tr>
+</tbody></table>
+<h3>grounds 的建議：用子公司</h3>
+<p>grounds 的情境：100% 日本持股、要開實體門市、未來可能展店、需要簽租約/開銀行帳戶/僱員工、需要持有台灣商標。 
+<p><strong>建議用子公司</strong>，理由： 
+<ol>
+<li><strong>獨立法人</strong> → 租約、銀行帳戶、商標都掛在子公司名下，日本母公司風險隔離</li>
+<li><strong>展店彈性</strong> → 第二家店可直接增資或轉投資</li>
+<li><strong>商標歸屬</strong> → 子公司持有台灣商標，未來要賣台灣業務或引入股東都方便</li>
+<li><strong>稅務</strong> → 雖然匯回盈餘要扣 21%，但台灣營所稅僅 20%，實際差異不大</li>
+<li><strong>獨立決策</strong> → 台灣端日常營運不需每次回日本批准</li>
+</ol>
+<p><strong>需在會議中確認的子項目：</strong> 
+<ul class="task">
+<li class="">子公司還是分公司？日本是否認同子公司方案？</li>
+<li class="">法定負責人由誰擔任？</li>
+<li class="">資本額多少？資金何時到位？</li>
+<li class="">若採子公司，台灣商標登記在誰名下（見商標章節）</li>
+</ul>
+<hr>
+<h2>台灣選品店通路策略（2026-09-08 新增）</h2>
+<h3>現況盤點</h3>
+<table><thead><tr><th>選品店</th><th>狀態</th><th>關係</th></tr></thead><tbody>
+   <tr><td>Plain-me</td><td>有販售 grounds</td><td>台灣知名選品店，多店經營</td></tr>
+   <tr><td>NE.SENSE</td><td>有販售 grounds</td><td>台灣選品店，強調日本品牌</td></tr>
+   <tr><td>UJNG</td><td>有販售 grounds</td><td>台灣選品店</td></tr>
+</tbody></table>
+<h3>四種處理模式比較</h3>
+<h4>模式A：全部收回（獨家直營）</h4>
+<p>開店後終止所有選品店供貨，只在自己的直營店與官網販售。 
+<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody>
+   <tr><td>價格完全控制</td><td>失去現有通路曝光量</td></tr>
+   <tr><td>消費者資料全在自己手上</td><td>選品店客人可能不知道開了新店</td></tr>
+   <tr><td>利潤全拿</td><td>短期營收可能下降</td></tr>
+   <tr><td>品牌形象統一管理</td><td>跟選品店關係破裂，口碑受影響</td></tr>
+</tbody></table>
+<h4>模式B：並行但統一價格</h4>
+<p>直營店開了之後選品店繼續賣，但統一建議售價。 
+<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody>
+   <tr><td>通路覆蓋率最大</td><td>價格難真正統一（選品店可能偷打折）</td></tr>
+   <tr><td>選品店客人=免費品牌曝光</td><td>直營店與選品店互相搶客人</td></tr>
+   <tr><td>保留合作關係</td><td>難以控制陳列與服務品質</td></tr>
+</tbody></table>
+<h4>模式C：階段性退場（漸進式）</h4>
+<p>開店後 6~12 個月內逐步減少選品店供貨，等直營店站穩後完全收回。 
+<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody>
+   <tr><td>平穩過渡，不影響營收</td><td>需精準控制退場時間表</td></tr>
+   <tr><td>給選品店緩衝期，保持關係</td><td>管理複雜度高</td></tr>
+   <tr><td>直營店有時間建立客源</td><td>可能拖太久導致進退兩難</td></tr>
+</tbody></table>
+<h4>模式D：選品店升級為經銷夥伴</h4>
+<p>不收回，改成「正式經銷商」模式，簽訂經銷合約（最低售價、陳列標準、退換貨規則）。 
+<table><thead><tr><th>優點</th><th>缺點</th></tr></thead><tbody>
+   <tr><td>通路覆蓋最大</td><td>控制力比直營弱</td></tr>
+   <tr><td>選品店有動力推廣</td><td>經銷商管理需人力</td></tr>
+   <tr><td>減少平行輸入/水貨風險</td><td>價格體系複雜</td></tr>
+</tbody></table>
+<h3>建議策略：模式C（階段性退場）</h3>
+<p>考量 grounds 是新品牌在台灣： 
+<ol>
+<li><strong>第一年</strong> → 選品店是重要品牌曝光來源（消費者不知道 grounds 是什麼，選品店能教育市場）</li>
+<li><strong>開店後</strong> → 直營店建立品牌體驗，選品店繼續維持通路覆蓋</li>
+<li><strong>6~12 個月後</strong> → 若直營店業績穩定，開始減少選品店供貨</li>
+<li><strong>第二年</strong> → 評估完全收回，或保留 1~2 家最重要的選品店作為「經銷夥伴」</li>
+</ol>
+<h3>會議中要問日本（見提問清單）</h3>
+<ul class="task">
+<li class="">日本總部怎麼看台灣選品店通路？威脅還是幫忙？</li>
+<li class="">若繼續供貨給選品店，價格條件由誰定？（日本→選品店，還是日本→台灣子公司→選品店？）</li>
+<li class="">選品店的陳列標準、品牌展示規範，日本有無要求？</li>
+<li class="">選品店打折促銷，日本能接受嗎？會否影響品牌形象？</li>
+<li class="">日本在其他國家（韓國、香港）的選品店通路如何處理？有無先例？</li>
+</ul>
+<hr>
+<hr>
+<h2>進口路線比較：日本 vs 印尼直接進口（2026-09-08 新增）</h2>
+<blockquote><p><strong>背景</strong>：grounds 鞋在<strong>印尼／中國</strong>的工廠生產（已確認，非日本製造）。因此比較「從日本進口」vs「從印尼直送」。</p></blockquote>
+<h3>關鍵觀念：關稅看「原產地」不看「出貨地」</h3>
+<ul>
+<li>台灣與印尼<strong>沒有自由貿易協定</strong>（台灣非 ASEAN 成員，所以 ATIGA／Form E 免關稅<strong>不適用</strong>於印尼→台灣）</li>
+<li>鞋類（海關稅則第64章）進口關稅約 <strong>6~10%</strong>（依材質），再加 <strong>5% 營業稅</strong></li>
+<li>從日本轉口 → 原產地仍為印尼（<strong>不可偽報成日本製</strong>，違反《海關緝私條例》）</li>
+<li><strong>結論：關稅面日本 vs 印尼幾乎無差別</strong>（都是 6~10% + 5%）；真正差別在交期、庫存、控制權</li>
+</ul>
+<h3>比較表</h3>
+<table><thead><tr><th>比較項目</th><th>從日本進口（經 FOOLS 日本倉）</th><th>從印尼直送（工廠直出）</th></tr></thead><tbody>
+   <tr><td>關稅＋營業稅</td><td>6~10% + 5%（原產地=印尼）</td><td>6~10% + 5%（同）</td></tr>
+   <tr><td>交期（海運）</td><td>日本→台灣 約 <strong>2~4 天</strong></td><td>印尼→台灣 約 <strong>7~14 天</strong></td></tr>
+   <tr><td>交期（空運）</td><td>日本→台灣 <strong>1~2 天</strong></td><td>印尼→台灣 <strong>3~7 天</strong></td></tr>
+   <tr><td>最小訂購量 (MOQ)</td><td>低，可少量多次補貨</td><td>高，工廠有最低起訂</td></tr>
+   <tr><td>前置期（下單到到貨）</td><td>短（FOOLS 有庫存可立即出）</td><td>長（配合工廠排產，數週~數月）</td></tr>
+   <tr><td>庫存風險</td><td>低（日方扛庫存）</td><td>高（一次進大量壓資金）</td></tr>
+   <tr><td>換季/滯銷彈性</td><td>好（可小量試）</td><td>差（量大難退）</td></tr>
+   <tr><td>價格</td><td>較貴（日本端加拉利潤/物流費）</td><td>較便宜（省中間層）</td></tr>
+   <tr><td>品質/標籤控管</td><td>由日本統一整合</td><td>台灣端要自己盯中文標、BSMI</td></tr>
+   <tr><td>付款/匯率</td><td>付日幣（與日方月結）</td><td>付美金/印尼盾（風險自負）</td></tr>
+   <tr><td>供應鏈控制權</td><td>完全交給日本</td><td>台灣介入了訂貨決策</td></tr>
+</tbody></table>
+<h3>建議：初期走日本、中期評估印尼直送</h3>
+<ol>
+<li><strong>開店第一階段（Phase 1-2）→ 全走日本進口</strong>：交期短、小量多補、日方扛庫存、換季彈性大，最適合新品牌試水溫</li>
+<li><strong>銷量穩定後（6~12 個月後）→ 用銷量數據與日本談部分熱銷款印尼直送</strong>：壓低成本，需有明確訂單量才划算（MOQ 效益）</li>
+<li><strong>交易條件建議</strong>：初期談「寄售（Consignment）」或「買斷但小量高頻」，打通庫存與現金流，別一次押大量</li>
+</ol>
+<p><strong>會議重點</strong>：直接問日本——FOOLS 目前是「日本倉庫庫存出貨」還是「印尼/中國工廠指定品項出貨」？這決定台灣端庫存天數設定。 
+<hr>
+<h2>商標擴大建議（2026-09-08 更新）</h2>
+<blockquote><p>除第25類（鞋）之外，建議擴大註冊以完整保護品牌。</p></blockquote>
+<table><thead><tr><th>類別</th><th>對應業務</th><th>台灣現況</th><th>是否註冊</th></tr></thead><tbody>
+   <tr><td><strong>第25類</strong></td><td>鞋/服裝</td><td>❌ 未註冊</td><td><strong>必註</strong></td></tr>
+   <tr><td><strong>第35類</strong></td><td>零售/電商/批發</td><td>❌ 未註冊</td><td><strong>必註</strong>★</td></tr>
+   <tr><td><strong>第18類</strong></td><td>包袋/皮件</td><td>❌ 未註冊</td><td>建議註</td></tr>
+   <tr><td><strong>第14類</strong></td><td>飾品/珠寶</td><td>❌ 未註冊</td><td>視產品線</td></tr>
+   <tr><td><strong>第3/9/26類</strong></td><td>化妝品/眼鏡/配件</td><td>—</td><td>視未來產品</td></tr>
+</tbody></table>
+<h3>為什麼第 35 類特別重要</h3>
+<ul>
+<li>第35類保護「<strong>開店、電商販售 grounds</strong>」這件<strong>服務</strong>本身，不只保護商品</li>
+<li>日本 FOOLS <strong>連日本國內都沒註冊第35類</strong>（上次調查確認）——是<strong>台日共同缺口</strong></li>
+<li>只註商品類不註零售類 → 別人可註冊「grounds 零售/電商服務」再主張權利</li>
+</ul>
+<h3>建議動作</h3>
+<ul>
+<li>台灣<strong>一次送第 25+35+18 三類</strong>（費用/時程見商標章節）</li>
+<li>會議<strong>主動提醒日本</strong>：日本自己的第35類也漏了，建議台日並行補齊</li>
+<li>用「先送件再移轉」策略（日本母公司先送、公司成立後移轉台灣子公司）</li>
+</ul>
+<hr>
+<h2>電商三階段策略（2026-09-08 新增）</h2>
+<blockquote><p>核心原則：grounds 是設計師品牌，電商必須「<strong>品牌型</strong>」而非「折扣型」。<strong>第一年避開蝦皮/MOMO</strong>（量販平台、折扣文化，會吃掉品牌定位與門市價差）。</p></blockquote>
+<h3>現況</h3>
+<ul>
+<li>日本有官方線上商店（grounds-fw.jp）</li>
+<li>台灣無本地電商，消費者透過選品店或日本官網購買</li>
+</ul>
+<h3>三階段</h3>
+<table><thead><tr><th>階段</th><th>做法</th><th>理由</th></tr></thead><tbody>
+   <tr><td><strong>初期（開店前~半年）</strong></td><td>走日本官網國際配送（DTC）或直營店，不開台灣電商</td><td>避免折扣文化，保品牌；門市建立認知</td></tr>
+   <tr><td><strong>中期（半年~一年）</strong></td><td>開台灣自有官網（品牌型電商）</td><td>門市品牌基礎後，電商承接會員/回購；風格可控</td></tr>
+   <tr><td><strong>後期</strong></td><td>視需要評估百貨/其他平台</td><td>等品牌立足後再看，不為早期折扣犧牲形象</td></tr>
+</tbody></table>
+<h3>待確認決策點（週五問日本）</h3>
+<ul class="task">
+<li class="">台灣電商自行開官網，還是日本官網國際配送直送台灣？</li>
+<ul>
+<li>日本官網直送 → 初期零庫存，但個資跨境（台灣個資法）+ 電子發票、退換貨責任複雜</li>
+<ul>
+<li>台灣官網 → 綁電子發票、本地物流、需庫存</li>
+</ul>
+<ul class="task">
+<li class="">電商貨從台灣庫存出，還是日本直寄？定價與庫存邊界怎麼切？</li>
+<li class="">平台策略：是否認同「初期不上蝦皮/MOMO」？</li>
+</ul>
+<hr>
+<h2>快閃活動：歷史記錄與下次規劃（2026-09-08 新增）</h2>
+<h3>已辦快閃（2026-07，台灣已做過一次）</h3>
+<blockquote><p>資料來源：TVBS女人我最大 2026/07/15 報導。</p></blockquote>
+<ul>
+<li><strong>時間</strong>：2026/07/10–07/21（12 天），12:00–20:00（最後一天至 18:00）</li>
+<li><strong>地點</strong>：台北市中山區林森北路 107 巷 10 號 3 樓（三樓空間，非街邊店）</li>
+<li><strong>形式</strong>：限時快閃店，主打可試穿＋品牌世界觀陳列</li>
+<li><strong>商品</strong>：經典系列＋人氣配色＋最新款；主推 MOOPIE、MOOPIE KNIT PUMPS（瑪莉珍）</li>
+<li><strong>行銷</strong>：主流媒體報導（女人我最大），強調「免飛日本」＋「厚底鞋趨勢回歸」</li>
+<li><strong>賣點</strong>：泡泡鞋底「踩棉花糖」腳感；韓星/時尚編輯赴日必買清單敘事</li>
+</ul>
+<h3>下次快閃（2027-03）</h3>
+<ul>
+<li>與直營店時序、主導權責、能否沿用前次媒體合作/場地模式、設計師是否來台——見《週五會議_提問清單》第十一節</li>
+</ul>
+<hr>
+<h2>開店前置合規 Checklist（2026-09-08 新增）</h2>
+<blockquote><p>開店落地會被卡住的硬性法規與行政面，逐一勾選。★ = 有硬性時效或會卡住營業，一定要提前。</p></blockquote>
+<h3>A. 公司設立與登記（Phase 1 核心）</h3>
+<ul class="task">
+<li class="">★ 子公司設立（名稱預查→投審會→籌備戶→匯資→投資審定→公司登記）</li>
+<li class="">★ 商業登記＋<strong>稅籍登記</strong>（開業前完成，未登記不得營業）</li>
+<li class="">關務登錄：取得<strong>進口人身分</strong>（報關用，決定關稅/營業稅繳納主體）</li>
+<li class="">印鑑登記、大小章</li>
+</ul>
+<h3>B. 銀行與金流</h3>
+<ul class="task">
+<li class="">★ 開設公司帳戶（外資：一般帳戶＋OBU／日圓、美金帳戶評估）</li>
+<li class="">★ <strong>刷卡收單</strong>（零售 POS 綁定金流，需提早申辦審核）</li>
+<li class="">第三方金流／電子支付評估（LINE Pay、街口等台灣常用）</li>
+<li class="">外幣匯款與匯率避險安排（尤其日本/印尼進貨付款）</li>
+</ul>
+<h3>C. 會計與稅務</h3>
+<ul class="task">
+<li class="">★ 委任<strong>記帳士／會計師</strong>（記帳、申報）</li>
+<li class="">★ 電子發票申請（加值型營業稅，每二個月申報一次）</li>
+<li class="">營業稅稅籍、統一發票購票證</li>
+<li class="">營所稅：暫繳、結算申報、未分配盈餘</li>
+<li class="">扣繳申報：員工薪資、房租扣繳 10%、給付外國人（日本）扣繳</li>
+<li class="">資本額查核簽證</li>
+</ul>
+<h3>D. 室裝與店面合規</h3>
+<ul class="task">
+<li class="">★ <strong>室內裝修許可</strong>申請（動工前，需送審）</li>
+<li class="">★ <strong>建築物使用執照／用途變更</strong>（土屋鞄現址含藝文空間，複合使用需確認）</li>
+<li class="">★ <strong>消防會勘</strong>（消防檢查通過才能營業）</li>
+<li class="">★ <strong>公共安全檢查（公安申報）</strong>（零售店面定期申報）</li>
+<li class="">電器檢查、逃生標示、滅火器配置</li>
+<li class="">★ <strong>招牌廣告物管理</strong>（北市需申請、部分需雜項執照）</li>
+<li class="">樓地板/逃生動線符合零售規定</li>
+</ul>
+<h3>E. 保險</h3>
+<ul class="task">
+<li class="">★ <strong>公共意外責任險</strong>（營業場所，多數縣市強制 + 消防審查會看）</li>
+<li class="">貨物/水險（進口途中）、火險（店面設備）</li>
+<li class="">員工團險（雇主責任、意外）</li>
+</ul>
+<h3>F. 人資與勞務</h3>
+<ul class="task">
+<li class="">★ <strong>勞健保、勞退、職災保險、就業保險</strong>投保申報</li>
+<li class="">勞動契約書（僱用前簽署）</li>
+<li class="">工作規則（受僱勞工達 30 人以上需報備）</li>
+<li class="">排班/加班費/特休/工時上限（零售業排班法規）</li>
+<li class="">給付薪資依勞基法（薪資扣繳、加班費）</li>
+<li class="">員工個資蒐集同意</li>
+</ul>
+<h3>G. 個資與資安</h3>
+<ul class="task">
+<li class="">會員資料（個資法）、監視器設置、員工資料保管</li>
+<li class="">跨境傳輸（若會員資料回傳日本，需個資法同意＋可能的跨境傳輸機制）</li>
+</ul>
+<h3>H. 品牌／智慧財產（已在商標章節，重點提醒）</h3>
+<ul class="task">
+<li class="">★ 台灣商標（第25+35+18類）送件——優先於開店</li>
+<li class="">侵害風險盤點（品牌視覺、陳列、販售物是否用到他人權利）</li>
+</ul>
+<h3>I. 營運準備</h3>
+<ul class="task">
+<li class="">POS/ERP/CRM 系統（含電子發票串接、刷卡收單）</li>
+<li class="">進口合規：中文標示、BSMI（見進口章節）</li>
+<li class="">庫存、物流倉儲、警報/保全</li>
+</ul>
+<hr>
+<h2>待補充</h2>
+<ul>
+<li>各章負責人（目前多數標「台灣主責」，實際執行時需要指定到人）</li>
+<li>具體時程（本文件先列順序與依賴關係，尚未排入實際日期）</li>
+</ul></div></div>
+<footer class="site-footer">
+  <p>2026 <a href="../zh/blueprint.html" class="stealth-link">AUG</a></p>
+</footer>
+<script src="../assets/js/main.js?v=e0a8d70253"></script>
+</body>
+</html>
