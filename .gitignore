@@ -12,3 +12,17 @@
 /koziol.svg
 /png-transparent-refin-ceramiche-hd-logo.png
 /LOGO.jpg
+
+# Internal business planning documents (contain contact details, quotes,
+# negotiation notes). The repo is PUBLIC — these must never be committed.
+# The published site is generated from tools/generate.py into
+# index.html / blueprint.html only.
+/grounds_taiwan_行動方案.md
+/週五會議_提問清單.md
+/門市地點分析_中山北路二段36巷.md
+/過程框架_決策總表.md
+/過程框架_互動學習.html
+/商標事務所報價_宏景.md
+/商標事務所洽談_QA.md
+/商標申請回覆Sharon.md
+/給宏景的初期資料.md
