@@ -19,7 +19,7 @@ SHELL_HEAD = """<!doctype html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<base href="/Grounds_TW/">
+<base href="/Grounds_TW/docs/">
 <title>__TITLE__｜grounds Taiwan 工作文件</title>
 <meta name="description" content="__DESC__">
 <link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
