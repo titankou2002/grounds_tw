@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>藍圖實踐｜grounds Taiwan</title>
+<meta name="description" content="grounds Taiwan 開店藍圖的逐步實踐進度（需登入）。">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" type="image/png" sizes="32x32" href="assets/img/favicon-32.png">
+<style>
+:root{
+  --bg:#faf9f6; --fg:#1d1d1b; --muted:#6b6a66; --line:#e3e0d8; --card:#ffffff;
+  --accent:#1d1d1b; --ok:#2f7d4f; --doing:#b7791f; --wait:#b4452f; --todo:#9a978f; --lock:#9a978f;
+  --p0:#b4452f; --p1:#b7791f; --p2:#6b6a66;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#161614; --fg:#ecebe6; --muted:#9c9a92; --line:#2e2d2a; --card:#1e1e1c;
+    --accent:#ecebe6; --ok:#5bb581; --doing:#e0a44a; --wait:#e0765f; --todo:#77746d; --lock:#77746d;
+    --p0:#e0765f; --p1:#e0a44a; --p2:#9c9a92;
+  }
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.65 -apple-system,BlinkMacSystemFont,"Noto Sans TC","PingFang TC",sans-serif}
+.wrap{max-width:880px;margin:0 auto;padding:28px 16px 120px}
+a{color:inherit}
+header.top{display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin-bottom:20px}
+header.top h1{font-size:20px;margin:0;font-weight:600}
+.who{font-size:13px;color:var(--muted);display:flex;gap:10px;align-items:center}
+button,select,textarea{font:inherit;color:inherit}
+.btn{border:1px solid var(--line);background:var(--card);padding:6px 12px;border-radius:8px;cursor:pointer}
+.btn:hover{border-color:var(--fg)}
+.btn.primary{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.overall{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:18px}
+.overall .big{font-size:28px;font-weight:600;line-height:1.2}
+.overall .sub{color:var(--muted);font-size:13px}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden;margin-top:10px}
+.bar>i{display:block;height:100%;background:var(--ok);width:0;transition:width .3s}
+.tabs{display:flex;gap:6px;margin:0 0 14px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:transparent;padding:6px 14px;border-radius:99px;cursor:pointer;font-size:14px}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--bg);border-color:var(--accent)}
+.hint{color:var(--muted);font-size:13px;margin:0 0 12px}
+.task{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px}
+.task>summary{list-style:none;cursor:pointer;padding:12px 16px;display:flex;gap:10px;align-items:flex-start}
+.task>summary::-webkit-details-marker{display:none}
+.dot{flex:none;width:10px;height:10px;border-radius:50%;margin-top:8px;background:var(--todo)}
+.dot.doing{background:var(--doing)} .dot.waiting_japan{background:var(--wait)} .dot.done{background:var(--ok)}
+.t-main{flex:1;min-width:0}
+.t-title{font-weight:600}
+.t-meta{font-size:12.5px;color:var(--muted);display:flex;gap:10px;flex-wrap:wrap;margin-top:2px}
+.pill{font-size:11.5px;border:1px solid currentColor;border-radius:99px;padding:0 7px}
+.pill.P0{color:var(--p0)} .pill.P1{color:var(--p1)} .pill.P2{color:var(--p2)}
+.task.done .t-title{text-decoration:line-through;color:var(--muted)}
+.task.locked{opacity:.65}
+.body{padding:2px 16px 16px 36px;border-top:1px dashed var(--line)}
+.body h4{margin:14px 0 6px;font-size:13px;color:var(--muted);font-weight:600}
+.cond{display:flex;gap:8px;align-items:flex-start;padding:4px 0}
+.cond input{margin-top:5px;width:16px;height:16px;flex:none}
+.row{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+select{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:5px 8px}
+textarea{width:100%;min-height:64px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px}
+.ro{font-size:13px;color:var(--muted)}
+.chap{margin:22px 0 8px;display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.chap h2{font-size:16px;margin:0}
+.chap .why{font-size:13px;color:var(--muted);margin:2px 0 8px}
+.chap .cnt{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.lockmsg{font-size:13px;color:var(--wait);margin:8px 0 0}
+.toast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:9px 16px;border-radius:99px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90vw}
+.toast.show{opacity:1}
+.empty{color:var(--muted);padding:24px 0;text-align:center}
+@media (max-width:520px){ .body{padding-left:16px} }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <h1>藍圖實踐 · grounds Taiwan</h1>
+    <div class="who" id="who">載入中…</div>
+  </header>
+
+  <section class="overall" id="overall"></section>
+
+  <nav class="tabs" role="tablist" id="tabs">
+    <button class="tab" role="tab" data-v="next" aria-selected="true">下一步</button>
+    <button class="tab" role="tab" data-v="all" aria-selected="false">全部章節</button>
+    <button class="tab" role="tab" data-v="japan" aria-selected="false">等日本</button>
+  </nav>
+
+  <main id="view"></main>
+  <input type="file" id="upl" accept="application/json,.json" style="display:none">
+</div>
+<div class="toast" id="toast" role="status"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.117.2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+'use strict';
+
+// ───────── 設定 ─────────
+// 公開金鑰（publishable）本來就可以放在網頁裡；真正的保護是資料庫的 RLS 權限規則。
+var SUPABASE_URL = 'https://wvslwxbdfcqbsnihvwnb.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_dnpBAxgX5cNpiVsRGncILg_8zXEL7gD';
+var TENANT_SLUG  = 'grounds';
+
+var STATUS = { todo:'未開始', doing:'進行中', waiting_japan:'等日本', done:'完成' };
+var PRI = { P0:0, P1:1, P2:2 };
+
+var sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY, {
+  auth:{ persistSession:true, autoRefreshToken:true, detectSessionInUrl:true }
+});
+
+var S = {
+  chapters:[], tasks:{}, rows:{}, tenantId:null,
+  user:null, canEdit:false, isAdmin:false, member:false, name:'', view:'next'
+};
+
+// ───────── 小工具（全部用 textContent，不用 innerHTML） ─────────
+function h(tag, attrs){
+  var el = document.createElement(tag);
+  if (attrs) for (var k in attrs){
+    if (k === 'class') el.className = attrs[k];
+    else if (k.slice(0,2) === 'on') el.addEventListener(k.slice(2), attrs[k]);
+    else if (attrs[k] !== false && attrs[k] != null) el.setAttribute(k, attrs[k] === true ? '' : attrs[k]);
+  }
+  for (var i = 2; i < arguments.length; i++){
+    var c = arguments[i];
+    if (c == null || c === false) continue;
+    el.appendChild(typeof c === 'string' ? document.createTextNode(c) : c);
+  }
+  return el;
+}
+var toastTimer;
+function toast(msg){
+  var t = document.getElementById('toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(function(){ t.classList.remove('show'); }, 2600);
+}
+function fmt(ts){
+  if (!ts) return '';
+  var d = new Date(ts);
+  return (d.getMonth()+1)+'/'+d.getDate()+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2);
+}
+
+// ───────── 狀態推導 ─────────
+function rowOf(id){ return S.rows[id] || { status:'todo', conditions_done:[], note:'' }; }
+function statusOf(id){ return rowOf(id).status; }
+function isDone(id){ return statusOf(id) === 'done'; }
+function blockers(t){ return t.depends.filter(function(d){ return !isDone(d); }); }
+function allCondsDone(t){
+  var done = rowOf(t.id).conditions_done || [];
+  return t.conditions.length > 0 && t.conditions.every(function(_, i){ return done.indexOf(i) >= 0; });
+}
+function allTasks(){ var a = []; S.chapters.forEach(function(c){ a = a.concat(c.tasks); }); return a; }
+
+function nextTasks(){
+  return allTasks().filter(function(t){
+    var s = statusOf(t.id);
+    return s !== 'done' && s !== 'waiting_japan' && blockers(t).length === 0;
+  }).sort(function(a, b){
+    var da = statusOf(a.id) === 'doing' ? 0 : 1, db = statusOf(b.id) === 'doing' ? 0 : 1;
+    if (da !== db) return da - db;
+    if (PRI[a.priority] !== PRI[b.priority]) return PRI[a.priority] - PRI[b.priority];
+    var ta = a.deadline_t == null ? -1 : a.deadline_t, tb = b.deadline_t == null ? -1 : b.deadline_t;
+    return tb - ta; // T 數字大＝離開幕遠＝更早要做
+  });
+}
+
+// ───────── 寫入 ─────────
+function save(t, patch){
+  if (!S.canEdit) return;
+  var cur = rowOf(t.id);
+  var next = {
+    status: patch.status != null ? patch.status : cur.status,
+    conditions_done: patch.conditions_done != null ? patch.conditions_done : (cur.conditions_done || []),
+    note: patch.note != null ? patch.note : (cur.note || '')
+  };
+  if (next.status === 'done' && !allCondsDone({ id:t.id, conditions:t.conditions }) && patch.conditions_done == null){
+    var done = next.conditions_done;
+    if (!(t.conditions.length && t.conditions.every(function(_, i){ return done.indexOf(i) >= 0; }))){
+      toast('還有完成條件沒勾，不能標成「完成」'); render(); return;
+    }
+  }
+  var before = S.rows[t.id];
+  S.rows[t.id] = Object.assign({}, cur, next, { updated_by_name:S.name, updated_at:new Date().toISOString() });
+  render();
+  sb.from('bp_task_state').upsert(
+    { tenant_id:S.tenantId, task_id:t.id, status:next.status, conditions_done:next.conditions_done, note:next.note },
+    { onConflict:'tenant_id,task_id' }
+  ).then(function(r){
+    if (r.error){
+      if (before) S.rows[t.id] = before; else delete S.rows[t.id];
+      render(); toast('存檔失敗：' + r.error.message);
+    }
+  });
+}
+
+// ───────── 畫面 ─────────
+function taskCard(t, open){
+  var st = statusOf(t.id), row = rowOf(t.id), bl = blockers(t);
+  var locked = bl.length > 0 && st !== 'done';
+  var d = h('details', { class:'task ' + (st === 'done' ? 'done ' : '') + (locked ? 'locked' : ''), open:open ? true : false });
+
+  var doneN = (row.conditions_done || []).length;
+  var meta = h('div', { class:'t-meta' },
+    h('span', { class:'pill ' + t.priority }, t.priority),
+    h('span', null, '第 ' + t.chapter + ' 章'),
+    t.deadline_t != null ? h('span', null, '截止 T-' + t.deadline_t) : (t.deadline_raw ? h('span', null, t.deadline_raw) : null),
+    h('span', null, STATUS[st]),
+    h('span', null, doneN + '/' + t.conditions.length + ' 條件'),
+    locked ? h('span', null, '🔒 被卡住') : null,
+    t.waiting_japan && st !== 'done' ? h('span', null, '需日本') : null
+  );
+  d.appendChild(h('summary', null, h('span', { class:'dot ' + st }), h('div', { class:'t-main' }, h('div', { class:'t-title' }, t.title), meta)));
+
+  var body = h('div', { class:'body' });
+  if (locked){
+    body.appendChild(h('p', { class:'lockmsg' }, '要先完成：' + bl.map(function(id){ return S.tasks[id].title; }).join('、')));
+  }
+
+  body.appendChild(h('h4', null, '完成條件'));
+  t.conditions.forEach(function(c, i){
+    var checked = (row.conditions_done || []).indexOf(i) >= 0;
+    var cb = h('input', { type:'checkbox', checked:checked, disabled:!S.canEdit || (locked && !checked), onchange:function(){
+      var set = (rowOf(t.id).conditions_done || []).slice();
+      var at = set.indexOf(i);
+      if (this.checked && at < 0) set.push(i);
+      if (!this.checked && at >= 0) set.splice(at, 1);
+      set.sort(function(a, b){ return a - b; });
+      var patch = { conditions_done:set };
+      if (this.checked && statusOf(t.id) === 'todo') patch.status = 'doing';
+      if (!this.checked && statusOf(t.id) === 'done') patch.status = 'doing';
+      save(t, patch);
+    }});
+    body.appendChild(h('label', { class:'cond' }, cb, h('span', null, c.text)));
+  });
+
+  if (t.needs_japan) body.appendChild(h('p', { class:'ro' }, '需要日本：' + t.needs_japan));
+
+  body.appendChild(h('h4', null, '狀態'));
+  if (S.canEdit){
+    var sel = h('select', { disabled:locked && st === 'todo', onchange:function(){ save(t, { status:this.value }); } });
+    Object.keys(STATUS).forEach(function(k){
+      sel.appendChild(h('option', { value:k, selected:k === st ? true : false }, STATUS[k]));
+    });
+    body.appendChild(h('div', { class:'row' }, sel, allCondsDone(t) && st !== 'done' ? h('span', { class:'ro' }, '條件都勾完了，可以標成完成') : null));
+  } else {
+    body.appendChild(h('p', { class:'ro' }, STATUS[st]));
+  }
+
+  body.appendChild(h('h4', null, '備註'));
+  if (S.canEdit){
+    body.appendChild(h('textarea', { placeholder:'卡在哪、下一步、日本回覆了什麼…', onblur:function(){
+      if (this.value !== (rowOf(t.id).note || '')) save(t, { note:this.value });
+    }}, row.note || ''));
+  } else {
+    body.appendChild(h('p', { class:'ro' }, row.note || '（無）'));
+  }
+  if (t.note) { body.appendChild(h('h4', null, '注意')); body.appendChild(h('p', { class:'ro' }, t.note)); }
+  if (row.updated_at) body.appendChild(h('p', { class:'ro' }, '最後更新：' + (row.updated_by_name || '') + ' ' + fmt(row.updated_at)));
+
+  d.appendChild(body);
+  return d;
+}
+
+function renderOverall(){
+  var all = allTasks(), done = all.filter(function(t){ return isDone(t.id); }).length;
+  var pct = all.length ? Math.round(done / all.length * 100) : 0;
+  var p0 = all.filter(function(t){ return t.priority === 'P0' && !isDone(t.id); }).length;
+  var wait = all.filter(function(t){ return statusOf(t.id) === 'waiting_japan'; }).length;
+  var el = document.getElementById('overall'); el.textContent = '';
+  el.appendChild(h('div', { class:'big' }, done + ' / ' + all.length + ' 項完成（' + pct + '%）'));
+  el.appendChild(h('div', { class:'sub' }, '未完成的 P0：' + p0 + ' 項　·　等日本：' + wait + ' 項'));
+  var bar = h('div', { class:'bar' }, h('i')); bar.firstChild.style.width = pct + '%';
+  el.appendChild(bar);
+}
+
+function renderWho(){
+  var el = document.getElementById('who'); el.textContent = '';
+  if (S.user && S.member){
+    el.appendChild(h('span', null, S.name + (S.canEdit ? '' : '（唯讀）')));
+    if (S.isAdmin) el.appendChild(h('button', { class:'btn', onclick:function(){ document.getElementById('upl').click(); } }, '更新任務內容'));
+    el.appendChild(h('button', { class:'btn', onclick:function(){ sb.auth.signOut().then(function(){ location.reload(); }); } }, '登出'));
+  } else if (S.user){
+    el.appendChild(h('span', null, S.user.email));
+    el.appendChild(h('button', { class:'btn', onclick:function(){ sb.auth.signOut().then(function(){ location.reload(); }); } }, '登出'));
+  } else {
+    el.appendChild(h('button', { class:'btn primary', onclick:function(){
+      sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:location.origin + location.pathname } });
+    }}, '用 Google 登入'));
+  }
+}
+
+function renderView(){
+  var v = document.getElementById('view'); v.textContent = '';
+  if (!S.member){
+    document.getElementById('tabs').style.display = 'none';
+    document.getElementById('overall').style.display = 'none';
+    v.appendChild(h('p', { class:'empty' }, S.user
+      ? '這個帳號（' + S.user.email + '）還沒有被邀請。請聯絡高弘治。'
+      : '這份進度需要登入才能查看。'));
+    return;
+  }
+  if (!S.chapters.length){
+    v.appendChild(h('p', { class:'empty' }, S.isAdmin
+      ? '還沒有任務內容。按右上角「更新任務內容」，選 data/tasks.json。'
+      : '任務內容還沒準備好，請稍後再看。'));
+    return;
+  }
+  if (S.view === 'next'){
+    var list = nextTasks();
+    v.appendChild(h('p', { class:'hint' }, '現在可以動手、沒被卡住的事，依「進行中 → 優先級 → 離開幕越遠越先」排序。'));
+    if (!list.length) v.appendChild(h('p', { class:'empty' }, '沒有可以立刻動手的事了。看看「等日本」那頁。'));
+    list.slice(0, 6).forEach(function(t, i){ v.appendChild(taskCard(t, i === 0)); });
+    if (list.length > 6) v.appendChild(h('p', { class:'hint' }, '還有 ' + (list.length - 6) + ' 項，在「全部章節」。'));
+  } else if (S.view === 'all'){
+    S.chapters.forEach(function(c){
+      var done = c.tasks.filter(function(t){ return isDone(t.id); }).length;
+      v.appendChild(h('div', { class:'chap' }, h('h2', null, '第 ' + c.num + ' 章　' + c.title), h('span', { class:'cnt' }, done + '/' + c.tasks.length)));
+      if (c.why) v.appendChild(h('p', { class:'why' }, c.why));
+      c.tasks.forEach(function(t){ v.appendChild(taskCard(t, false)); });
+    });
+  } else {
+    var w = allTasks().filter(function(t){ return !isDone(t.id) && (statusOf(t.id) === 'waiting_japan' || t.waiting_japan); });
+    v.appendChild(h('p', { class:'hint' }, '需要日本回覆、拍板或提供資料的事。可複製成週五會議議程。'));
+    v.appendChild(h('button', { class:'btn', onclick:function(){
+      var txt = '【週五會議・待日本確認】\n' + w.map(function(t, i){
+        return (i + 1) + '. ' + t.title + '（' + t.priority + (t.deadline_t != null ? '，T-' + t.deadline_t : '') + '）\n   需要：' + t.needs_japan;
+      }).join('\n');
+      (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject()).then(
+        function(){ toast('已複製議程'); }, function(){ toast('瀏覽器不允許複製，請手動選取'); });
+    }}, '複製成會議議程'));
+    v.appendChild(h('div', { style:'height:12px' }));
+    if (!w.length) v.appendChild(h('p', { class:'empty' }, '目前沒有等日本的事。'));
+    w.forEach(function(t){ v.appendChild(taskCard(t, false)); });
+  }
+}
+
+function render(){
+  // 重畫時保留展開中的卡片
+  var openIds = {};
+  document.querySelectorAll('details.task[open] .t-title').forEach(function(e){ openIds[e.textContent] = 1; });
+  renderWho(); renderOverall(); renderView();
+  document.querySelectorAll('details.task').forEach(function(d){
+    if (openIds[d.querySelector('.t-title').textContent]) d.open = true;
+  });
+}
+
+// ───────── 載入 ─────────
+function loadRows(){
+  return sb.from('bp_task_state').select('*').eq('tenant_id', S.tenantId).then(function(r){
+    if (r.error) { toast('讀取進度失敗：' + r.error.message); return; }
+    S.rows = {}; r.data.forEach(function(x){ S.rows[x.task_id] = x; });
+  });
+}
+
+function loadContent(){
+  return sb.from('bp_content').select('data').eq('tenant_id', S.tenantId).eq('key', 'tasks').maybeSingle().then(function(r){
+    if (r.error) throw new Error(r.error.message);
+    S.chapters = r.data ? r.data.data.chapters : []; S.tasks = {};
+    S.chapters.forEach(function(c){ c.tasks.forEach(function(t){ S.tasks[t.id] = t; }); });
+  });
+}
+
+function init(){
+  document.getElementById('tabs').addEventListener('click', function(e){
+    var b = e.target.closest('.tab'); if (!b) return;
+    S.view = b.getAttribute('data-v');
+    document.querySelectorAll('.tab').forEach(function(x){ x.setAttribute('aria-selected', x === b ? 'true' : 'false'); });
+    renderView();
+  });
+
+  sb.auth.getSession().then(function(r){
+    S.user = r.data.session ? r.data.session.user : null;
+    if (!S.user) return;
+    return sb.rpc('accept_invites').then(function(){
+      return sb.rpc('bp_tenant_id', { p_slug:TENANT_SLUG });
+    }).then(function(t){
+      if (t.error) throw new Error(t.error.message);
+      S.tenantId = t.data;
+      if (!S.tenantId) return;
+      return sb.from('members').select('user_id,display_name,role,active').eq('tenant_id', S.tenantId).then(function(m){
+        var me = (m.data || []).filter(function(x){ return x.user_id === S.user.id && x.active; })[0];
+        if (!me) { S.tenantId = null; return; }
+        S.member = true; S.name = me.display_name;
+        S.isAdmin = me.role === 'admin';
+        S.canEdit = me.role === 'admin' || me.role === 'manager';
+        return loadContent().then(loadRows);
+      });
+    });
+  }).then(render)
+  .catch(function(e){
+    document.getElementById('who').textContent = '';
+    document.getElementById('view').textContent = '';
+    document.getElementById('view').appendChild(h('p', { class:'empty' }, '載入失敗：' + e.message));
+  });
+
+  document.getElementById('upl').addEventListener('change', function(){
+    var f = this.files[0]; this.value = '';
+    if (!f) return;
+    f.text().then(function(txt){
+      var d = JSON.parse(txt);
+      if (!d.chapters || !d.chapters.length) throw new Error('檔案格式不對（找不到 chapters）');
+      var n = d.chapters.reduce(function(a, c){ return a + c.tasks.length; }, 0);
+      if (!confirm('要用這份檔案更新任務內容嗎？\n' + d.chapters.length + ' 章、' + n + ' 個任務\n（已存的進度不會被清掉）')) return;
+      return sb.from('bp_content').upsert({ tenant_id:S.tenantId, key:'tasks', data:d }, { onConflict:'tenant_id,key' }).then(function(r){
+        if (r.error) throw new Error(r.error.message);
+        toast('任務內容已更新'); return loadContent().then(render);
+      });
+    }).catch(function(e){ toast('更新失敗：' + e.message); });
+  });
+
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && S.member) loadRows().then(render);
+  });
+}
+init();
+})();
+</script>
+</body>
+</html>
