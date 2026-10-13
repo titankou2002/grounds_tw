@@ -110,6 +110,7 @@ function bpChat_(b) {
   var model = PROPS.getProperty('GEMINI_MODEL') || 'gemini-2.5-flash';
   var rules = (b.system && String(b.system).slice(0, 4000)) ||
     '你是 grounds Taiwan 專案的助理，用繁體中文，簡短直接。';
+  rules += '\n輸出純文字，不要使用 ** 或 # 等 Markdown 符號；條列用「・」或數字。';
   var system = rules + '\n\n【藍圖頁面內容】\n' + String(b.context || '').slice(0, 40000);
   var contents = (b.history || []).slice(-10).map(function (m) {
     return { role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.text }] };
@@ -120,7 +121,7 @@ function bpChat_(b) {
     method: 'post', contentType: 'application/json', muteHttpExceptions: true,
     payload: JSON.stringify({
       system_instruction: { parts: [{ text: system }] }, contents: contents,
-      generationConfig: { temperature: 0.3, maxOutputTokens: 1024 }
+      generationConfig: { temperature: 0.3, maxOutputTokens: 4096 }
     })
   });
   var g = JSON.parse(res.getContentText());

@@ -310,7 +310,7 @@
   var CHAT_RULES =
     '你是 grounds Taiwan（日本品牌 grounds 在台灣開店）專案的助理，用繁體中文，簡短直接，不要客套廢話。' +
     '先參考下面的藍圖頁面內容；頁面沒寫的，就用你的一般知識（台灣開店、公司設立、法規、進口、行銷等）直接回答，' +
-    '並標明「（一般說法，請向會計師／專業人士確認）」。不確定的數字或法規要說不確定，不要編造。';
+    '並標明「（一般說法，請向會計師／專業人士確認）」。不確定的數字或法規要說不確定，不要編造。輸出純文字，不要使用 ** 或 # 等 Markdown 符號。';
   function initChat() {
     var hist = [];
     var cs = document.createElement('style');
@@ -343,7 +343,7 @@
           body: JSON.stringify({ action: 'bpchat', token: tok, question: q, context: ctx, history: hist, system: CHAT_RULES }) })
           .then(function (res) { return res.json(); });
       }).then(function (d) {
-        if (d && d.answer) { hist.push({ role: 'user', text: q }, { role: 'ai', text: d.answer }); wait.textContent = d.answer; }
+        if (d && d.answer) { hist.push({ role: 'user', text: q }, { role: 'ai', text: d.answer }); wait.textContent = d.answer.replace(/\*\*/g, '').replace(/^\s*[*-]\s+/gm, '・').replace(/^#+\s*/gm, ''); }
         else wait.textContent = '（出錯：' + ((d && d.error) || '失敗了') + '）';
         msgs.scrollTop = msgs.scrollHeight;
       }).catch(function (e) { wait.textContent = '（出錯：' + e.message + '）'; });
