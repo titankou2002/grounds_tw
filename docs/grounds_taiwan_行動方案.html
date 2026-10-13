@@ -1,285 +1,98 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>grounds Taiwan｜執行行動方案（互動版）</title>
+<base href="/Grounds_TW/docs/">
+<title>目前進度｜grounds Taiwan 工作文件</title>
+<meta name="description" content="grounds Taiwan 目前做到哪、卡在哪、下一步">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="../assets/img/favicon.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../assets/css/style.css?v=162f86dd72">
 <style>
-:root{
-  --bg:#0e1116; --bg2:#151a22; --card:#1b222c; --card2:#202a36;
-  --line:#2c3a4d; --txt:#e8eef6; --muted:#8fa0b5;
-  --accent:#7fb3ff; --accent2:#ffd075;
-  --do:#ffd075; --watch:#ff8f8f; --note:#7fe3c8;
-  --phase0:#66b3ff; --phase1:#ff9f5c; --phase2:#78d17f; --phase3:#5cc8ff;
-  --r0:#ff5c5c; --r1:#ff9f5c; --r2:#ffd075; --r3:#8fa0b5;
-  --radius:14px;
-}
-*{box-sizing:border-box; margin:0; padding:0}
-html{scroll-behavior:smooth}
-body{background:var(--bg); color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.75; font-size:15.5px}
-::selection{background:var(--accent); color:#000}
-
-.app{display:flex; min-height:100vh}
-nav.side{
-  width:290px; flex-shrink:0; background:var(--bg2); border-right:1px solid var(--line);
-  position:sticky; top:0; height:100vh; overflow-y:auto; padding:22px 18px; z-index:20;
-}
-nav.side .brand{font-weight:800; font-size:18px; margin-bottom:2px}
-nav.side .brand span{color:var(--accent)}
-nav.side .sub{color:var(--muted); font-size:12px; margin-bottom:14px}
-.ngroup{margin-bottom:6px}
-.nav-phase{display:flex; align-items:center; gap:8px; padding:7px 10px; border-radius:9px; cursor:pointer; font-weight:700; font-size:13px}
-.nav-phase:hover{background:var(--card)}
-.nav-phase .dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
-.nav-link{margin-left:18px; padding:4px 8px; border-left:1px solid var(--line); color:var(--muted); font-size:12.5px; cursor:pointer; border-radius:0 7px 7px 0; display:flex; gap:6px; align-items:center}
-.nav-link:hover{color:var(--txt); background:var(--card)}
-.nav-link .mp{width:8px;height:8px;border-radius:50%;flex-shrink:0}
-.nav-head{font-size:11px; letter-spacing:1px; color:var(--muted); font-weight:800; margin:14px 4px 6px}
-
-main{flex:1; min-width:0; padding:30px 40px 90px; max-width:1020px; margin:0 auto}
-.h1{font-size:30px; font-weight:800; margin-bottom:6px}
-.tagline{color:var(--muted); margin-bottom:6px}
-.vtag{font-size:12px; color:var(--muted); margin:0 0 18px}
-.one-liner{background:var(--card2); border-left:4px solid var(--accent2); border-radius:10px; padding:14px 18px; margin:18px 0; font-size:15px; font-weight:600}
-
-.flow{display:flex; flex-direction:column; margin:18px 0 30px}
-.flow .node{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:12px 16px; cursor:pointer; font-weight:700; display:flex; align-items:center; gap:12px; transition:transform .15s}
-.flow .node:hover{transform:translateX(4px)}
-.flow .node .d{color:var(--muted); font-weight:400; font-size:13px}
-.flow .bar{height:2px;width:100%;background:var(--line)}
-
-.section{margin-top:30px; scroll-margin-top:16px}
-.section-head{display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--line); padding-bottom:10px; margin-bottom:4px; flex-wrap:wrap}
-.section-head .ph{font-size:12px; font-weight:800; letter-spacing:1px; padding:4px 10px; border-radius:7px; color:#0e1116}
-.section-head h2{font-size:22px}
-.section-desc{color:var(--muted); margin-bottom:14px}
-
-details.module{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); margin-bottom:14px; overflow:hidden}
-details.module>summary{display:flex; align-items:center; gap:10px; padding:14px 18px; cursor:pointer; user-select:none; list-style:none}
-details.module>summary::-webkit-details-marker{display:none}
-details.module>summary .mnum{font-size:12px; color:var(--muted); font-weight:800}
-details.module>summary h3{font-size:17px; flex:1}
-details.module>summary .arrow{transition:transform .25s; color:var(--muted)}
-details.module[open]>summary .arrow{transform:rotate(180deg)}
-details.module .mod-body{padding:6px 18px 18px; border-top:1px solid var(--line)}
-
-.blk{margin-top:12px; background:var(--card2); border-radius:11px; padding:13px 15px; border-left:3px solid var(--muted)}
-.blk .lbl{font-size:11px; letter-spacing:1px; font-weight:800; margin-bottom:8px}
-.blk.do{border-left-color:var(--do)} .blk.do .lbl{color:var(--do)}
-.blk.watch{border-left-color:var(--watch)} .blk.watch .lbl{color:var(--watch)}
-.blk.note{border-left-color:var(--note)} .blk.note .lbl{color:var(--note)}
-.blk ul{list-style:none}
-.blk li{list-style:none; padding-left:16px; position:relative; margin-bottom:6px; font-size:14px}
-.blk li:before{content:"▸"; position:absolute; left:0}
-.blk li.ck{padding-left:24px}
-.blk li.ck:before{content:"☐"; color:var(--do)}
-.blk li.ck.done:before{content:"☑"; color:var(--do)}
-.blk.do li:before{color:var(--do)}
-.blk.watch li:before{content:"!"; font-weight:900; color:var(--watch); font-size:12px}
-.blk.note li:before{color:var(--note)}
-.blk p{font-size:14px}
-.act{margin-top:12px; background:var(--bg); border:1px solid var(--line); border-left:3px solid var(--do); border-radius:10px; padding:12px 15px}
-.act .act-head{display:flex; align-items:flex-start; gap:8px; font-weight:700; font-size:14.5px}
-.act .actchk{color:var(--do); flex-shrink:0}
-.act.done .act-head b{color:var(--muted); text-decoration:line-through}
-.act .kw{display:flex; gap:8px; margin-top:8px; font-size:13.5px; color:var(--muted); align-items:flex-start}
-.act .kwl{color:var(--do); font-weight:800; flex-shrink:0}
-.act ol.steps{margin:8px 0 0; list-style:none; counter-reset:st}
-.act ol.steps li{list-style:none; counter-increment:st; padding-left:24px; position:relative; font-size:13.5px; margin-bottom:4px}
-.act ol.steps li:before{content:counter(st); position:absolute; left:0; top:1px; width:16px; height:16px; border-radius:5px; background:rgba(255,208,117,.14); color:var(--do); font-size:10.5px; font-weight:800; display:flex; align-items:center; justify-content:center}
-.chips{display:flex; gap:6px; flex-wrap:wrap; margin-right:4px}
-.chip{font-size:11px; font-weight:800; padding:3px 10px; border-radius:20px; color:#0e1116; white-space:nowrap}
-.chip.tw{background:#7fe3c8}
-.chip.jp{background:#7fb3ff}
-.chip.both{background:#d299ff}
-.chip.p0{background:var(--r0)}
-.chip.p1{background:var(--r1)}
-.chip.p2{background:var(--r2)}
-.urg{margin-left:auto; font-size:12px; font-weight:800; padding:3px 12px; border-radius:20px; color:#0e1116; white-space:nowrap; flex-shrink:0}
-.task{list-style:none}
-.task li{list-style:none; padding-left:22px; position:relative; margin-bottom:6px; font-size:14px}
-.task li:before{content:"☐"; position:absolute; left:0; color:var(--do)}
-.task li.done:before{content:"☑"; color:var(--do)}
-
-table{width:100%; border-collapse:collapse; margin:12px 0 6px; font-size:13px}
-th,td{padding:8px 10px; border:1px solid var(--line); text-align:left; vertical-align:top}
-th{background:var(--bg2); font-weight:700; color:var(--accent2)}
-strong{color:#fff}
-blockquote{background:var(--card2); border-left:3px solid var(--accent2); border-radius:8px; padding:11px 14px; margin:12px 0; font-size:13.5px; color:var(--muted)}
-h4{margin:14px 0 6px; font-size:15px}
-ol,ul{margin:8px 0}
-
-footer{margin-top:40px; color:var(--muted); font-size:12.5px; border-top:1px solid var(--line); padding-top:18px}
-.progress{position:fixed; top:0; left:0; height:3px; background:var(--accent); width:0; z-index:50}
-
-.mobile-menu{display:none}
-@media(max-width:860px){
-  nav.side{position:fixed; left:-100%; transition:left .3s; width:320px}
-  nav.side.show{left:0}
-  main{padding:20px 18px 70px}
-  .mobile-menu{display:flex; align-items:center; gap:10px; padding:14px 18px; position:sticky; top:0; background:var(--bg); z-index:15; border-bottom:1px solid var(--line)}
-  .mobile-menu button{background:var(--card); border:1px solid var(--line); color:var(--txt); padding:6px 12px; border-radius:8px; cursor:pointer}
-  table{font-size:12px}
-  .app{display:block}
-  main{padding-top:8px}
-}
-.menu-overlay{display:none; position:fixed; inset:0; background:rgba(0,0,0,.5); z-index:18}
-@media(max-width:860px){ .menu-overlay.show{display:block} }
+.docs-layout{max-width:900px;margin:0 auto;padding:56px 32px 120px}
+.docs-nav{display:flex;gap:18px;font-size:13px;margin-bottom:40px;flex-wrap:wrap}
+.docs-nav a{text-decoration:none;color:var(--muted)}
+.docs-nav a:hover{color:var(--fg)}
+.docs-body h1{font-family:var(--serif);font-weight:400;font-size:clamp(24px,3vw,32px);margin:0 0 8px}
+.docs-body h2{font-size:18px;margin:40px 0 12px;padding-bottom:8px;border-bottom:1px solid var(--line)}
+.docs-body h3{font-size:15px;margin:24px 0 8px}
+.docs-body h4{font-size:14px;margin:18px 0 6px}
+.docs-body p{font-size:14.5px;margin:0 0 12px}
+.docs-body ul,.docs-body ol{margin:0 0 16px;padding-left:22px;font-size:14px}
+.docs-body li{margin-bottom:5px}
+.docs-body li p{display:inline}
+.docs-body table{width:100%;border-collapse:collapse;font-size:13px;margin:16px 0}
+.docs-body th,.docs-body td{padding:8px 10px;border:1px solid var(--line);text-align:left;vertical-align:top}
+.docs-body th{background:var(--callout-bg);font-weight:600}
+.docs-body blockquote{margin:16px 0;padding:14px 18px;background:var(--callout-bg);border-radius:4px;font-size:13.5px;color:var(--muted)}
+.docs-body blockquote p{margin:0 0 6px;font-size:13.5px}
+.docs-body hr{border:none;border-top:1px solid var(--line);margin:32px 0}
+.docs-body code{background:var(--callout-bg);padding:1px 5px;border-radius:3px;font-size:12.5px}
+.docs-tag{display:inline-block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);border:1px solid var(--line);padding:3px 8px;border-radius:20px;margin:0 0 8px}
+.task{list-style:none;padding-left:2px}
+.task li{padding-left:22px;position:relative}
+.task li::before{content:"☐";position:absolute;left:0;color:var(--muted)}
+.task li.done::before{content:"☑";color:var(--accent)}
 </style>
 </head>
 <body>
-<div class="progress" id="progress"></div>
-<div class="menu-overlay" id="overlay" onclick="toggleMenu()"></div>
-<div class="mobile-menu"><button onclick="toggleMenu()">☰ 導覽</button><b>執行行動方案</b></div>
-<div class="app">
-  <nav class="side" id="side">
-    <div class="brand">grounds <span>Taiwan</span></div>
-    <div class="sub">執行行動方案 · 互動閱讀版</div>
-    <div class="ngroup"><div class="nav-phase" onclick="scrollToId('ph-p0')"><span class="dot" style="background:var(--phase0)"></span>Phase 0 對齊</div>
-<div class="nav-link" onclick="scrollToId('ch01')"><span class="mp" style="background:var(--phase0)"></span>Ch01 專案概要</div>
-<div class="nav-link" onclick="scrollToId('ch02')"><span class="mp" style="background:var(--phase0)"></span>Ch02 品牌哲學</div>
-<div class="nav-link" onclick="scrollToId('ch03')"><span class="mp" style="background:var(--phase0)"></span>Ch03 商品哲學</div>
-<div class="nav-link" onclick="scrollToId('ch04')"><span class="mp" style="background:var(--phase0)"></span>Ch04 台灣市場分析</div>
-</div>
-<div class="ngroup"><div class="nav-phase" onclick="scrollToId('ph-p1')"><span class="dot" style="background:var(--phase1)"></span>Phase 1 籌備</div>
-<div class="nav-link" onclick="scrollToId('ch05')"><span class="mp" style="background:var(--phase1)"></span>Ch05 門市策略</div>
-<div class="nav-link" onclick="scrollToId('ch06')"><span class="mp" style="background:var(--phase1)"></span>Ch06 台灣營運架構</div>
-<div class="nav-link" onclick="scrollToId('ch07')"><span class="mp" style="background:var(--phase1)"></span>Ch07 公司成立</div>
-<div class="nav-link" onclick="scrollToId('ch08')"><span class="mp" style="background:var(--phase1)"></span>Ch08 進口與物流</div>
-<div class="nav-link" onclick="scrollToId('ch09')"><span class="mp" style="background:var(--phase1)"></span>Ch09 數位系統</div>
-</div>
-<div class="ngroup"><div class="nav-phase" onclick="scrollToId('ph-p2')"><span class="dot" style="background:var(--phase2)"></span>Phase 2 開店</div>
-<div class="nav-link" onclick="scrollToId('ch10')"><span class="mp" style="background:var(--phase2)"></span>Ch10 品牌策略</div>
-<div class="nav-link" onclick="scrollToId('ch11')"><span class="mp" style="background:var(--phase2)"></span>Ch11 教育訓練</div>
-<div class="nav-link" onclick="scrollToId('ch12')"><span class="mp" style="background:var(--phase2)"></span>Ch12 財務計畫</div>
-<div class="nav-link" onclick="scrollToId('ch13')"><span class="mp" style="background:var(--phase2)"></span>Ch13 風險與因應</div>
-<div class="nav-link" onclick="scrollToId('ch14')"><span class="mp" style="background:var(--phase2)"></span>Ch14 願景</div>
-</div>
-<div class="nav-head">專題</div>
-<div class="nav-link" onclick="scrollToId('topic-0')"><span class="mp" style="background:var(--phase3)"></span>專題文件庫（詳細內容在各自檔案）</div>
-<div class="nav-link" onclick="scrollToId('topic-1')"><span class="mp" style="background:var(--phase3)"></span>本文件怎麼活著（工作流程）</div>
-<div class="nav-link" onclick="scrollToId('topic-2')"><span class="mp" style="background:var(--phase3)"></span>待補充</div>
+<header class="site-nav">
+  <a class="wordmark" href="../zh/index.html" aria-label="grounds Taiwan"></a>
+  <nav class="nav-links">
+    <a href="../zh/index.html">首頁</a>
+    <a href="../zh/blueprint.html">Blueprint</a>
+    <a href="../zh/trademark.html">商標</a>
+    <a href="../docs/index.html" class="active">文件</a>
   </nav>
-  <main>
-    <div class="h1">執行行動方案</div>
-    <div class="tagline">每一章：先做什麼（台灣可直接行動）、開店要注意的事（實務細節）、以及誰主責。</div>
-    <div class="vtag">依據《grounds Taiwan Launch Blueprint》14 章整理 · 隨執行進度更新</div>
-    <div class="one-liner">輕重緩急一句話：<b>商標最急（先申請主義）、公司最關鍵、快閃是眼前、消防沒過不能營業、定價要防代購。</b></div>
-    <div class="flow"><div class="node" onclick="scrollToId('ph-p0')"><span class="dot" style="width:12px;height:12px;border-radius:50%;background:var(--phase0);flex-shrink:0"></span><span>Phase 0 對齊</span><span class="d">先跟日本把話說開、把基礎文件定案</span></div><div class="bar"></div><div class="node" onclick="scrollToId('ph-p1')"><span class="dot" style="width:12px;height:12px;border-radius:50%;background:var(--phase1);flex-shrink:0"></span><span>Phase 1 籌備</span><span class="d">公司、供應鏈、系統、選址裝修、教育</span></div><div class="bar"></div><div class="node" onclick="scrollToId('ph-p2')"><span class="dot" style="width:12px;height:12px;border-radius:50%;background:var(--phase2);flex-shrink:0"></span><span>Phase 2 開店</span><span class="d">招募、訓練、行銷、Launch、營運</span></div></div>
-    <div class="section" id="overview">
-  <div class="section-head"><span class="ph" style="background:var(--phase0)">OVERVIEW</span><h2>總覽：三個階段</h2></div>
-  <div class="section-desc">三個階段的大方向與依賴關係。</div>
-  <table><thead><tr><th>階段</th><th>內容</th><th>大致依賴</th></tr></thead><tbody><tr><td><strong>Phase 0　對齊期</strong></td><td>確認待確認事項、拿到日本總部初步回覆</td><td>無，現在就能做</td></tr><tr><td><strong>Phase 1　籌備期</strong></td><td>公司設立、供應鏈、系統建置、第一家店選址裝修、教育制度</td><td>需要 Phase 0 部分答案</td></tr><tr><td><strong>Phase 2　開店期</strong></td><td>招募、教育訓練、行銷曝光、開幕活動、正式營運</td><td>需要 Phase 1 完成</td></tr></tbody></table>
-</div>
-    <div class="section" id="quick">
-  <div class="section-head"><span class="ph" style="background:var(--r0)">NOW</span><h2>立即行動清單（本週就能推進的5件事）</h2></div>
-  <ol>
-<li class="ck">把「待確認事項」整理成正式清單，發送給日本總部（尤其優先：第一家店定位、子公司/分公司、出貨模式）</li>
-<li class="ck">聯繫會計師/律師事務所詢問子公司設立流程與成本</li>
-<li class="ck">完成第四章（台灣市場分析）與第十三章（風險與因應）兩個台灣可自行完成的章節初稿</li>
-<li class="ck">詢價2-3家物流／報關代理商</li>
-<li class="ck">把第六章的權責分工／金額授權表做成正式文件，請日本簽署確認</li>
-</ol>
-</div>
-    <div class="section" id="ph-p0">
-  <div class="section-head"><span class="ph" style="background:var(--phase0)">PHASE 0 對齊</span><h2>Phase 0 對齊</h2></div>
-  <div class="section-desc">先跟日本把話說開、把基礎文件定案</div>
-  <details class="module" id="ch01">
-  <summary><span class="mnum">CH 01</span><h3>專案概要</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜行事曆是排程樞紐，本週就要起頭，但不卡開店本身</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把 14 章的執行項目排進一份「開店倒數行事曆」</b></div><div class="kw"><span class="kwl">目的</span><span>裝修、進貨、系統、招募、開幕每件事都有日期和負責人，才看得出輕重、不會各做各的</span></div><ol class="steps"><li>把 14 章所有「先做什麼」動作按依賴關係排序，寫成第一版行事曆（月份＋里程碑）</li><li>標出會卡住別的的事（商標送件、公司成立、消防）優先往前排</li><li>每項標負責人（台灣端此刻就能指定到人）</li><li>每週五檢視一次：哪些到期、哪些延誤，延誤就標註影響到哪一章</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>不排行事曆 → 各做各的、到期沒人知道，延誤也不對外警覺，開幕從這裡開始失控</li><li>每章只有一份正本，其他地方一律用連結引用，改版在同一處改，避免出現兩份內容打架</li><li>每週五用行事曆當檢視點：哪些到期、哪些延誤，延誤立刻標註影響到哪一章</li></ul></div></div>
-</details><details class="module" id="ch02">
-  <summary><span class="mnum">CH 02</span><h3>品牌哲學</h3><span class="chips"><span class="chip jp">日本主責（品牌內容原始資料）</span><span class="chip tw">台灣執行在地化</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜素材與翻譯要提早動手，開幕前內容才齊得出</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>向日本索取品牌原始素材</b></div><div class="kw"><span class="kwl">目的</span><span>品牌歷史、設計理念、型錄這類原始資料在日本人手上，不開口索取不會自己過來</span></div><ol class="steps"><li>列出需要的素材清單：官網與社群帳號、品牌歷史與理念文件、Mikio Sakabe設計概念、LEAP GRAVITY素材、型錄與公關資料</li><li>把清單整理成一頁「素材索取表」，逐項標明用途（店內陳列／教育訓練／社群文案）與使用期限</li><li>透過週五會議正式提出，並請日本指定一位素材窗口</li><li>索取到的素材統一存放，並註明授權範圍（能否商業使用、能否中文改製）</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把素材翻譯與在地化，建立共用素材庫</b></div><div class="kw"><span class="kwl">目的</span><span>日本原文直接拿來台灣消費者看不懂，需要翻成台灣人熟悉的語言</span></div><ol class="steps"><li>優先翻譯第一批：品牌故事、設計理念、主力鞋款介紹</li><li>建立「共用詞彙表」：把日文專有名詞統一翻譯成台灣說法（例如保留日文原名的、需要意譯的各列一行）</li><li>把檔案分類建檔：品牌故事／商品介紹／形象照／影片，供陳列、訓練、社群取用</li><li>在素材庫首頁放使用規範說明，避免有人誤用未授權素材</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>品牌不統一 → 店裡和 IG 講兩個版本，消費者對「grounds 是什麼」更困惑，教育式試穿的賣點直接破功</li><li>素材授權沒確認就印刷上架 → 店開到一半被通知不能商用，看板、袋子、社群全部重來</li><li>翻譯用語一致性：建立共用詞彙表的原因就在這，同一個日文名詞店內招牌、IG、官網、客人話術四處不能講不同版本</li><li>素材檔案規格統一收集：原始檔（AI/PDF/高解析圖）和輸出用檔分開放，避免店內輸出時找不到大圖</li></ul></div></div>
-</details><details class="module" id="ch03">
-  <summary><span class="mnum">CH 03</span><h3>商品哲學</h3><span class="chips"><span class="chip jp">日本核准商品線</span><span class="chip tw">台灣提出市場建議</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜引進範圍不定，進貨就卡在起點，但可先排市場建議</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定初期引進全系列還是部分系列</b></div><div class="kw"><span class="kwl">目的</span><span>不先決定引進範圍，進貨、庫存、店面陳列空間全都無法往下走</span></div><ol class="steps"><li>盤點日本全系列清單，列成表格：系列名稱／定位／在台灣的預估接受度／價格帶</li><li>按「台灣市場契合度高→低」排序，圈出台灣側建議優先引進的系列</li><li>每組系列附一行推薦理由，做成「建議清單」，送日本裁示</li><li>日本回覆後據此排進貨順序</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>取得各系列的產品知識教材</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿要能講出故事與材質，需要日本原本的產品知識當原料</span></div><ol class="steps"><li>向日本索取每個系列的：故事、材質、技術說明</li><li>整理成「商品知識卡」：一卡一款（故事／材質／技術／適合對象／話術提示）</li><li>標記優先順序：首批主打系列先做</li><li>成品當作教育訓練教材，同時放進共用素材庫供社群取用</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>商品結構不先定 → 進了賣不動的貨，整批卡庫存、季末只能打折，毛利直接被吃掉</li><li>尺碼分布抓錯 → 主力尺寸缺貨、冷門尺寸滯銷，來客試穿沒碼就走人</li><li>鞋底（泡棉／厚底）在台灣高溫多雨環境的磨耗與發霉風險要先問清保養方式，並在話術／售後說明裡寫清楚</li><li>庫存週轉：鞋類過季幾乎無法原價賣，引進的量要保守、多批少進，寧可缺貨也不要囤死貨</li><li>台灣沒有明顯的冬季長靴需求，季節分界跟日本不同，進貨月份要對照台灣的換季節奏而不是日本的</li></ul></div></div>
-</details><details class="module" id="ch04">
-  <summary><span class="mnum">CH 04</span><h3>台灣市場分析</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜定位靠數據，但現在就能用「本案待確認」往日本送，不必等分析完整</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成台灣市場分析</b></div><div class="kw"><span class="kwl">目的</span><span>定位、消費力、日本品牌接受度、競爭態勢這塊不需等日本，台灣自己就能做完</span></div><ol class="steps"><li>先寫市場定位與消費能力：蒐集台灣鞋類市場規模、機能性鞋款／設計師鞋款在台的價格帶與銷售結構，整理成一段結論</li><li>分析台灣消費者對日本設計師品牌的接受度：用捷運站點人流、網路討論聲量、競品定價三個面向交叉看</li><li>盤點直接競爭者（含與 GROUNDS 定位最接近的 GROUND FIVE）：比較價格帶、通路型態、社群經營方式</li><li>收尾成優劣勢分析（優勢／劣勢／機會／威脅），完成後送日本備查</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>產出「品牌教育」計畫初稿</b></div><div class="kw"><span class="kwl">目的</span><span>最大挑戰不是價錢／商圈／競爭者，而是消費者不知道 GROUNDS 是什麼——要先讓大家認識品牌</span></div><ol class="steps"><li>定溝通主軸：日本設計師品牌、獨特厚底、教育式試穿（先把一句話講清楚）</li><li>規劃內容管道與各自任務：官網（品牌故事落點）、IG（每日視覺）、LINE（會員通知）、接觸美妝／鞋類 KOL（意見領袖，社群上有影響力的人，發文與試穿開箱）、門市體驗（現場教育）</li><li>排出第一季的內容／活動節奏草案：一星期一篇主內容、每月一篇系列深度文、每季一支形象影片</li><li>每項內容定出「衡量指標」：貼文觀看數、互動數、導至官網人數，作為第一季檢討依據</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出第一年關鍵指標草案</b></div><div class="kw"><span class="kwl">目的</span><span>第一年不能只看營收，品牌曝光與顧客理解更重要</span></div><ol class="steps"><li>定義五個面向：品牌曝光、會員數、社群互動、品牌理解度、回購率</li><li>每個面向寫出可衡量的目標與量測方式（例如品牌理解度＝試穿後填問卷的正確回答率）</li><li>先訂「目標值」（營運第十二個月的月數字），第二季開始逐月檢視</li><li>與日本對齊後再更新目標值</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>市場分析只用感覺、不拿數據 → 定位講錯、首批貨進錯，後面第五章到第十二章全部跟著錯</li><li>數據不標年份來源 → 引用舊資料會讓整個分析失真，至少用近 1-2 年內可查證的來源</li><li>人流數據要分平日／假日、雨天／晴天看，只看假日高峰會高估銷售</li><li>消費力評估不要只按行政區的「平均收入」，要對應到實際會走進店裡的那群人（年齡、消費習慣、是否會買設計師品牌）</li><li>GROUND FIVE 是近似的直接競品，除了價格帶也要比它怎麼鋪通路、怎麼做社群、評價如何，那是台灣市場最真實的參考</li><li>商圈的四個數字都要實際拿到再下結論：租金、坪數、人流、周邊競品，缺一個就別拍板</li></ul></div></div>
-</details>
-</div><div class="section" id="ph-p1">
-  <div class="section-head"><span class="ph" style="background:var(--phase1)">PHASE 1 籌備</span><h2>Phase 1 籌備</h2></div>
-  <div class="section-desc">公司、供應鏈、系統、選址裝修、教育</div>
-  <details class="module" id="ch05">
-  <summary><span class="mnum">CH 05</span><h3>門市策略</h3><span class="chips"><span class="chip jp">日本決定定位</span><span class="chip tw">台灣執行選址與裝修</span></span><span class="urg" style="background:var(--r0)" title="急迫度">P0｜消防沒過不能營業；選址不定，後面的裝修、預算全部懸空</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點可能店址，做出 2-3 個候選方案</b></div><div class="kw"><span class="kwl">目的</span><span>先有具體候選清單，日本才能從中選，而不是空談定位</span></div><ol class="steps"><li>列出候選區域（優先考慮中山北路二段36巷現址、附近商圈）</li><li>每個候選做比較表：租金、坪數、人流、曝光、裝修難度，各標一顆星到三顆星</li><li>每處候選拍現場照片＋畫粗略動線圖（入口在哪、主力陳列牆在哪）</li><li>產出一頁比較表，作為週五會議討論的基礎</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把店鋪概念寫成具體構想書</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到台灣對店面想像的具體輪廓，加速拍板第一家店定位</span></div><ol class="steps"><li>寫一版店鋪概念：品牌調性（想傳達的氛圍）、空間感（大小、挑高、光線）、顧客進店後的體驗順序</li><li>勾勒視覺陳列重點：主力鞋牆怎麼排、教育式試穿區放哪、走道與動線怎麼留</li><li>標出「品牌旗艦店」與「市場驗證店」兩種設定的差異：前者重品牌形象（地點更核心、空間更大、裝修預算高），後者重力省成本快速驗證銷量</li><li>附 2-3 張參考圖（日本店鋪或類似店鋪）讓日本直覺了解台灣的想法</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>做一份店鋪裝修與設備的粗估預算表</b></div><div class="kw"><span class="kwl">目的</span><span>定位一確定就能馬上動工，不用重新估，替日本省一輪來回</span></div><ol class="steps"><li>列出項目：木作／陳列架、地板牆面、燈光、試穿椅與鏡、結帳櫃台、招牌</li><li>先用「每坪裝修單價 × 坪數」估出總價區間</li><li>標註變數：坪數越大、挑高越高，費用越高；要不要改水電消防也寫清</li><li>兩種設定各出一版數字（旗艦店一版、驗證店一版）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>消防沒過 → 不能營業，開幕日直接跳票，最嚴重的一項</li><li>租約沒逐條看清 → 漲租、不能轉租、裝修期照收全租，簽下去就被綁死</li><li><strong>消防與安檢</strong>：開店前一定要通過消防設備檢查，沒通過不能營業；幾坪以上要辦理「建築物使用執照變更」？店面有無既有消防設備（滅火器、緊急照明、避難指示）？電容量夠不夠（鞋店燈多、冷氣＋刷卡機＋收銀）？</li><li><strong>水電</strong>：確認有獨立電錶、水電管線位置與容量，裝修後才發現跳電／拉線不足是常見大雷</li><li><strong>動線</strong>：店面入門→鞋牆→試穿區→結帳櫃台的流線先在平面圖上畫順，試穿區要有椅子和鏡子，別讓客人站著脫鞋</li><li><strong>庫存空間</strong>：後場或倉儲夠不夠放整季安全庫存，鞋盒多大、一季幾百雙要塞哪，別讓賣場堆紙箱</li><li><strong>招牌與廣告物</strong>：台北市對招牌、廣告物有申請規定，先確認店面外露招牌要不要申請許可，亂掛會被罰</li><li><strong>天氣</strong>：台灣夏天高溫多雨，騎樓或入口的防滑、冷氣夠不夠、下雨天鞋盒會不會受潮都要想</li></ul></div></div>
-</details><details class="module" id="ch06">
-  <summary><span class="mnum">CH 06</span><h3>台灣營運架構</h3><span class="chips"><span class="chip tw">雙方共同確認，之後台灣依此執行</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜權責不清會讓後續每個決定卡住，但還不卡開幕</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把權責分工做成正式文件</b></div><div class="kw"><span class="kwl">目的</span><span>誰決定什麼，白紙黑字定下來，避免日後灰色地帶</span></div><ol class="steps"><li>把日本保留的（品牌方向／年度預算／重大投資／品牌合作／第二店／重大設計／重大採購）與台灣負責的（門市／人事／排班／行政／日常營運／庫存／會員／活動／預算內執行）整理成左右對照表，並附「誰拍板、誰執行、誰知會」三欄</li><li>加上金額授權表：50 萬以下台灣核准、50 萬以上日本核准，並把「下列事項即使金額低也要日本核准」的清單列出來</li><li>定義例外處理：碰到表上沒寫到的事，先問哪一方、多久內回覆</li><li>正式送日本簽署確認</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>畫出台灣端組織圖草案</b></div><div class="kw"><span class="kwl">目的</span><span>先定職位與權責架構，之後找人不慌</span></div><ol class="steps"><li>定職位：店長、正職、兼職、行銷／營運支援</li><li>標出每個職位的負責範圍與對應的權責分工權限</li><li>標出入職順序假設：第一家店開幕前先到位的職位、開幕後才補的職位</li><li>註明「先抓職位，人之後再補」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>權責沒先簽好 → 店開起來，5 成的決定會卡在半空中沒人拍板，日本也怕你一意孤行</li><li><strong>勞基法令</strong>：排班、加班、特休、勞健保、勞退都要按台灣規定走，門市雙週工時（一例一休）在排班表上就要對好，被抓到罰鍰以外人事成本會被逼高</li><li><strong>門市 SOP（標準作業流程，把做法寫成固定步驟的文件）</strong>：開店／閉店檢查清單、交接（現金、庫存、客人資訊）、異常回報流程，一張白紙黑字寫下來，不然每個人做法都不同</li><li><strong>現金與金流</strong>：收銀、刷卡、電子支付的每日對帳流程，現金短少誰負責、多久結一次，這是門市最容易出問題的地方之一</li><li><strong>盤點制度</strong>：多久盤一次、盤差怎麼處理，庫存數字不準，補貨和管銷全部失真</li><li><strong>保險</strong>：公共意外責任險、火險、竊盜險在開店前投保，發生事情才不會獨自吞</li><li><strong>後勤支援</strong>：店長之外誰負責叫修、補貨、帳務，有事時要有明確的聯絡網而不是只靠一個人</li></ul></div></div>
-</details><details class="module" id="ch07">
-  <summary><span class="mnum">CH 07</span><h3>公司成立</h3><span class="chips"><span class="chip jp">日本決策</span><span class="chip tw">台灣執行設立流程</span></span><span class="urg" style="background:var(--r0)" title="急迫度">P0｜公司沒成立，簽約、進貨、匯錢全部無法進行；商標先申請主義，愈快愈好</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>把「100%日本持股台灣子公司」建議整理成給日本拍的方案</b></div><div class="kw"><span class="kwl">目的</span><span>日本看到清楚的建議＋理由，才好下決策，避免回覆「再看看」</span></div><ol class="steps"><li>整理子公司 vs 分公司比較表：品牌控制（子公司可留日本母公司名義）、治理、展店彈性、未來發展——每項寫一行利弊</li><li>寫出台灣建議用子公司的一頁理由，並預先補上日本可能問的三個反問（資本額多少、盈餘怎麼匯回、稅務怎麼處理）</li><li>列出子公司設立的時程預估（名稱預查→備文件→送件→登記約需幾週），讓日本知道拖一天就晚一天開店</li><li>排進週五會議正式請日本拍板</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先聯繫會計師／律師事務所詢價</b></div><div class="kw"><span class="kwl">目的</span><span>設立流程、時間、成本這類資訊現在就能問，不用等日本選子公司或分公司（兩種都需要類似資訊）</span></div><ol class="steps"><li>找 2-3 家會計師／律師事務所，準備同一份問題清單當面問取得報價</li><li>問清楚：外資來台設立流程、所需時間、費用明細、後續每年記帳費用</li><li>每家問完當天補一行重點摘要，整理成比較表</li><li>會議附給日本參考，並標出台灣側建議的選擇</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>★ <strong>台灣商標未註冊</strong>（2026-09-08確認）→ 任何人現在就能搶先註冊，搶走品牌名，等於替別人開店；台灣採先申請主義（註冊權先送先贏，不看誰先用），務必在開店前送件（品牌核心 3 件：GROUNDS／LEAP GRAVITY／圖片LOGO，至少各送第25＋35類），送件愈慢風險愈高。完整標的清單與費用見「商標佈局調查結果」章節</li><li><strong>公司名稱</strong>：先用經濟部商工登記資料查詢，名稱預查避開與既有公司近似（含 GROUND FIVE），名稱或地址跟實際營業不符後續帳務、報稅都會卡</li><li><strong>銀行開戶</strong>：公司帳戶、刷卡收單帳戶要提早申辦，銀行審核需要時間，別等開幕前一週才辦</li><li><strong>平台登記</strong>：營業登記、稅籍登記（向國稅局申請營業稅籍，等同稅務上的營業身份）、統一發票購票證在開業前完成，未登記不得營業、也無法開電子發票（發票以電子檔上傳國稅局的省紙化發票，台灣法規強制）</li><li><strong>外資金流</strong>：外資股本匯入、結匯都有申報程序，資金不到位會延後一堆工作，先排資金時程表</li></ul></div></div>
-</details><details class="module" id="ch08">
-  <summary><span class="mnum">CH 08</span><h3>進口與物流</h3><span class="chips"><span class="chip jp">日本決定出貨模式</span><span class="chip tw">台灣執行在地報關與倉儲</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜進貨前置期最長，越晚談越容易斷貨，但可先用詢價起頭</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>研究鞋類進口的稅則號列、稅率與報關流程</b></div><div class="kw"><span class="kwl">目的</span><span>進口成本算得出來，定價與庫存才有依據</span></div><ol class="steps"><li>透過海關「稅則稅率查詢系統」查鞋類（海關稅則第64章）的稅則號列與關稅稅率（約6~10%）</li><li>把「船運到港→報關→放行→入倉」的流程與所需文件（商業發票、裝箱單、提單、報關委任書）列成檢查表</li><li>記錄台灣零售標示法規：中文標示、鞋類尺碼標示規定，先確認第一批貨要貼什麼</li><li>就第一批進貨試算一次完整的進口成本，含運費分攤、關稅、營業稅、報關手續費</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>詢價 2-3 家進口物流／報關代理商</b></div><div class="kw"><span class="kwl">目的</span><span>抓出大概的物流成本結構，避免事後暴雷</span></div><ol class="steps"><li>找出 2-3 家台灣進口物流／報關代理</li><li>各拿一份報價（海運、空運、報關費、倉儲），確認報價含哪些項目、哪些另計</li><li>整理成成本比較表，附上各自回覆速度與服務窗口</li><li>選定一家後簽約</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>貨到不驗 → 開箱才發現整批瑕疵，退貨時程把開幕週打亂</li><li>前置期算錯 → 開幕週＋旺季（周年慶、百貨檔期）前沒下單，架上空給客人看</li><li><strong>進口成本別漏算</strong>：關稅、營業稅、報關費、運輸、倉儲、國內配送逐筆加總，才不會店裡賣價訂錯、毛利被吃掉</li><li><strong>標示法規</strong>：中文標籤、鞋類尺碼標示、材質／產地標示要符合台灣規定，進口報關時就要備齊</li><li><strong>驗貨</strong>：到貨要抽驗（數量、尺碼、瑕疵、鞋盒狀況），瑕疵退換貨的規則先講好，不驗貨，開箱才發現整批有問題就晚了</li><li><strong>倉儲與配送</strong>：台灣潮濕，鞋子存放要防潮防蟲；如果電商要做店到倉，物流商的服務水準先測過</li><li><strong>換季與滯銷</strong>：賣不動的鞋款要提前想好處理方式（折扣、回銷日本、轉電商），壓在倉裡就是現金卡死</li></ul></div></div>
-</details><details class="module" id="ch09">
-  <summary><span class="mnum">CH 09</span><h3>數位系統</h3><span class="chips"><span class="chip jp">日本決定是否統一系統</span><span class="chip tw">台灣提出在地系統需求（尤其電子發票，這是台灣法規強制項目）</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜刷卡收單簽約到開通要數週，開幕前 1 個月就要辦好，別拖到最後</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>盤點台灣本地的銷售／庫存／會員系統選項</b></div><div class="kw"><span class="kwl">目的</span><span>電子發票是台灣法規強制，日本系統不一定支援，要及早確認台灣選項</span></div><ol class="steps"><li>列出本地候選系統（重點看電子發票串接能力），一系統一行：功能／月費／串接成本</li><li>篩出 2-3 家可支援電子發票＋刷卡收單的</li><li>預約每家一次試用說明，實際操作結帳、退貨、開電子發票流程各一次</li><li>整理成比較表（功能／月費／串接成本／客服回應速度），供決策</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>列「必須跟日本同步」vs「台灣可獨立採用」清單</b></div><div class="kw"><span class="kwl">目的</span><span>哪些系統要跟日本連線、哪些台灣自己選就行，先劃清楚才好談</span></div><ol class="steps"><li>逐項盤點：銷售系統／庫存／會員／電子發票／顧客關係管理，逐項標「同步日本」或「台灣獨立」的建議與理由</li><li>對「要同步日本」的項目，寫明同步什麼資料（庫存量？會員資料？）、多久同步一次</li><li>送日本確認同步範圍，回覆後照辦</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li><strong>電子發票是法規強制</strong> → 台灣零售一定要開電子發票（每二個月申報一次營業稅），系統不支援就不能合法營業——這是選系統的硬條件，不是加分項</li><li><strong>刷卡收單要提早申請</strong>：信用卡／行動支付收單銀行審核耗時，簽約到開通可能要數週，最晚在開幕前 1 個月辦好</li><li><strong>斷電／斷網的備援</strong>：POS（銷售結帳系統）是不是雲端？網頁不穩時能不能離線結帳？要有紙本備援流程，進店第一天就遇到伺服器掛掉的狀況要想過</li><li><strong>資料備份</strong>：會員、銷售、庫存資料每天備份，異地／雲端一份，硬碟壞了不用從零開始</li><li><strong>個資法</strong>：會員資料、LINE 好友名單的蒐集利用要遵守台灣個資法，隱私權說明寫清楚，不要被投訴</li><li><strong>系統銜接</strong>：POS、庫存、會員、電子發票如果不同廠商，串接與測試要留時間，別到開幕才發現報表打不開</li></ul></div></div>
-</details>
-</div><div class="section" id="ph-p2">
-  <div class="section-head"><span class="ph" style="background:var(--phase2)">PHASE 2 開店</span><h2>Phase 2 開店</h2></div>
-  <div class="section-desc">招募、訓練、行銷、Launch、營運</div>
-  <details class="module" id="ch10">
-  <summary><span class="mnum">CH 10</span><h3>品牌策略</h3><span class="chips"><span class="chip tw">台灣主責在地執行</span><span class="chip jp">日本核准品牌調性與素材使用</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜開幕前 6 週的內容行事曆要能配合進度產出，不能等開幕才開始</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃 IG／LINE／官網的內容架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>社群是有累積性的，先有架構再發文，不會發散</span></div><ol class="steps"><li>定義帳號定位與目標受眾（台灣、女生鞋類為主），寫成一句定位聲明</li><li>規劃內容支柱：品牌故事／商品知識／穿搭靈感／門市訊息，各配固定欄目名稱</li><li>排出每週發布節奏（IG 幾篇、LINE 幾則），並註明每則配圖／影片的素材來源</li><li>列出開幕前 6 週的內容行事曆表格，每週一格：主題、素材、負責人</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>提出「品牌教育優先於促銷」的內容策略</b></div><div class="kw"><span class="kwl">目的</span><span>第一階段重點是讓台灣人理解 GROUNDS 是什麼，不是打折</span></div><ol class="steps"><li>規劃品牌故事系列貼文：設計師、獨特厚底、教育式試穿，每篇定一個主視覺與一句標語</li><li>擬 KOL 合作方向：以品牌認知為目的（開箱、試穿體驗、形象合作），非折扣導向，先列 3-5 位候選並標明各自合作形式</li><li>每一項都標出需要日本提供或核准的素材，併入素材索取清單</li><li>訂第一季檢核點：按第四章的曝光／互動指標逐月檢討</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>規劃開幕活動初步構想</b></div><div class="kw"><span class="kwl">目的</span><span>開幕活動是第一次大規模曝光，先抓時間與預算級距</span></div><ol class="steps"><li>定活動時間（配合開店時程），抓出與開幕日的間隔天數</li><li>定形式：媒體日／VIP 場／開幕限定企劃，各估所需人力與合作廠商</li><li>估預算級距（低／中／高三案），供日本核可</li><li>列出開幕當週的完整時程表：佈展、彩排、當日流程、撤場</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>文案踩廣告紅線 → 「原價／特價」標示不合規被罰，社群好不容易累積的信譽一次歸零</li><li>帳號被盜／離職員工亂發文 → 品牌帳號從開幕前就要設雙重驗證</li><li><strong>廣告法規</strong>：台灣對不實廣告、誇大效果、促銷標示有規範，折扣價「原價／特價」的標示要照規定來，文案別踩紅線</li><li><strong>社群帳號安全</strong>：IG／LINE／官網帳號設管理員雙重驗證，權限只給該給的人，帳號被盜、員工離職亂發文都是真實風險</li><li><strong>KOL 合作</strong>：合作前把內容授權、貼文次數、檔期、費用寫進合約，避免按讚數／曝光量達不到預期的爭議；肖像、圖檔授權範圍也要載明</li><li><strong>行銷數據要追</strong>：投入的曝光、互動、導流每天看，跑的差的內容趕快換，別等一季結束才發現效果低</li><li><strong>開幕活動的人流與控管</strong>：媒體日／VIP 場／公開場的人數控管、排隊動線、現場補貨與收銀負荷要先排演，開幕當天爆單的備援（第二台收銀、加派人手）要先準備</li><li><strong>活動保險</strong>：非公開活動只要有人流就有責任風險，活動保險在活動前投保</li></ul></div></div>
-</details><details class="module" id="ch11">
-  <summary><span class="mnum">CH 11</span><h3>教育訓練</h3><span class="chips"><span class="chip tw">台灣主責建置</span><span class="chip jp">日本提供認證標準</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜教育式試穿是賣點，開幕前要練到每個店員一致，跟招募時程綁定</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>建立「GROUNDS 台灣教育學院」課程架構草案</b></div><div class="kw"><span class="kwl">目的</span><span>教育式試穿是賣點，課程架構要先成形，訓練才能執行</span></div><ol class="steps"><li>列課程模組：品牌文化／產品知識／服務流程／結帳系統操作／店長認證，每個模組標出時數、對象、評核方式</li><li>寫出每個模組的「學完要會什麼」清單（例如服務流程模組＝能獨立完成一次教育式試穿並帶出加購）</li><li>訂課程教材產出方式：哪些直接用日本教材翻譯、哪些台灣自製</li><li>排出第一批受訓時程表（配合開店前招募），並訂「通過標準」驗收表</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>決定教育訓練是否赴日受訓／取日本認證</b></div><div class="kw"><span class="kwl">目的</span><span>是否赴日、是否由日本認證，直接影響預算與時程，要先有結論</span></div><ol class="steps"><li>列出「赴日受訓」與「日本教材＋台灣在地訓練」的比較，含費用、時間、成效三欄</li><li>台灣端提出建議方案（含選誰去、去多久、返台後怎麼傳承）</li><li>送日本確認認證標準與是否派人支援</li><li>結論出來後照辦</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>店員講錯材質／故事 → 教育式試穿反過來傷品牌，客人一聽就知道不專業，賣點變扣分</li><li>受訓時間排錯 → 開幕前兩週人力接不上，練出來的兵不能上場</li><li><strong>試穿的衛生與體驗</strong>：鞋櫃、試穿襪、清潔噴霧、噴霧擦拭布要備齊，客人試穿前有沒有檢查鞋內乾淨度？一次教育式試穿的標準流程要在開店前練到每個店員都一樣</li><li><strong>教育是賣點也是風險</strong>：店員講錯材質／故事＝品牌損傷，產品知識卡的內容要定期更新、離職交接時把教材留下</li><li><strong>訓練排班要錯開</strong>：受訓期間人力會同時變少，開幕前兩週人力要雙倍、後台支援要上，別訓練做完人力接不上</li><li><strong>店長不在的維護</strong>：店長休假、離職時誰補位？SOP 手冊和經營資料不能只存在店長腦子裡</li><li><strong>語言與術語</strong>：日文教材如果直接轉給員工用，至少要把關鍵術語中文化做一份速查表，不然員工永遠背不起來</li></ul></div></div>
-</details><details class="module" id="ch12">
-  <summary><span class="mnum">CH 12</span><h3>財務計畫</h3><span class="chips"><span class="chip tw">台灣提出草案</span><span class="chip jp">日本核准年度預算（超過授權金額）</span></span><span class="urg" style="background:var(--r1)" title="急迫度">P1｜數字範圍現在就能估，先給日本方向，不必等全案定案</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>先抓資本支出與營運支出的粗估區間</b></div><div class="kw"><span class="kwl">目的</span><span>給日本一個可審的數字範圍，不用等第五章／第七章完全定案就能先對齊方向</span></div><ol class="steps"><li>資本支出：裝修＋設備連同器具的粗估區間（低／中／高三案），列出主要項目與單價來源</li><li>營運支出：租金、人事、行銷、雜費逐項列出區間，標明每月／每季</li><li>把「會影響數字的重要假設」列成腳註（例如坪數、店員人數、行銷預算佔比）</li><li>標明「待第五章定案後收斂」，送日本審年度預算用</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>訂出損益平衡點的三種假設情境</b></div><div class="kw"><span class="kwl">目的</span><span>讓日本看到「最壞到最好」的損益邊界，方便決定投入規模</span></div><ol class="steps"><li>樂觀情境：高來客、高回購的參數（來客數／客單價／回購率各自給數字）</li><li>中性情境：保守一點的參數</li><li>保守情境：最低存活線，算出每月要賣幾雙才打平，並標出對應的固定成本控制重點</li><li>三案各附一行「達成條件」與「若未達成要砍的項目」</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>現金流斷了 → 店開著但發不出下個月薪水，帳面有盈餘也救不了</li><li>帳記錯 → 補稅罰款比省下的成本還多</li><li><strong>現金流比帳面盈餘重要</strong>：租金、人事、進貨是每月固定流出，第一批進貨＋裝修＋押金一次墊很大，先把「還能撐幾個月」算清楚</li><li><strong>資金分配</strong>：裝修超支是常態，預留 10-15% 備用金；行銷預算要能隨時加碼（開幕期曝光是關鍵），別把預算全部綁死在固定成本</li><li><strong>淡旺季</strong>：台灣鞋類有季節性，旺季錢進得快、淡季要看庫存水位，別用旺季的樂觀數字回頭算年度預算</li><li><strong>匯率</strong>：向日本進貨用日圓計價，匯率波動會直接改動成本，備妥兩種幣別的走勢假設</li><li><strong>稅務時點</strong>：營業稅每二個月申報、年度營所稅申報、發票與帳務要留對，帳記錯補稅罰款比省的成本還多</li><li><strong>損益要和庫存一起看</strong>：賣出去的毛利片面的盈餘不可信，庫存積壓、呆滯貨要每月攤出來看</li></ul></div></div>
-</details><details class="module" id="ch13">
-  <summary><span class="mnum">CH 13</span><h3>風險與因應</h3><span class="chips"><span class="chip tw">台灣主責</span></span><span class="urg" style="background:var(--r2)" title="急迫度">P2｜風險表寫起來放著沒用，定期檢視才生效，不急著一口氣做完</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>為六大風險各寫 1-2 個因應動作草案</b></div><div class="kw"><span class="kwl">目的</span><span>風險先想過、先有解法，出狀況時不會措手不及</span></div><ol class="steps"><li>六大風險逐條列：品牌知名度不足、決策過慢、補貨、人才、現金流、品牌理解錯誤</li><li>每個風險寫出 1-2 個具體因應動作，並註明「偵測訊號」：出現什麼前兆就要啟動因應（例如補貨→安全庫存到水準以下即補）</li><li>依因應動作排優先順序與負責人</li><li>建一張風險表，欄位：風險／前兆訊號／因應動作／負責人／多久檢視一次</li></ol></div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>完成風險章節初稿</b></div><div class="kw"><span class="kwl">目的</span><span>這章台灣主責就能完成，趁早做完送日本備查</span></div><ol class="steps"><li>把六大風險＋因應草案整理成單一文件</li><li>完成後送日本備查</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>風險表寫完就放著 → 等出事才發現前兆早就出現，備援全都來不及</li><li>六大風險的前兆訊號要寫成「看得出來的數字」：例如補貨風險＝安全庫存跌破水位、現金流風險＝帳上剩幾個月營運金，不要等到出事才發現</li><li>風險表要有人定期看、定期更新，不是寫一次就放著；至少每月檢視一次，情況變了就重排優先序</li><li>出狀況時的聯絡網先建好：誰決策、誰執行、多久內回覆，突發（倉庫淹水、社群負評爆量、店員集體離職）才不會當下慌</li><li>備援先做最痛的兩個：<strong>庫存與現金流</strong>，其他風險可以邊做邊補</li></ul></div></div>
-</details><details class="module" id="ch14">
-  <summary><span class="mnum">CH 14</span><h3>願景</h3><span class="chips"><span class="chip both">雙方共同</span></span><span class="urg" style="background:var(--r2)" title="急迫度">P2｜願景是方向不是時程，先寫方向性敘述即可，不卡任何里程碑</span><span class="arrow">▼</span></summary>
-  <div class="mod-body"><div class="blk do"><div class="lbl">✔ 先做什麼</div><div class="act"><div class="act-head"><span class="actchk">☐</span><b>寫出願景方向性敘述</b></div><div class="kw"><span class="kwl">目的</span><span>先有方向（為什麼在台灣做 grounds），細節等有數據再補</span></div><ol class="steps"><li>寫 3-5 句的願景方向（品牌精神、在台使命）</li><li>註明「待第一階段有實際數據後具體化 3/5/10 年願景」</li><li>排定下次檢討時間（例如第一年財報出爐時）</li></ol></div></div><div class="blk watch"><div class="lbl">▶ 開店要注意的事</div><ul><li>願景只有口號、不連到決定 → 遇到沒答案的事大家各自解讀，方向感從開店第一週就散了</li><li>願景是要拿來做決定用的，不是掛在牆上的口號：寫完後，對應到「這一年要先做到哪幾件事」要有具體對應</li><li>第一年的檢討點先排好（例如：開幕後 3 個月、半年、一年各看一次），時間到了就對照實際數據回顧，不要等「有空」才看</li><li>把願景翻成店員聽得懂的方向（品牌精神一句話），不然教育訓練和日常服務會跟願景脫節</li></ul></div></div>
-</details>
-</div>
-    <div class="section" id="topics">
-  <div class="section-head"><span class="ph" style="background:var(--phase3)">TOPICS</span><h2>專題調查與策略</h2></div>
-  <div class="section-desc">商標佈局、子公司vs分公司、選品店、進口路線、電商、快閃、合規清單等。</div>
-  <details class="module" id="topic-0">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>專題文件庫（詳細內容在各自檔案）</h3></summary>
-  <div class="mod-body"><blockquote><p>調查、策略與清單的細節全部拆到獨立檔案，每份只有一份正本；本行動方案只留入口，不再重複內容。</p></blockquote>
-<table><thead><tr><th>文件</th><th>內容</th><th>急迫度</th></tr></thead><tbody><tr><td><a href="知識_商標佈局調查結果.html" target="_blank" rel="noopener">知識_商標佈局調查結果.html</a></td><td>台灣/日本商標狀況、要註冊的標的清單、方案與費用、先送件再移轉、第35類擴大</td><td><strong>P0</strong>（先申請主義）</td></tr><tr><td><a href="知識_子公司vs分公司.html" target="_blank" rel="noopener">知識_子公司vs分公司.html</a></td><td>兩種結構完整比較與建議</td><td><strong>P0</strong>（公司沒成立什麼都卡）</td></tr><tr><td><a href="策略_選品店通路.html" target="_blank" rel="noopener">策略_選品店通路.html</a></td><td>選品店四種處理模式與建議（模式C）</td><td>P1</td></tr><tr><td><a href="策略_進口路線比較.html" target="_blank" rel="noopener">策略_進口路線比較.html</a></td><td>日本 vs 印尼進口：關稅、交期、MOQ（最小訂購量）、寄售（先鋪貨後結算）</td><td>P1</td></tr><tr><td><a href="策略_電商三階段.html" target="_blank" rel="noopener">策略_電商三階段.html</a></td><td>品牌型電商三階段，初期不上量販平台</td><td>P1</td></tr><tr><td><a href="記錄_快閃活動.html" target="_blank" rel="noopener">記錄_快閃活動.html</a></td><td>2026-07 快閃歷史與下次規劃</td><td>P1</td></tr><tr><td><a href="檢查_開店前置合規.html" target="_blank" rel="noopener">檢查_開店前置合規.html</a></td><td>A~I 九大類合規勾選清單</td><td><strong>P0</strong>（★項目卡營業）</td></tr></tbody></table></div>
-</details><details class="module" id="topic-1">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>本文件怎麼活著（工作流程）</h3></summary>
-  <div class="mod-body"><blockquote><p>這節說明怎麼管理這份文件，是「工作」的管理，不是開店本身。</p></blockquote>
-<ul>
-<li>每次開會／重大決定後當天更新，並在開頭標註版號＋一行改動摘要</li>
-<li>一個主題只有一份正本，其他地方一律連結引用，避免兩份內容打架</li>
-<li>檔案更新後同步發布到網站（docs 文件庫），讓大家都看同一份</li>
-</ul>
-<ul>
-<li>每一筆關鍵決定記進共用工作表：日期／決定事項／參與者／決策內容／後續動作／誰負責／下次確認日</li>
-<li>跟日本對話後 24 小時內補上紀錄</li>
-<li>每週五會議前，把「本週新增決定」列印出來當開會第一頁</li>
-</ul>
-<ul>
-<li>打開第一章的開店倒數行事曆：哪些到期、哪些延誤</li>
-<li>延誤立即標註「影響到哪一章、下一個里程碑何時」</li>
-</ul></div>
-</details><details class="module" id="topic-2">
-  <summary><span class="arrow" style="margin-right:2px">▼</span><h3>待補充</h3></summary>
-  <div class="mod-body"><ul>
-<li>各章負責人（目前多數標「台灣主責」，實際執行時需要指定到人）</li>
-<li>具體時程（本文件先列順序與依賴關係，尚未排入實際日期）</li>
-</ul></div>
-</details>
-</div>
-    <footer>這是內部執行與溝通文件，非對外檔案。</footer>
-  </main>
-</div>
-<script>
-function scrollToId(id){ var el=document.getElementById(id); if(el) el.scrollIntoView({behavior:"smooth"}); closeMenu(); }
-function toggleMenu(){ document.getElementById("side").classList.toggle("show"); document.getElementById("overlay").classList.toggle("show"); }
-function closeMenu(){ document.getElementById("side").classList.remove("show"); document.getElementById("overlay").classList.remove("show"); }
-window.addEventListener("scroll",function(){
-  var h=document.documentElement;
-  document.getElementById("progress").style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight)*100)+"%";
-});
-document.querySelectorAll("details.module").forEach(function(d,i){ if(i<4) d.open=true; });
-</script>
+  <div class="lang-switch"><a class="lang-link" href="../index.html">日本語</a><a class="lang-link" href="../en/index.html">English</a><a class="lang-link current" href="../zh/index.html">中文</a></div>
+</header>
+<div class="docs-layout"><nav class="docs-nav"><a href="index.html">← 全部文件</a><a href="grounds_taiwan_行動方案.html">台灣執行行動方案（互動版）</a><a href="目前進度.html">目前進度</a><a href="過程框架_決策總表.html">過程框架 — 決策總表</a><a href="週五會議_提問清單.html">與日本總部會議提問清單</a><a href="門市地點分析_中山北路二段36巷.html">門市地點分析（中山北路二段36巷）</a><a href="商標事務所洽談_QA.html">商標事務所洽談 QA</a><a href="商標事務所報價_宏景.html">商標報價整理（宏景）</a><a href="商標申請回覆Sharon.html">商標申請回覆（Sharon）</a><a href="給宏景的初期資料.html">給宏景的初期資料</a></nav><div class="docs-body"><h1>grounds Taiwan 目前進度</h1>
+<blockquote><p>更新：2026-10-13　只列「做到哪、卡在哪、下一步」。細節請看各專題文件。</p><p>狀態：✅ 完成　🔶 進行中　⏳ 等日本　⬜ 還沒開始</p></blockquote>
+<hr>
+<h2>一、公司成立（最優先）</h2>
+<table><thead><tr><th>項目</th><th>狀態</th><th>做到哪</th><th>下一步／卡點</th></tr></thead><tbody>
+   <tr><td>公司結構</td><td>✅</td><td>台灣端決定走<strong>子公司</strong></td><td>等日本確認</td></tr>
+   <tr><td>會計師</td><td>🔶</td><td>豐業聯合（D&C）9/30 報價：子公司 NT$75,000（分公司 55,000 不採用）</td><td>簽署報價單回傳，收一半訂金請款單</td></tr>
+   <tr><td>資本額／負責人／出資人名義</td><td>⏳</td><td>登記費 = 資本額 1/4000，需先決定資本額</td><td><strong>週五請日本拍板</strong></td></tr>
+   <tr><td>公司設立執行（名稱預查→外資→登記→銀行）</td><td>⬜</td><td>等上一列</td><td>設立約 2–3 個月</td></tr>
+</tbody></table>
+<h2>二、商標</h2>
+<table><thead><tr><th>項目</th><th>狀態</th><th>做到哪</th><th>下一步／卡點</th></tr></thead><tbody>
+   <tr><td>事務所報價</td><td>✅</td><td>宏景智權（Sharon）報價已收，3 類基礎 NT$30,000</td><td>決定是否選定</td></tr>
+   <tr><td>申請人名義、圖樣</td><td>⏳</td><td>回覆 Sharon 的資料稿已備，名義待定</td><td>日本確認：母公司先送或子公司</td></tr>
+   <tr><td>送件（GROUNDS／LEAP GRAVITY／LOGO）</td><td>⬜</td><td>—</td><td>先申請主義，越晚越危險</td></tr>
+</tbody></table>
+<h2>三、店面</h2>
+<table><thead><tr><th>項目</th><th>狀態</th><th>做到哪</th><th>下一步／卡點</th></tr></thead><tbody>
+   <tr><td>候選店址</td><td>🔶</td><td>已看多個店面；土屋鞄台北店（中山北路二段36巷）完成分析</td><td>整理比較表，週五帶去</td></tr>
+   <tr><td>消防與安檢確認</td><td>⬜</td><td>選址後才能做</td><td>—</td></tr>
+</tbody></table>
+<h2>四、其他已有進度</h2>
+<table><thead><tr><th>項目</th><th>狀態</th><th>做到哪</th></tr></thead><tbody>
+   <tr><td>快閃活動</td><td>✅</td><td>2026/07 已辦一次；下次預計 2027/03，待週五討論</td></tr>
+   <tr><td>選品店通路</td><td>🔶</td><td>策略已寫（建議模式 C），待日本裁示</td></tr>
+   <tr><td>進口路線／電商</td><td>🔶</td><td>比較與三階段方案已寫，待日本裁示</td></tr>
+   <tr><td>開店前置合規清單</td><td>🔶</td><td>清單已建，尚未逐項確認</td></tr>
+</tbody></table>
+<h2>五、還沒開始</h2>
+<p>物流報關報價、POS／電子發票、刷卡收單、營運 SOP、教育訓練、開幕企劃、財務投資表、風險表。 
+<hr>
+<h2>週五要請日本決定</h2>
+<ol>
+<li>公司資本額、負責人、出資人名義</li>
+<li>商標申請人名義（母公司先送，或等子公司成立）</li>
+<li>候選店址意見</li>
+<li>選品店通路、電商、進口路線的方向</li>
+<li>2027/03 快閃是否照做</li>
+</ol></div></div>
+<footer class="site-footer">
+  <p>2026 <a href="../zh/blueprint.html" class="stealth-link">AUG</a></p>
+</footer>
+<script src="../assets/js/main.js?v=e0a8d70253"></script>
 </body>
 </html>

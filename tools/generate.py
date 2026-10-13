@@ -662,9 +662,14 @@ def html_shell(lang, active_page, body, extra_head=""):
 
 
 def index_body(lang):
-    profile_section = render_profile_section(lang)
+    t = SITE[lang]
+    bp_href = "blueprint.html" if lang == "ja" else f"{lang}/blueprint.html"
     return f'''<div class="pf-page">
-{profile_section}
+  <section class="pf-section reveal" style="text-align:center;padding:120px 0">
+    <p class="pf-name">grounds Taiwan</p>
+    <p class="pf-subtitle">{t['subtitle']}</p>
+    <p style="margin-top:32px"><a href="{bp_href}">{t['enter']} →</a></p>
+  </section>
 </div>
 '''
 
@@ -841,7 +846,6 @@ def blueprint_body(lang):
     )
     sections_nav += f'\n    <a href="{bp_href}#success-factors">{SUCCESS_FACTORS[lang]["title"]}</a>'
     sections_nav += f'\n    <a href="{bp_href}#open-questions">{OPEN_QUESTIONS[lang]["title"]}</a>'
-    sections_nav += f'\n    <a href="{bp_href}#leadership">Profile</a>'
 
     chapter_sections = []
     for c in CHAPTERS:
@@ -883,7 +887,7 @@ def blueprint_body(lang):
     </div>
   </section>'''
 
-    leadership_section = f'<div id="leadership" class="pf-page">{render_profile_section(lang)}</div>'
+    leadership_section = ""
 
     cl = CLOSING[lang]
     closing_lines = "\n".join(f"    <p>{l}</p>" for l in cl["lines"])
