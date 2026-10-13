@@ -655,7 +655,7 @@ def html_shell(lang, active_page, body, extra_head=""):
   <p>2026 <a href="{bp_href}" class="stealth-link">AUG</a></p>
 </footer>
 <script src="assets/js/main.js?v={JS_VERSION}"></script>
-{'<script src="assets/js/live-progress.js?v=1"></script>' if active_page == 'blueprint' else ''}
+{'<script src="assets/js/live-progress.js?v=2"></script>' if active_page == 'blueprint' else ''}
 </body>
 </html>
 '''
