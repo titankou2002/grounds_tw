@@ -332,7 +332,7 @@
       var wait = add('ai', '思考中…');
       var ctx = Array.prototype.filter.call(sections, function (s) { return s.style.display !== 'none'; })
         .map(function (s) { return s.innerText.replace(/×/g, ''); }).join('\n\n');
-      sb.functions.invoke('blueprint-chat', { body: { question: q, context: ctx, history: hist } }).then(function (r) {
+      sb.functions.invoke('clever-api', { body: { question: q, context: ctx, history: hist } }).then(function (r) {
         var a = r.data && r.data.answer;
         if (!a) {
           var msg = (r.data && r.data.error) || (r.error && r.error.message) || '失敗了';
