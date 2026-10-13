@@ -18,7 +18,7 @@
   var sections = document.querySelectorAll('section.chapter');
   if (!main || !toc || !sections.length) return;
 
-  var sb, tenantId = null, isMember = false, canEdit = false, userName = '', user = null;
+  var sb, tenantId = null, isMember = false, isAdminUser = false, canEdit = false, userName = '', user = null;
   var edits = {};
   var targets = [];
   var saveTimer = null;
@@ -367,7 +367,7 @@
       if (!tenantId || !user) return;
       return sb.from('members').select('user_id,display_name,role,active').eq('tenant_id', tenantId).then(function (m) {
         var me = (m.data || []).filter(function (x) { return x.user_id === user.id && x.active; })[0];
-        if (me) { isMember = true; userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
+        if (me) { isMember = true; isAdminUser = me.role === 'admin'; userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
       });
     }).then(function () {
       if (!tenantId) return;
@@ -379,7 +379,7 @@
         if (user) setBar(user.email + '（無編輯權限）', logoutBtn());
         else setBar('唯讀', loginBtn());
       }
-      if (isMember) initChat();
+      if (isAdminUser) initChat();
       if (location.hash) { var el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }
     }).catch(function () { /* 載入失敗不影響閱讀 */ });
     document.addEventListener('visibilitychange', function () {
