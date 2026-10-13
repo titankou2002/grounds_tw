@@ -18,7 +18,7 @@
   var sections = document.querySelectorAll('section.chapter');
   if (!main || !toc || !sections.length) return;
 
-  var sb, tenantId = null, canEdit = false, userName = '', user = null;
+  var sb, tenantId = null, isMember = false, canEdit = false, userName = '', user = null;
   var edits = {};
   var targets = [];
   var saveTimer = null;
@@ -304,6 +304,45 @@
     setBar('編輯模式：點文字直接改・目錄可拖曳、可刪除・' + userName, restoreBtn(), logoutBtn());
   }
 
+
+  // ───── AI 聊天框（登入的成員才有） ─────
+  function initChat() {
+    var hist = [];
+    var cs = document.createElement('style');
+    cs.textContent =
+      '.lp-chatbtn{position:fixed;left:16px;bottom:16px;z-index:99;font:inherit;font-size:13px;background:var(--fg);color:var(--bg);border:0;border-radius:99px;padding:9px 16px;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.25)}' +
+      '.lp-chat{position:fixed;left:16px;bottom:64px;z-index:99;width:min(380px,calc(100vw - 32px));height:min(520px,70vh);background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:12px;box-shadow:0 6px 24px rgba(0,0,0,.3);display:none;flex-direction:column;overflow:hidden}' +
+      '.lp-chat.open{display:flex}.lp-msgs{flex:1;overflow:auto;padding:12px;font-size:14px;line-height:1.6}' +
+      '.lp-m{margin:0 0 10px;white-space:pre-wrap}.lp-m.me{text-align:right;color:var(--muted)}' +
+      '.lp-m.ai{background:var(--callout-bg,#f4f3ee);padding:8px 10px;border-radius:8px}' +
+      '.lp-in{display:flex;gap:6px;padding:8px;border-top:1px solid var(--line)}' +
+      '.lp-in input{flex:1;font:inherit;font-size:14px;color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:7px 10px}' +
+      '.lp-in button{font:inherit;font-size:13px;border:0;background:var(--fg);color:var(--bg);border-radius:8px;padding:0 14px;cursor:pointer}';
+    document.head.appendChild(cs);
+    var msgs = h('div', { class: 'lp-msgs' }, h('p', { class: 'lp-m ai' }, '問我關於這份藍圖的任何事，例如：「現在卡在哪？」「週五要請日本決定什麼？」'));
+    var input = h('input', { placeholder: '輸入問題，按 Enter', autocomplete: 'off' });
+    var panel = h('div', { class: 'lp-chat' }, msgs,
+      h('form', { class: 'lp-in', onsubmit: function (e) { e.preventDefault(); ask(); } }, input, h('button', { type: 'submit' }, '送出')));
+    var toggle = h('button', { class: 'lp-chatbtn', onclick: function () { panel.classList.toggle('open'); if (panel.classList.contains('open')) input.focus(); } }, '問 AI');
+    document.body.appendChild(panel); document.body.appendChild(toggle);
+    function add(cls, text) { var p = h('p', { class: 'lp-m ' + cls }, text); msgs.appendChild(p); msgs.scrollTop = msgs.scrollHeight; return p; }
+    function ask() {
+      var q = input.value.trim(); if (!q) return; input.value = '';
+      add('me', q);
+      var wait = add('ai', '思考中…');
+      var ctx = Array.prototype.filter.call(sections, function (s) { return s.style.display !== 'none'; })
+        .map(function (s) { return s.innerText.replace(/×/g, ''); }).join('\n\n');
+      sb.functions.invoke('blueprint-chat', { body: { question: q, context: ctx, history: hist } }).then(function (r) {
+        var a = r.data && r.data.answer;
+        if (!a) {
+          var msg = (r.data && r.data.error) || (r.error && r.error.message) || '失敗了';
+          a = '（出錯：' + msg + '）';
+        } else { hist.push({ role: 'user', text: q }, { role: 'ai', text: a }); }
+        wait.textContent = a; msgs.scrollTop = msgs.scrollHeight;
+      });
+    }
+  }
+
   function load() {
     return sb.from('bp_content').select('data').eq('tenant_id', tenantId).eq('key', 'edits').maybeSingle().then(function (r) {
       if (!r.error && r.data) edits = r.data.data || {};
@@ -323,7 +362,7 @@
       if (!tenantId || !user) return;
       return sb.from('members').select('user_id,display_name,role,active').eq('tenant_id', tenantId).then(function (m) {
         var me = (m.data || []).filter(function (x) { return x.user_id === user.id && x.active; })[0];
-        if (me) { userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
+        if (me) { isMember = true; userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
       });
     }).then(function () {
       if (!tenantId) return;
@@ -335,6 +374,7 @@
         if (user) setBar(user.email + '（無編輯權限）', logoutBtn());
         else setBar('唯讀', loginBtn());
       }
+      if (isMember) initChat();
       if (location.hash) { var el = document.getElementById(location.hash.slice(1)); if (el) el.scrollIntoView(); }
     }).catch(function () { /* 載入失敗不影響閱讀 */ });
     document.addEventListener('visibilitychange', function () {
