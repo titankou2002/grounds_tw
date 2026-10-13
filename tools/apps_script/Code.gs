@@ -99,11 +99,11 @@ function bpChat_(b) {
     payload: JSON.stringify({ p_slug: 'grounds' }), muteHttpExceptions: true
   });
   var tid = JSON.parse(tr.getContentText());
-  if (!tid || typeof tid !== 'string') return { ok: false, error: '只有管理員可以使用' };
+  if (!tid || typeof tid !== 'string') return { ok: false, error: '只有編輯者可以使用' };
   var mr = UrlFetchApp.fetch(SB_URL + '/rest/v1/members?select=role&tenant_id=eq.' + tid +
-    '&user_id=eq.' + uid + '&active=eq.true&role=eq.admin', { headers: h, muteHttpExceptions: true });
+    '&user_id=eq.' + uid + '&active=eq.true&role=in.(admin,manager)', { headers: h, muteHttpExceptions: true });
   var rows = JSON.parse(mr.getContentText());
-  if (!rows.length) return { ok: false, error: '只有管理員可以使用' };
+  if (!rows.length) return { ok: false, error: '只有編輯者可以使用' };
 
   var key = PROPS.getProperty('GEMINI_API_KEY');
   if (!key) return { ok: false, error: 'GEMINI_API_KEY 尚未設定' };

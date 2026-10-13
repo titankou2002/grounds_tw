@@ -369,7 +369,7 @@
       if (!tenantId || !user) return;
       return sb.from('members').select('user_id,display_name,role,active').eq('tenant_id', tenantId).then(function (m) {
         var me = (m.data || []).filter(function (x) { return x.user_id === user.id && x.active; })[0];
-        if (me) { isMember = true; isAdminUser = me.role === 'admin'; userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
+        if (me) { isMember = true; isAdminUser = me.role === 'admin' || me.role === 'manager'; userName = me.display_name; canEdit = me.role === 'admin' || me.role === 'manager'; }
       });
     }).then(function () {
       if (!tenantId) return;
