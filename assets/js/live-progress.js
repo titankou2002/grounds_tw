@@ -306,6 +306,7 @@
 
 
   // ───── AI 聊天框（登入的成員才有） ─────
+  var CHAT_URL = 'https://script.google.com/macros/s/AKfycbyZog9Sw2JpEX0EsEyyunM3oTbvVQBoKiwQnj3B8SNLHRtrjpmFadoli9ioohLIH_a_1A/exec';
   var CHAT_RULES =
     '你是 grounds Taiwan（日本品牌 grounds 在台灣開店）專案的助理，用繁體中文，簡短直接，不要客套廢話。' +
     '先參考下面的藍圖頁面內容；頁面沒寫的，就用你的一般知識（台灣開店、公司設立、法規、進口、行銷等）直接回答，' +
@@ -336,15 +337,16 @@
       var wait = add('ai', '思考中…');
       var ctx = Array.prototype.filter.call(sections, function (s) { return s.style.display !== 'none'; })
         .map(function (s) { return s.innerText.replace(/×/g, ''); }).join('\n\n');
-      sb.functions.invoke('clever-api', { body: { question: q, context: ctx, history: hist, system: CHAT_RULES } }).then(function (r) {
-        var a = r.data && r.data.answer;
-        if (a) { hist.push({ role: 'user', text: q }, { role: 'ai', text: a }); wait.textContent = a; msgs.scrollTop = msgs.scrollHeight; return; }
-        var base = (r.data && r.data.error) || (r.error && r.error.message) || '失敗了';
-        var ctxp = r.error && r.error.context && r.error.context.json ? r.error.context.json() : Promise.resolve(null);
-        ctxp.catch(function () { return null; }).then(function (b) {
-          wait.textContent = '（出錯：' + ((b && b.error) || base) + '）'; msgs.scrollTop = msgs.scrollHeight;
-        });
-      });
+      sb.auth.getSession().then(function (r) {
+        var tok = r.data.session ? r.data.session.access_token : '';
+        return fetch(CHAT_URL, { method: 'POST', headers: { 'Content-Type': 'text/plain' },
+          body: JSON.stringify({ action: 'bpchat', token: tok, question: q, context: ctx, history: hist, system: CHAT_RULES }) })
+          .then(function (res) { return res.json(); });
+      }).then(function (d) {
+        if (d && d.answer) { hist.push({ role: 'user', text: q }, { role: 'ai', text: d.answer }); wait.textContent = d.answer; }
+        else wait.textContent = '（出錯：' + ((d && d.error) || '失敗了') + '）';
+        msgs.scrollTop = msgs.scrollHeight;
+      }).catch(function (e) { wait.textContent = '（出錯：' + e.message + '）'; });
     }
   }
 

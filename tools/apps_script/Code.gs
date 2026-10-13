@@ -69,8 +69,65 @@ function doGet(e) {
 }
 
 function doPost(e) {
+  var raw = e && e.postData && e.postData.contents;
+  if (raw && raw.charAt(0) === '{') {
+    try {
+      var b = JSON.parse(raw);
+      if (b.action === 'bpchat') return jso(bpChat_(b));
+    } catch (err) { return jso({ ok: false, error: String(err) }); }
+  }
   var p = (e && e.parameter) || {};
   return handle(p, 'POST');
+}
+
+/* ------------------------------------------------------------
+ *  藍圖頁面 AI 聊天：只有 Supabase 登入的「管理員」能用
+ *  （網頁把登入憑證 token 傳來，這裡向 Supabase 驗證身分與角色）
+ * ---------------------------------------------------------- */
+var SB_URL = 'https://wvslwxbdfcqbsnihvwnb.supabase.co';
+var SB_KEY = 'sb_publishable_dnpBAxgX5cNpiVsRGncILg_8zXEL7gD';
+
+function bpChat_(b) {
+  var tok = b.token || '';
+  if (!tok) return { ok: false, error: '請先登入' };
+  var h = { apikey: SB_KEY, Authorization: 'Bearer ' + tok };
+  var ur = UrlFetchApp.fetch(SB_URL + '/auth/v1/user', { headers: h, muteHttpExceptions: true });
+  if (ur.getResponseCode() !== 200) return { ok: false, error: '請先登入' };
+  var uid = JSON.parse(ur.getContentText()).id;
+  var tr = UrlFetchApp.fetch(SB_URL + '/rest/v1/rpc/bp_tenant_id', {
+    method: 'post', contentType: 'application/json', headers: h,
+    payload: JSON.stringify({ p_slug: 'grounds' }), muteHttpExceptions: true
+  });
+  var tid = JSON.parse(tr.getContentText());
+  if (!tid || typeof tid !== 'string') return { ok: false, error: '只有管理員可以使用' };
+  var mr = UrlFetchApp.fetch(SB_URL + '/rest/v1/members?select=role&tenant_id=eq.' + tid +
+    '&user_id=eq.' + uid + '&active=eq.true&role=eq.admin', { headers: h, muteHttpExceptions: true });
+  var rows = JSON.parse(mr.getContentText());
+  if (!rows.length) return { ok: false, error: '只有管理員可以使用' };
+
+  var key = PROPS.getProperty('GEMINI_API_KEY');
+  if (!key) return { ok: false, error: 'GEMINI_API_KEY 尚未設定' };
+  var model = PROPS.getProperty('GEMINI_MODEL') || 'gemini-2.5-flash';
+  var rules = (b.system && String(b.system).slice(0, 4000)) ||
+    '你是 grounds Taiwan 專案的助理，用繁體中文，簡短直接。';
+  var system = rules + '\n\n【藍圖頁面內容】\n' + String(b.context || '').slice(0, 40000);
+  var contents = (b.history || []).slice(-10).map(function (m) {
+    return { role: m.role === 'ai' ? 'model' : 'user', parts: [{ text: m.text }] };
+  });
+  contents.push({ role: 'user', parts: [{ text: String(b.question || '') }] });
+  var res = UrlFetchApp.fetch('https://generativelanguage.googleapis.com/v1beta/models/' +
+    encodeURIComponent(model) + ':generateContent?key=' + encodeURIComponent(key), {
+    method: 'post', contentType: 'application/json', muteHttpExceptions: true,
+    payload: JSON.stringify({
+      system_instruction: { parts: [{ text: system }] }, contents: contents,
+      generationConfig: { temperature: 0.3, maxOutputTokens: 1024 }
+    })
+  });
+  var g = JSON.parse(res.getContentText());
+  if (res.getResponseCode() !== 200) return { ok: false, error: (g.error && g.error.message) || ('Gemini ' + res.getResponseCode()) };
+  var text = (g.candidates && g.candidates[0] && g.candidates[0].content.parts || [])
+    .map(function (x) { return x.text || ''; }).join('');
+  return text ? { ok: true, answer: text } : { ok: false, error: 'AI 沒有回應' };
 }
 
 function handle(p, method) {
