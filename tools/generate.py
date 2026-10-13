@@ -360,6 +360,25 @@ CHAPTERS = [
     },
 ]
 
+
+def _merge_intro_chapters():
+    """目前在「公司成立」階段：把 專案概要／品牌哲學／商品哲學 合併成一章，並重新編號。"""
+    global CHAPTERS
+    a, b, c = CHAPTERS[0], CHAPTERS[1], CHAPTERS[2]
+    merged = {
+        "id": "overview",
+        "num": "01",
+        "title": {"ja": "プロジェクト概要・ブランド・商品", "en": "Overview, Brand & Product", "zh": "專案概要・品牌・商品"},
+        "intent": {l: a["intent"][l] + c["intent"][l] for l in LANGS},
+        "bullets": {l: b["bullets"][l] + c["bullets"][l] for l in LANGS},
+    }
+    CHAPTERS = [merged] + CHAPTERS[3:]
+    for i, ch in enumerate(CHAPTERS, 1):
+        ch["num"] = f"{i:02d}"
+
+
+_merge_intro_chapters()
+
 SUCCESS_FACTORS = {
     "ja": {
         "title": "重要成功要因",
@@ -655,7 +674,7 @@ def html_shell(lang, active_page, body, extra_head=""):
   <p>2026 <a href="{bp_href}" class="stealth-link">AUG</a></p>
 </footer>
 <script src="assets/js/main.js?v={JS_VERSION}"></script>
-{'<script src="assets/js/live-progress.js?v=2"></script>' if active_page == 'blueprint' else ''}
+{'<script src="assets/js/live-progress.js?v=3"></script>' if active_page == 'blueprint' else ''}
 </body>
 </html>
 '''
