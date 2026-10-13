@@ -275,7 +275,12 @@ function renderOverall(){
 
 function renderWho(){
   var el = document.getElementById('who'); el.textContent = '';
-  if (S.user && S.member){
+  if (S.guest){
+    el.appendChild(h('span', null, '唯讀檢視'));
+    el.appendChild(h('button', { class:'btn primary', onclick:function(){
+      sb.auth.signInWithOAuth({ provider:'google', options:{ redirectTo:location.origin + location.pathname } });
+    }}, '登入編輯'));
+  } else if (S.user && S.member){
     el.appendChild(h('span', null, S.name + (S.canEdit ? '' : '（唯讀）')));
     if (S.isAdmin) el.appendChild(h('button', { class:'btn', onclick:function(){ document.getElementById('upl').click(); } }, '更新任務內容'));
     el.appendChild(h('button', { class:'btn', onclick:function(){ sb.auth.signOut().then(function(){ location.reload(); }); } }, '登出'));
@@ -370,7 +375,16 @@ function init(){
 
   sb.auth.getSession().then(function(r){
     S.user = r.data.session ? r.data.session.user : null;
-    if (!S.user) return;
+    if (!S.user){
+      // 未登入：唯讀檢視（資料庫已開放公開讀取）
+      return sb.rpc('bp_tenant_id', { p_slug:TENANT_SLUG }).then(function(t){
+        if (t.error) throw new Error(t.error.message);
+        S.tenantId = t.data;
+        if (!S.tenantId) return;
+        S.member = true; S.guest = true; S.name = '訪客';
+        return loadContent().then(loadRows);
+      });
+    }
     return sb.rpc('accept_invites').then(function(){
       return sb.rpc('bp_tenant_id', { p_slug:TENANT_SLUG });
     }).then(function(t){
