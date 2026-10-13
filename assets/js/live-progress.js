@@ -108,7 +108,6 @@
       var arr = edits['add|' + g.getAttribute('data-lpg')] || [];
       arr.forEach(function (txt, i) { g.appendChild(makeNew(g, arr, i)); });
     });
-    Array.prototype.forEach.call(sections, renderChip);
     applyOrder();
   }
 
