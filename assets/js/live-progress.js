@@ -334,11 +334,12 @@
         .map(function (s) { return s.innerText.replace(/×/g, ''); }).join('\n\n');
       sb.functions.invoke('clever-api', { body: { question: q, context: ctx, history: hist } }).then(function (r) {
         var a = r.data && r.data.answer;
-        if (!a) {
-          var msg = (r.data && r.data.error) || (r.error && r.error.message) || '失敗了';
-          a = '（出錯：' + msg + '）';
-        } else { hist.push({ role: 'user', text: q }, { role: 'ai', text: a }); }
-        wait.textContent = a; msgs.scrollTop = msgs.scrollHeight;
+        if (a) { hist.push({ role: 'user', text: q }, { role: 'ai', text: a }); wait.textContent = a; msgs.scrollTop = msgs.scrollHeight; return; }
+        var base = (r.data && r.data.error) || (r.error && r.error.message) || '失敗了';
+        var ctxp = r.error && r.error.context && r.error.context.json ? r.error.context.json() : Promise.resolve(null);
+        ctxp.catch(function () { return null; }).then(function (b) {
+          wait.textContent = '（出錯：' + ((b && b.error) || base) + '）'; msgs.scrollTop = msgs.scrollHeight;
+        });
       });
     }
   }
