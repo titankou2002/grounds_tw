@@ -48,3 +48,7 @@
 
 # Supabase 的資料表／權限 SQL（含管理員 Email），不放公開 repo。
 /supabase/
+
+# 本機交接文件（含內部設定，不公開）
+/CLAUDE.md
+/目前進度.md
