@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     if (file_exists($dataFile)) {
         $content = file_get_contents($dataFile);
         if ($content && trim($content) !== '') {
+            $content = preg_replace('/^\xEF\xBB\xBF/', '', $content);
             echo $content;
             exit;
         }
