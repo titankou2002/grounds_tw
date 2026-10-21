@@ -1469,6 +1469,320 @@
       }
     }
 
+
+    /* --- PROJECT DECISION BOARD (跨國決策審議看板) --- */
+    .board-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+      background: #ffffff;
+      padding: 12px 16px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    }
+    .board-filter-group {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .board-filter-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 13px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: #f8fafc;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .board-filter-chip:hover {
+      background: #f1f5f9;
+      color: #111;
+    }
+    .board-filter-chip.active {
+      background: #111111;
+      color: #ffffff;
+      border-color: #111111;
+    }
+    .board-count-badge {
+      background: rgba(0,0,0,0.08);
+      color: inherit;
+      font-size: 10.5px;
+      font-weight: 800;
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+    .board-filter-chip.active .board-count-badge {
+      background: rgba(255,255,255,0.25);
+      color: #ffffff;
+    }
+    .board-topics-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .board-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .board-card:hover {
+      box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+      border-color: #cbd5e1;
+    }
+    .board-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+    .board-card-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .board-cat-badge {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 3px 9px;
+      background: #f1f5f9;
+      color: #475569;
+      border-radius: 12px;
+      letter-spacing: 0.3px;
+    }
+    .board-status-badge {
+      font-size: 11.5px;
+      font-weight: 800;
+      padding: 3px 10px;
+      border-radius: 14px;
+      cursor: pointer;
+      user-select: none;
+      transition: opacity 0.15s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .board-status-badge:hover {
+      opacity: 0.85;
+      transform: scale(1.02);
+    }
+    .board-status-badge.status-discussing {
+      background: #fef3c7;
+      color: #b45309;
+      border: 1px solid #fcd34d;
+    }
+    .board-status-badge.status-pending {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+    .board-status-badge.status-resolved {
+      background: #dcfce7;
+      color: #15803d;
+      border: 1px solid #86efac;
+    }
+    .board-card-actions {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .board-icon-btn {
+      background: transparent;
+      border: none;
+      padding: 4px 6px;
+      cursor: pointer;
+      color: var(--fg-muted);
+      border-radius: 6px;
+      transition: all 0.15s;
+    }
+    .board-icon-btn:hover {
+      background: #f1f5f9;
+      color: #111;
+    }
+    .board-icon-btn.danger:hover {
+      background: #fee2e2;
+      color: var(--danger);
+    }
+    .board-topic-title {
+      font-size: 16.5px;
+      font-weight: 800;
+      line-height: 1.4;
+      color: #0f172a;
+      letter-spacing: -0.2px;
+      margin-bottom: 4px;
+    }
+    .board-topic-title-ja {
+      font-size: 13px;
+      font-weight: 600;
+      color: #64748b;
+      line-height: 1.4;
+      margin-bottom: 12px;
+    }
+    .board-topic-summary {
+      background: #f8fafc;
+      border-left: 3.5px solid #0f172a;
+      border-radius: 0 8px 8px 0;
+      padding: 10px 14px;
+      font-size: 13.5px;
+      line-height: 1.6;
+      color: #334155;
+      margin-bottom: 10px;
+    }
+    .board-topic-summary-ja {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.5;
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px dashed #e2e8f0;
+    }
+    .board-linked-store {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      color: #166534;
+      font-size: 12px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 20px;
+      cursor: pointer;
+      margin-bottom: 12px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+    .board-linked-store:hover {
+      background: #dcfce7;
+      border-color: #86efac;
+    }
+    .board-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: var(--fg-muted);
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+      margin-bottom: 12px;
+    }
+    .board-thread-container {
+      background: #fafaf9;
+      border-radius: 10px;
+      padding: 12px 14px;
+      border: 1px solid #f1f1ef;
+    }
+    .board-thread-title {
+      font-size: 12px;
+      font-weight: 800;
+      color: #44403c;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .board-comment-item {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-bottom: 8px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .board-comment-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      margin-bottom: 4px;
+    }
+    .board-comment-author-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .board-comment-author {
+      font-weight: 700;
+      color: #111;
+    }
+    .board-comment-role-tag {
+      font-size: 10px;
+      font-weight: 800;
+      padding: 1px 5px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+    .board-comment-role-tag.tw {
+      background: #eff6ff;
+      color: #1d4ed8;
+    }
+    .board-comment-role-tag.jp {
+      background: #fdf2f8;
+      color: #be185d;
+    }
+    .board-comment-date {
+      color: var(--fg-muted);
+    }
+    .board-comment-text-zh {
+      font-size: 13px;
+      line-height: 1.5;
+      color: #1f2937;
+    }
+    .board-comment-text-ja {
+      font-size: 12px;
+      line-height: 1.45;
+      color: #6b7280;
+      margin-top: 4px;
+    }
+    .board-reply-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      margin-top: 10px;
+    }
+    .board-reply-input {
+      flex: 1;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 12.5px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .board-reply-input:focus {
+      border-color: #111111;
+    }
+    .board-reply-btn {
+      background: #111111;
+      color: #ffffff;
+      border: none;
+      border-radius: 20px;
+      padding: 7px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+    .board-reply-btn:hover {
+      background: #333333;
+    }
+
   </style>
 </head>
 <body>
@@ -1491,6 +1805,10 @@
         <button class="nav-tab-btn" id="btn-tab-store" onclick="switchNavTab('store')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span class="tab-title">MAP</span>
+        </button>
+        <button class="nav-tab-btn" id="btn-tab-board" onclick="switchNavTab('board')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
+          <span class="tab-title">BOARD</span>
         </button>
       </nav>
     </div>
@@ -1638,6 +1956,36 @@
           <div id="store-map-box"></div>
         </div>
       </div>
+    </section>
+
+    <!-- 3. PROJECT DECISION BOARD (跨國決策審議看板) -->
+    <section id="tab-board" class="view-panel" style="display:none;">
+      <!-- Top Bar: Filter Chips & New Topic Button -->
+      <div class="board-top-bar">
+        <div class="board-filter-group">
+          <button type="button" class="board-filter-chip active" id="bf-all" onclick="setBoardFilter('all')">
+            <span id="bf-label-all">全部</span> <span class="board-count-badge" id="bcount-all">0</span>
+          </button>
+          <button type="button" class="board-filter-chip" id="bf-discussing" onclick="setBoardFilter('discussing')">
+            <span id="bf-label-disc">🟡 審議中</span> <span class="board-count-badge" id="bcount-discussing">0</span>
+          </button>
+          <button type="button" class="board-filter-chip" id="bf-pending" onclick="setBoardFilter('pending')">
+            <span id="bf-label-pend">🔴 待確認</span> <span class="board-count-badge" id="bcount-pending">0</span>
+          </button>
+          <button type="button" class="board-filter-chip" id="bf-resolved" onclick="setBoardFilter('resolved')">
+            <span id="bf-label-res">🟢 已定案</span> <span class="board-count-badge" id="bcount-resolved">0</span>
+          </button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <button class="btn-submit" onclick="openNewBoardTopicModal()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:700;">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span id="btn-new-topic-label">＋ 發起新議題</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Board Topics List Container -->
+      <div id="board-topics-list" class="board-topics-list"></div>
     </section>
 
   </main>
@@ -2123,6 +2471,70 @@
   </div>
 </div>
 
+<!-- Board Topic Modal (發起 / 編輯決策議題) -->
+<div class="modal-overlay" id="board-topic-modal">
+  <div class="modal-content-box" style="max-width:580px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+      <h3 style="font-size:16px;font-weight:800;display:flex;align-items:center;gap:6px;">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
+        <span id="board-topic-modal-title">發起專案決策議題</span>
+      </h3>
+      <button class="action-btn" onclick="closeBoardTopicModal()">關閉</button>
+    </div>
+
+    <form id="board-topic-form" onsubmit="event.preventDefault(); submitBoardTopic();">
+      <input type="hidden" id="board-topic-edit-id" value="">
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">議題分類：</label>
+          <select id="board-topic-cat" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
+            <option value="品牌策略">品牌策略 (Brand Strategy)</option>
+            <option value="租約談判">租約談判 (Lease Negotiation)</option>
+            <option value="門市選址">門市選址 (Store Location)</option>
+            <option value="智財法務">智財法務 (Intellectual Property)</option>
+            <option value="公司設立">公司設立 (Corporate Entity)</option>
+            <option value="空間設計">空間設計 (Space Design)</option>
+            <option value="營運管理">營運管理 (Operations)</option>
+            <option value="物流供應鏈">物流供應鏈 (Logistics)</option>
+            <option value="其他">其他 (General)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">審議狀態：</label>
+          <select id="board-topic-status" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
+            <option value="discussing">🟡 審議中 (In Discussion / 審議中)</option>
+            <option value="pending">🔴 待確認 (Pending Action / 要確認)</option>
+            <option value="resolved">🟢 已定案 (Resolved / 決定済)</option>
+          </select>
+        </div>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">議題標題：</label>
+        <input type="text" id="board-topic-title-zh" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" placeholder="輸入清晰明確的決策審議標題..." required>
+      </div>
+
+      <div style="margin-bottom:12px;">
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">關聯候選店面（選填）：</label>
+        <select id="board-topic-store" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
+          <option value="">-- 無關聯店面 --</option>
+        </select>
+      </div>
+
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">決策背景與核心提案摘要：</label>
+        <textarea id="board-topic-summary-zh" class="composer-textarea" style="min-height:85px;padding:8px 10px;line-height:1.5;" placeholder="說明此決策的背景、待決事項、關鍵數字或各方意見..."></textarea>
+      </div>
+
+      <div style="display:flex;justify-content:flex-end;gap:8px;">
+        <button type="button" class="action-btn" onclick="closeBoardTopicModal()">取消</button>
+        <button type="submit" class="btn-submit" id="board-topic-submit-btn">儲存議題</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- Custom Tags Manager Modal (浮動視窗管理分類條件) -->
 <div class="modal-overlay" id="tag-manager-modal">
   <div class="modal-content-box" style="max-width:500px;">
@@ -2480,11 +2892,163 @@ const DEFAULT_MEMBERS = [
   }
 ];
 
+const DEFAULT_BOARD_TOPICS = [
+  {
+    id: "board-1",
+    category: "品牌策略",
+    status: "discussing",
+    titleZh: "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
+    titleJa: "旗艦1号店の商圏ポジショニング策定：赤峰街路面店 vs 中山駅メインストリート",
+    summaryZh: "首店究竟要以赤峰街文青高黏著度小金店建立小眾潮流形象，還是以中山站56坪大坪數旗艦店打響全台知名度？",
+    summaryJa: "第1号店は赤峰街の路面店でストリートファッション・カルチャーの独自性を発信すべきか、中山駅前の56坪大型旗艦店で台湾全土の認知度を一気に高めるべきか？",
+    author: "Lynn",
+    date: "2026/10/22 06:00",
+    storeId: "591-21939969",
+    storeTitle: "中山站商圈金店面 (56.6坪)",
+    comments: [
+      {
+        id: "c1-1",
+        author: "坂部三樹郎",
+        role: "jp",
+        date: "2026/10/22 06:15",
+        textZh: "赤峰街的次文化感非常契合 grounds 的品牌靈魂，但空間若低於20坪可能無法完整展出 jewelry 系列全鞋款。",
+        textJa: "赤峰街のストリート感はブランドの世界観に合致するが、20坪未満だとjewelryの全ラインナップ展開に制限が出る懸念がある。"
+      },
+      {
+        id: "c1-2",
+        author: "Lynn",
+        role: "tw",
+        date: "2026/10/22 06:30",
+        textZh: "我們目前有鎖定承德路二段與民生西路雙門面22.8坪物件，兼具赤峰商圈人潮與足夠陳列面寬，本週五安排現勘。",
+        textJa: "現在、赤峰街至近の承徳路二段22.8坪（二面開口）に注目しており、集客力と陳列幅を両立できます。今週金曜に内見予定。"
+      }
+    ]
+  },
+  {
+    id: "board-2",
+    category: "租約談判",
+    status: "pending",
+    titleZh: "免租裝修期與首約免租期爭取談判底線",
+    titleJa: "フリーレント（内装工事猶予期間）の交渉下限ライン設定",
+    summaryZh: "台北一級商圈房東通常僅給 14~30 天免租期。考量日系極簡特殊規格陳列裝潢需 45~60 天，需定調爭取目標與租金補貼底線。",
+    summaryJa: "台北の商業地では通常14〜30日のフリーレントが通例だが、特殊什器と内装設計に45〜60日を要するため、交渉下限条件を確定させる必要がある。",
+    author: "陳律師 / 顧問",
+    date: "2026/10/22 05:30",
+    storeId: "",
+    storeTitle: "",
+    comments: [
+      {
+        id: "c2-1",
+        author: "陳顧問",
+        role: "tw",
+        date: "2026/10/22 05:40",
+        textZh: "建議正式合約載明起租日起算45天免租期；若房東堅持僅給30天，則要求前兩個月租金折抵20%作為補貼。",
+        textJa: "契約上のフリーレントを最低45日確保、不可なら初期2ヶ月の賃料20%減額を条件として提示することを推奨。"
+      }
+    ]
+  },
+  {
+    id: "board-3",
+    category: "智財法務",
+    status: "resolved",
+    titleZh: "台灣商標註冊與代理經銷授權書官方公證進度",
+    titleJa: "台湾商標登録状況および正規販売代理権ライセンス認証",
+    summaryZh: "第25類（鞋履服飾）台灣商標已進入經濟部智財局審定公告階段；日本總公司出具之台灣獨家代理授權書已完成外務省公證。",
+    summaryJa: "第25類（靴・アパレル）の商標出願は台湾経済部知財局にて公告段階。日本法人発行の台湾総代理授権書は公証完了。",
+    author: "陳律師 / 顧問",
+    date: "2026/10/21 18:00",
+    storeId: "",
+    storeTitle: "",
+    comments: [
+      {
+        id: "c3-1",
+        author: "陳顧問",
+        role: "tw",
+        date: "2026/10/21 18:30",
+        textZh: "商標優先權無爭議案件，官方證書預計於 3 個月內核發，不影響首店開幕營業與海關備案。",
+        textJa: "異議申し立てなく順調に推移しており、3ヶ月以内に正式証書が交付予定。店舗オープンおよび税関手続きに支障なし。"
+      }
+    ]
+  },
+  {
+    id: "board-4",
+    category: "公司設立",
+    status: "discussing",
+    titleZh: "台灣實體公司設立架構與資本額外匯匯入時程",
+    titleJa: "台湾法人設立スキームおよび資本金海外送金スケジュール",
+    summaryZh: "評估採外國法人在台分公司或是100%外商獨資子公司。投審會（現投審司）審查與銀行OBU/DBU帳戶開立時程。",
+    summaryJa: "外国法人の台湾支店形態か、100%外資子会社かのスキーム最終確認。投資審査委員会の許認可と銀行口座開設の進捗管理。",
+    author: "會計師事務所",
+    date: "2026/10/21 14:00",
+    storeId: "",
+    storeTitle: "",
+    comments: [
+      {
+        id: "c4-1",
+        author: "Lynn",
+        role: "tw",
+        date: "2026/10/21 15:20",
+        textZh: "目前建議直接設立「台灣格蘭斯股份有限公司」，資本額暫定新台幣 500 萬元，便於後續大坪數門市發票與租賃合約直接簽署。",
+        textJa: "現地法人「台灣格蘭斯股份有限公司」設立、資本金500万NTDにて手続き準備中。店舗賃貸契約の主体として最適です。"
+      }
+    ]
+  },
+  {
+    id: "board-5",
+    category: "空間設計",
+    status: "pending",
+    titleZh: "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
+    titleJa: "内装什器・ディスプレイツール：日本からの直輸入 vs 台湾現地特注製作",
+    summaryZh: "grounds 招牌透明氣泡鞋底造型的壓克力鞋架與金屬陳列架，是否由日本原廠整組海運來台，或由台灣精工工廠照圖打樣？",
+    summaryJa: "ブランド象徴である透明ソール什器・アクリル特注ラックについて、日本からのコンテナ輸送か、台湾の高品質アクリル工場でのライセンス製作か比較検討。",
+    author: "Lynn",
+    date: "2026/10/21 11:00",
+    storeId: "",
+    storeTitle: "",
+    comments: [
+      {
+        id: "c5-1",
+        author: "坂部三樹郎",
+        role: "jp",
+        date: "2026/10/21 13:00",
+        textZh: "日本有合作的特殊透明成型工廠，但海運材積與關稅成本較高。台灣若能找到能做出無氣泡高透光接合的工廠，先做1組樣品確認也是好方案。",
+        textJa: "日本の専属工場製が品質上最も確実だが輸送費・関税が嵩む。台湾で高透過無気泡アクリル加工が可能な先があれば、まずサンプル1台を試作検討したい。"
+      }
+    ]
+  },
+  {
+    id: "board-6",
+    category: "物流供應鏈",
+    status: "resolved",
+    titleZh: "首批現貨報關進口與保稅/溫控倉儲配合方案",
+    titleJa: "初回来日在庫の輸入通関および空調完備保管倉庫の選定",
+    summaryZh: "首批預計進口 1,200 雙（涵蓋 MOOPIE, JEWELRY 等全系列），已洽定具備空調恆溫之北部第三方電商物流倉。",
+    summaryJa: "初回輸入1,200足（MOOPIE, JEWELRY等）。台北近郊の空調完備フルフィルメント倉庫と基本合意。",
+    author: "物流部",
+    date: "2026/10/20 16:00",
+    storeId: "",
+    storeTitle: "",
+    comments: [
+      {
+        id: "c6-1",
+        author: "Lynn",
+        role: "tw",
+        date: "2026/10/20 17:10",
+        textZh: "鞋盒包裝完整度檢驗與條碼貼標作業已確認由倉儲方配合，支援門市日補貨與官網下單同倉配送。",
+        textJa: "検品・バーコード貼付・店舗向け即日補充配送およびオンライン受注出荷の一元管理体制が整備完了。"
+      }
+    ]
+  }
+];
+
+
 let state = {
   currentUser: 'Lynn',
   currentUserRole: 'tw',
   langMode: 'bilingual', // 'bilingual', 'zh', 'ja'
   storeModalLang: 'bilingual',
+  boardFilter: 'all',
+  boardTopics: JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS)),
   customTags: ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流'],
   selectedStoresForCompare: [],
   members: [],
@@ -2715,7 +3279,11 @@ function loadAppState() {
   if (loadedData) {
     if (Array.isArray(loadedData.posts)) state.posts = loadedData.posts;
     if (Array.isArray(loadedData.stores)) state.stores = loadedData.stores;
+    if (Array.isArray(loadedData.boardTopics) && loadedData.boardTopics.length > 0) state.boardTopics = loadedData.boardTopics;
     if (Array.isArray(loadedData.deletedLogs)) state.deletedLogs = loadedData.deletedLogs;
+  }
+  if (!Array.isArray(state.boardTopics) || state.boardTopics.length === 0) {
+    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
   }
 
   // Purge any deleted items (and old sample placeholders) so they NEVER resurrect
@@ -2859,6 +3427,7 @@ function saveAppState(pushToCloud = true) {
     localStorage.setItem(STORE_KEY, JSON.stringify({
       posts: state.posts,
       stores: state.stores,
+      boardTopics: state.boardTopics,
       deletedLogs: state.deletedLogs
     }));
   } catch (err) {
@@ -2873,6 +3442,7 @@ function saveAppState(pushToCloud = true) {
       localStorage.setItem(STORE_KEY, JSON.stringify({
         posts: safePosts,
         stores: state.stores,
+        boardTopics: state.boardTopics,
         deletedLogs: state.deletedLogs
       }));
     } catch (e2) {
@@ -2933,7 +3503,13 @@ async function syncCloudData() {
           });
         }
 
-        // 4. Ensure any deleted items are strictly purged
+        // 4. Merge board topics from cloud
+        if (Array.isArray(data.boardTopics) && data.boardTopics.length > 0) {
+          state.boardTopics = data.boardTopics;
+          updated = true;
+        }
+
+        // 5. Ensure any deleted items are strictly purged
         const prePostLen = state.posts.length;
         const preStoreLen = state.stores.length;
         state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
@@ -2947,6 +3523,7 @@ async function syncCloudData() {
           saveAppState(false);
           renderFeeds();
           renderStores();
+          renderBoard();
         }
       }
     }
@@ -2960,6 +3537,7 @@ function pushStateToCloud() {
     const payload = JSON.stringify({
       posts: state.posts,
       stores: state.stores,
+      boardTopics: state.boardTopics,
       deletedLogs: state.deletedLogs
     });
     fetch('api_sync.php', {
@@ -3052,6 +3630,19 @@ function applyGlobalLanguageTexts() {
   if (tabFeedTitle) tabFeedTitle.textContent = isJa ? 'REPORT (日報)' : 'REPORT';
   const tabStoreTitle = document.querySelector('#btn-tab-store .tab-title');
   if (tabStoreTitle) tabStoreTitle.textContent = isJa ? 'MAP (店舗)' : 'MAP';
+  const tabBoardTitle = document.querySelector('#btn-tab-board .tab-title');
+  if (tabBoardTitle) tabBoardTitle.textContent = isJa ? 'BOARD (審議)' : 'BOARD';
+
+  const bfAll = document.getElementById('bf-label-all');
+  if (bfAll) bfAll.textContent = isJa ? 'すべて' : '全部';
+  const bfDisc = document.getElementById('bf-label-disc');
+  if (bfDisc) bfDisc.textContent = isJa ? '🟡 審議中' : '🟡 審議中';
+  const bfPend = document.getElementById('bf-label-pend');
+  if (bfPend) bfPend.textContent = isJa ? '🔴 要確認' : '🔴 待確認';
+  const bfRes = document.getElementById('bf-label-res');
+  if (bfRes) bfRes.textContent = isJa ? '🟢 決定済' : '🟢 已定案';
+  const btnNewTopic = document.getElementById('btn-new-topic-label');
+  if (btnNewTopic) btnNewTopic.textContent = isJa ? '＋ 新規議題' : '＋ 發起新議題';
 
   const postText = document.getElementById('post-text-zh');
   if (postText) {
@@ -3084,7 +3675,7 @@ function toggleActiveMember() {
   renderFeeds();
 }
 
-// --- Navigation Tabs ---
+// --- Navigation Tabs (REPORT / MAP / BOARD) ---
 function switchNavTab(tabId) {
   document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById(`btn-tab-${tabId}`);
@@ -3092,16 +3683,24 @@ function switchNavTab(tabId) {
 
   const tabFeed = document.getElementById('tab-feed');
   const tabStore = document.getElementById('tab-store');
+  const tabBoard = document.getElementById('tab-board');
 
   if (tabId === 'feed') {
-    tabFeed.style.display = 'block';
-    tabStore.style.display = 'none';
+    if (tabFeed) tabFeed.style.display = 'block';
+    if (tabStore) tabStore.style.display = 'none';
+    if (tabBoard) tabBoard.style.display = 'none';
     renderFeeds();
-  } else {
-    tabFeed.style.display = 'none';
-    tabStore.style.display = 'block';
+  } else if (tabId === 'store') {
+    if (tabFeed) tabFeed.style.display = 'none';
+    if (tabStore) tabStore.style.display = 'block';
+    if (tabBoard) tabBoard.style.display = 'none';
     renderStores();
     setTimeout(initStoreMap, 200);
+  } else if (tabId === 'board') {
+    if (tabFeed) tabFeed.style.display = 'none';
+    if (tabStore) tabStore.style.display = 'none';
+    if (tabBoard) tabBoard.style.display = 'block';
+    renderBoard();
   }
 }
 
@@ -5490,6 +6089,372 @@ function renderAuditLogs() {
       </div>
     `).join('');
   }
+}
+
+
+// ==========================================================================
+// --- PROJECT DECISION BOARD (跨國決策審議看板) LOGIC ---
+// ==========================================================================
+
+function setBoardFilter(filter) {
+  state.boardFilter = filter;
+  document.querySelectorAll('.board-filter-chip').forEach(c => c.classList.remove('active'));
+  const activeChip = document.getElementById(`bf-${filter}`);
+  if (activeChip) activeChip.classList.add('active');
+  renderBoard();
+}
+
+function cycleTopicStatus(topicId, e) {
+  if (e) e.stopPropagation();
+  const topic = (state.boardTopics || []).find(t => t.id === topicId);
+  if (!topic) return;
+  const cycle = {
+    'discussing': 'pending',
+    'pending': 'resolved',
+    'resolved': 'discussing'
+  };
+  topic.status = cycle[topic.status] || 'discussing';
+  saveAppState();
+  renderBoard();
+}
+
+function renderBoard() {
+  const container = document.getElementById('board-topics-list');
+  if (!container) return;
+
+  if (!Array.isArray(state.boardTopics) || state.boardTopics.length === 0) {
+    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
+  }
+
+  // Update counter badges
+  const allCount = state.boardTopics.length;
+  const discussingCount = state.boardTopics.filter(t => t.status === 'discussing').length;
+  const pendingCount = state.boardTopics.filter(t => t.status === 'pending').length;
+  const resolvedCount = state.boardTopics.filter(t => t.status === 'resolved').length;
+
+  const elAll = document.getElementById('bcount-all');
+  if (elAll) elAll.textContent = allCount;
+  const elDisc = document.getElementById('bcount-discussing');
+  if (elDisc) elDisc.textContent = discussingCount;
+  const elPend = document.getElementById('bcount-pending');
+  if (elPend) elPend.textContent = pendingCount;
+  const elRes = document.getElementById('bcount-resolved');
+  if (elRes) elRes.textContent = resolvedCount;
+
+  // Filter topics
+  const currentFilter = state.boardFilter || 'all';
+  const filtered = currentFilter === 'all'
+    ? state.boardTopics
+    : state.boardTopics.filter(t => t.status === currentFilter);
+
+  if (filtered.length === 0) {
+    container.innerHTML = `
+      <div style="text-align:center;padding:48px 20px;background:#fff;border-radius:12px;border:1px dashed var(--border);color:var(--fg-muted);">
+        <svg class="icon" style="width:36px;height:36px;margin-bottom:10px;opacity:0.4;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <div style="font-size:14px;font-weight:700;">目前此狀態尚無審議議題</div>
+        <div style="font-size:12px;margin-top:4px;">點擊上方「＋ 發起新議題」建立跨國決策討論</div>
+      </div>
+    `;
+    return;
+  }
+
+  const isJa = state.langMode === 'ja';
+
+  container.innerHTML = filtered.map(t => {
+    const statusClass = `status-${t.status || 'discussing'}`;
+    const statusText = t.status === 'resolved'
+      ? (isJa ? '🟢 決定済' : '🟢 已定案')
+      : (t.status === 'pending' ? (isJa ? '🔴 要確認' : '🔴 待確認') : (isJa ? '🟡 審議中' : '🟡 審議中'));
+
+    const comments = Array.isArray(t.comments) ? t.comments : [];
+
+    // Linked store chip
+    let linkedStoreHtml = '';
+    if (t.storeId) {
+      const storeObj = (state.stores || []).find(s => s.id === t.storeId);
+      const storeName = storeObj ? storeObj.title : (t.storeTitle || '關聯店面');
+      linkedStoreHtml = `
+        <div>
+          <div class="board-linked-store" onclick="openStoreDetailModal('${escapeHtml(t.storeId)}')" title="點擊檢視店面完整資訊">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <span>📍 關聯店面：${escapeHtml(storeName)} (點擊查看)</span>
+          </div>
+        </div>
+      `;
+    }
+
+    // Thread comments HTML
+    const commentsHtml = comments.map(c => `
+      <div class="board-comment-item">
+        <div class="board-comment-header">
+          <div class="board-comment-author-group">
+            <span class="board-comment-author">${escapeHtml(c.author || '團隊成員')}</span>
+            <span class="board-comment-role-tag ${c.role === 'jp' ? 'jp' : 'tw'}">${c.role === 'jp' ? 'JP 日本' : 'TW 台灣'}</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span class="board-comment-date">${escapeHtml(c.date || '')}</span>
+            <button type="button" class="board-icon-btn danger" style="padding:1px 4px;font-size:11px;" onclick="deleteBoardComment('${t.id}', '${c.id}')" title="刪除留言">×</button>
+          </div>
+        </div>
+        <div class="board-comment-text-zh">${escapeHtml(c.textZh || c.text || '')}</div>
+        ${c.textJa && c.textJa !== c.textZh ? `<div class="board-comment-text-ja">🇯🇵 ${escapeHtml(c.textJa)}</div>` : ''}
+      </div>
+    `).join('');
+
+    return `
+      <div class="board-card" id="bcard-${t.id}">
+        <div class="board-card-header">
+          <div class="board-card-badges">
+            <span class="board-cat-badge">${escapeHtml(t.category || '專案審議')}</span>
+            <span class="board-status-badge ${statusClass}" onclick="cycleTopicStatus('${t.id}', event)" title="點擊直接切換狀態（審議中 ⇄ 待確認 ⇄ 已定案）">
+              ${statusText} ▾
+            </span>
+          </div>
+          <div class="board-card-actions">
+            <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal('${t.id}')" title="編輯議題">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            </button>
+            <button type="button" class="board-icon-btn danger" onclick="confirmDeleteBoardTopic('${t.id}')" title="刪除議題">
+              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="board-topic-title">${escapeHtml(t.titleZh || '')}</div>
+        ${t.titleJa ? `<div class="board-topic-title-ja">🇯🇵 ${escapeHtml(t.titleJa)}</div>` : ''}
+
+        <div class="board-topic-summary">
+          <div>${escapeHtml(t.summaryZh || '')}</div>
+          ${t.summaryJa ? `<div class="board-topic-summary-ja">🇯🇵 ${escapeHtml(t.summaryJa)}</div>` : ''}
+        </div>
+
+        ${linkedStoreHtml}
+
+        <div class="board-meta-bar">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span>發起人：<b>${escapeHtml(t.author || 'Lynn')}</b></span>
+            <span>時間：${escapeHtml(t.date || '')}</span>
+          </div>
+          <div style="font-weight:700;">
+            💬 ${comments.length} 則交流反饋
+          </div>
+        </div>
+
+        <!-- Inline Thread Section -->
+        <div class="board-thread-container">
+          <div class="board-thread-title">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            <span>雙向審議交流串 (${comments.length})</span>
+          </div>
+
+          <div id="board-comments-list-${t.id}">
+            ${commentsHtml}
+          </div>
+
+          <!-- Add Comment Input Box -->
+          <div class="board-reply-row">
+            <input type="text" id="board-reply-input-${t.id}" class="board-reply-input" placeholder="${isJa ? '意見・決定事項を入力...' : '輸入您的意見、反饋或定案決策...'}" onkeydown="if(event.key==='Enter')submitBoardReply('${t.id}')">
+            <button type="button" class="board-reply-btn" id="board-reply-btn-${t.id}" onclick="submitBoardReply('${t.id}')">
+              ${isJa ? '返信' : '發表回饋'}
+            </button>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+async function submitBoardReply(topicId) {
+  const input = document.getElementById(`board-reply-input-${topicId}`);
+  if (!input) return;
+  const text = input.value.trim();
+  if (!text) return;
+
+  const btn = document.getElementById(`board-reply-btn-${topicId}`);
+  if (btn) {
+    btn.disabled = true;
+    btn.textContent = '傳送中...';
+  }
+
+  const topic = (state.boardTopics || []).find(t => t.id === topicId);
+  if (!topic) return;
+  if (!Array.isArray(topic.comments)) topic.comments = [];
+
+  const isJaUser = state.currentUserRole === 'jp';
+  let textZh = text;
+  let textJa = text;
+
+  try {
+    if (isJaUser) {
+      textJa = text;
+      textZh = await translateTextAsync(text, 'ja|zh-TW') || text;
+    } else {
+      textZh = text;
+      textJa = await translateTextAsync(text, 'zh-TW|ja') || text;
+    }
+  } catch(e) {
+    console.warn('Reply translation skipped:', e);
+  }
+
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+
+  const commentObj = {
+    id: 'c_' + Date.now(),
+    author: state.currentUser || 'Lynn',
+    role: state.currentUserRole || 'tw',
+    date: dateStr,
+    textZh: textZh,
+    textJa: textJa
+  };
+
+  topic.comments.push(commentObj);
+  saveAppState();
+  input.value = '';
+  renderBoard();
+}
+
+function deleteBoardComment(topicId, commentId) {
+  const topic = (state.boardTopics || []).find(t => t.id === topicId);
+  if (!topic || !Array.isArray(topic.comments)) return;
+  topic.comments = topic.comments.filter(c => c.id !== commentId);
+  saveAppState();
+  renderBoard();
+}
+
+function openNewBoardTopicModal() {
+  document.getElementById('board-topic-edit-id').value = '';
+  document.getElementById('board-topic-modal-title').textContent = '發起專案決策議題';
+  document.getElementById('board-topic-cat').value = '品牌策略';
+  document.getElementById('board-topic-status').value = 'discussing';
+  document.getElementById('board-topic-title-zh').value = '';
+  document.getElementById('board-topic-summary-zh').value = '';
+
+  // Populate store dropdown
+  const storeSelect = document.getElementById('board-topic-store');
+  storeSelect.innerHTML = '<option value="">-- 無關聯店面 --</option>' +
+    (state.stores || []).map(s => `<option value="${escapeHtml(s.id)}">${escapeHtml(s.title)} (${s.area || ''}坪)</option>`).join('');
+
+  const modal = document.getElementById('board-topic-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function openEditBoardTopicModal(topicId) {
+  const topic = (state.boardTopics || []).find(t => t.id === topicId);
+  if (!topic) return;
+
+  document.getElementById('board-topic-edit-id').value = topic.id;
+  document.getElementById('board-topic-modal-title').textContent = '編輯專案決策議題';
+  document.getElementById('board-topic-cat').value = topic.category || '品牌策略';
+  document.getElementById('board-topic-status').value = topic.status || 'discussing';
+  document.getElementById('board-topic-title-zh').value = topic.titleZh || '';
+  document.getElementById('board-topic-summary-zh').value = topic.summaryZh || '';
+
+  const storeSelect = document.getElementById('board-topic-store');
+  storeSelect.innerHTML = '<option value="">-- 無關聯店面 --</option>' +
+    (state.stores || []).map(s => `<option value="${escapeHtml(s.id)}" ${s.id === topic.storeId ? 'selected' : ''}>${escapeHtml(s.title)} (${s.area || ''}坪)</option>`).join('');
+
+  const modal = document.getElementById('board-topic-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeBoardTopicModal() {
+  const modal = document.getElementById('board-topic-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+async function submitBoardTopic() {
+  const editId = document.getElementById('board-topic-edit-id').value.trim();
+  const category = document.getElementById('board-topic-cat').value;
+  const status = document.getElementById('board-topic-status').value;
+  const titleZh = document.getElementById('board-topic-title-zh').value.trim();
+  const summaryZh = document.getElementById('board-topic-summary-zh').value.trim();
+  const storeId = document.getElementById('board-topic-store').value;
+
+  if (!titleZh) {
+    alert('請填寫議題標題！');
+    return;
+  }
+
+  const submitBtn = document.getElementById('board-topic-submit-btn');
+  if (submitBtn) {
+    submitBtn.disabled = true;
+    submitBtn.textContent = '儲存與日文翻譯中...';
+  }
+
+  let titleJa = '';
+  let summaryJa = '';
+  try {
+    titleJa = await translateTextAsync(titleZh, 'zh-TW|ja') || titleZh;
+    if (summaryZh) {
+      summaryJa = await translateTextAsync(summaryZh, 'zh-TW|ja') || summaryZh;
+    }
+  } catch(e) {
+    console.warn('Auto translation error:', e);
+  }
+
+  if (!Array.isArray(state.boardTopics)) {
+    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
+  }
+
+  let storeTitle = '';
+  if (storeId) {
+    const sObj = (state.stores || []).find(s => s.id === storeId);
+    if (sObj) storeTitle = sObj.title;
+  }
+
+  if (editId) {
+    // Edit existing
+    const topic = state.boardTopics.find(t => t.id === editId);
+    if (topic) {
+      topic.category = category;
+      topic.status = status;
+      topic.titleZh = titleZh;
+      topic.titleJa = titleJa;
+      topic.summaryZh = summaryZh;
+      topic.summaryJa = summaryJa;
+      topic.storeId = storeId || null;
+      topic.storeTitle = storeTitle;
+    }
+  } else {
+    // New topic
+    const now = new Date();
+    const dateStr = `${now.getFullYear()}/${String(now.getMonth()+1).padStart(2,'0')}/${String(now.getDate()).padStart(2,'0')} ${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`;
+    const newTopic = {
+      id: 'board-' + Date.now(),
+      category: category,
+      status: status,
+      titleZh: titleZh,
+      titleJa: titleJa,
+      summaryZh: summaryZh,
+      summaryJa: summaryJa,
+      author: state.currentUser || 'Lynn',
+      date: dateStr,
+      storeId: storeId || null,
+      storeTitle: storeTitle,
+      comments: []
+    };
+    state.boardTopics.unshift(newTopic);
+  }
+
+  if (submitBtn) {
+    submitBtn.disabled = false;
+    submitBtn.textContent = '儲存議題';
+  }
+
+  saveAppState();
+  closeBoardTopicModal();
+  renderBoard();
+}
+
+function confirmDeleteBoardTopic(topicId) {
+  const topic = (state.boardTopics || []).find(t => t.id === topicId);
+  if (!topic) return;
+  if (!confirm(`確定要刪除決策議題「${topic.titleZh}」嗎？`)) return;
+
+  state.boardTopics = state.boardTopics.filter(t => t.id !== topicId);
+  saveAppState();
+  renderBoard();
 }
 
 // Universal Click-Outside-To-Close for all floating modals
