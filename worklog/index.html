@@ -2970,29 +2970,7 @@ const DEFAULT_BOARD_TOPICS = [
       }
     ]
   },
-  {
-    id: "board-4",
-    category: "公司設立",
-    status: "discussing",
-    titleZh: "台灣實體公司設立架構與資本額外匯匯入時程",
-    titleJa: "台湾法人設立スキームおよび資本金海外送金スケジュール",
-    summaryZh: "評估採外國法人在台分公司或是100%外商獨資子公司。投審會（現投審司）審查與銀行OBU/DBU帳戶開立時程。",
-    summaryJa: "外国法人の台湾支店形態か、100%外資子会社かのスキーム最終確認。投資審査委員会の許認可と銀行口座開設の進捗管理。",
-    author: "會計師事務所",
-    date: "2026/10/21 14:00",
-    storeId: "",
-    storeTitle: "",
-    comments: [
-      {
-        id: "c4-1",
-        author: "Lynn",
-        role: "tw",
-        date: "2026/10/21 15:20",
-        textZh: "目前建議直接設立「台灣格蘭斯股份有限公司」，資本額暫定新台幣 500 萬元，便於後續大坪數門市發票與租賃合約直接簽署。",
-        textJa: "現地法人「台灣格蘭斯股份有限公司」設立、資本金500万NTDにて手続き準備中。店舗賃貸契約の主体として最適です。"
-      }
-    ]
-  },
+
   {
     id: "board-5",
     category: "空間設計",
@@ -3289,8 +3267,11 @@ function loadAppState() {
   // Purge any deleted items (and old sample placeholders) so they NEVER resurrect
   const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
   const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
+  const deletedBoardIds = new Set((state.deletedLogs || []).filter(l => l.type === '決策議題').map(l => l.id));
 
   state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
+  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+  state.boardTopics = (state.boardTopics || []).filter(t => !deletedBoardIds.has(t.id));
   if (state.posts.length === 0) {
     state.posts = [
       {
@@ -3503,18 +3484,38 @@ async function syncCloudData() {
           });
         }
 
-        // 4. Merge board topics from cloud
+        const deletedBoardIds = new Set((state.deletedLogs || []).filter(l => l.type === '決策議題').map(l => l.id));
+
+        // 4. Merge board topics from cloud if not deleted
         if (Array.isArray(data.boardTopics) && data.boardTopics.length > 0) {
-          state.boardTopics = data.boardTopics;
-          updated = true;
+          const localBoardIds = new Set(state.boardTopics.map(b => b.id));
+          data.boardTopics.forEach(bt => {
+            if (!localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id)) {
+              state.boardTopics.push(bt);
+              localBoardIds.add(bt.id);
+              updated = true;
+            } else if (localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id)) {
+              const localT = state.boardTopics.find(t => t.id === bt.id);
+              if (localT && Array.isArray(bt.comments) && bt.comments.length > (localT.comments || []).length) {
+                localT.comments = bt.comments;
+                updated = true;
+              }
+              if (localT && bt.status && bt.status !== localT.status) {
+                localT.status = bt.status;
+                updated = true;
+              }
+            }
+          });
         }
 
         // 5. Ensure any deleted items are strictly purged
         const prePostLen = state.posts.length;
         const preStoreLen = state.stores.length;
+        const preBoardLen = state.boardTopics.length;
         state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
         state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
-        if (state.posts.length !== prePostLen || state.stores.length !== preStoreLen) {
+        state.boardTopics = state.boardTopics.filter(t => !deletedBoardIds.has(t.id));
+        if (state.posts.length !== prePostLen || state.stores.length !== preStoreLen || state.boardTopics.length !== preBoardLen) {
           updated = true;
         }
 
@@ -4562,6 +4563,9 @@ function openDeleteConfirmModal(type, id, title) {
   } else if (type === 'store') {
     if (msgEl) msgEl.textContent = `確定要刪除店面「${title}」嗎？`;
     if (reasonInp) reasonInp.value = '不符展店需求';
+  } else if (type === 'board') {
+    if (msgEl) msgEl.textContent = `確定要刪除決策議題「${title}」嗎？此操作將記錄於存證中。`;
+    if (reasonInp) reasonInp.value = '議題結案/紀錄調整';
   }
 
   if (modal) modal.classList.add('open');
@@ -4622,6 +4626,21 @@ function executeDeleteConfirmed() {
       renderStores();
       showToast(`店面【${item.title}】已刪除並記錄存證`, 2500);
     }
+  } else if (type === 'board') {
+    const topic = (state.boardTopics || []).find(t => t.id === id);
+    const titleText = topic ? topic.titleZh : title;
+    state.deletedLogs.unshift({
+      type: '決策議題',
+      id: id,
+      title: titleText,
+      deletedBy: state.currentUser,
+      deletedAt: new Date().toLocaleString(),
+      reason: reason
+    });
+    state.boardTopics = (state.boardTopics || []).filter(t => t.id !== id);
+    saveAppState();
+    renderBoard();
+    showToast(`決策議題【${titleText}】已刪除並記錄存證`, 2500);
   }
 
   closeDeleteConfirmModal();
@@ -6372,7 +6391,7 @@ async function submitBoardTopic() {
   const storeId = document.getElementById('board-topic-store').value;
 
   if (!titleZh) {
-    alert('請填寫議題標題！');
+    showToast('請填寫議題標題！', 2500);
     return;
   }
 
@@ -6450,11 +6469,7 @@ async function submitBoardTopic() {
 function confirmDeleteBoardTopic(topicId) {
   const topic = (state.boardTopics || []).find(t => t.id === topicId);
   if (!topic) return;
-  if (!confirm(`確定要刪除決策議題「${topic.titleZh}」嗎？`)) return;
-
-  state.boardTopics = state.boardTopics.filter(t => t.id !== topicId);
-  saveAppState();
-  renderBoard();
+  openDeleteConfirmModal('board', topic.id, topic.titleZh);
 }
 
 // Universal Click-Outside-To-Close for all floating modals
