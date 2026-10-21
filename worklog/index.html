@@ -3212,6 +3212,28 @@ function KNKNOWN_IMAGE(id) {
   ];
 }
 
+// --- Global Toast Notification Helper ---
+let toastTimeout = null;
+function showToast(msg, duration = 3000) {
+  try {
+    let toast = document.getElementById('global-toast-notice');
+    if (!toast) {
+      toast = document.createElement('div');
+      toast.id = 'global-toast-notice';
+      toast.className = 'toast-notice';
+      document.body.appendChild(toast);
+    }
+    toast.textContent = msg;
+    toast.classList.add('show');
+    if (toastTimeout) clearTimeout(toastTimeout);
+    toastTimeout = setTimeout(() => {
+      if (toast) toast.classList.remove('show');
+    }, duration);
+  } catch(e) {
+    console.log('Toast:', msg);
+  }
+}
+
 // --- Initialization & Token Authentication ---
 function loadAppState() {
   const savedMembers = localStorage.getItem(MEMBERS_KEY);
@@ -4587,63 +4609,68 @@ function executeDeleteConfirmed() {
   const reasonInp = document.getElementById('del-confirm-reason');
   const reason = (reasonInp && reasonInp.value.trim()) ? reasonInp.value.trim() : '紀錄調整';
 
-  if (type === 'post') {
-    const post = state.posts.find(p => p.id === id);
-    if (post) {
-      state.deletedLogs.unshift({
-        type: '工作動態',
-        id: id,
-        title: post.zh.slice(0, 30) + '...',
-        deletedBy: state.currentUser,
-        deletedAt: new Date().toLocaleString(),
-        reason: reason
-      });
-      state.posts = state.posts.filter(p => p.id !== id);
-      saveAppState();
-      renderFeeds();
-      showToast('動態已成功刪除並記入團隊存證', 2500);
-    }
-  } else if (type === 'store') {
-    const item = state.stores.find(s => s.id === id);
-    if (item) {
-      state.deletedLogs.unshift({
-        type: '店面物件',
-        id: id,
-        title: item.title,
-        deletedBy: state.currentUser,
-        deletedAt: new Date().toLocaleString(),
-        reason: reason
-      });
-      state.stores = state.stores.filter(s => s.id !== id);
-      state.selectedStoresForCompare = state.selectedStoresForCompare.filter(x => x !== id);
-
-      if (storeMarkers[id]) {
-        storeMap.removeLayer(storeMarkers[id]);
-        delete storeMarkers[id];
-      }
-
-      saveAppState();
-      renderStores();
-      showToast(`店面【${item.title}】已刪除並記錄存證`, 2500);
-    }
-  } else if (type === 'board') {
-    const topic = (state.boardTopics || []).find(t => t.id === id);
-    const titleText = topic ? topic.titleZh : title;
-    state.deletedLogs.unshift({
-      type: '決策議題',
-      id: id,
-      title: titleText,
-      deletedBy: state.currentUser,
-      deletedAt: new Date().toLocaleString(),
-      reason: reason
-    });
-    state.boardTopics = (state.boardTopics || []).filter(t => t.id !== id);
-    saveAppState();
-    renderBoard();
-    showToast(`決策議題【${titleText}】已刪除並記錄存證`, 2500);
-  }
-
+  // Immediately close modal to prevent UI lock
   closeDeleteConfirmModal();
+
+  try {
+    if (type === 'post') {
+      const post = state.posts.find(p => p.id === id);
+      if (post) {
+        state.deletedLogs.unshift({
+          type: '工作動態',
+          id: id,
+          title: post.zh.slice(0, 30) + '...',
+          deletedBy: state.currentUser,
+          deletedAt: new Date().toLocaleString(),
+          reason: reason
+        });
+        state.posts = state.posts.filter(p => p.id !== id);
+        saveAppState();
+        renderFeeds();
+        showToast('動態已成功刪除並記入團隊存證', 2500);
+      }
+    } else if (type === 'store') {
+      const item = state.stores.find(s => s.id === id);
+      if (item) {
+        state.deletedLogs.unshift({
+          type: '店面物件',
+          id: id,
+          title: item.title,
+          deletedBy: state.currentUser,
+          deletedAt: new Date().toLocaleString(),
+          reason: reason
+        });
+        state.stores = state.stores.filter(s => s.id !== id);
+        state.selectedStoresForCompare = state.selectedStoresForCompare.filter(x => x !== id);
+
+        if (storeMarkers[id]) {
+          storeMap.removeLayer(storeMarkers[id]);
+          delete storeMarkers[id];
+        }
+
+        saveAppState();
+        renderStores();
+        showToast(`店面【${item.title}】已刪除並記錄存證`, 2500);
+      }
+    } else if (type === 'board') {
+      const topic = (state.boardTopics || []).find(t => t.id === id);
+      const titleText = topic ? topic.titleZh : title;
+      state.deletedLogs.unshift({
+        type: '決策議題',
+        id: id,
+        title: titleText,
+        deletedBy: state.currentUser,
+        deletedAt: new Date().toLocaleString(),
+        reason: reason
+      });
+      state.boardTopics = (state.boardTopics || []).filter(t => t.id !== id);
+      saveAppState();
+      renderBoard();
+      showToast(`決策議題【${titleText}】已刪除並記錄存證`, 2500);
+    }
+  } catch(err) {
+    console.error('Delete execution error:', err);
+  }
 }
 
 function deletePost(postId) {
