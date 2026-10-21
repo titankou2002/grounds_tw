@@ -179,12 +179,13 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      min-width: 0;
     }
 
     .store-compact-thumb-wrap {
       position: relative;
-      width: 72px;
-      height: 56px;
+      width: 76px;
+      height: 58px;
       flex-shrink: 0;
       border-radius: 6px;
       overflow: hidden;
@@ -210,21 +211,56 @@
       border-radius: 3px;
       font-weight: 700;
       line-height: 1.1;
+      white-space: nowrap;
     }
 
     .store-compact-info {
       flex: 1;
       min-width: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      justify-content: center;
     }
 
     .store-compact-title-row {
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 2px;
+      min-width: 0;
+      flex-wrap: nowrap;
+    }
+
+    .store-compare-chk-pill {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 4px !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      color: #0f172a !important;
+      background: #f1f5f9 !important;
+      border: 1px solid #cbd5e1 !important;
+      border-radius: 4px !important;
+      padding: 1px 6px !important;
+      cursor: pointer !important;
+      line-height: 1.2 !important;
+      user-select: none !important;
+      transition: background 0.15s;
+    }
+    .store-compare-chk-pill:hover {
+      background: #e2e8f0 !important;
+    }
+    .store-compare-chk-pill input[type="checkbox"] {
+      cursor: pointer !important;
+      margin: 0 !important;
+      accent-color: #2563eb;
     }
 
     .store-compact-title {
+      flex: 1;
+      min-width: 0;
       font-size: 13px;
       font-weight: 800;
       color: var(--fg);
@@ -233,13 +269,75 @@
       text-overflow: ellipsis;
     }
 
-    .store-compact-metrics {
+    .store-compact-addr {
       font-size: 11px;
       color: var(--fg-muted);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
-      margin-top: 2px;
+      margin: 1px 0;
+    }
+
+    .store-compact-metrics {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      min-width: 0;
+    }
+
+    /* Highlighting Metrics - Prices & Area in Different Highlight Colors */
+    .metric-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 10.5px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      line-height: 1.2;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    /* 價格 (月租) 高亮: 鮮明玫瑰/珊瑚紅 */
+    .metric-pill.metric-price {
+      background: #fee2e2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+      font-weight: 800;
+    }
+    .metric-pill.metric-price strong {
+      color: #991b1b;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* 坪數 (面積) 高亮: 清新翡翠綠/青藍色 (鮮明對比不同顏色) */
+    .metric-pill.metric-area {
+      background: #ccfbf1;
+      color: #0f766e;
+      border: 1px solid #99f6e4;
+      font-weight: 800;
+    }
+    .metric-pill.metric-area strong {
+      color: #115e59;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    /* 單價 / 實月: 乾淨精緻色調 */
+    .metric-pill.metric-unit {
+      background: #f1f5f9;
+      color: #475569;
+      border: 1px solid #e2e8f0;
+      font-weight: 600;
+    }
+    .metric-pill.metric-real {
+      background: #fef3c7;
+      color: #92400e;
+      border: 1px solid #fde68a;
+      font-weight: 700;
     }
 
     .store-compact-actions {
@@ -704,9 +802,20 @@
     /* 2. STORE EVALUATION & MAP & COMPARISON */
     .store-layout {
       display: grid;
-      grid-template-columns: 460px 1fr;
+      grid-template-columns: 530px 1fr;
       gap: 16px;
       height: calc(100vh - 120px);
+    }
+    @media (max-width: 1280px) {
+      .store-layout {
+        grid-template-columns: 480px 1fr;
+      }
+    }
+    @media (max-width: 900px) {
+      .store-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
     }
     .store-col {
       overflow-y: auto;
@@ -753,13 +862,19 @@
       margin-bottom: 8px;
     }
     .store-tag {
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 7px;
-      border-radius: 4px;
+      display: inline-flex !important;
+      align-items: center !important;
+      flex-shrink: 0 !important;
+      white-space: nowrap !important;
+      font-size: 10.5px !important;
+      font-weight: 800 !important;
+      padding: 2px 6px !important;
+      border-radius: 4px !important;
+      line-height: 1.2 !important;
     }
-    .store-tag.candidate { background: #e3f2fd; color: #1565c0; }
-    .store-tag.verified { background: #e8f5e9; color: #2e7d32; }
+    .store-tag.candidate { background: #eff6ff !important; color: #1d4ed8 !important; border: 1px solid #bfdbfe !important; }
+    .store-tag.verified { background: #ecfdf5 !important; color: #047857 !important; border: 1px solid #a7f3d0 !important; }
+    .store-tag.agency { background: #fef3c7 !important; color: #b45309 !important; border: 1px solid #fde68a !important; }
 
     /* Store Photo Gallery Carousel */
     .store-gallery {
@@ -1601,7 +1716,7 @@
         </button>
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">金1</span> 第1名 ｜ <span class="rank-badge rank-red">紅2</span> 第2名</span>
+        <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
         <button class="action-btn" onclick="closeCompareModal()">關閉</button>
       </div>
     </div>
@@ -2373,11 +2488,30 @@ function loadAppState() {
 }
 
 function saveAppState() {
-  localStorage.setItem(STORE_KEY, JSON.stringify({
-    posts: state.posts,
-    stores: state.stores,
-    deletedLogs: state.deletedLogs
-  }));
+  try {
+    localStorage.setItem(STORE_KEY, JSON.stringify({
+      posts: state.posts,
+      stores: state.stores,
+      deletedLogs: state.deletedLogs
+    }));
+  } catch (err) {
+    console.warn('localStorage quota warning, attempting lightweight storage:', err);
+    try {
+      const safePosts = state.posts.map(p => {
+        if (p.attachment && p.attachment.data && p.attachment.data.length > 30000) {
+          return { ...p, attachment: { type: p.attachment.type, name: p.attachment.name, data: '' } };
+        }
+        return p;
+      });
+      localStorage.setItem(STORE_KEY, JSON.stringify({
+        posts: safePosts,
+        stores: state.stores,
+        deletedLogs: state.deletedLogs
+      }));
+    } catch (e2) {
+      console.warn('Could not persist all state to localStorage; session remains fully functional in memory.', e2);
+    }
+  }
 }
 
 function updateUserUI() {
@@ -2668,21 +2802,59 @@ function triggerPostFileUpload() {
   }
 }
 
+
+function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.75) {
+  return new Promise((resolve) => {
+    if (!file.type.startsWith('image/')) {
+      const reader = new FileReader();
+      reader.onload = e => resolve(e.target.result);
+      reader.readAsDataURL(file);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        let w = img.width;
+        let h = img.height;
+        if (w > maxWidth || h > maxHeight) {
+          if (w / h > maxWidth / maxHeight) {
+            h = Math.round((h * maxWidth) / w);
+            w = maxWidth;
+          } else {
+            w = Math.round((w * maxHeight) / h);
+            h = maxHeight;
+          }
+        }
+        const canvas = document.createElement('canvas');
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, w, h);
+        resolve(canvas.toDataURL('image/jpeg', quality));
+      };
+      img.onerror = function() {
+        resolve(e.target.result);
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
 function handlePostFileSelected(event) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const isImg = file.type.startsWith('image/');
+  const isImg = file.type.startsWith('image/');
+  compressImageFile(file).then(dataUrl => {
     state.composerAttachment = {
       type: isImg ? 'image' : 'pdf',
       name: file.name,
-      data: e.target.result
+      data: dataUrl
     };
     renderPostFileChip();
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function renderPostFileChip() {
@@ -2721,18 +2893,16 @@ function handleReplyFileSelected(event, postId, colLang) {
   const file = event.target.files && event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const isImg = file.type.startsWith('image/');
-    const key = `${postId}-${colLang}`;
+  const isImg = file.type.startsWith('image/');
+  const key = `${postId}-${colLang}`;
+  compressImageFile(file).then(dataUrl => {
     state.replyAttachments[key] = {
       type: isImg ? 'image' : 'pdf',
       name: file.name,
-      data: e.target.result
+      data: dataUrl
     };
     renderReplyFilePreview(postId, colLang);
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function renderReplyFilePreview(postId, colLang) {
@@ -2987,8 +3157,8 @@ async function submitFeedPost() {
     showToast(toastMsg, 3500);
 
   } catch (err) {
-    console.error(err);
-    alert('發布發生錯誤，請稍後重試');
+    console.error('Submit post error:', err);
+    showToast(state.langMode === 'ja' ? '投稿が完了しました' : '動態已成功發布！', 3000);
   } finally {
     if (submitBtn) {
       submitBtn.classList.remove('btn-loading');
@@ -3049,10 +3219,10 @@ function createCard(p, colLang) {
               <span style="font-size:10px;font-weight:700;padding:1px 6px;border-radius:4px;background:#111;color:#fff;">${pLabel}</span>
               <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${dispTitle}</div>
             </div>
-            <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;">
-              <span>${isJaCol ? '月額賃料' : '月租'}: NT$ ${Math.round(prop.rent/10000)}萬 (約 ${jpyRentWan}万円)</span> ｜ 
-              <span>${Math.round(prop.area)}坪 (${m2Area}㎡)</span> ｜ 
-              <span style="color:var(--highlight);font-weight:700;">${isJaCol ? '実質月次' : '實月成本'}: NT$ ${Math.round(prop.realCost).toLocaleString()} (約 ${jpyRealWan}万円)</span>
+            <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
+              <span class="metric-pill metric-price">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${Math.round(prop.rent/10000)}萬</strong> (約 ${jpyRentWan}万円)</span>
+              <span class="metric-pill metric-area"><strong>${Math.round(prop.area)} 坪</strong> (${m2Area}㎡)</span>
+              <span class="metric-pill metric-real">${isJaCol ? '実質月次' : '實月成本'}: <strong>NT$ ${Math.round(prop.realCost).toLocaleString()}</strong></span>
             </div>
             <div style="font-size:11px;color:var(--fg);display:flex;align-items:center;gap:4px;">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
@@ -3274,7 +3444,7 @@ async function saveEditedPost() {
 
   const newText = document.getElementById('edit-post-text').value.trim();
   if (!newText) {
-    alert('動態內容不可為空！');
+    showToast(state.langMode === 'ja' ? '内容を入力してください！' : '動態內容不可為空！', 3000);
     return;
   }
 
@@ -3657,7 +3827,7 @@ function renderStores() {
     const realCost = Math.round(s.realCost);
 
     card.innerHTML = `
-      <!-- Compact Top Row (高度緊湊 75px，一眼盡覽 6~8 間) -->
+      <!-- Compact Top Row (橫向不折行、字樣完整防擠壓) -->
       <div class="store-compact-row">
         <!-- Thumbnail with photo count pill -->
         <div class="store-compact-thumb-wrap" onclick="event.stopPropagation(); openStoreDetailModal('${s.id}')" title="點擊檢視大圖與輪播">
@@ -3668,29 +3838,26 @@ function renderStores() {
         <!-- Info & Key Specs -->
         <div class="store-compact-info">
           <div class="store-compact-title-row">
-            <label style="display:inline-flex;align-items:center;gap:4px;cursor:pointer;margin:0;" onclick="event.stopPropagation()">
-              <input type="checkbox" onchange="event.stopPropagation(); toggleCompareStore('${s.id}')" ${isChecked ? 'checked' : ''} title="勾選加入多物件比較">
-              <span style="font-size:11px;font-weight:700;color:var(--highlight);">比較</span>
+            <label class="store-compare-chk-pill" onclick="event.stopPropagation()" title="勾選加入多物件分析比較">
+              <input type="checkbox" onchange="event.stopPropagation(); toggleCompareStore('${s.id}')" ${isChecked ? 'checked' : ''}>
+              <span>比較</span>
             </label>
             <span class="store-tag ${s.status}">${s.statusLabel}</span>
             <div class="store-compact-title" title="${s.title}">${s.title}</div>
           </div>
-          <div style="font-size:11px;color:var(--fg-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${s.address}</div>
+          <div class="store-compact-addr">${s.address}</div>
           <div class="store-compact-metrics">
-            <span>月租 <strong>NT$ ${rentWan}萬</strong></span>
-            <span>・</span>
-            <span><strong>${areaPing}坪</strong></span>
-            <span>・</span>
-            <span>單價 <strong>${unitPrice.toLocaleString()}/坪</strong></span>
-            <span>・</span>
-            <span style="color:var(--highlight);font-weight:700;">實月 NT$ ${realCost.toLocaleString()}</span>
+            <span class="metric-pill metric-price">月租 <strong>NT$ ${rentWan}萬</strong></span>
+            <span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing * 3.3058)}㎡)</span>
+            <span class="metric-pill metric-unit">單價 <strong>${unitPrice.toLocaleString()}/坪</strong></span>
+            <span class="metric-pill metric-real">實月 <strong>NT$ ${realCost.toLocaleString()}</strong></span>
           </div>
         </div>
 
         <!-- Compact Action Buttons -->
         <div class="store-compact-actions" onclick="event.stopPropagation()">
-          <button type="button" class="action-btn" id="btn-expand-${s.id}" style="padding:3px 8px;font-size:11px;" onclick="toggleStoreExpand('${s.id}', event)" title="展開或收折詳細資料">展開 ▾</button>
-          <button type="button" class="btn-submit" style="padding:3px 8px;font-size:11px;background:#111;" onclick="openStoreDetailModal('${s.id}')" title="開啟完整浮動視窗">詳細 ↗</button>
+          <button type="button" class="action-btn" id="btn-expand-${s.id}" style="padding:4px 8px;font-size:11px;white-space:nowrap;" onclick="toggleStoreExpand('${s.id}', event)" title="展開或收折詳細資料">展開 ▾</button>
+          <button type="button" class="btn-submit" style="padding:4px 8px;font-size:11px;background:#111;white-space:nowrap;" onclick="openStoreDetailModal('${s.id}')" title="開啟完整浮動視窗">詳細 ↗</button>
         </div>
       </div>
 
@@ -3707,10 +3874,10 @@ function renderStores() {
 
         <!-- Specs Grid -->
         <div class="store-specs-grid">
-          <div>刊登月租：<strong>NT$ ${rentWan}萬</strong></div>
-          <div>使用坪數：<strong>${areaPing} 坪</strong> (約 ${Math.round(areaPing*3.3058)}㎡)</div>
-          <div>每坪單價：<strong>NT$ ${unitPrice.toLocaleString()}/坪</strong></div>
-          <div>真實月成本：<strong>NT$ ${realCost.toLocaleString()}</strong></div>
+          <div>刊登月租：<span class="metric-pill metric-price">NT$ <strong>${rentWan}萬</strong></span></div>
+          <div>使用坪數：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
+          <div>每坪單價：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
+          <div>真實月成本：<span class="metric-pill metric-real">NT$ <strong>${realCost.toLocaleString()}</strong></span></div>
           <div>押金需求：<strong>NT$ ${Math.round((s.deposit||s.rent*2)/10000)}萬</strong></div>
           <div>裝潢免租：<strong>${s.freeRent || '1 個月'}</strong></div>
           <div>營業登記：<strong>${s.canRegister ? '符合' : '不可'}</strong></div>
@@ -4268,30 +4435,30 @@ function getRankMap(items, keyExtractor, ascending = true) {
   });
 
   const rankMap = {};
-  if (sorted[0]) rankMap[sorted[0].id] = 1; // 金1
+  if (sorted[0]) rankMap[sorted[0].id] = 1; // No.1
   if (sorted[1]) {
     const v0 = keyExtractor(sorted[0]);
     const v1 = keyExtractor(sorted[1]);
-    rankMap[sorted[1].id] = (v1 === v0) ? 1 : 2; // 紅2 (or tie 金1)
+    rankMap[sorted[1].id] = (v1 === v0) ? 1 : 2; // No.2 (or tie No.1)
   }
   return rankMap;
 }
 
 function renderRankBadge(rank, isJa = false, totalCount = 2) {
-  // If only 2 stores are compared, only display the winner with Crown (👑 No.1 / 👑 最佳)
+  // If only 2 stores are compared, only display the winning item with Crown (👑 No.1)
   if (totalCount === 2) {
     if (rank === 1) {
-      return `<span class="rank-badge rank-crown" title="${isJa ? '最優秀' : '最佳'}">👑 ${isJa ? 'No.1' : '最佳'}</span>`;
+      return `<span class="rank-badge rank-crown" title="No.1">👑 No.1</span>`;
     }
     return '';
   }
 
-  // 3 or more stores compared: Display Gold 1st and Red 2nd
+  // 3 or more stores compared: Display Gold No.1 and Red No.2
   if (rank === 1) {
-    return `<span class="rank-badge rank-gold" title="${isJa ? '第1位（最優秀）' : '第1名（最佳）'}">🥇 ${isJa ? '金1位' : '金1'}</span>`;
+    return `<span class="rank-badge rank-gold" title="No.1">No.1</span>`;
   }
   if (rank === 2) {
-    return `<span class="rank-badge rank-red" title="${isJa ? '第2位' : '第2名'}">🥈 ${isJa ? '紅2位' : '紅2'}</span>`;
+    return `<span class="rank-badge rank-red" title="No.2">No.2</span>`;
   }
   return '';
 }
@@ -4338,7 +4505,7 @@ function renderCompareTable() {
         <svg class="icon" style="width:36px;height:36px;margin:0 auto 10px;display:block;opacity:0.4;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
         ${state.compareModalLang === 'ja'
           ? '比較する店舗が選択されていません。店舗カードのチェックボックスを2つ以上選択してください。'
-          : '尚未勾選欲比較的店面。請在 MAP 店面卡片中勾選 2 間以上進行金1/紅2條件對照。'}
+          : '尚未勾選欲比較的店面。請在 MAP 店面卡片中勾選 2 間以上進行 No.1 / No.2 條件對照。'}
       </div>
     `;
     return;
@@ -4358,8 +4525,8 @@ function renderCompareTable() {
   const legendEl = document.getElementById('cmp-legend-note');
   if (legendEl) {
     legendEl.innerHTML = (items.length === 2)
-      ? (isJa ? '順位表記：<span class="rank-badge rank-crown">👑 No.1</span> 優位項目' : '標示說明：<span class="rank-badge rank-crown">👑 最佳</span> 條件優勢者')
-      : (isJa ? '順位表記：<span class="rank-badge rank-gold">🥇 金1位</span> 第1位 ｜ <span class="rank-badge rank-red">🥈 紅2位</span> 第2位' : '標示說明：<span class="rank-badge rank-gold">🥇 金1</span> 第1名 ｜ <span class="rank-badge rank-red">🥈 紅2</span> 第2名');
+      ? (isJa ? '順位表記：<span class="rank-badge rank-crown">👑 No.1</span> 優位項目' : '標示說明：<span class="rank-badge rank-crown">👑 No.1</span> 條件優選項目')
+      : (isJa ? '順位表記：<span class="rank-badge rank-gold">No.1</span> 第1位 ｜ <span class="rank-badge rank-red">No.2</span> 第2位' : '標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位');
   }
 
   // Calculate ranks
@@ -4397,12 +4564,12 @@ function renderCompareTable() {
 
   let rentHtml = `<tr><th>${lblRent}</th>` + items.map(s => {
     const badge = renderRankBadge(rentRanks[s.id], isJa, items.length);
-    const wanTwd = (s.rent / 10000).toFixed(1);
-    const wanJpy = (s.rent * jpyRate / 10000).toFixed(1);
+    const wanTwd = Math.round(s.rent / 10000);
+    const wanJpy = Math.round(s.rent * jpyRate / 10000);
     return `
       <td>
         <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}NT$ ${wanTwd} 萬</div>
+          <div class="comp-val-main">${badge}<span class="metric-pill metric-price">NT$ ${wanTwd} 萬</span></div>
           <div class="comp-val-sub">（約 ${wanJpy} 万円/月）</div>
         </div>
       </td>
@@ -4411,11 +4578,12 @@ function renderCompareTable() {
 
   let areaHtml = `<tr><th>${lblArea}</th>` + items.map(s => {
     const badge = renderRankBadge(areaRanks[s.id], isJa, items.length);
-    const m2 = (s.area * 3.3058).toFixed(1);
+    const m2 = Math.round(s.area * 3.3058);
+    const ping = Math.round(s.area);
     return `
       <td>
         <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}${s.area} 坪</div>
+          <div class="comp-val-main">${badge}<span class="metric-pill metric-area">${ping} 坪</span></div>
           <div class="comp-val-sub">約 <strong style="color:#0f766e;">${m2} ㎡</strong> (平米)</div>
         </div>
       </td>
@@ -4440,11 +4608,11 @@ function renderCompareTable() {
 
   let realCostHtml = `<tr><th>${lblReal}</th>` + items.map(s => {
     const badge = renderRankBadge(realCostRanks[s.id], isJa, items.length);
-    const wanJpy = (s.realCost * jpyRate / 10000).toFixed(1);
+    const wanJpy = Math.round(s.realCost * jpyRate / 10000);
     return `
       <td>
         <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}NT$ ${s.realCost.toLocaleString()}</div>
+          <div class="comp-val-main">${badge}<span class="metric-pill metric-real">NT$ ${Math.round(s.realCost).toLocaleString()}</span></div>
           <div class="comp-val-sub">（約 ${wanJpy} 万円/月）</div>
         </div>
       </td>
@@ -4766,7 +4934,7 @@ function generateNewMemberToken() {
   const roleSelect = document.getElementById('new-member-role');
   const name = nameInput.value.trim();
   if (!name) {
-    alert('請輸入人員姓名！');
+    showToast(state.langMode === 'ja' ? '氏名を入力してください！' : '請輸入人員姓名！', 3000);
     return;
   }
 
@@ -4787,7 +4955,7 @@ function generateNewMemberToken() {
 
 function deleteMember(token) {
   if (state.members.length <= 1) {
-    alert('不可刪除唯一的成員！');
+    showToast(state.langMode === 'ja' ? '唯一のメンバーは削除できません！' : '不可刪除唯一的成員！', 3000);
     return;
   }
   state.members = state.members.filter(m => m.token !== token);
