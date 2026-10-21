@@ -133,19 +133,20 @@
       align-items: center;
       gap: 8px;
     }
-    .user-badge-btn {
-      padding: 4px 10px;
+    .user-badge {
+      padding: 5px 12px;
       border: 1px solid var(--border);
       border-radius: 99px;
       background: #f1f1f4;
       font-size: 12px;
       font-weight: 700;
-      cursor: pointer;
+      color: var(--fg);
       display: flex;
       align-items: center;
       gap: 5px;
+      cursor: default;
+      user-select: none;
     }
-    .user-badge-btn:hover { border-color: var(--fg); }
 
     .action-btn {
       padding: 5px 10px;
@@ -160,6 +161,29 @@
       gap: 5px;
     }
     .action-btn:hover { border-color: var(--fg); }
+
+    .icon-only-btn {
+      padding: 6px 8px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-lang-pill {
+      border: none;
+      background: transparent;
+      padding: 3px 8px;
+      font-size: 11px;
+      font-weight: 700;
+      border-radius: 4px;
+      cursor: pointer;
+      color: var(--fg-muted);
+    }
+    .modal-lang-pill.active {
+      background: #111;
+      color: #fff;
+    }
 
     /* Main Container */
     main.main-body {
@@ -743,32 +767,25 @@
       <nav class="nav-tabs">
         <button class="nav-tab-btn active" id="btn-tab-feed" onclick="switchNavTab('feed')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
-          <span class="tab-title">工作動態</span>
+          <span class="tab-title">REPORT</span>
         </button>
         <button class="nav-tab-btn" id="btn-tab-store" onclick="switchNavTab('store')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-          <span class="tab-title">店面地圖</span>
+          <span class="tab-title">MAP</span>
         </button>
       </nav>
     </div>
 
     <div class="header-actions">
-      <!-- Active Member Switcher -->
-      <button class="user-badge-btn" id="user-role-btn" onclick="toggleActiveMember()" title="點擊切換身分">
+      <!-- Current User Badge (Static - Not clickable) -->
+      <div class="user-badge" id="current-user-badge" title="目前使用者">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span id="current-user-name">Lynn</span>
-      </button>
+      </div>
 
-      <!-- Member Links Management Modal Button -->
-      <button class="action-btn" onclick="openMemberModal()" title="新增人員與專屬連結">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
-        <span>專屬連結</span>
-      </button>
-
-      <!-- Audit Log Button -->
-      <button class="action-btn" onclick="openDeleteLogModal()" title="檢視刪除存證紀錄">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
-        <span>存證紀錄</span>
+      <!-- Settings Icon Button (專屬連結 & 存證紀錄) -->
+      <button class="action-btn icon-only-btn" onclick="openSettingsModal()" title="系統設定（專屬成員連結・存證紀錄）">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
       </button>
     </div>
   </header>
@@ -808,13 +825,19 @@
                   <span>h</span>
                 </div>
 
-                <select class="select-field" id="post-tag">
+                <select class="select-field" id="post-tag" onchange="handleTagSelectChange(this)">
+                  <option value="進度回報" selected>進度回報</option>
                   <option value="門市選址">門市選址</option>
                   <option value="公司設立">公司設立</option>
                   <option value="商標佈局">商標佈局</option>
                   <option value="營運規劃">營運規劃</option>
                   <option value="進口物流">進口物流</option>
+                  <option value="__ADD_NEW__">＋ 手動新增條件...</option>
                 </select>
+                <button class="action-btn" type="button" onclick="promptAddNewTag()" title="手動新增分類條件/標籤" style="padding:4px 7px;">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>條件</span>
+                </button>
                 <button class="action-btn" type="button" onclick="triggerAgencyUpload()" title="讀取分析房仲給的資料圖">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
                   <span>附房仲資料圖</span>
@@ -891,15 +914,23 @@
           <h3 style="font-size:16px;font-weight:800;" id="m-store-title">店面名稱</h3>
           <span class="store-tag candidate" id="m-store-badge">重點候選</span>
         </div>
+        <div id="m-store-title-ja" style="font-size:13px;font-weight:700;color:#555;margin-top:2px;"></div>
         <p style="font-size:12px;color:var(--fg-muted);margin-top:2px;" id="m-store-address">地址</p>
+        
+        <!-- Modal Language Switcher (中日雙語對照 / 日本語 / 純中文) -->
+        <div style="display:inline-flex;gap:3px;background:#f1f1f4;padding:2px;border-radius:6px;margin-top:6px;">
+          <button class="modal-lang-pill active" id="modal-lang-bi" onclick="setStoreModalLang('bilingual')">中日對照</button>
+          <button class="modal-lang-pill" id="modal-lang-ja" onclick="setStoreModalLang('ja')">日本語</button>
+          <button class="modal-lang-pill" id="modal-lang-zh" onclick="setStoreModalLang('zh')">純中文</button>
+        </div>
       </div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <button class="action-btn" onclick="openEditStoreModal()">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-          <span>編輯店面</span>
+          <span id="m-btn-lbl-edit">編輯店面</span>
         </button>
         <button class="btn-submit" id="m-btn-toggle-compare" onclick="toggleCompareFromModal()">加入分析比較</button>
-        <button class="action-btn" onclick="closeStoreDetailModal()">關閉</button>
+        <button class="action-btn" onclick="closeStoreDetailModal()" id="m-btn-lbl-close">關閉</button>
       </div>
     </div>
 
@@ -914,37 +945,56 @@
     <!-- Key Metrics Grid -->
     <div class="kpi-badge-group">
       <div class="kpi-badge">
-        <div class="kpi-badge-label">刊登月租</div>
+        <div class="kpi-badge-label" id="lbl-store-rent">刊登月租</div>
         <div class="kpi-badge-val" id="m-store-rent">NT$ 0 萬</div>
+        <div id="m-store-rent-ja" style="font-size:11px;color:var(--fg-muted);margin-top:2px;"></div>
       </div>
       <div class="kpi-badge">
-        <div class="kpi-badge-label">使用坪數</div>
+        <div class="kpi-badge-label" id="lbl-store-area">使用坪數</div>
         <div class="kpi-badge-val" id="m-store-area">0 坪</div>
+        <div id="m-store-area-ja" style="font-size:11px;color:var(--fg-muted);margin-top:2px;"></div>
       </div>
       <div class="kpi-badge">
-        <div class="kpi-badge-label">每坪租金單價</div>
+        <div class="kpi-badge-label" id="lbl-store-unit">每坪租金單價</div>
         <div class="kpi-badge-val" id="m-store-unitprice">NT$ 0 /坪</div>
+        <div id="m-store-unitprice-ja" style="font-size:11px;color:var(--fg-muted);margin-top:2px;"></div>
       </div>
       <div class="kpi-badge">
-        <div class="kpi-badge-label">真實營運月成本 (含扣繳)</div>
+        <div class="kpi-badge-label" id="lbl-store-realcost">真實營運月成本 (含扣繳)</div>
         <div class="kpi-badge-val" style="color:var(--highlight);" id="m-store-realcost">NT$ 0</div>
+        <div id="m-store-realcost-ja" style="font-size:11px;color:var(--highlight);font-weight:700;margin-top:2px;"></div>
       </div>
     </div>
 
     <!-- Commercial Verification & Key Details -->
     <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12.5px;line-height:1.7;">
       <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:8px;">
-        <div><strong>押金需求：</strong><span id="m-store-deposit">--</span></div>
-        <div><strong>裝潢免租期：</strong><span id="m-store-freerent">--</span></div>
-        <div><strong>營業登記：</strong><span id="m-store-canreg">--</span></div>
-        <div><strong>稅籍開立發票：</strong><span id="m-store-caninvoice">--</span></div>
+        <div><strong id="lbl-store-deposit">押金需求：</strong><span id="m-store-deposit">--</span> <span id="m-store-deposit-ja" style="font-size:11px;color:var(--fg-muted);"></span></div>
+        <div><strong id="lbl-store-freerent">裝潢免租期：</strong><span id="m-store-freerent">--</span> <span id="m-store-freerent-ja" style="font-size:11px;color:var(--fg-muted);"></span></div>
+        <div><strong id="lbl-store-canreg">營業登記：</strong><span id="m-store-canreg">--</span> <span id="m-store-canreg-ja" style="font-size:11px;color:var(--fg-muted);"></span></div>
+        <div><strong id="lbl-store-caninvoice">稅籍開立發票：</strong><span id="m-store-caninvoice">--</span> <span id="m-store-caninvoice-ja" style="font-size:11px;color:var(--fg-muted);"></span></div>
       </div>
     </div>
 
     <!-- Pros & Cons -->
     <div style="font-size:13px;line-height:1.6;margin-bottom:14px;">
-      <div style="margin-bottom:6px;"><strong>商圈優點與人流分析：</strong><span id="m-store-pros"></span></div>
-      <div style="color:var(--danger);"><strong>特別考量與潛在風險：</strong><span id="m-store-cons"></span></div>
+      <div style="margin-bottom:10px;">
+        <div style="font-weight:700;display:flex;align-items:center;gap:6px;">
+          <span id="lbl-store-pros">商圈優點與人流分析</span>
+          <span id="lbl-store-pros-sub" style="font-size:11.5px;color:var(--fg-muted);font-weight:normal;">/ 立地の強み・人流分析</span>
+        </div>
+        <div id="m-store-pros-zh" style="margin-top:2px;"></div>
+        <div id="m-store-pros-ja" style="margin-top:4px;padding:6px 10px;background:#f3f4f8;border-left:3px solid #111;border-radius:4px;font-size:12px;color:#222;line-height:1.5;"></div>
+      </div>
+
+      <div>
+        <div style="font-weight:700;color:var(--danger);display:flex;align-items:center;gap:6px;">
+          <span id="lbl-store-cons">特別考量與潛在風險</span>
+          <span id="lbl-store-cons-sub" style="font-size:11.5px;color:#c62828;font-weight:normal;">/ 留意点・リスク</span>
+        </div>
+        <div id="m-store-cons-zh" style="color:var(--danger);margin-top:2px;"></div>
+        <div id="m-store-cons-ja" style="margin-top:4px;padding:6px 10px;background:#fdf2f2;border-left:3px solid #d32f2f;border-radius:4px;font-size:12px;color:#c62828;line-height:1.5;"></div>
+      </div>
     </div>
 
     <div style="display:flex;justify-content:flex-end;align-items:center;border-top:1px solid #f1f1f4;padding-top:10px;">
@@ -1160,44 +1210,59 @@
   </div>
 </div>
 
-<!-- Member Management & Random Token Links Modal -->
-<div class="modal-overlay" id="member-modal">
-  <div class="modal-content-box" style="max-width:580px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
-      <div>
-        <h3 style="font-size:15px;font-weight:800;">專屬連結與成員管理</h3>
-        <p style="font-size:11.5px;color:var(--fg-muted);margin-top:2px;">系統使用專屬亂碼 Token 辨識身分（後續將支援 Google 帳號授權登入）</p>
+<!-- Settings Modal (專屬連結與存證紀錄整合) -->
+<div class="modal-overlay" id="settings-modal">
+  <div class="modal-content-box" style="max-width:620px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        <h3 style="font-size:16px;font-weight:800;">系統設定</h3>
       </div>
-      <button class="action-btn" onclick="closeMemberModal()">關閉</button>
+      <button class="action-btn" onclick="closeSettingsModal()">關閉</button>
     </div>
 
-    <!-- Add Member Form -->
-    <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;">
-      <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">新增專屬成員</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input type="text" id="new-member-name" placeholder="輸入成員姓名（例如：金丸 拓矢 或 Lynn）" style="flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;">
-        <select id="new-member-role" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;background:#fff;">
-          <option value="tw">台灣端（繁體中文）</option>
-          <option value="jp">日本端（日本語）</option>
-        </select>
-        <button class="btn-submit" onclick="generateNewMemberToken()">生成專屬連結</button>
+    <!-- Segmented Tab within Settings -->
+    <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+      <button class="action-btn active" id="stg-tab-members-btn" onclick="switchSettingsTab('members')" style="font-weight:700;">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        <span>專屬成員連結</span>
+      </button>
+      <button class="action-btn" id="stg-tab-audit-btn" onclick="switchSettingsTab('audit')" style="font-weight:700;">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+        <span>刪除存證紀錄 (<span id="stg-audit-count">0</span>)</span>
+      </button>
+    </div>
+
+    <!-- Settings Panel 1: Members & Tokens -->
+    <div id="stg-panel-members">
+      <div style="font-size:12px;color:var(--fg-muted);margin-bottom:12px;">
+        系統使用專屬亂碼 Token 辨識身分（後續將支援 Google 帳號授權登入）
       </div>
+
+      <!-- Add Member Form -->
+      <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">新增專屬成員</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <input type="text" id="new-member-name" placeholder="輸入成員姓名（例如：金丸 拓矢 或 Lynn）" style="flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;">
+          <select id="new-member-role" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;background:#fff;">
+            <option value="tw">台灣端（繁體中文）</option>
+            <option value="jp">日本端（日本語）</option>
+          </select>
+          <button class="btn-submit" onclick="generateNewMemberToken()">生成專屬連結</button>
+        </div>
+      </div>
+
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">現有成員專屬連結清單</div>
+      <div id="members-list-container"></div>
     </div>
 
-    <!-- Existing Members List -->
-    <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">現有成員專屬連結清單</div>
-    <div id="members-list-container"></div>
-  </div>
-</div>
-
-<!-- Audit Log Modal -->
-<div class="modal-overlay" id="audit-modal">
-  <div class="modal-content-box" style="max-width:600px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:10px;">
-      <h3 style="font-size:15px;font-weight:800;" id="audit-title">刪除存證紀錄</h3>
-      <button class="action-btn" onclick="closeAuditModal()">關閉</button>
+    <!-- Settings Panel 2: Audit Logs -->
+    <div id="stg-panel-audit" style="display:none;">
+      <div style="font-size:12px;color:var(--fg-muted);margin-bottom:10px;">
+        所有動態日誌與店面物件的刪除原因與時間存證清單
+      </div>
+      <div id="audit-list-content" style="max-height:360px;overflow-y:auto;"></div>
     </div>
-    <div id="audit-list-content"></div>
   </div>
 </div>
 
@@ -1206,6 +1271,7 @@
 const KNOWN_591_DB = {
   '21939969': {
     title: '中山站商圈金店面',
+    titleJa: '中山駅商圏・旗艦路面店（MRT中山駅 徒歩3分）',
     address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
     rent: 285000,
     area: 56,
@@ -1220,11 +1286,14 @@ const KNOWN_591_DB = {
       'https://img1.591.com.tw/house/2026/08/24/178755227430594305.jpg!1000x.water2.jpg'
     ],
     pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
+    prosJa: 'MRT中山駅徒歩206m、56坪の大型路面店。南西商圏中心の路面に位置し、高感度ブランドやトレンドショップが集積。',
     cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
+    consJa: '月額賃料28.5万元（約137万円）は旗艦級予算のため、1号店の売上計画と採算性を総合評価する必要あり。',
     canRegister: true, canInvoice: true, fireSafety: true
   },
   '22015090': {
     title: 'MRT中山國小 龍江商圈 一個月免租期',
+    titleJa: 'MRT中山国小・龍江商圏（フリーレント1ヶ月）',
     address: '台北市中山區龍江路377巷',
     rent: 45999,
     area: 35,
@@ -1242,11 +1311,14 @@ const KNOWN_591_DB = {
       'https://img2.591.com.tw/house/2026/10/15/179203421399201808.jpg!1000x.water2.jpg'
     ],
     pros: '總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。',
+    prosJa: '総賃料の負担が非常に軽く（4.6万元/月・約22万円）、35坪と広々。角地で独立した採光があり内装期間1ヶ月免除。',
     cons: '位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。',
+    consJa: '龍江商圏の路地に位置し平日は周辺住民の生活圏中心。SNSでの的確なファン誘導が必要。',
     canRegister: true, canInvoice: true, fireSafety: true
   },
   '20654976': {
     title: 'MRT行天宮站 含稅・店面有獨立廁所',
+    titleJa: 'MRT行天宮駅・専用トイレ付路面店（税サ込）',
     address: '台北市中山區吉林路（近行天宮捷運站 2 號出口）',
     rent: 120000,
     area: 25.5,
@@ -1264,11 +1336,14 @@ const KNOWN_591_DB = {
       'https://img2.591.com.tw/house/2026/02/06/177037031484440409.jpg!1000x.water2.jpg'
     ],
     pros: '行天宮捷運站步行2分鐘，周邊商務白領人潮多，含稅且附獨立專用衛生間，門面俐落。',
+    prosJa: '行天宮駅徒歩2分。吉林路のビジネス客・OL人流が豊富。税金込で専用トイレあり、天井高3.6m。',
     cons: '25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。',
+    consJa: '25.5坪とややコンパクトなため、靴箱ストックとバックヤードの立体効率配置が必須。',
     canRegister: true, canInvoice: true, fireSafety: true
   },
   '21265868': {
     title: '民權西路站可餐飲廣告效益佳大面寬金店面',
+    titleJa: '民権西路駅・大間口ロードサイド店舗',
     address: '台北市中山區撫順街（近民權西路雙捷運站）',
     rent: 180000,
     area: 60.71,
@@ -1285,7 +1360,9 @@ const KNOWN_591_DB = {
       'https://img2.591.com.tw/house/2026/01/06/176768970128324700.jpg!1000x.water2.jpg'
     ],
     pros: '8米超大面寬、廣告曝光極強，室內實達60.7坪，適合旗艦體驗門市。',
+    prosJa: '8mのワイドスパンで看板露出効果大。民権西路の2路線乗換駅至近。室内実面積60.7坪の広さを確保。',
     cons: '撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。',
+    consJa: '撫順街は休日の人流が南西商圏に比べ落ち着くため、平日の通勤客依存度が高い。',
     canRegister: true, canInvoice: true, fireSafety: true
   }
 };
@@ -1293,6 +1370,9 @@ const KNOWN_591_DB = {
 // --- Core State ---
 const STORE_KEY = 'grounds_tw_v5_data';
 const MEMBERS_KEY = 'grounds_tw_v5_members';
+const TAGS_KEY = 'grounds_tw_v5_tags';
+
+const DEFAULT_CUSTOM_TAGS = ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流'];
 
 const DEFAULT_MEMBERS = [
   {
@@ -1313,6 +1393,8 @@ let state = {
   currentUser: 'Lynn',
   currentUserRole: 'tw',
   langMode: 'bilingual', // 'bilingual', 'zh', 'ja'
+  storeModalLang: 'bilingual',
+  customTags: ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流'],
   selectedStoresForCompare: [],
   members: [],
   editingPostId: null,
@@ -1477,6 +1559,14 @@ function loadAppState() {
     state.members = DEFAULT_MEMBERS;
     localStorage.setItem(MEMBERS_KEY, JSON.stringify(state.members));
   }
+
+  const savedTags = localStorage.getItem(TAGS_KEY);
+  if (savedTags) {
+    try { state.customTags = JSON.parse(savedTags); } catch(e) { state.customTags = [...DEFAULT_CUSTOM_TAGS]; }
+  } else {
+    state.customTags = [...DEFAULT_CUSTOM_TAGS];
+  }
+  updateTagDropdowns();
 
   const saved = localStorage.getItem(STORE_KEY);
   if (saved) {
@@ -1663,24 +1753,45 @@ function applyLanguageLayout() {
 
 window.addEventListener('resize', applyLanguageLayout);
 
-// --- Translation Simulation (Instant & Local) ---
-function translateToJapanese(text) {
-  return text
+// --- Real Translation Engine (Server Proxy translate.php + MyMemory API) ---
+async function translateToJapaneseAsync(text) {
+  if (!text || !text.trim()) return '';
+  const trimmed = text.trim();
+
+  // 1. Try server proxy translate.php
+  try {
+    const res = await fetch(`translate.php?text=${encodeURIComponent(trimmed)}`);
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success && data.translation) {
+        return data.translation;
+      }
+    }
+  } catch(e) {}
+
+  // 2. Direct client-side fetch to MyMemory API
+  try {
+    const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=zh-TW|ja`;
+    const res2 = await fetch(mmUrl);
+    if (res2.ok) {
+      const data2 = await res2.json();
+      if (data2.responseData && data2.responseData.translatedText) {
+        return data2.responseData.translatedText;
+      }
+    }
+  } catch(e) {}
+
+  // 3. Fallback dictionary (if completely offline)
+  return trimmed
     .replace(/今天|本日/g, '本日、')
     .replace(/店面|門市/g, '店舗')
-    .replace(/實勘|視察/g, '現地視察')
-    .replace(/人流/g, '人流')
-    .replace(/採光/g, '採光')
-    .replace(/租金/g, '賃料')
-    .replace(/坪數/g, '坪数')
-    .replace(/免租期/g, 'フリーレント期間')
-    .replace(/會計師/g, '会計士')
-    .replace(/資本額/g, '資本金')
-    .replace(/商標/g, '商標')
-    .replace(/子公司/g, '子会社')
-    .replace(/拍板|決定/g, '決定・承認')
-    .replace(/卡在/g, '〜の確認待ちとなっており、')
-    + (text.endsWith('。') ? '' : '。担当者にて確認を進めております。');
+    .replace(/幾家/g, 'いくつかの')
+    .replace(/找了/g, '探しました、')
+    .replace(/請總部看一下|請總部確認/g, '本社にてご確認ください。');
+}
+
+function translateToJapanese(text) {
+  return text;
 }
 
 // --- Feed Posting & 591 Link Recognition ---
@@ -1692,8 +1803,8 @@ async function submitFeedPost() {
   const textZh = textEl.value.trim();
   if (!textZh) return;
 
-  const hours = parseFloat(hoursEl.value) || 1.0;
-  const tag = tagEl.value;
+  const hours = parseFloat(hoursEl.value) || 0.0;
+  const tag = (tagEl.value === '__ADD_NEW__' || !tagEl.value) ? '進度回報' : tagEl.value;
 
   // Direct 591 link recognition in post
   let linkedPropId = null;
@@ -1707,6 +1818,7 @@ async function submitFeedPost() {
       const d = KNOWN_591_DB[rawId];
       if (storeObj) {
         storeObj.title = d.title;
+        storeObj.titleJa = d.titleJa || d.title;
         storeObj.address = d.address;
         storeObj.rent = d.rent;
         storeObj.area = d.area;
@@ -1714,12 +1826,15 @@ async function submitFeedPost() {
         storeObj.freeRent = d.freeRent;
         storeObj.realCost = d.realCost;
         storeObj.pros = d.pros;
+        storeObj.prosJa = d.prosJa || d.pros;
         storeObj.cons = d.cons;
+        storeObj.consJa = d.consJa || d.cons;
         storeObj.images = d.images;
       } else {
         storeObj = {
           id: linkedPropId,
           title: d.title,
+          titleJa: d.titleJa || d.title,
           address: d.address,
           status: 'candidate',
           statusLabel: '重點候選',
@@ -1734,7 +1849,9 @@ async function submitFeedPost() {
           canInvoice: d.canInvoice,
           fireSafety: d.fireSafety,
           pros: d.pros,
+          prosJa: d.prosJa || d.pros,
           cons: d.cons,
+          consJa: d.consJa || d.cons,
           url: match591[0],
           images: d.images,
           activeImgIdx: 0
@@ -1756,6 +1873,7 @@ async function submitFeedPost() {
         storeObj = {
           id: linkedPropId,
           title: fetched.title,
+          titleJa: fetched.title,
           address: fetched.address || '台北市中山區精華商圈',
           status: 'candidate',
           statusLabel: '重點候選',
@@ -1768,7 +1886,9 @@ async function submitFeedPost() {
           realCost: fetched.realCost || Math.round(fetched.rent * 1.1211),
           canRegister: true, canInvoice: true, fireSafety: true,
           pros: fetched.pros,
+          prosJa: fetched.pros,
           cons: fetched.cons,
+          consJa: fetched.cons,
           url: match591[0],
           images: fetched.images && fetched.images.length ? fetched.images : [
             'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg'
@@ -1779,6 +1899,7 @@ async function submitFeedPost() {
         storeObj = {
           id: linkedPropId,
           title: `591#${rawId} 中山商圈金店面`,
+          titleJa: `591#${rawId} 中山区商業店舗`,
           address: '台北市中山區精華商圈',
           status: 'candidate',
           statusLabel: '重點候選',
@@ -1791,7 +1912,9 @@ async function submitFeedPost() {
           realCost: 319514,
           canRegister: true, canInvoice: true, fireSafety: true,
           pros: '591 即時解析，可點擊店面卡片編輯精確數值。',
+          prosJa: '591即時解析、詳細条件は編集可能。',
           cons: '待實勘人流與現況。',
+          consJa: '現地での人流および現況視察が必要。',
           url: match591[0],
           images: [
             'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
@@ -1804,7 +1927,8 @@ async function submitFeedPost() {
     }
   }
 
-  const textJa = translateToJapanese(textZh);
+  // Real asynchronous translation for Japanese column
+  const textJa = await translateToJapaneseAsync(textZh);
   const now = new Date();
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
@@ -1936,7 +2060,7 @@ function createCard(p, colLang) {
   return card;
 }
 
-function submitReply(postId, colLang) {
+async function submitReply(postId, colLang) {
   const inp = document.getElementById(`rep-${postId}-${colLang}`);
   if (!inp) return;
   const val = inp.value.trim();
@@ -1950,11 +2074,12 @@ function submitReply(postId, colLang) {
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
   if (colLang === 'zh') {
+    const jaTrans = await translateToJapaneseAsync(val);
     target.comments.push({
       author: state.currentUser,
       date: timeStr,
       zh: val,
-      ja: translateToJapanese(val)
+      ja: jaTrans
     });
   } else {
     target.comments.push({
@@ -1975,8 +2100,15 @@ function openEditPostModal(postId) {
   if (!p) return;
   state.editingPostId = postId;
   document.getElementById('edit-post-text').value = p.zh;
-  document.getElementById('edit-post-hours').value = p.hours || 1.0;
-  document.getElementById('edit-post-tag').value = p.tag || '門市選址';
+  document.getElementById('edit-post-hours').value = p.hours || 0.0;
+  
+  // Populate edit-post-tag
+  const editTag = document.getElementById('edit-post-tag');
+  if (editTag) {
+    editTag.innerHTML = (state.customTags || ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流']).map(t => `<option value="${t}">${t}</option>`).join('');
+    editTag.value = p.tag || '進度回報';
+  }
+  
   document.getElementById('edit-post-modal').classList.add('open');
 }
 
@@ -1985,7 +2117,7 @@ function closeEditPostModal() {
   state.editingPostId = null;
 }
 
-function saveEditedPost() {
+async function saveEditedPost() {
   if (!state.editingPostId) return;
   const p = state.posts.find(x => x.id === state.editingPostId);
   if (!p) return;
@@ -1997,8 +2129,8 @@ function saveEditedPost() {
   }
 
   p.zh = newText;
-  p.ja = translateToJapanese(newText);
-  p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 1.0;
+  p.ja = await translateToJapaneseAsync(newText);
+  p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 0.0;
   p.tag = document.getElementById('edit-post-tag').value;
 
   saveAppState();
@@ -2027,24 +2159,145 @@ function deletePost(postId) {
   renderFeeds();
 }
 
+// --- Store Detail Modal Language Switcher ---
+function setStoreModalLang(lang) {
+  state.storeModalLang = lang;
+  document.querySelectorAll('.modal-lang-pill').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById(`modal-lang-${lang === 'bilingual' ? 'bi' : lang}`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const zhPros = document.getElementById('m-store-pros-zh');
+  const jaPros = document.getElementById('m-store-pros-ja');
+  const zhCons = document.getElementById('m-store-cons-zh');
+  const jaCons = document.getElementById('m-store-cons-ja');
+  const titleJa = document.getElementById('m-store-title-ja');
+
+  if (lang === 'ja') {
+    if (zhPros) zhPros.style.display = 'none';
+    if (jaPros) jaPros.style.display = 'block';
+    if (zhCons) zhCons.style.display = 'none';
+    if (jaCons) jaCons.style.display = 'block';
+    if (titleJa) titleJa.style.display = 'block';
+    document.getElementById('lbl-store-rent').textContent = '掲載賃料';
+    document.getElementById('lbl-store-area').textContent = '使用面積';
+    document.getElementById('lbl-store-unit').textContent = '坪単価';
+    document.getElementById('lbl-store-realcost').textContent = '実効総コスト (税込)';
+    document.getElementById('lbl-store-deposit').textContent = '敷金 (保証金)：';
+    document.getElementById('lbl-store-freerent').textContent = 'フリーレント期間：';
+    document.getElementById('lbl-store-canreg').textContent = '営業登記：';
+    document.getElementById('lbl-store-caninvoice').textContent = 'インボイス適格：';
+    document.getElementById('lbl-store-pros').textContent = '立地の強み・人流分析';
+    document.getElementById('lbl-store-pros-sub').textContent = '';
+    document.getElementById('lbl-store-cons').textContent = '留意点・リスク';
+    document.getElementById('lbl-store-cons-sub').textContent = '';
+    document.getElementById('m-btn-lbl-edit').textContent = '編集';
+    document.getElementById('m-btn-lbl-close').textContent = '閉じる';
+  } else if (lang === 'zh') {
+    if (zhPros) zhPros.style.display = 'block';
+    if (jaPros) jaPros.style.display = 'none';
+    if (zhCons) zhCons.style.display = 'block';
+    if (jaCons) jaCons.style.display = 'none';
+    if (titleJa) titleJa.style.display = 'none';
+    document.getElementById('lbl-store-rent').textContent = '刊登月租';
+    document.getElementById('lbl-store-area').textContent = '使用坪數';
+    document.getElementById('lbl-store-unit').textContent = '每坪租金單價';
+    document.getElementById('lbl-store-realcost').textContent = '真實營運月成本 (含扣繳)';
+    document.getElementById('lbl-store-deposit').textContent = '押金需求：';
+    document.getElementById('lbl-store-freerent').textContent = '裝潢免租期：';
+    document.getElementById('lbl-store-canreg').textContent = '營業登記：';
+    document.getElementById('lbl-store-caninvoice').textContent = '稅籍開立發票：';
+    document.getElementById('lbl-store-pros').textContent = '商圈優點與人流分析';
+    document.getElementById('lbl-store-pros-sub').textContent = '';
+    document.getElementById('lbl-store-cons').textContent = '特別考量與潛在風險';
+    document.getElementById('lbl-store-cons-sub').textContent = '';
+    document.getElementById('m-btn-lbl-edit').textContent = '編輯店面';
+    document.getElementById('m-btn-lbl-close').textContent = '關閉';
+  } else {
+    if (zhPros) zhPros.style.display = 'block';
+    if (jaPros) jaPros.style.display = 'block';
+    if (zhCons) zhCons.style.display = 'block';
+    if (jaCons) jaCons.style.display = 'block';
+    if (titleJa) titleJa.style.display = 'block';
+    document.getElementById('lbl-store-rent').textContent = '刊登月租';
+    document.getElementById('lbl-store-area').textContent = '使用坪數';
+    document.getElementById('lbl-store-unit').textContent = '每坪租金單價';
+    document.getElementById('lbl-store-realcost').textContent = '真實營運月成本 (含扣繳)';
+    document.getElementById('lbl-store-deposit').textContent = '押金需求 (敷金)：';
+    document.getElementById('lbl-store-freerent').textContent = '裝潢免租期 (フリーレント)：';
+    document.getElementById('lbl-store-canreg').textContent = '營業登記 (営業登記)：';
+    document.getElementById('lbl-store-caninvoice').textContent = '稅籍開立發票 (インボイス)：';
+    document.getElementById('lbl-store-pros').textContent = '商圈優點與人流分析';
+    document.getElementById('lbl-store-pros-sub').textContent = '/ 立地の強み・人流分析';
+    document.getElementById('lbl-store-cons').textContent = '特別考量與潛在風險';
+    document.getElementById('lbl-store-cons-sub').textContent = '/ 留意点・リスク';
+    document.getElementById('m-btn-lbl-edit').textContent = '編輯店面';
+    document.getElementById('m-btn-lbl-close').textContent = '關閉';
+  }
+}
+
 // --- Floating Store Details Modal (浮動視窗看比較美，不用跳到591) ---
 function openStoreDetailModal(storeId) {
   const s = state.stores.find(x => x.id === storeId);
   if (!s) return;
   state.activeDetailStoreId = storeId;
 
+  const unitPrice = Math.round(s.rent / s.area);
+  const jpyRate = 4.8;
+  const rentJpyWan = (s.rent * jpyRate / 10000).toFixed(1);
+  const realCostJpyWan = (s.realCost * jpyRate / 10000).toFixed(1);
+  const depositJpyWan = ((s.deposit || s.rent * 2) * jpyRate / 10000).toFixed(1);
+  const areaSqm = (s.area * 3.3058).toFixed(1);
+  const unitJpy = Math.round(unitPrice * jpyRate).toLocaleString();
+
   document.getElementById('m-store-title').textContent = s.title;
+  document.getElementById('m-store-title-ja').textContent = s.titleJa || s.title;
   document.getElementById('m-store-address').textContent = s.address || '台北市中山區精華商圈';
+
   document.getElementById('m-store-rent').textContent = `NT$ ${(s.rent/10000).toFixed(1)} 萬`;
+  document.getElementById('m-store-rent-ja').textContent = `（約 ${rentJpyWan} 万円/月）`;
+
   document.getElementById('m-store-area').textContent = `${s.area} 坪`;
-  document.getElementById('m-store-unitprice').textContent = `NT$ ${Math.round(s.rent/s.area).toLocaleString()} /坪`;
+  document.getElementById('m-store-area-ja').textContent = `（約 ${areaSqm} ㎡）`;
+
+  document.getElementById('m-store-unitprice').textContent = `NT$ ${unitPrice.toLocaleString()} /坪`;
+  document.getElementById('m-store-unitprice-ja').textContent = `（約 ${unitJpy} 円/坪）`;
+
   document.getElementById('m-store-realcost').textContent = `NT$ ${s.realCost.toLocaleString()}`;
+  document.getElementById('m-store-realcost-ja').textContent = `（約 ${realCostJpyWan} 万円/月）`;
+
   document.getElementById('m-store-deposit').textContent = `NT$ ${(s.deposit/10000).toFixed(1)} 萬`;
+  document.getElementById('m-store-deposit-ja').textContent = `（敷金 約${depositJpyWan}万円）`;
+
   document.getElementById('m-store-freerent').textContent = s.freeRent || '1 個月';
+  document.getElementById('m-store-freerent-ja').textContent = `（フリーレント ${s.freeRent || '1ヶ月'}）`;
+
   document.getElementById('m-store-canreg').textContent = s.canRegister ? '符合（可辦理營業登記）' : '不可';
+  document.getElementById('m-store-canreg-ja').textContent = s.canRegister ? '（会社設立登記可）' : '（登記不可）';
+
   document.getElementById('m-store-caninvoice').textContent = s.canInvoice ? '可以開立發票' : '否';
-  document.getElementById('m-store-pros').textContent = s.pros;
-  document.getElementById('m-store-cons').textContent = s.cons;
+  document.getElementById('m-store-caninvoice-ja').textContent = s.canInvoice ? '（インボイス適格）' : '（非適格）';
+
+  // Pros & Cons with Japanese
+  document.getElementById('m-store-pros-zh').textContent = s.pros || '';
+  const prosJaEl = document.getElementById('m-store-pros-ja');
+  prosJaEl.textContent = s.prosJa || '翻訳取得中...';
+
+  document.getElementById('m-store-cons-zh').textContent = s.cons || '';
+  const consJaEl = document.getElementById('m-store-cons-ja');
+  consJaEl.textContent = s.consJa || '翻訳取得中...';
+
+  if (!s.prosJa && s.pros) {
+    translateToJapaneseAsync(s.pros).then(res => {
+      s.prosJa = res;
+      prosJaEl.textContent = res;
+    });
+  }
+  if (!s.consJa && s.cons) {
+    translateToJapaneseAsync(s.cons).then(res => {
+      s.consJa = res;
+      consJaEl.textContent = res;
+    });
+  }
 
   const linkEl = document.getElementById('m-store-591-link');
   if (s.url && s.url.startsWith('http')) {
@@ -2071,6 +2324,11 @@ function openStoreDetailModal(storeId) {
   `).join('');
 
   updateModalCompareButton();
+
+  // If user role is jp, default modal language to ja
+  const targetModalLang = (state.currentUserRole === 'jp' || state.langMode === 'ja') ? 'ja' : 'bilingual';
+  setStoreModalLang(targetModalLang);
+
   document.getElementById('store-detail-modal').classList.add('open');
 }
 
@@ -2633,6 +2891,63 @@ function focusStoreMap(storeId) {
   if (storeMarkers[storeId]) storeMarkers[storeId].openPopup();
 }
 
+// --- Custom Tags Management ---
+function saveCustomTags() {
+  localStorage.setItem(TAGS_KEY, JSON.stringify(state.customTags));
+  updateTagDropdowns();
+}
+
+function updateTagDropdowns() {
+  const postTag = document.getElementById('post-tag');
+  const editTag = document.getElementById('edit-post-tag');
+
+  const optionsHtml = state.customTags.map(t => `<option value="${t}">${t}</option>`).join('') +
+    '<option value="__ADD_NEW__">＋ 手動新增條件...</option>';
+
+  if (postTag) {
+    const curPost = postTag.value;
+    postTag.innerHTML = optionsHtml;
+    if (curPost && curPost !== '__ADD_NEW__' && state.customTags.includes(curPost)) {
+      postTag.value = curPost;
+    } else {
+      postTag.value = state.customTags[0] || '進度回報';
+    }
+  }
+
+  if (editTag) {
+    const curEdit = editTag.value;
+    editTag.innerHTML = optionsHtml;
+    if (curEdit && curEdit !== '__ADD_NEW__' && state.customTags.includes(curEdit)) {
+      editTag.value = curEdit;
+    } else {
+      editTag.value = state.customTags[0] || '進度回報';
+    }
+  }
+}
+
+function handleTagSelectChange(selectEl) {
+  if (!selectEl) return;
+  if (selectEl.value === '__ADD_NEW__') {
+    promptAddNewTag(selectEl);
+  }
+}
+
+function promptAddNewTag(selectEl) {
+  const newTag = prompt('請輸入欲新增的標籤/條件名稱（例如：合約審核、消防安檢、租金議價）：');
+  if (newTag && newTag.trim()) {
+    const trimmed = newTag.trim();
+    if (!state.customTags.includes(trimmed)) {
+      state.customTags.push(trimmed);
+      saveCustomTags();
+    }
+    if (selectEl) selectEl.value = trimmed;
+    const postTag = document.getElementById('post-tag');
+    if (postTag) postTag.value = trimmed;
+  } else {
+    if (selectEl) selectEl.value = state.customTags[0] || '進度回報';
+  }
+}
+
 // --- Member Management & Random Token Generation ---
 function generateSecureToken() {
   const array = new Uint8Array(8);
@@ -2640,13 +2955,46 @@ function generateSecureToken() {
   return 'tok_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
+function openSettingsModal(tabName) {
+  const modal = document.getElementById('settings-modal');
+  if (modal) modal.classList.add('open');
+  switchSettingsTab(tabName || 'members');
+  const countEl = document.getElementById('stg-audit-count');
+  if (countEl) countEl.textContent = (state.deletedLogs || []).length;
+}
+
+function closeSettingsModal() {
+  const modal = document.getElementById('settings-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function switchSettingsTab(tabName) {
+  const btnMembers = document.getElementById('stg-tab-members-btn');
+  const btnAudit = document.getElementById('stg-tab-audit-btn');
+  const panelMembers = document.getElementById('stg-panel-members');
+  const panelAudit = document.getElementById('stg-panel-audit');
+
+  if (tabName === 'audit') {
+    if (btnMembers) btnMembers.classList.remove('active');
+    if (btnAudit) btnAudit.classList.add('active');
+    if (panelMembers) panelMembers.style.display = 'none';
+    if (panelAudit) panelAudit.style.display = 'block';
+    renderAuditLogs();
+  } else {
+    if (btnMembers) btnMembers.classList.add('active');
+    if (btnAudit) btnAudit.classList.remove('active');
+    if (panelMembers) panelMembers.style.display = 'block';
+    if (panelAudit) panelAudit.style.display = 'none';
+    renderMemberList();
+  }
+}
+
 function openMemberModal() {
-  document.getElementById('member-modal').classList.add('open');
-  renderMemberList();
+  openSettingsModal('members');
 }
 
 function closeMemberModal() {
-  document.getElementById('member-modal').classList.remove('open');
+  closeSettingsModal();
 }
 
 function renderMemberList() {
@@ -2722,27 +3070,33 @@ function copyToClipboard(text, btnElement) {
   });
 }
 
-// --- Audit Log Modal ---
+// --- Audit Log Modal / Tab ---
 function openDeleteLogModal() {
-  const modal = document.getElementById('audit-modal');
-  const box = document.getElementById('audit-list-content');
-  const logs = state.deletedLogs;
-
-  if (!logs.length) {
-    box.innerHTML = '<div style="font-size:12px;color:var(--fg-muted);padding:10px 0;">尚無任何刪除存證紀錄。</div>';
-  } else {
-    box.innerHTML = logs.map(l => `
-      <div class="delete-log-item">
-        <strong>[${l.type}]</strong> ${l.title} (${l.id})<br>
-        <span style="color:var(--danger);">刪除原因：${l.reason}</span> ｜ 執行人：${l.deletedBy} ｜ 時間：${l.deletedAt}
-      </div>
-    `).join('');
-  }
-  modal.classList.add('open');
+  openSettingsModal('audit');
 }
 
 function closeAuditModal() {
-  document.getElementById('audit-modal').classList.remove('open');
+  closeSettingsModal();
+}
+
+function renderAuditLogs() {
+  const box = document.getElementById('audit-list-content');
+  if (!box) return;
+  const logs = state.deletedLogs || [];
+  const countEl = document.getElementById('stg-audit-count');
+  if (countEl) countEl.textContent = logs.length;
+
+  if (!logs.length) {
+    box.innerHTML = '<div style="font-size:12px;color:var(--fg-muted);padding:14px 0;text-align:center;">尚無任何刪除存證紀錄。</div>';
+  } else {
+    box.innerHTML = logs.map(l => `
+      <div class="delete-log-item" style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;">
+        <div style="font-weight:700;">[${l.type}] ${l.title || ''} <span style="font-size:11px;color:var(--fg-muted);">(${l.id})</span></div>
+        <div style="color:var(--danger);margin:3px 0;">刪除原因：${l.reason || '無填寫'}</div>
+        <div style="font-size:11px;color:var(--fg-muted);">執行人：${l.deletedBy} ｜ 時間：${l.deletedAt}</div>
+      </div>
+    `).join('');
+  }
 }
 
 // Bootstrap
