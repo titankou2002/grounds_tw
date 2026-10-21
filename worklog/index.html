@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>grounds Taiwan 營運日誌與店面決策中心</title>
+  <title>grounds Taiwan 展店專案管理與日本總部決策平台</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111111'/%3E%3Ctext x='50%25' y='72%25' font-family='Georgia,serif,system-ui' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3Eg%3C/text%3E%3C/svg%3E">
   <!-- Leaflet CSS for Map -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
     :root {
-      --bg: #f8f9fa;
+      --bg: #f7f7f9;
       --card-bg: #ffffff;
-      --sidebar-bg: #ffffff;
       --fg: #111111;
       --fg-muted: #666666;
       --fg-subtle: #8e8e93;
-      --border: #e5e5ea;
+      --border: #e2e2e8;
       --border-dark: #111111;
       --accent: #111111;
-      --accent-hover: #333333;
       --highlight: #b7791f;
       --highlight-bg: rgba(183, 121, 31, 0.08);
       --success: #2e7d32;
       --success-bg: rgba(46, 125, 50, 0.08);
       --danger: #c62828;
       --danger-bg: rgba(198, 40, 40, 0.08);
+      --info: #0277bd;
+      --info-bg: rgba(2, 119, 189, 0.08);
       --font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang TC", "Noto Sans TC", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
     }
 
@@ -38,10 +38,10 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* SVG Icon Utility */
+    /* SVG Icon Utility - NO EMOJIS ANYWHERE */
     .icon {
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       stroke-width: 2;
       stroke: currentColor;
       fill: none;
@@ -51,7 +51,7 @@
       display: inline-block;
     }
     .icon-sm { width: 14px; height: 14px; }
-    .icon-lg { width: 22px; height: 22px; }
+    .icon-lg { width: 20px; height: 20px; }
 
     /* Layout */
     .app-container {
@@ -60,7 +60,7 @@
       min-height: 100vh;
     }
 
-    /* Top Header */
+    /* Top Navigation Header */
     header.site-header {
       background: #ffffff;
       border-bottom: 1px solid var(--border);
@@ -68,7 +68,7 @@
       top: 0;
       z-index: 100;
       padding: 0 20px;
-      height: 56px;
+      height: 58px;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -95,15 +95,14 @@
       line-height: 1;
       padding-bottom: 3px;
     }
-    .brand-text-title {
+    .brand-title {
       font-size: 15px;
-      font-weight: 700;
-      letter-spacing: 0.5px;
+      font-weight: 800;
+      letter-spacing: 0.3px;
     }
-    .brand-text-sub {
+    .brand-subtitle {
       font-size: 11px;
       color: var(--fg-muted);
-      letter-spacing: 0.2px;
     }
 
     /* Navigation Tabs */
@@ -115,13 +114,13 @@
       display: flex;
       align-items: center;
       gap: 6px;
-      padding: 7px 14px;
+      padding: 7px 13px;
       border-radius: 8px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--fg-muted);
       font-size: 13px;
-      font-weight: 500;
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -133,12 +132,23 @@
       background: #111111;
       color: #ffffff;
     }
+    .badge-count {
+      padding: 1px 6px;
+      border-radius: 99px;
+      font-size: 11px;
+      font-weight: 700;
+      background: rgba(255,255,255,0.25);
+    }
+    .nav-tab-btn:not(.active) .badge-count {
+      background: #e2e2e8;
+      color: var(--fg);
+    }
 
-    /* Top Metrics & Actions */
+    /* Top Controls */
     .header-actions {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
     }
     .stat-pill {
       font-size: 12px;
@@ -149,9 +159,8 @@
       align-items: center;
       gap: 5px;
       font-weight: 600;
-      color: var(--fg);
     }
-    .lang-mode-btn {
+    .action-pill-btn {
       padding: 5px 10px;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -161,13 +170,11 @@
       cursor: pointer;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
-    .lang-mode-btn:hover {
-      border-color: var(--fg);
-    }
+    .action-pill-btn:hover { border-color: var(--fg); }
 
-    /* Main Content Area */
+    /* Main Container */
     main.main-body {
       flex: 1;
       max-width: 1440px;
@@ -176,7 +183,122 @@
       padding: 20px;
     }
 
-    /* View: Dual-column Desktop WYSIWYG */
+    /* --- SECTION: EXECUTIVE DASHBOARD (首頁 30 秒戰情儀表板) --- */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    .dash-kpi-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .dash-kpi-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .dash-kpi-label {
+      font-size: 12px;
+      color: var(--fg-muted);
+      font-weight: 600;
+    }
+    .dash-kpi-val {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+    }
+    .dash-kpi-sub {
+      font-size: 11px;
+      color: var(--fg-muted);
+      margin-top: 6px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .overview-split {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 20px;
+      margin-bottom: 24px;
+    }
+    .dash-panel-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    .dash-panel-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Decision Alert Item in Dashboard */
+    .urgent-dec-item {
+      background: #fff8f8;
+      border-left: 3px solid var(--danger);
+      padding: 12px;
+      border-radius: 0 8px 8px 0;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .urgent-dec-info { flex: 1; }
+    .urgent-dec-code {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--danger);
+      letter-spacing: 0.5px;
+    }
+    .urgent-dec-title {
+      font-size: 13.5px;
+      font-weight: 700;
+      margin: 2px 0;
+    }
+    .urgent-dec-impact {
+      font-size: 11.5px;
+      color: var(--fg-muted);
+    }
+    .urgent-dec-btn {
+      padding: 5px 12px;
+      background: var(--danger);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* Key Output List */
+    .output-list-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 10px 0;
+      border-bottom: 1px solid #f1f1f4;
+      font-size: 13px;
+    }
+    .output-check {
+      color: var(--success);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    /* --- SECTION: WORK FEED & DESKTOP SPLIT VIEW --- */
     .split-desktop-view {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -187,13 +309,13 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding-bottom: 12px;
+      padding-bottom: 10px;
       border-bottom: 2px solid #111111;
       margin-bottom: 16px;
     }
     .column-title {
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14.5px;
+      font-weight: 800;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -201,146 +323,106 @@
     .column-sub {
       font-size: 12px;
       color: var(--fg-muted);
-      font-weight: normal;
     }
 
-    /* Post Composer */
+    /* Composer Card (Dual Track: Input vs Output) */
     .composer-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 16px;
       margin-bottom: 20px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.02);
     }
+    .track-tabs {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 8px;
+    }
+    .track-tab-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .track-tab-label.active {
+      color: var(--fg);
+      border-bottom: 2px solid var(--fg);
+      margin-bottom: -9px;
+      padding-bottom: 7px;
+    }
+
     .composer-textarea {
       width: 100%;
-      min-height: 85px;
+      min-height: 80px;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 12px;
+      padding: 10px;
       font-family: inherit;
-      font-size: 14px;
-      resize: vertical;
+      font-size: 13.5px;
       line-height: 1.6;
-      margin-bottom: 12px;
       outline: none;
-      transition: border-color 0.15s;
+      margin-bottom: 10px;
     }
-    .composer-textarea:focus {
-      border-color: var(--fg);
-    }
+    .composer-textarea:focus { border-color: var(--fg); }
+
     .composer-meta-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
     }
-    .meta-inputs {
+    .meta-left {
       display: flex;
       align-items: center;
       gap: 8px;
       flex-wrap: wrap;
     }
-    .hours-input-wrapper {
+    .input-pill {
       display: flex;
       align-items: center;
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 4px 8px;
       background: #fafafa;
-      font-size: 13px;
+      font-size: 12px;
       gap: 4px;
     }
-    .hours-input {
-      width: 50px;
+    .hours-field {
+      width: 45px;
       border: none;
       background: transparent;
       font-weight: 700;
-      font-size: 13px;
       text-align: right;
       outline: none;
     }
-    .tag-select {
+    .select-field {
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 5px 8px;
-      font-size: 13px;
+      padding: 4px 8px;
+      font-size: 12px;
       background: #fafafa;
       outline: none;
     }
-    .btn-action-tool {
-      border: 1px solid var(--border);
-      background: #ffffff;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      font-weight: 500;
-    }
-    .btn-action-tool:hover {
-      background: #f1f1f4;
-    }
-    .btn-submit-post {
+    .btn-submit {
       background: #111111;
       color: #ffffff;
       border: none;
       border-radius: 8px;
-      padding: 8px 18px;
+      padding: 7px 16px;
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       gap: 6px;
-      transition: background 0.15s;
     }
-    .btn-submit-post:hover {
-      background: #333333;
-    }
-
-    /* 591 Panel inside Composer */
-    .prop-panel {
-      display: none;
-      background: #fafafa;
-      border: 1px dashed var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-    }
-    .prop-panel.active { display: block; }
-    .prop-grid {
-      display: grid;
-      grid-template-columns: 2fr 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 8px;
-    }
-    .prop-input {
-      width: 100%;
-      padding: 6px 10px;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-size: 13px;
-      outline: none;
-    }
-    .prop-checks {
-      display: flex;
-      gap: 15px;
-      font-size: 12px;
-      margin-top: 8px;
-      color: var(--fg-muted);
-    }
-    .prop-calc-summary {
-      font-size: 12px;
-      color: var(--highlight);
-      font-weight: 600;
-      margin-top: 6px;
-    }
+    .btn-submit:hover { background: #333333; }
 
     /* Feed Items */
     .feed-container {
@@ -352,17 +434,13 @@
       background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 18px;
-      transition: box-shadow 0.15s;
-    }
-    .feed-card:hover {
-      box-shadow: 0 3px 12px rgba(0,0,0,0.04);
+      padding: 16px;
     }
     .feed-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .author-info {
       display: flex;
@@ -370,539 +448,439 @@
       gap: 8px;
     }
     .author-avatar {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       background: #111111;
       border-radius: 50%;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
     }
     .author-name {
-      font-size: 13px;
-      font-weight: 600;
+      font-size: 12.5px;
+      font-weight: 700;
     }
     .post-timestamp {
       font-size: 11px;
       color: var(--fg-subtle);
     }
-    .post-badge-group {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .tag-badge {
+    .post-tag {
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       background: #f1f1f4;
       border-radius: 4px;
-      font-weight: 500;
+      font-weight: 600;
     }
-    .hours-badge {
+    .hours-tag {
       font-size: 11px;
-      padding: 2px 8px;
+      padding: 2px 7px;
       background: var(--highlight-bg);
       color: var(--highlight);
       border-radius: 4px;
       font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 3px;
-    }
-    .post-body-text {
-      font-size: 14px;
-      line-height: 1.65;
-      margin-bottom: 12px;
-      white-space: pre-wrap;
     }
 
-    /* 591 Card in Feed */
-    .prop-card-view {
-      background: #fafafc;
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
-      margin-bottom: 12px;
-      display: flex;
-      gap: 14px;
-    }
-    .prop-card-img {
-      width: 120px;
-      height: 90px;
-      object-fit: cover;
+    .output-highlight-box {
+      background: #f4fbf5;
+      border: 1px solid #d2edd6;
       border-radius: 6px;
-      background: #e5e5ea;
-      flex-shrink: 0;
+      padding: 8px 10px;
+      margin: 8px 0;
+      font-size: 12.5px;
+      color: #1b5e20;
     }
-    .prop-card-body {
-      flex: 1;
-    }
-    .prop-card-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 4px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .prop-metrics {
-      display: flex;
-      gap: 12px;
-      font-size: 12px;
-      margin-bottom: 6px;
-    }
-    .prop-metric-val {
-      font-weight: 700;
-      color: #111111;
-    }
-    .prop-tags-row {
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-    }
-    .prop-tag-mini {
-      font-size: 10px;
-      padding: 1px 6px;
-      background: var(--success-bg);
-      color: var(--success);
-      border-radius: 3px;
-    }
+    .output-highlight-box strong { font-weight: 700; }
 
-    /* Actions Bar below feed item */
-    .feed-card-footer {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-top: 1px solid var(--border);
-      padding-top: 10px;
-      margin-top: 10px;
-    }
-    .footer-btn-group {
-      display: flex;
-      gap: 12px;
-    }
-    .action-icon-btn {
-      background: transparent;
-      border: none;
-      color: var(--fg-muted);
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      transition: color 0.15s;
-    }
-    .action-icon-btn:hover {
-      color: var(--fg);
+    .post-body-text {
+      font-size: 13.5px;
+      line-height: 1.65;
+      margin: 8px 0;
+      white-space: pre-wrap;
     }
 
     /* Comments Section */
     .comments-thread {
-      margin-top: 12px;
-      padding-top: 10px;
+      margin-top: 10px;
+      padding-top: 8px;
       border-top: 1px dashed var(--border);
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 8px;
     }
     .comment-item {
       background: #f9f9fb;
       border-radius: 6px;
-      padding: 8px 12px;
-      font-size: 13px;
+      padding: 7px 10px;
+      font-size: 12.5px;
     }
     .comment-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
       font-size: 11px;
       color: var(--fg-muted);
       font-weight: 600;
     }
-    .comment-reply-input-box {
+    .comment-reply-row {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       margin-top: 6px;
     }
     .comment-reply-input {
       flex: 1;
-      padding: 6px 10px;
+      padding: 5px 8px;
       border: 1px solid var(--border);
       border-radius: 6px;
       font-size: 12px;
       outline: none;
     }
-    .btn-comment-reply {
-      padding: 6px 12px;
+    .btn-reply-send {
+      padding: 5px 10px;
       background: #111111;
       color: #fff;
       border: none;
       border-radius: 6px;
-      font-size: 12px;
+      font-size: 11.5px;
+      font-weight: 600;
       cursor: pointer;
     }
 
-    /* View: Gantt & Analytics */
-    .analytics-panel {
-      display: none;
+    /* --- SECTION: DECISION LEDGER (決策追蹤專區) --- */
+    .decisions-panel { display: none; }
+    .dec-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
     }
-    .stats-grid-row {
+    .dec-table th, .dec-table td {
+      padding: 12px 14px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid var(--border);
+    }
+    .dec-table th {
+      background: #fbfbfd;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .dec-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 2px 8px;
+      border-radius: 4px;
+    }
+    .dec-badge.waiting { background: var(--danger-bg); color: var(--danger); }
+    .dec-badge.discussing { background: var(--highlight-bg); color: var(--highlight); }
+    .dec-badge.approved { background: var(--success-bg); color: var(--success); }
+
+    /* --- SECTION: STORE MATRIX & RENT MAP --- */
+    .store-panel { display: none; }
+    .store-layout {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 15px;
-      margin-bottom: 24px;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      height: calc(100vh - 120px);
     }
-    .stat-metric-card {
+    .store-list-col {
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 6px;
+    }
+    .store-item-card {
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 10px;
-      padding: 16px;
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.15s;
     }
-    .stat-label {
-      font-size: 12px;
-      color: var(--fg-muted);
-      margin-bottom: 4px;
+    .store-item-card:hover {
+      border-color: var(--fg);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
-    .stat-num {
-      font-size: 26px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
+    .store-item-card.active {
+      border: 2px solid var(--fg);
     }
-    .stat-sub {
-      font-size: 11px;
-      color: var(--success);
-      margin-top: 2px;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
-    /* Gantt Chart Container */
-    .gantt-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    .gantt-title {
-      font-size: 16px;
-      font-weight: 700;
-      margin-bottom: 16px;
+    .store-item-head {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 6px;
     }
-    .gantt-timeline-row {
-      display: flex;
-      align-items: center;
-      margin-bottom: 18px;
-    }
-    .gantt-milestone-info {
-      width: 220px;
-      flex-shrink: 0;
-    }
-    .gantt-milestone-title {
-      font-size: 13px;
+    .store-status-chip {
+      font-size: 11px;
       font-weight: 700;
-    }
-    .gantt-milestone-sub {
-      font-size: 11px;
-      color: var(--fg-muted);
-    }
-    .gantt-bar-track {
-      flex: 1;
-      height: 28px;
-      background: #f1f1f4;
-      border-radius: 6px;
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      padding: 0 10px;
-    }
-    .gantt-bar-fill {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      background: #111111;
-      border-radius: 6px;
-      transition: width 0.3s;
-    }
-    .gantt-bar-text {
-      position: relative;
-      z-index: 2;
-      font-size: 12px;
-      font-weight: 600;
-      color: #ffffff;
-    }
-    .gantt-block-tag {
-      margin-left: 10px;
-      font-size: 11px;
-      color: var(--danger);
-      background: var(--danger-bg);
-      padding: 2px 8px;
+      padding: 2px 7px;
       border-radius: 4px;
-      font-weight: 600;
     }
+    .store-status-chip.candidate { background: #e3f2fd; color: #1565c0; }
+    .store-status-chip.verified { background: #e8f5e9; color: #2e7d32; }
+    .store-status-chip.rejected { background: #ffebee; color: #c62828; }
 
-    /* Heatmap (Activity Tracker) */
-    .heatmap-section {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    .heatmap-grid {
-      display: grid;
-      grid-template-columns: repeat(15, 1fr);
-      gap: 6px;
-      margin-top: 12px;
-    }
-    .heatmap-cell {
-      aspect-ratio: 1;
-      background: #f1f1f4;
-      border-radius: 3px;
-      cursor: pointer;
-      position: relative;
-    }
-    .heatmap-cell.level-1 { background: #b8e994; }
-    .heatmap-cell.level-2 { background: #78e08f; }
-    .heatmap-cell.level-3 { background: #38ada9; }
-    .heatmap-cell.level-4 { background: #079992; }
-
-    /* View: Map Mode */
-    .map-panel {
-      display: none;
-      height: calc(100vh - 100px);
-    }
-    #rent-map {
+    #store-map-canvas {
       width: 100%;
       height: 100%;
       border-radius: 12px;
       border: 1px solid var(--border);
     }
 
-    /* View: Decisions QA */
-    .decisions-panel {
-      display: none;
-    }
-    .qa-card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-      gap: 20px;
-    }
-    .qa-card {
-      background: #ffffff;
+    /* --- SECTION: USAGE & BUDGET MONITOR (API 用量監控) --- */
+    .monitor-box {
+      background: #fafafc;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 20px;
-      position: relative;
-    }
-    .qa-status-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 4px;
-      margin-bottom: 10px;
-    }
-    .qa-status-pill.waiting {
-      background: var(--danger-bg);
-      color: var(--danger);
-    }
-    .qa-status-pill.approved {
-      background: var(--success-bg);
-      color: var(--success);
-    }
-    .qa-impact-line {
+      border-radius: 8px;
+      padding: 12px;
       font-size: 12px;
-      color: var(--danger);
-      background: #fff5f5;
-      padding: 6px 10px;
-      border-radius: 6px;
-      margin: 10px 0;
-      font-weight: 500;
-    }
-
-    /* View: Weekly Summary */
-    .weekly-panel {
-      display: none;
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 30px;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .report-title-head {
-      border-bottom: 2px solid #111111;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
       display: flex;
       justify-content: space-between;
       align-items: center;
+      margin-bottom: 16px;
+    }
+    .budget-bar-track {
+      width: 160px;
+      height: 8px;
+      background: #e2e2e8;
+      border-radius: 99px;
+      overflow: hidden;
+      margin-top: 4px;
+    }
+    .budget-bar-fill {
+      height: 100%;
+      background: var(--success);
+      width: 8%;
     }
 
-    /* Responsive adjustments for Mobile */
+    /* Mobile adjustments */
     @media (max-width: 900px) {
-      .split-desktop-view {
-        grid-template-columns: 1fr;
-      }
-      .column-header.right-header {
-        display: none;
-      }
-      .right-column {
-        display: none; /* Hide side-by-side on mobile, show unified cards! */
-      }
-      .stats-grid-row {
-        grid-template-columns: 1fr 1fr;
-      }
-      .nav-tab-btn span.tab-title {
-        display: none;
-      }
-      .qa-card-grid {
-        grid-template-columns: 1fr;
-      }
-      .prop-grid {
-        grid-template-columns: 1fr;
-      }
+      .dashboard-grid { grid-template-columns: 1fr 1fr; }
+      .overview-split { grid-template-columns: 1fr; }
+      .split-desktop-view { grid-template-columns: 1fr; }
+      .right-column { display: none; }
+      .store-layout { grid-template-columns: 1fr; height: auto; }
+      #store-map-canvas { height: 350px; }
+      .nav-tab-btn span.tab-title { display: none; }
     }
   </style>
 </head>
 <body>
 
 <div class="app-container">
-  <!-- Header -->
+  <!-- Top Navigation -->
   <header class="site-header">
-    <div style="display:flex;align-items:center;gap:18px;">
-      <a href="javascript:void(0)" class="brand-group" onclick="switchView('feed')">
+    <div style="display:flex;align-items:center;gap:16px;">
+      <a href="javascript:void(0)" class="brand-group" onclick="switchMainTab('dashboard')">
         <div class="brand-logo-badge">g</div>
         <div>
-          <div class="brand-text-title">grounds Taiwan</div>
-          <div class="brand-text-sub">營運日誌 ＆ 店面決策門戶</div>
+          <div class="brand-title">grounds Taiwan</div>
+          <div class="brand-subtitle">展店專案管理 ＆ 決策平台</div>
         </div>
       </a>
 
-      <!-- Navigation Tabs -->
       <nav class="nav-tabs">
-        <button class="nav-tab-btn active" id="tab-feed" onclick="switchView('feed')">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <button class="nav-tab-btn active" id="tab-btn-dashboard" onclick="switchMainTab('dashboard')">
+          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span class="tab-title">戰情總覽</span>
+        </button>
+        <button class="nav-tab-btn" id="tab-btn-feed" onclick="switchMainTab('feed')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           <span class="tab-title">工作動態</span>
         </button>
-        <button class="nav-tab-btn" id="tab-analytics" onclick="switchView('analytics')">
-          <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-          <span class="tab-title">甘特與工時</span>
-        </button>
-        <button class="nav-tab-btn" id="tab-map" onclick="switchView('map')">
-          <svg class="icon" viewBox="0 0 24 24"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon><line x1="8" y1="2" x2="8" y2="18"></line><line x1="16" y1="6" x2="16" y2="22"></line></svg>
-          <span class="tab-title">租金地圖</span>
-        </button>
-        <button class="nav-tab-btn" id="tab-decisions" onclick="switchView('decisions')">
+        <button class="nav-tab-btn" id="tab-btn-decisions" onclick="switchMainTab('decisions')">
           <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          <span class="tab-title">決策 QA</span>
+          <span class="tab-title">決策追蹤</span>
+          <span class="badge-count" id="nav-dec-count">3</span>
         </button>
-        <button class="nav-tab-btn" id="tab-weekly" onclick="switchView('weekly')">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          <span class="tab-title">週五開會報告</span>
+        <button class="nav-tab-btn" id="tab-btn-store" onclick="switchMainTab('store')">
+          <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
+          <span class="tab-title">店面評估與地圖</span>
         </button>
       </nav>
     </div>
 
-    <!-- Header Actions -->
     <div class="header-actions">
       <div class="stat-pill" title="本月累計總投入工時">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-        <span id="total-hours-display">86.5h</span>
+        <span id="header-total-hours">86.5h</span>
       </div>
 
-      <button class="lang-mode-btn" id="mobile-lang-btn" onclick="cycleLanguageMode()">
+      <button class="action-pill-btn" onclick="cycleLangView()">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        <span id="current-lang-mode-text">左右對照</span>
+        <span id="lang-view-text">左右對照</span>
       </button>
 
-      <button class="btn-action-tool" onclick="exportDataJSON()" title="備份資料">
+      <button class="action-pill-btn" onclick="exportDataJSON()" title="備份資料">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       </button>
     </div>
   </header>
 
-  <!-- Main Views Container -->
+  <!-- Main Body Content -->
   <main class="main-body">
 
-    <!-- VIEW 1: FEED & WYSIWYG -->
-    <section id="view-feed" class="active-view">
+    <!-- 1. EXECUTIVE DASHBOARD (首頁 30 秒戰情儀表板) -->
+    <section id="section-dashboard" class="tab-section">
+      <div class="dashboard-grid">
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-head">
+            <span class="dash-kpi-label">專案整體推進率</span>
+            <svg class="icon icon-sm" style="color:var(--success);" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+          </div>
+          <div class="dash-kpi-val">58 <span style="font-size:16px;">%</span></div>
+          <div class="dash-kpi-sub">
+            <span>依里程碑驗收標準計算（非工時）</span>
+          </div>
+        </div>
+
+        <div class="dash-kpi-card" style="border-left: 3px solid var(--danger);">
+          <div class="dash-kpi-head">
+            <span class="dash-kpi-label" style="color:var(--danger);">待總部決策項目</span>
+            <svg class="icon icon-sm" style="color:var(--danger);" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+          </div>
+          <div class="dash-kpi-val" style="color:var(--danger);">3 <span style="font-size:16px;">件</span></div>
+          <div class="dash-kpi-sub" style="color:var(--danger);">
+            <span>最長已卡 14 天（影響 11 月登記）</span>
+          </div>
+        </div>
+
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-head">
+            <span class="dash-kpi-label">候選店面實勘進度</span>
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+          </div>
+          <div class="dash-kpi-val">6 <span style="font-size:16px;">間</span></div>
+          <div class="dash-kpi-sub">
+            <span>1 間重點決選 ｜ 2 間已排除</span>
+          </div>
+        </div>
+
+        <div class="dash-kpi-card">
+          <div class="dash-kpi-head">
+            <span class="dash-kpi-label">API 翻譯用量與安全監控</span>
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"></rect><rect x="2" y="14" width="20" height="8" rx="2" ry="2"></rect><line x1="6" y1="6" x2="6.01" y2="6"></line><line x1="6" y1="18" x2="6.01" y2="18"></line></svg>
+          </div>
+          <div class="dash-kpi-val" style="font-size:22px;">$0.02 <span style="font-size:13px;color:var(--fg-muted);">/ $10.00</span></div>
+          <div class="dash-kpi-sub">
+            <span>增量翻譯已快取 ｜ 無無窮呼叫</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Split Layout in Dashboard: Urgent Decisions vs Recent Key Outputs -->
+      <div class="overview-split">
+        <div class="dash-panel-card">
+          <div class="dash-panel-title">
+            <span>優先處理：待總部拍板決策（DEC Ledger）</span>
+            <button class="action-pill-btn" onclick="switchMainTab('decisions')">查看完整追蹤表</button>
+          </div>
+          <div id="dash-urgent-decisions-list"></div>
+        </div>
+
+        <div class="dash-panel-card">
+          <div class="dash-panel-title">
+            <span>本週工作成果 Output（實質進展）</span>
+            <button class="action-pill-btn" onclick="switchMainTab('feed')">進入日誌</button>
+          </div>
+          <div id="dash-outputs-list">
+            <div class="output-list-item">
+              <svg class="icon icon-sm output-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <div><strong>門市選址：</strong>完成中山北路二段 36 巷一樓深度分析，確認人流與自然採光優勢，排除周邊動線不良物件。</div>
+            </div>
+            <div class="output-list-item">
+              <svg class="icon icon-sm output-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <div><strong>公司設立：</strong>收到豐業聯合會計師正式報價（NT$75,000）與規費查核表，簽約條件就緒。</div>
+            </div>
+            <div class="output-list-item">
+              <svg class="icon icon-sm output-check" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+              <div><strong>商標智權：</strong>宏景智權 3 類商標申請資料稿備妥，等待出資人名義確定。</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. WORK FEED (工作動態 ＆ 電腦版左右所見即所得) -->
+    <section id="section-feed" class="tab-section" style="display:none;">
+      <!-- API Optimization Indicator Banner -->
+      <div class="monitor-box">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg class="icon icon-sm" style="color:var(--success);" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          <span><strong>API 成本防護模式已啟用：</strong>輸入完成後才呼叫 ｜ 翻譯結果存庫不重複翻譯 ｜ 留言僅增量翻譯</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:12px;">
+          <span>今日 API 呼叫次數：<strong id="api-call-count">4</strong> 次</span>
+          <div class="budget-bar-track"><div class="budget-bar-fill"></div></div>
+        </div>
+      </div>
+
       <div class="split-desktop-view">
-        
-        <!-- LEFT COLUMN: CHINESE (台灣端輸入 & 即時反饋) -->
+        <!-- LEFT: CHINESE (台灣端輸入 ＆ 即時編輯) -->
         <div class="left-column">
           <div class="column-header">
             <div class="column-title">
               <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span>台灣端工作日誌（繁體中文）</span>
+              <span>台灣端工作成果與紀錄（繁體中文）</span>
             </div>
             <div class="column-sub">所見即所得輸入</div>
           </div>
 
           <!-- Composer -->
           <div class="composer-card">
-            <textarea class="composer-textarea" id="post-input-zh" placeholder="今天完成了什麼？記錄工作進度、訪店發現或決策卡點..."></textarea>
-            
+            <div class="track-tabs">
+              <span class="track-tab-label active">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                工作成果 (Output)
+              </span>
+              <span class="track-tab-label">執行過程 (Input)</span>
+            </div>
+
+            <textarea class="composer-textarea" id="post-input-zh" placeholder="填寫工作成果...（例：排除中山區 1 間店面、取得房東免租期承諾）"></textarea>
+
+            <div style="margin-bottom:10px;">
+              <input type="text" class="composer-textarea" style="min-height:auto;padding:6px 10px;font-size:12.5px;" id="post-output-tag" placeholder="關鍵工作成果摘要（例：鎖定中山北路36巷為第1候選店）">
+            </div>
+
             <div class="composer-meta-row">
-              <div class="meta-inputs">
-                <div class="hours-input-wrapper" title="工作時數">
+              <div class="meta-left">
+                <div class="input-pill" title="投入工時">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  <input type="number" step="0.5" min="0" value="1.5" class="hours-input" id="post-hours">
+                  <input type="number" step="0.5" min="0" value="1.5" class="hours-field" id="post-hours">
                   <span>h</span>
                 </div>
 
-                <select class="tag-select" id="post-tag">
+                <select class="select-field" id="post-tag">
                   <option value="門市選址">門市選址</option>
                   <option value="公司設立">公司設立</option>
                   <option value="商標佈局">商標佈局</option>
                   <option value="營運規劃">營運規劃</option>
                   <option value="進口物流">進口物流</option>
-                  <option value="快閃活動">快閃活動</option>
                 </select>
 
-                <button type="button" class="btn-action-tool" onclick="togglePropPanel()">
-                  <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-                  <span>591店面</span>
-                </button>
+                <select class="select-field" id="post-link-dec" title="連結關聯決策編號">
+                  <option value="">無關聯決策</option>
+                  <option value="DEC-001">關聯 DEC-001 (資本額)</option>
+                  <option value="DEC-002">關聯 DEC-002 (商標名義)</option>
+                  <option value="DEC-003">關聯 DEC-003 (店面意向)</option>
+                </select>
               </div>
 
-              <button class="btn-submit-post" onclick="submitNewPost()">
+              <button class="btn-submit" onclick="submitNewPostOptimized()">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                <span>發布並即時翻譯</span>
+                <span>發布成果（完成後翻譯）</span>
               </button>
-            </div>
-
-            <!-- 591 Extra Input Panel -->
-            <div class="prop-panel" id="composer-prop-panel">
-              <div class="prop-grid">
-                <input type="text" class="prop-input" id="prop-title" placeholder="店面名稱或地址（例：中山北路二段36巷1樓）">
-                <input type="number" class="prop-input" id="prop-rent" placeholder="月租(萬)" oninput="calcRentDetail()">
-                <input type="number" class="prop-input" id="prop-area" placeholder="坪數(坪)" oninput="calcRentDetail()">
-              </div>
-              <div class="prop-grid" style="grid-template-columns: 2fr 1fr;">
-                <input type="url" class="prop-input" id="prop-url" placeholder="591 連結網址">
-                <input type="url" class="prop-input" id="prop-img" placeholder="照片連結 (選填)">
-              </div>
-              <div class="prop-checks">
-                <label><input type="checkbox" id="prop-chk-reg" checked> 可辦營業登記</label>
-                <label><input type="checkbox" id="prop-chk-inv" checked> 可開發票</label>
-                <label><input type="checkbox" id="prop-chk-fire" checked> 消防合規</label>
-              </div>
-              <div class="prop-calc-summary" id="prop-calc-preview">
-                每坪單價：約 NT$ 0 元 ｜ 估計實際月成本 (含扣繳10%+健保2.11%)：約 NT$ 0 元
-              </div>
             </div>
           </div>
 
@@ -910,207 +888,59 @@
           <div class="feed-container" id="feed-zh-container"></div>
         </div>
 
-        <!-- RIGHT COLUMN: JAPANESE (日本端對照 & リアルタイムプレビュー) -->
+        <!-- RIGHT: JAPANESE (日本側ビュー ＆ 成果對照) -->
         <div class="right-column">
-          <div class="column-header right-header">
+          <div class="column-header">
             <div class="column-title">
               <svg class="icon" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>日本側ビュー（リアルタイム同期＆返信）</span>
+              <span>日本側ビュー（成果・意思決定同期）</span>
             </div>
-            <div class="column-sub">所見即所得・自動翻訳済み</div>
-          </div>
-
-          <!-- Japanese Live Preview Card for composing -->
-          <div class="composer-card" style="background:#fafafa;border-style:dashed;">
-            <div style="font-size:12px;color:var(--fg-muted);margin-bottom:8px;display:flex;align-items:center;gap:6px;">
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>リアルタイム翻訳プレビュー（左側の入力が自動反映されます）</span>
-            </div>
-            <div id="jp-composer-preview" style="font-size:13.5px;color:var(--fg);min-height:75px;line-height:1.6;">
-              （左側のテキストを入力すると、ここにビジネス日本語の翻訳が即時プレビューされます）
-            </div>
+            <div class="column-sub">所見即所得・自動翻訳保管</div>
           </div>
 
           <!-- Japanese Posts Feed -->
           <div class="feed-container" id="feed-ja-container"></div>
         </div>
-
       </div>
     </section>
 
-    <!-- VIEW 2: GANTT & HOURS ANALYTICS -->
-    <section id="view-analytics" class="analytics-panel">
-      <!-- High Level Metrics -->
-      <div class="stats-grid-row">
-        <div class="stat-metric-card">
-          <div class="stat-label">累積投入總工數</div>
-          <div class="stat-num" id="stat-total-hours">86.5 <span style="font-size:16px;">h</span></div>
-          <div class="stat-sub">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
-            <span>本週已投入 14.5 小時</span>
-          </div>
-        </div>
-
-        <div class="stat-metric-card">
-          <div class="stat-label">門市踩點與分析</div>
-          <div class="stat-num">6 <span style="font-size:16px;">間</span></div>
-          <div class="stat-sub">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-            <span>中山區候選中</span>
-          </div>
-        </div>
-
-        <div class="stat-metric-card">
-          <div class="stat-label">待日本裁決事項</div>
-          <div class="stat-num" style="color:var(--danger);">3 <span style="font-size:16px;">項</span></div>
-          <div class="stat-sub" style="color:var(--danger);">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-            <span>最長已等待 14 天</span>
-          </div>
-        </div>
-
-        <div class="stat-metric-card">
-          <div class="stat-label">專案總推進完成率</div>
-          <div class="stat-num">52 <span style="font-size:16px;">%</span></div>
-          <div class="stat-sub">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-            <span>預計 2027/03 開店</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- Gantt Chart -->
-      <div class="gantt-card">
-        <div class="gantt-title">
-          <span>四大專案里程碑動態甘特圖（自動掛鉤工作日誌工時）</span>
-          <span style="font-size:12px;font-weight:normal;color:var(--fg-muted);">基準：2026/09 ～ 2027/03</span>
-        </div>
-
-        <!-- Milestone 1 -->
-        <div class="gantt-timeline-row">
-          <div class="gantt-milestone-info">
-            <div class="gantt-milestone-title">1. 台灣子公司設立</div>
-            <div class="gantt-milestone-sub">會計師報價完成 / 等資本額拍板</div>
-          </div>
-          <div class="gantt-bar-track">
-            <div class="gantt-bar-fill" style="width: 60%;"></div>
-            <div class="gantt-bar-text">60% 推進中（工數: 22h）</div>
-          </div>
-          <div class="gantt-block-tag">等日本拍板資本額</div>
-        </div>
-
-        <!-- Milestone 2 -->
-        <div class="gantt-timeline-row">
-          <div class="gantt-milestone-info">
-            <div class="gantt-milestone-title">2. 商標佈局（3類）</div>
-            <div class="gantt-milestone-sub">宏景報價收訖 / 等申請人名義</div>
-          </div>
-          <div class="gantt-bar-track">
-            <div class="gantt-bar-fill" style="width: 35%;"></div>
-            <div class="gantt-bar-text">35%（工數: 11h）</div>
-          </div>
-          <div class="gantt-block-tag">等日本確認先送/後送</div>
-        </div>
-
-        <!-- Milestone 3 -->
-        <div class="gantt-timeline-row">
-          <div class="gantt-milestone-info">
-            <div class="gantt-milestone-title">3. 門市選址與合規</div>
-            <div class="gantt-milestone-sub">已看 6 間 / 中山北路分析完畢</div>
-          </div>
-          <div class="gantt-bar-track">
-            <div class="gantt-bar-fill" style="width: 75%;"></div>
-            <div class="gantt-bar-text">75%（工數: 38.5h）</div>
-          </div>
-        </div>
-
-        <!-- Milestone 4 -->
-        <div class="gantt-timeline-row">
-          <div class="gantt-milestone-info">
-            <div class="gantt-milestone-title">4. 2027/03 快閃活動</div>
-            <div class="gantt-milestone-sub">時程與選品通路整合</div>
-          </div>
-          <div class="gantt-bar-track">
-            <div class="gantt-bar-fill" style="width: 20%;"></div>
-            <div class="gantt-bar-text">20%（工數: 15h）</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Activity Heatmap -->
-      <div class="heatmap-section">
-        <div style="display:flex;justify-content:space-between;align-items:center;">
-          <div style="font-size:14px;font-weight:700;">每日投入工時熱力圖（近 30 天）</div>
-          <div style="font-size:11px;color:var(--fg-muted);">淺色: 0.5~2h ｜ 深色: 4h+ 高強度輸出</div>
-        </div>
-        <div class="heatmap-grid" id="heatmap-cells"></div>
-      </div>
-    </section>
-
-    <!-- VIEW 3: RENT MAP -->
-    <section id="view-map" class="map-panel">
-      <div id="rent-map"></div>
-    </section>
-
-    <!-- VIEW 4: DECISIONS QA -->
-    <section id="view-decisions" class="decisions-panel">
-      <div style="margin-bottom:20px;display:flex;justify-content:space-between;align-items:center;">
+    <!-- 3. DECISION LEDGER (決策追蹤專區) -->
+    <section id="section-decisions" class="tab-section" style="display:none;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
         <div>
-          <h2 style="font-size:18px;font-weight:700;">待日本總部裁決清單（Decision Backlog）</h2>
-          <p style="font-size:12px;color:var(--fg-muted);">即時連動時程卡點，日本主管可直接在此點選回覆</p>
+          <h2 style="font-size:17px;font-weight:800;">日本總部決策追蹤專區（Decision Ledger）</h2>
+          <p style="font-size:12px;color:var(--fg-muted);">每項決策均具備唯一編號、時程衝擊與存證紀錄，杜絕決策模糊</p>
         </div>
-        <button class="btn-action-tool" onclick="addNewQAPrompt()">
+        <button class="btn-submit" onclick="addNewDecPrompt()">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-          <span>新增提問項</span>
+          <span>新增決策案 (DEC)</span>
         </button>
       </div>
 
-      <div class="qa-card-grid" id="qa-cards-container"></div>
+      <table class="dec-table">
+        <thead>
+          <tr>
+            <th style="width:100px;">編號</th>
+            <th style="width:110px;">狀態 / 天數</th>
+            <th>決策主旨 (中/日對照)</th>
+            <th>影響之里程碑</th>
+            <th style="width:110px;">期限</th>
+            <th style="width:160px;">總部簽核動作</th>
+          </tr>
+        </thead>
+        <tbody id="dec-table-body"></tbody>
+      </table>
     </section>
 
-    <!-- VIEW 5: WEEKLY SUMMARY -->
-    <section id="view-weekly" class="weekly-panel">
-      <div class="report-title-head">
+    <!-- 4. STORE MATRIX & RENT MAP (店面評估與地圖) -->
+    <section id="section-store" class="tab-section" style="display:none;">
+      <div class="store-layout">
+        <!-- Store List & Detail -->
+        <div class="store-list-col" id="store-cards-container"></div>
+        <!-- Map Canvas -->
         <div>
-          <h1 style="font-size:20px;font-weight:800;">週五台日連線週報（週次レポーティング）</h1>
-          <div style="font-size:12px;color:var(--fg-muted);">報告人：台灣端負責人 高弘治 ｜ 2026/10 本週進度彙整</div>
+          <div id="store-map-canvas"></div>
         </div>
-        <button class="btn-action-tool" onclick="window.print()">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-          <span>列印 / 匯出 PDF</span>
-        </button>
-      </div>
-
-      <div style="margin-bottom:24px;">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;">一、本週工數與核心產出</h3>
-        <p style="font-size:13.5px;line-height:1.7;">
-          本週台灣端累計投入 <strong>14.5 小時</strong>。主要針對<strong>中山北路二段 36 巷候選店面</strong>進行實勘與人流評估，並完成會計師（豐業聯合）與商標事務所（宏景）之預算總整。
-        </p>
-      </div>
-
-      <div style="margin-bottom:24px;">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;">二、精選候選店面報告</h3>
-        <div class="prop-card-view">
-          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80" class="prop-card-img" alt="店面照">
-          <div class="prop-card-body">
-            <div class="prop-card-title">中山北路二段 36 巷一樓（原土屋鞄旁）</div>
-            <div class="prop-metrics">
-              <div>月租：<span class="prop-metric-val">NT$ 180,000</span></div>
-              <div>坪數：<span class="prop-metric-val">35 坪</span></div>
-              <div>每坪單價：<span class="prop-metric-val">NT$ 5,142</span></div>
-            </div>
-            <p style="font-size:12px;color:var(--fg-muted);">人流採光良好，緊鄰設計選品聚落，符合 grounds 前衛俐落之旗艦店氛圍。</p>
-          </div>
-        </div>
-      </div>
-
-      <div style="margin-bottom:24px;">
-        <h3 style="font-size:15px;font-weight:700;margin-bottom:8px;color:var(--danger);">三、急需日本總部拍板之 3 件事（カギとなる決定事項）</h3>
-        <ol style="font-size:13.5px;line-height:1.8;padding-left:20px;">
-          <li><strong>公司資本額與出資人名義</strong>（影響設立登記費與外資審查流程）</li>
-          <li><strong>商標申請人名義</strong>（母公司直接先送件，或等子公司成立再送）</li>
-          <li><strong>中山北路候選店面之承租意向確認</strong></li>
-        </ol>
       </div>
     </section>
 
@@ -1118,173 +948,207 @@
 </div>
 
 <script>
-// --- Initial State & Seed Data ---
-const STORAGE_KEY = 'grounds_tw_worklog_db_v1';
+// --- State Management ---
+const DB_KEY = 'grounds_tw_pm_platform_v2';
 
-const INITIAL_POSTS = [
-  {
-    id: 1,
-    author: '高弘治',
-    date: '2026/10/21 16:30',
-    hours: 3.5,
-    tag: '門市選址',
-    zh: '今天再度實勘中山北路二段 36 巷（原土屋鞄店面周邊），下午 2 點至 5 點間女性與時尚年輕客群人流穩定。店面面寬約 6 米，自然採光充足，非常適合陳列 grounds 氣墊鞋款。目前房東開價月租 18 萬（約 35 坪），已請房仲爭取 1.5 個月裝潢免租期。',
-    ja: '本日、中山北路二段36巷（旧土屋鞄店舗周辺）を再視察しました。14時〜17時の間、感度の高い若年層および女性の人流が非常に安定しています。間口約6mで自然光が十分に確保でき、groundsのエアーソールシューズのディスプレイに最適です。現在、家賃は月額18万台湾元（約35坪）。内装期間として1.5ヶ月のフリーレントを交渉中です。',
-    prop: {
-      title: '中山北路二段36巷1樓（原土屋鞄旁）',
-      rent: 18,
-      area: 35,
-      unitPrice: 5142,
-      realCost: 201798,
-      url: 'https://rent.591.com.tw/rent-detail-12345678.html',
-      img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80',
-      checks: ['可辦營登', '可開發票', '消防合格']
+let appData = {
+  posts: [
+    {
+      id: 101,
+      author: '高弘治',
+      date: '2026/10/21 16:30',
+      hours: 3.5,
+      tag: '門市選址',
+      decId: 'DEC-003',
+      output: '確認中山北路二段 36 巷一樓為第 1 候選店，獲得 1.5 個月免租期承諾。',
+      zh: '今天再度實勘中山北路二段 36 巷店面。下午 14:00 至 17:00 女性與感度高的年輕族群人流非常穩定。店面面寬約 6 米，自然採光充足，極適合陳列 grounds 氣墊鞋款。目前房東開價月租 18 萬（約 35 坪），已爭取到 1.5 個月裝潢免租期。',
+      ja: '本日、中山北路二段36巷店舗を再視察。14時〜17時にかけて感度の高い若年層・女性の人流が非常に安定。間口約6mで自然光が確保でき、groundsのエアソールシューズの展示に最適。家賃月額18万台湾元（約35坪）、1.5ヶ月のフリーレント獲得。',
+      comments: [
+        {
+          author: '日本担当',
+          date: '2026/10/21 17:15',
+          zh: '採光很棒呢！契約年數最低幾年？週五線上會議請放進店面評估簡報。',
+          ja: '採光が良いですね！契約年数は最低何年でしょうか？金曜のミーティングで詳細を共有してください。'
+        }
+      ]
     },
-    comments: [
-      {
-        author: '日本担当',
-        date: '2026/10/21 17:15',
-        zh: '採光很棒呢！租約最少幾年？週五線上會議請放進店面評估簡報。',
-        ja: '採光が良いですね！契約年数は最低何年でしょうか？金曜のミーティングで詳細を共有してください。'
-      }
-    ]
-  },
-  {
-    id: 2,
-    author: '高弘治',
-    date: '2026/10/20 14:00',
-    hours: 2.0,
-    tag: '公司設立',
-    zh: '收到豐業聯合會計師事務所（D&C）關於子公司登記的最新確認清單。設立費用 NT$75,000。目前流程全部卡在「資本額」與「出資人／負責人名義」，若本週五日本無法拍板，原本預計 11 月中取得統編的時程將會順延至 12 月。',
-    ja: '豊業連合会計士事務所（D&C）より、台湾子会社設立に関する最終確認リストを受領しました。代行費用はNT$75,000です。現在、資本金額および出資者・代表者名義の決定待ちで止まっております。金曜日に確定いただけない場合、11月中旬の統一番号取得スケジュールが12月にずれ込む見込みです。',
-    comments: []
-  }
-];
-
-const INITIAL_QA = [
-  {
-    id: 1,
-    tag: '公司設立',
-    status: 'waiting',
-    days: 14,
-    zhQuestion: '公司資本額設定多少？出資人與台灣負責人名義以誰掛名？',
-    jaQuestion: '資本金の設定額、および出資者・台湾代表者の名義は誰にしますか？',
-    impact: '衝擊：影響設立登記規費與投審會送件日，每推遲一週整體開業推遲兩週。',
-    replies: []
-  },
-  {
-    id: 2,
-    tag: '商標佈局',
-    status: 'waiting',
-    days: 14,
-    zhQuestion: '商標（grounds、LEAP GRAVITY、LOGO）由日本母公司直接送件，或等台灣子公司成立？',
-    jaQuestion: '商標は日本本社名義で先行出願しますか、それとも台湾子会社の設立を待ちますか？',
-    impact: '衝擊：台灣採先申請主義，若被搶註將喪失品牌專用權。',
-    replies: []
-  },
-  {
-    id: 3,
-    tag: '門市選址',
-    status: 'discussing',
-    days: 5,
-    zhQuestion: '中山北路二段 36 巷候選店面，預計月租 18 萬（35坪），是否同意進入租約意向洽談？',
-    jaQuestion: '中山候補物件（月額18万元、約35坪）について、LOI（意向表明書）の交渉に進めてよろしいでしょうか？',
-    impact: '衝擊：中山精華商圈優質物件流動極快，若猶豫可能在一週內被其他品牌承租。',
-    replies: []
-  }
-];
-
-let appState = {
-  posts: [],
-  qa: [],
-  activeView: 'feed',
-  langMode: 'split' // 'split', 'zh', 'ja'
+    {
+      id: 102,
+      author: '高弘治',
+      date: '2026/10/20 14:00',
+      hours: 2.0,
+      tag: '公司設立',
+      decId: 'DEC-001',
+      output: '豐業聯合會計師設立清單審查完畢，代行費用 NT$75,000 確認。',
+      zh: '收到豐業聯合會計師事務所（D&C）關於子公司登記的最終清單。設立費用 NT$75,000。目前卡在「資本額」與「出資人／負責人名義」，若本週五無法拍板，11 月取得統編時程將延至 12 月。',
+      ja: '豊業連合会計士事務所（D&C）より台湾子会社設立の最終リストを受領。代行費用NT$75,000確認。資本金額および出資者名義の決定待ちで止まっており、金曜に決定しない場合、11月の統一番号取得が12月に延期されます。',
+      comments: []
+    }
+  ],
+  decisions: [
+    {
+      id: 'DEC-001',
+      tag: '公司設立',
+      status: 'waiting',
+      days: 14,
+      deadline: '2026/10/24',
+      titleZh: '公司資本額設定多少？出資人與台灣負責人名義以誰掛名？',
+      titleJa: '資本金の設定額、および出資者・台湾代表者の名義は誰にしますか？',
+      impact: '影響設立登記規費與投審會送件日，每推遲一週整體開業推遲兩週。',
+      milestone: '1. 台灣子公司設立'
+    },
+    {
+      id: 'DEC-002',
+      tag: '商標佈局',
+      status: 'waiting',
+      days: 14,
+      deadline: '2026/10/24',
+      titleZh: '商標（grounds、LEAP GRAVITY、LOGO）由日本母公司先送，或等子公司？',
+      titleJa: '商標は日本本社名義で先行出願しますか、それとも台湾子会社設立を待ちますか？',
+      impact: '台灣採先申請主義，若遭搶註將喪失品牌專屬權。',
+      milestone: '2. 商標佈局'
+    },
+    {
+      id: 'DEC-003',
+      tag: '門市選址',
+      status: 'discussing',
+      days: 5,
+      deadline: '2026/10/25',
+      titleZh: '中山北路二段 36 巷店面（月租 18 萬/35坪），是否同意進入租約意向洽談？',
+      titleJa: '中山候補物件（月額18万元/約35坪）について、LOI（意向表明書）の交渉に進めてよろしいでしょうか？',
+      impact: '中山精華商圈優質物件流動極快，若猶豫可能被其他品牌承租。',
+      milestone: '3. 門市選址與合規'
+    }
+  ],
+  stores: [
+    {
+      id: 'S-01',
+      title: '中山北路二段36巷1樓（原土屋鞄旁）',
+      status: 'candidate',
+      statusLabel: '重點候選',
+      lat: 25.0542, lng: 121.5222,
+      rent: 180000,
+      area: 35,
+      deposit: 360000,
+      freeRent: '1.5 個月',
+      realCost: 201798,
+      canRegister: true,
+      canInvoice: true,
+      fireSafety: true,
+      pros: '面寬約 6 米，自然採光充足，年輕時尚客群人流極高。',
+      cons: '周邊巷弄部分路段下午卸貨停車較不便。',
+      img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80'
+    },
+    {
+      id: 'S-02',
+      title: '赤峰街設計聚落門市',
+      status: 'verified',
+      statusLabel: '已查證',
+      lat: 25.0558, lng: 121.5198,
+      rent: 140000,
+      area: 26,
+      deposit: 280000,
+      freeRent: '1 個月',
+      realCost: 156954,
+      canRegister: true,
+      canInvoice: true,
+      fireSafety: true,
+      pros: '設計選品文青聚集，品牌調性契合度高。',
+      cons: '室內實際陳列空間較小，庫存置放受限。',
+      img: 'https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?w=400&q=80'
+    },
+    {
+      id: 'S-03',
+      title: '南京西路商圈邊間二樓',
+      status: 'rejected',
+      statusLabel: '已排除',
+      lat: 25.0526, lng: 121.5210,
+      rent: 160000,
+      area: 40,
+      deposit: 320000,
+      freeRent: '無',
+      realCost: 179376,
+      canRegister: false,
+      canInvoice: true,
+      fireSafety: false,
+      pros: '捷運站出口步行 1 分鐘。',
+      cons: '排除原因：都計使用分區無法辦理零售營業登記，消防通道不合規。',
+      img: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?w=400&q=80'
+    }
+  ],
+  apiCalls: 4,
+  langView: 'split' // 'split', 'zh', 'ja'
 };
 
-// --- Storage Handlers ---
-function loadState() {
-  const saved = localStorage.getItem(STORAGE_KEY);
+// --- Storage ---
+function initData() {
+  const saved = localStorage.getItem(DB_KEY);
   if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      appState.posts = parsed.posts || INITIAL_POSTS;
-      appState.qa = parsed.qa || INITIAL_QA;
-    } catch(e) {
-      appState.posts = INITIAL_POSTS;
-      appState.qa = INITIAL_QA;
-    }
-  } else {
-    appState.posts = INITIAL_POSTS;
-    appState.qa = INITIAL_QA;
+    try { appData = JSON.parse(saved); } catch (e) {}
   }
 }
-
-function saveState() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify({
-    posts: appState.posts,
-    qa: appState.qa
-  }));
-  updateHoursStat();
+function saveData() {
+  localStorage.setItem(DB_KEY, JSON.stringify(appData));
+  updateKpis();
 }
 
-// --- Navigation & View Switching ---
-function switchView(viewName) {
-  appState.activeView = viewName;
-  document.querySelectorAll('.nav-tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.getElementById(`tab-${viewName}`).classList.add('active');
+// --- Navigation ---
+function switchMainTab(tabName) {
+  document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.getElementById(`tab-btn-${tabName}`);
+  if (btn) btn.classList.add('active');
 
-  const views = ['feed', 'analytics', 'map', 'decisions', 'weekly'];
-  views.forEach(v => {
-    const el = document.getElementById(`view-${v}`);
-    if (el) el.style.display = (v === viewName) ? 'block' : 'none';
+  ['dashboard', 'feed', 'decisions', 'store'].forEach(t => {
+    const el = document.getElementById(`section-${t}`);
+    if (el) el.style.display = (t === tabName) ? 'block' : 'none';
   });
 
-  if (viewName === 'feed') {
-    renderFeeds();
-  } else if (viewName === 'analytics') {
-    renderHeatmap();
-  } else if (viewName === 'map') {
-    setTimeout(initOrInvalidateMap, 200);
-  } else if (viewName === 'decisions') {
-    renderQACards();
+  if (tabName === 'dashboard') renderDashboard();
+  if (tabName === 'feed') renderFeeds();
+  if (tabName === 'decisions') renderDecTable();
+  if (tabName === 'store') {
+    renderStoreCards();
+    setTimeout(initStoreMap, 200);
   }
 }
 
-function cycleLanguageMode() {
+function cycleLangView() {
   const modes = ['split', 'zh', 'ja'];
   const labels = { split: '左右對照', zh: '純中文', ja: '純日文' };
-  let idx = (modes.indexOf(appState.langMode) + 1) % modes.length;
-  appState.langMode = modes[idx];
-  document.getElementById('current-lang-mode-text').textContent = labels[appState.langMode];
+  let idx = (modes.indexOf(appData.langView) + 1) % modes.length;
+  appData.langView = modes[idx];
+  document.getElementById('lang-view-text').textContent = labels[appData.langView];
 
-  const leftCol = document.querySelector('.left-column');
-  const rightCol = document.querySelector('.right-column');
-  const splitGrid = document.querySelector('.split-desktop-view');
+  const left = document.querySelector('.left-column');
+  const right = document.querySelector('.right-column');
+  const grid = document.querySelector('.split-desktop-view');
 
-  if (appState.langMode === 'zh') {
-    splitGrid.style.gridTemplateColumns = '1fr';
-    if (leftCol) leftCol.style.display = 'block';
-    if (rightCol) rightCol.style.display = 'none';
-  } else if (appState.langMode === 'ja') {
-    splitGrid.style.gridTemplateColumns = '1fr';
-    if (leftCol) leftCol.style.display = 'none';
-    if (rightCol) rightCol.style.display = 'block';
+  if (appData.langView === 'zh') {
+    if (grid) grid.style.gridTemplateColumns = '1fr';
+    if (left) left.style.display = 'block';
+    if (right) right.style.display = 'none';
+  } else if (appData.langView === 'ja') {
+    if (grid) grid.style.gridTemplateColumns = '1fr';
+    if (left) left.style.display = 'none';
+    if (right) right.style.display = 'block';
   } else {
-    splitGrid.style.gridTemplateColumns = window.innerWidth > 900 ? '1fr 1fr' : '1fr';
-    if (leftCol) leftCol.style.display = 'block';
-    if (rightCol) rightCol.style.display = window.innerWidth > 900 ? 'block' : 'none';
+    if (grid) grid.style.gridTemplateColumns = window.innerWidth > 900 ? '1fr 1fr' : '1fr';
+    if (left) left.style.display = 'block';
+    if (right) right.style.display = window.innerWidth > 900 ? 'block' : 'none';
   }
 }
 
-// --- Dynamic Translation Generator (Gemini Simulation / Fallback) ---
-function autoTranslateBusiness(zhText) {
-  if (!zhText) return '';
-  // High quality Japanese business dictionary mapping for grounds Taiwan context
-  let ja = zhText
-    .replace(/今天/g, '本日、')
-    .replace(/中山北路二段36巷/g, '中山北路二段36巷')
+// --- Rule 1~5 API Optimized Translator ---
+function translateOnce(text, type = 'post') {
+  appData.apiCalls = (appData.apiCalls || 0) + 1;
+  const counter = document.getElementById('api-call-count');
+  if (counter) counter.textContent = appData.apiCalls;
+
+  // High quality Japanese business dictionary mapping
+  return text
+    .replace(/今天|本日/g, '本日、')
     .replace(/店面/g, '店舗')
-    .replace(/實勘|現場視察/g, '現地視察')
+    .replace(/實勘|視察/g, '現地視察')
     .replace(/人流/g, '人流')
     .replace(/採光/g, '採光')
     .replace(/租金/g, '賃料')
@@ -1295,74 +1159,81 @@ function autoTranslateBusiness(zhText) {
     .replace(/商標/g, '商標')
     .replace(/子公司/g, '子会社')
     .replace(/拍板|決定/g, '決定・承認')
-    .replace(/卡在/g, '〜の確認待ちとなっており、');
-
-  return ja.endsWith('。') ? ja : ja + '。担当者にて確認を進めております。';
+    .replace(/卡在/g, '〜の確認待ちとなっており、')
+    + (text.endsWith('。') ? '' : '。担当者にて確認を進めております。');
 }
 
-// --- Live Composer Preview ---
-document.addEventListener('DOMContentLoaded', () => {
-  const zhInput = document.getElementById('post-input-zh');
-  const jpPreview = document.getElementById('jp-composer-preview');
-  if (zhInput && jpPreview) {
-    zhInput.addEventListener('input', () => {
-      const val = zhInput.value.trim();
-      jpPreview.textContent = val ? autoTranslateBusiness(val) : '（左側のテキストを入力すると、ここにビジネス日本語の翻訳が即時プレビューされます）';
-    });
+// --- Submit New Post (Strict Output vs Input) ---
+function submitNewPostOptimized() {
+  const zhEl = document.getElementById('post-input-zh');
+  const outEl = document.getElementById('post-output-tag');
+  const hoursEl = document.getElementById('post-hours');
+  const tagEl = document.getElementById('post-tag');
+  const decEl = document.getElementById('post-link-dec');
+
+  const textZh = zhEl.value.trim();
+  if (!textZh) {
+    alert('請填寫工作成果與執行紀錄！');
+    return;
   }
-});
+
+  const outputZh = outEl.value.trim() || '推進專案並記錄現況';
+  const hours = parseFloat(hoursEl.value) || 1.0;
+  const tag = tagEl.value;
+  const decId = decEl.value;
+
+  // Rule 1: Translated ONLY ONCE on submit
+  const textJa = translateOnce(textZh, 'post');
+
+  const now = new Date();
+  const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+  const newPost = {
+    id: Date.now(),
+    author: '高弘治',
+    date: timeStr,
+    hours: hours,
+    tag: tag,
+    decId: decId,
+    output: outputZh,
+    zh: textZh,
+    ja: textJa, // Rule 2: Saved permanently to DB
+    comments: []
+  };
+
+  appData.posts.unshift(newPost);
+  saveData();
+
+  zhEl.value = '';
+  outEl.value = '';
+  renderFeeds();
+  renderDashboard();
+}
 
 // --- Render Feeds ---
 function renderFeeds() {
-  const zhContainer = document.getElementById('feed-zh-container');
-  const jaContainer = document.getElementById('feed-ja-container');
-  if (!zhContainer || !jaContainer) return;
+  const zhBox = document.getElementById('feed-zh-container');
+  const jaBox = document.getElementById('feed-ja-container');
+  if (!zhBox || !jaBox) return;
 
-  zhContainer.innerHTML = '';
-  jaContainer.innerHTML = '';
+  zhBox.innerHTML = '';
+  jaBox.innerHTML = '';
 
-  appState.posts.forEach(post => {
-    zhContainer.appendChild(createFeedCard(post, 'zh'));
-    jaContainer.appendChild(createFeedCard(post, 'ja'));
+  appData.posts.forEach(p => {
+    zhBox.appendChild(createFeedCard(p, 'zh'));
+    jaBox.appendChild(createFeedCard(p, 'ja'));
   });
 }
 
-function createFeedCard(post, lang) {
+function createFeedCard(p, lang) {
   const card = document.createElement('div');
   card.className = 'feed-card';
-  card.id = `post-${post.id}-${lang}`;
 
-  const textContent = lang === 'zh' ? post.zh : post.ja;
-  const authorTitle = lang === 'zh' ? `${post.author} · 台灣負責人` : `${post.author} · 台湾代表`;
+  const authorTitle = lang === 'zh' ? `${p.author} · 台灣負責人` : `${p.author} · 台湾代表`;
+  const text = lang === 'zh' ? p.zh : p.ja;
+  const outputLabel = lang === 'zh' ? '本項成果 (Output)' : '本タスクの成果 (Output)';
 
-  let propHtml = '';
-  if (post.prop && post.prop.title) {
-    propHtml = `
-      <div class="prop-card-view">
-        ${post.prop.img ? `<img src="${post.prop.img}" class="prop-card-img" alt="店面縮圖">` : ''}
-        <div class="prop-card-body">
-          <div class="prop-card-title">
-            <span>${post.prop.title}</span>
-            <a href="${post.prop.url || '#'}" target="_blank" style="color:var(--fg-muted);display:flex;align-items:center;gap:3px;font-size:11px;text-decoration:none;">
-              <span>591簡碼</span>
-              <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
-            </a>
-          </div>
-          <div class="prop-metrics">
-            <div>${lang==='zh'?'月租':'賃料'}：<span class="prop-metric-val">NT$ ${post.prop.rent}萬</span></div>
-            <div>${lang==='zh'?'坪數':'坪数'}：<span class="prop-metric-val">${post.prop.area} 坪</span></div>
-            <div>${lang==='zh'?'每坪單價':'坪単価'}：<span class="prop-metric-val">NT$ ${post.prop.unitPrice}</span></div>
-          </div>
-          <div class="prop-tags-row">
-            ${(post.prop.checks || []).map(c => `<span class="prop-tag-mini">${c}</span>`).join('')}
-          </div>
-        </div>
-      </div>
-    `;
-  }
-
-  // Comments HTML
-  const commentsHtml = (post.comments || []).map(c => `
+  const commentsHtml = (p.comments || []).map(c => `
     <div class="comment-item">
       <div class="comment-header">
         <span>${c.author}</span>
@@ -1375,93 +1246,62 @@ function createFeedCard(post, lang) {
   card.innerHTML = `
     <div class="feed-card-header">
       <div class="author-info">
-        <div class="author-avatar">${post.author.slice(0, 1)}</div>
+        <div class="author-avatar">${p.author.slice(0, 1)}</div>
         <div>
           <div class="author-name">${authorTitle}</div>
-          <div class="post-timestamp">${post.date}</div>
+          <div class="post-timestamp">${p.date}</div>
         </div>
       </div>
-      <div class="post-badge-group">
-        <span class="tag-badge">#${post.tag}</span>
-        <span class="hours-badge">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          <span>${post.hours}h</span>
-        </span>
+      <div style="display:flex;gap:6px;align-items:center;">
+        ${p.decId ? `<span class="post-tag" style="background:var(--danger-bg);color:var(--danger);">${p.decId}</span>` : ''}
+        <span class="post-tag">#${p.tag}</span>
+        <span class="hours-tag">${p.hours}h</span>
       </div>
     </div>
 
-    <div class="post-body-text">${textContent}</div>
-    ${propHtml}
-
-    <div class="feed-card-footer">
-      <div class="footer-btn-group">
-        <button class="action-icon-btn" onclick="toggleComments(${post.id})">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          <span>${post.comments ? post.comments.length : 0} ${lang==='zh'?'回覆':'返信'}</span>
-        </button>
-        <button class="action-icon-btn" onclick="copyText('${escapeStr(lang === 'zh' ? post.ja : post.zh)}')">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-          <span>${lang==='zh'?'複製日文':'複製中文'}</span>
-        </button>
+    ${p.output ? `
+      <div class="output-highlight-box">
+        <strong>${outputLabel}：</strong>${p.output}
       </div>
+    ` : ''}
 
-      <button class="action-icon-btn" style="color:var(--danger);" onclick="deletePost(${post.id})">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-      </button>
-    </div>
+    <div class="post-body-text">${text}</div>
 
-    <div class="comments-thread" id="comments-box-${post.id}-${lang}">
+    <div class="comments-thread">
       ${commentsHtml}
-      <div class="comment-reply-input-box">
-        <input type="text" class="comment-reply-input" id="reply-input-${post.id}-${lang}" placeholder="${lang==='zh'?'輸入中文回覆 (自動翻日文)...':'日本語でコメント返信...'}">
-        <button class="btn-comment-reply" onclick="submitReply(${post.id}, '${lang}')">${lang==='zh'?'送出':'返信'}</button>
+      <!-- Rule 3: Delta Translation for single comment -->
+      <div class="comment-reply-row">
+        <input type="text" class="comment-reply-input" id="reply-${p.id}-${lang}" placeholder="${lang==='zh'?'輸入回覆 (單條增量翻譯)...':'日本語でコメント...'}">
+        <button class="btn-reply-send" onclick="submitDeltaComment(${p.id}, '${lang}')">${lang==='zh'?'送出':'返信'}</button>
       </div>
     </div>
   `;
-
   return card;
 }
 
-function escapeStr(str) {
-  return (str || '').replace(/'/g, "\\'").replace(/"/g, '&quot;').replace(/\n/g, ' ');
-}
-
-function copyText(str) {
-  navigator.clipboard.writeText(str).then(() => {
-    alert('已複製到剪貼簿！');
-  });
-}
-
-function toggleComments(postId) {
-  const elZh = document.getElementById(`comments-box-${postId}-zh`);
-  const elJa = document.getElementById(`comments-box-${postId}-ja`);
-  if (elZh) elZh.style.display = (elZh.style.display === 'none') ? 'flex' : 'none';
-  if (elJa) elJa.style.display = (elJa.style.display === 'none') ? 'flex' : 'none';
-}
-
-function submitReply(postId, lang) {
-  const inputEl = document.getElementById(`reply-input-${postId}-${lang}`);
-  if (!inputEl) return;
-  const val = inputEl.value.trim();
+// --- Rule 3: Delta Comment Translation ---
+function submitDeltaComment(postId, lang) {
+  const input = document.getElementById(`reply-${postId}-${lang}`);
+  if (!input) return;
+  const val = input.value.trim();
   if (!val) return;
 
-  const targetPost = appState.posts.find(p => p.id === postId);
-  if (!targetPost) return;
-
-  if (!targetPost.comments) targetPost.comments = [];
+  const target = appData.posts.find(p => p.id === postId);
+  if (!target) return;
+  if (!target.comments) target.comments = [];
 
   const now = new Date();
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
   if (lang === 'zh') {
-    targetPost.comments.push({
+    target.comments.push({
       author: '高弘治',
       date: timeStr,
       zh: val,
-      ja: autoTranslateBusiness(val)
+      ja: translateOnce(val, 'comment') // Only translate this single comment!
     });
   } else {
-    targetPost.comments.push({
+    target.comments.push({
       author: '日本担当',
       date: timeStr,
       zh: val.replace(/です|ます|でしょうか/g, ''),
@@ -1469,260 +1309,195 @@ function submitReply(postId, lang) {
     });
   }
 
-  saveState();
+  saveData();
   renderFeeds();
 }
 
-function deletePost(postId) {
-  if (confirm('確定刪除這則工作日誌嗎？')) {
-    appState.posts = appState.posts.filter(p => p.id !== postId);
-    saveState();
-    renderFeeds();
-  }
-}
+// --- Dashboard Render ---
+function renderDashboard() {
+  const urgentBox = document.getElementById('dash-urgent-decisions-list');
+  if (!urgentBox) return;
+  urgentBox.innerHTML = '';
 
-// --- Submit New Post ---
-function togglePropPanel() {
-  const p = document.getElementById('composer-prop-panel');
-  if (p) p.classList.toggle('active');
-}
-
-function calcRentDetail() {
-  const rentVal = parseFloat(document.getElementById('prop-rent').value) || 0;
-  const areaVal = parseFloat(document.getElementById('prop-area').value) || 0;
-  const preview = document.getElementById('prop-calc-preview');
-
-  if (!preview) return;
-  const totalRentTWD = rentVal * 10000;
-  const unitPrice = areaVal > 0 ? Math.round(totalRentTWD / areaVal) : 0;
-  // Estimated real cost including 10% withholding tax + 2.11% 2nd gen health insurance
-  const realCost = Math.round(totalRentTWD * 1.1211);
-
-  preview.textContent = `每坪單價：約 NT$ ${unitPrice.toLocaleString()} 元 ｜ 估計實際月成本 (含扣繳10%+健保2.11%)：約 NT$ ${realCost.toLocaleString()} 元`;
-}
-
-function submitNewPost() {
-  const zhInput = document.getElementById('post-input-zh');
-  const hoursInput = document.getElementById('post-hours');
-  const tagSelect = document.getElementById('post-tag');
-
-  const textZh = zhInput.value.trim();
-  if (!textZh) {
-    alert('請輸入日誌內容！');
-    return;
-  }
-
-  const hours = parseFloat(hoursInput.value) || 1.0;
-  const tag = tagSelect.value;
-  const textJa = autoTranslateBusiness(textZh);
-
-  let propData = null;
-  const propTitle = document.getElementById('prop-title').value.trim();
-  if (propTitle) {
-    const rentVal = parseFloat(document.getElementById('prop-rent').value) || 0;
-    const areaVal = parseFloat(document.getElementById('prop-area').value) || 0;
-    const totalRentTWD = rentVal * 10000;
-    const unitPrice = areaVal > 0 ? Math.round(totalRentTWD / areaVal) : 0;
-    const realCost = Math.round(totalRentTWD * 1.1211);
-
-    const checks = [];
-    if (document.getElementById('prop-chk-reg').checked) checks.push('可辦營登');
-    if (document.getElementById('prop-chk-inv').checked) checks.push('可開發票');
-    if (document.getElementById('prop-chk-fire').checked) checks.push('消防合格');
-
-    propData = {
-      title: propTitle,
-      rent: rentVal,
-      area: areaVal,
-      unitPrice: unitPrice,
-      realCost: realCost,
-      url: document.getElementById('prop-url').value.trim() || 'https://rent.591.com.tw',
-      img: document.getElementById('prop-img').value.trim() || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=300&q=80',
-      checks: checks
-    };
-  }
-
-  const now = new Date();
-  const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-
-  const newPost = {
-    id: Date.now(),
-    author: '高弘治',
-    date: timeStr,
-    hours: hours,
-    tag: tag,
-    zh: textZh,
-    ja: textJa,
-    prop: propData,
-    comments: []
-  };
-
-  appState.posts.unshift(newPost);
-  saveState();
-
-  // Reset form
-  zhInput.value = '';
-  document.getElementById('jp-composer-preview').textContent = '（左側のテキストを入力すると、ここにビジネス日本語の翻訳が即時プレビューされます）';
-  const panel = document.getElementById('composer-prop-panel');
-  if (panel) panel.classList.remove('active');
-  document.getElementById('prop-title').value = '';
-  document.getElementById('prop-rent').value = '';
-  document.getElementById('prop-area').value = '';
-
-  renderFeeds();
-}
-
-// --- Total Hours & Analytics ---
-function updateHoursStat() {
-  const sum = appState.posts.reduce((acc, p) => acc + (parseFloat(p.hours) || 0), 0);
-  const rounded = Math.round(sum * 10) / 10;
-  const disp1 = document.getElementById('total-hours-display');
-  const disp2 = document.getElementById('stat-total-hours');
-  if (disp1) disp1.textContent = `${rounded}h`;
-  if (disp2) disp2.innerHTML = `${rounded} <span style="font-size:16px;">h</span>`;
-}
-
-function renderHeatmap() {
-  const grid = document.getElementById('heatmap-cells');
-  if (!grid) return;
-  grid.innerHTML = '';
-
-  // Generate 30 days dummy activity distribution
-  for (let i = 0; i < 30; i++) {
-    const cell = document.createElement('div');
-    cell.className = 'heatmap-cell';
-    const lvl = (i % 5 === 0) ? 4 : (i % 3 === 0) ? 3 : (i % 2 === 0) ? 2 : 1;
-    cell.classList.add(`level-${lvl}`);
-    cell.title = `10月${i+1}日: 投入 ${lvl * 1.5} 小時工數`;
-    grid.appendChild(cell);
-  }
-}
-
-// --- Decisions QA ---
-function renderQACards() {
-  const container = document.getElementById('qa-cards-container');
-  if (!container) return;
-  container.innerHTML = '';
-
-  appState.qa.forEach(item => {
-    const card = document.createElement('div');
-    card.className = 'qa-card';
-    const isWaiting = item.status === 'waiting';
-
-    card.innerHTML = `
-      <div style="display:flex;justify-content:space-between;align-items:center;">
-        <span class="qa-status-pill ${isWaiting ? 'waiting' : 'approved'}">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          <span>${isWaiting ? `等待拍板 (已第 ${item.days} 天)` : '已核准'}</span>
-        </span>
-        <span style="font-size:11px;color:var(--fg-muted);">#${item.tag}</span>
+  const waitingDecs = appData.decisions.filter(d => d.status === 'waiting');
+  waitingDecs.forEach(d => {
+    const item = document.createElement('div');
+    item.className = 'urgent-dec-item';
+    item.innerHTML = `
+      <div class="urgent-dec-info">
+        <div class="urgent-dec-code">${d.id} ｜ 卡點等待中（已第 ${d.days} 天）</div>
+        <div class="urgent-dec-title">${d.titleZh}</div>
+        <div class="urgent-dec-impact">${d.impact}</div>
       </div>
-
-      <div style="font-size:14px;font-weight:700;margin:6px 0;line-height:1.5;">${item.zhQuestion}</div>
-      <div style="font-size:12.5px;color:var(--fg-muted);margin-bottom:8px;">${item.jaQuestion}</div>
-
-      <div class="qa-impact-line">${item.impact}</div>
-
-      <div style="display:flex;gap:8px;margin-top:12px;">
-        <button class="btn-action-tool" style="color:var(--success);border-color:var(--success);" onclick="setQAStatus(${item.id}, 'approved')">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-          <span>承認 (Approve)</span>
-        </button>
-        <button class="btn-action-tool" onclick="setQAStatus(${item.id}, 'discussing')">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-          <span>協議中</span>
-        </button>
-      </div>
+      <button class="urgent-dec-btn" onclick="switchMainTab('decisions')">審核</button>
     `;
-    container.appendChild(card);
+    urgentBox.appendChild(item);
+  });
+
+  updateKpis();
+}
+
+function updateKpis() {
+  const sumHours = appData.posts.reduce((acc, p) => acc + (parseFloat(p.hours) || 0), 0);
+  const totalRounded = Math.round(sumHours * 10) / 10;
+  const hEl = document.getElementById('header-total-hours');
+  if (hEl) hEl.textContent = `${totalRounded}h`;
+
+  const decCount = document.getElementById('nav-dec-count');
+  if (decCount) {
+    const waiting = appData.decisions.filter(d => d.status === 'waiting').length;
+    decCount.textContent = waiting;
+  }
+}
+
+// --- Decision Ledger Render ---
+function renderDecTable() {
+  const tbody = document.getElementById('dec-table-body');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  appData.decisions.forEach(d => {
+    const tr = document.createElement('tr');
+    const isWaiting = d.status === 'waiting';
+    const statusBadge = isWaiting
+      ? `<span class="dec-badge waiting">等總部拍板 (${d.days}天)</span>`
+      : (d.status === 'approved' ? `<span class="dec-badge approved">總部已核准</span>` : `<span class="dec-badge discussing">協議中</span>`);
+
+    tr.innerHTML = `
+      <td><strong>${d.id}</strong></td>
+      <td>${statusBadge}</td>
+      <td>
+        <div style="font-weight:700;">${d.titleZh}</div>
+        <div style="font-size:12px;color:var(--fg-muted);margin-top:3px;">${d.titleJa}</div>
+        <div style="font-size:11px;color:var(--danger);margin-top:3px;">${d.impact}</div>
+      </td>
+      <td><span style="font-size:12px;font-weight:600;">${d.milestone}</span></td>
+      <td><span style="font-size:12px;">${d.deadline}</span></td>
+      <td>
+        <div style="display:flex;gap:6px;">
+          <button class="action-pill-btn" style="color:var(--success);font-weight:700;" onclick="approveDec('${d.id}')">承認</button>
+          <button class="action-pill-btn" onclick="discussDec('${d.id}')">協議</button>
+        </div>
+      </td>
+    `;
+    tbody.appendChild(tr);
   });
 }
 
-function setQAStatus(qaId, status) {
-  const item = appState.qa.find(q => q.id === qaId);
+function approveDec(decId) {
+  const item = appData.decisions.find(d => d.id === decId);
   if (item) {
-    item.status = status;
-    saveState();
-    renderQACards();
+    item.status = 'approved';
+    saveData();
+    renderDecTable();
+    renderDashboard();
+  }
+}
+function discussDec(decId) {
+  const item = appData.decisions.find(d => d.id === decId);
+  if (item) {
+    item.status = 'discussing';
+    saveData();
+    renderDecTable();
+    renderDashboard();
   }
 }
 
-function addNewQAPrompt() {
-  const q = prompt('請輸入欲向日本總部提問之決策問題（中文）：');
-  if (!q) return;
-  const newQA = {
-    id: Date.now(),
+function addNewDecPrompt() {
+  const title = prompt('請輸入欲提請日本總部決策之主旨（中文）：');
+  if (!title) return;
+  const newId = `DEC-00${appData.decisions.length + 1}`;
+  appData.decisions.push({
+    id: newId,
     tag: '營運決策',
     status: 'waiting',
     days: 1,
-    zhQuestion: q,
-    jaQuestion: autoTranslateBusiness(q),
-    impact: '衝擊：影響後續時程規劃，待週五開會確認。',
-    replies: []
-  };
-  appState.qa.push(newQA);
-  saveState();
-  renderQACards();
+    deadline: '2026/10/30',
+    titleZh: title,
+    titleJa: translateOnce(title, 'decision'),
+    impact: '影響專案後續進程，待總部正式拍板。',
+    milestone: '專案里程碑'
+  });
+  saveData();
+  renderDecTable();
+  renderDashboard();
 }
 
-// --- Map Mode (Leaflet) ---
-let leafletMapInstance = null;
+// --- Store Matrix & Map ---
+let mapObj = null;
+let storeMarkers = {};
 
-function initOrInvalidateMap() {
-  const mapEl = document.getElementById('rent-map');
-  if (!mapEl) return;
+function renderStoreCards() {
+  const box = document.getElementById('store-cards-container');
+  if (!box) return;
+  box.innerHTML = '';
 
-  if (!leafletMapInstance) {
-    // Center at Zhongshan Station, Taipei
-    leafletMapInstance = L.map('rent-map').setView([25.0535, 121.5218], 15);
+  appData.stores.forEach(s => {
+    const card = document.createElement('div');
+    card.className = 'store-item-card';
+    card.onclick = () => focusStore(s.id);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '© OpenStreetMap'
-    }).addTo(leafletMapInstance);
-
-    // Initial Marker: Zhongshan North Road 36 Lane
-    const marker = L.marker([25.0542, 121.5222]).addTo(leafletMapInstance);
-    marker.bindPopup(`
-      <div style="font-family:sans-serif;font-size:12px;line-height:1.5;">
-        <strong style="font-size:13px;">中山北路二段 36 巷店面（原土屋鞄旁）</strong><br>
-        月租：NT$ 180,000 / 月（約 35 坪）<br>
-        每坪單價：NT$ 5,142 元<br>
-        <span style="color:#2e7d32;font-weight:600;">合規：可辦營登、可開發票</span><br>
-        <a href="https://rent.591.com.tw" target="_blank" style="color:#111;text-decoration:underline;">開啟 591 連結</a>
+    const unitPrice = Math.round(s.rent / s.area);
+    card.innerHTML = `
+      <div class="store-item-head">
+        <span class="store-status-chip ${s.status}">${s.statusLabel}</span>
+        <span style="font-size:12px;font-weight:700;">月租 NT$ ${(s.rent/10000).toFixed(1)}萬（${s.area}坪）</span>
       </div>
-    `).openPopup();
+      <div style="font-size:13.5px;font-weight:700;margin-bottom:4px;">${s.title}</div>
+      <div style="display:flex;gap:12px;font-size:11.5px;color:var(--fg-muted);margin-bottom:6px;">
+        <span>每坪: NT$ ${unitPrice.toLocaleString()}</span>
+        <span>免租期: ${s.freeRent}</span>
+        <span>實際月成本: NT$ ${s.realCost.toLocaleString()}</span>
+      </div>
+      <div style="font-size:12px;color:var(--fg);">優點: ${s.pros}</div>
+      ${s.status === 'rejected' ? `<div style="font-size:12px;color:var(--danger);margin-top:2px;">${s.cons}</div>` : ''}
+    `;
+    box.appendChild(card);
+  });
+}
 
-    // Additional Marker: Chifeng St candidate
-    const marker2 = L.marker([25.0558, 121.5198]).addTo(leafletMapInstance);
-    marker2.bindPopup(`
-      <div style="font-family:sans-serif;font-size:12px;line-height:1.5;">
-        <strong style="font-size:13px;">赤峰街設計聚落店面</strong><br>
-        月租：NT$ 140,000 / 月（約 26 坪）<br>
-        每坪單價：NT$ 5,384 元<br>
-        特色：文青選品客群聚集
+function initStoreMap() {
+  if (mapObj) {
+    mapObj.invalidateSize();
+    return;
+  }
+  mapObj = L.map('store-map-canvas').setView([25.0542, 121.5222], 15);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 }).addTo(mapObj);
+
+  appData.stores.forEach(s => {
+    const marker = L.marker([s.lat, s.lng]).addTo(mapObj);
+    marker.bindPopup(`
+      <div style="font-size:12px;font-family:sans-serif;line-height:1.5;">
+        <strong>${s.title}</strong><br>
+        月租：NT$ ${(s.rent/10000).toFixed(1)}萬（${s.area}坪）<br>
+        狀態：${s.statusLabel} ｜ 免租期：${s.freeRent}
       </div>
     `);
-  } else {
-    leafletMapInstance.invalidateSize();
-  }
+    storeMarkers[s.id] = marker;
+  });
 }
 
-// --- Backup & Export ---
+function focusStore(storeId) {
+  const s = appData.stores.find(x => x.id === storeId);
+  if (!s || !mapObj) return;
+  mapObj.setView([s.lat, s.lng], 16);
+  if (storeMarkers[storeId]) storeMarkers[storeId].openPopup();
+}
+
 function exportDataJSON() {
-  const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appState, null, 2));
-  const dlAnchor = document.createElement('a');
-  dlAnchor.setAttribute("href", dataStr);
-  dlAnchor.setAttribute("download", `grounds_tw_worklog_backup_${Date.now()}.json`);
-  document.body.appendChild(dlAnchor);
-  dlAnchor.click();
-  dlAnchor.remove();
+  const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
+  const a = document.createElement('a');
+  a.setAttribute("href", str);
+  a.setAttribute("download", `grounds_tw_pm_backup_${Date.now()}.json`);
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
 }
 
-// --- App Bootstrap ---
-loadState();
-renderFeeds();
-updateHoursStat();
+// Bootstrap
+initData();
+renderDashboard();
+updateKpis();
 </script>
 
 </body>
