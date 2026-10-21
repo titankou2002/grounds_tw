@@ -7,7 +7,14 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>grounds Taiwan 展店決策平台</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111111'/%3E%3Ctext x='50%25' y='72%25' font-family='Georgia,serif,system-ui' font-size='22' font-weight='bold' fill='%23ffffff' text-anchor='middle'%3Eg%3C/text%3E%3C/svg%3E">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
+  <link rel="icon" type="image/png" sizes="512x512" href="favicon-512.png">
+  <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-title" content="grounds">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <style>
@@ -2483,44 +2490,7 @@ let state = {
   members: [],
   editingPostId: null,
   activeDetailStoreId: null,
-  posts: [
-    {
-      id: 202,
-      author: 'Lynn',
-      date: '2026/10/21 18:20',
-      hours: 2.0,
-      tag: '房仲推薦',
-      zh: '收到東家國際地產提供的錦州街店面資料圖（編號：A2610063，原魔術真髮）。1+2樓使用面積達 72.8 坪，面寬 12.4 米、挑高 4.6 米極為氣派！使用執照確認為 B2 一般零售業（合規營登與發票），刊登月租 25 萬（未含稅，真實營運月成本約 28 萬），已將資料圖與關鍵規格建立至店面地圖進行比較。',
-      ja: '東家国際不動産より錦州街店舗の物件資料（番号：A2610063）を受領。1+2階の実使用面積は72.8坪、間口12.4m、天井高4.6mで非常に迫力があります。用途地域・営業許可はB2一般小売業（営業登記・インボイス適格）に適合。月額賃料25万元（税別、実効賃料約28万元）。資料画像と重要スペックを店舗マップに登録し比較中です。',
-      propId: 'AGY-A2610063',
-      comments: [
-        {
-          author: '金丸 拓矢',
-          date: '2026/10/21 19:05',
-          zh: '面寬 12.4 米的展示效果非常吸引人，很適合 grounds 的鞋履陳列與視覺氛圍。週五把這間與中山站 28.5 萬那間做重點對照。',
-          ja: '間口12.4mのファサードは非常に魅力的で、groundsのシューズディスプレイと世界観に最適です。金曜日に中山駅の28.5万元物件と重点比較しましょう。'
-        }
-      ]
-    },
-    {
-      id: 201,
-      author: 'Lynn',
-      date: '2026/10/21 16:30',
-      hours: 3.5,
-      tag: '門市選址',
-      zh: '今天再度實勘中山北路與行天宮捷運周邊候選物件。吉林路店面（591#20654976）挑高3.6米且含獨立衛浴，女性與上班族人流充足。另外龍江路商圈（591#22015090）租金僅 4.6 萬性價比高，已列入浮動視窗詳細評估。',
-      ja: '本日、中山北路および行天宮周辺の候補物件を再視察。吉林路店舗（591#20654976）は天井高3.6mで専用トイレ付、女性とOLの人流が豊富。龍江路物件（591#22015090）も家賃4.6万元とコスパが良く、詳細評価リストに追加しました。',
-      propId: '591-20654976',
-      comments: [
-        {
-          author: '金丸 拓矢',
-          date: '2026/10/21 17:15',
-          zh: '採光很棒呢！契約年數最低幾年？週五線上會議請放進店面評估簡報。',
-          ja: '採光が良いですね！契約年数は最低何年でしょうか？金曜のミーティングで詳細を共有してください。'
-        }
-      ]
-    }
-  ],
+  posts: [],
   stores: [
     {
       id: 'AGY-A2610063',
@@ -2660,116 +2630,34 @@ function loadAppState() {
   }
   updateTagDropdowns();
 
-  const saved = localStorage.getItem(STORE_KEY);
-  if (saved) {
-    try {
-      const parsed = JSON.parse(saved);
-      if (parsed.posts) state.posts = parsed.posts;
-      if (parsed.stores) state.stores = parsed.stores;
-      if (parsed.deletedLogs) state.deletedLogs = parsed.deletedLogs;
-    } catch(e) {}
-  }
-
-  // Ensure pre-seeded stores and posts exist even if loaded from older localStorage
-  if (!state.posts.some(p => p.id === 203)) {
-    state.posts.unshift({
-      id: 203,
-      author: 'Lynn',
-      date: '2026/10/22 09:30',
-      hours: 2.5,
-      tag: '門市選址',
-      zh: '於樂屋網（住商不動產）檢索到南京東路一段條通商圈安家京漾店面（https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent）。1+2樓實用40.48坪，月租僅10萬元（實質營運成本約11.2萬），押金3個月，已加入店面地圖並與南西、吉林路物件納入比較。',
-      ja: '楽屋網（住商不動産）にて南京東路一段・条通商圏の安家京漾店舗（https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent）を発見。1+2階実面積40.48坪で家賃は月額10万元（実効賃料約11.2万元）、敷金3ヶ月。店舗マップに追加し中山南西・吉林路物件と比較中です。',
-      propId: 'rakuya-034d4c34943093e',
-      comments: [
-        {
-          author: '金丸 拓矢',
-          date: '2026/10/22 10:15',
-          zh: '月租 10 萬（約 48 萬日圓）且面積達 40.5 坪，坪效成本非常漂亮！條通商圈日籍商務客眾多，需確認周邊白天與夜間人流差異。',
-          ja: '家賃月額10万元（約48万円）で40.5坪確保でき、坪効率・コストパフォーマンスが非常に優秀です！条通は日系ビジネス客も多いため、昼と夜の人流差を確認してください。'
+  // Load state from localStorage with multi-version fallback
+  const keysToTry = [STORE_KEY, 'grounds_tw_v5_data', 'grounds_tw_v3_core', 'grounds_tw_v4_data', 'grounds_tw_pm_data', 'grounds_tw_data'];
+  let loadedData = null;
+  for (const k of keysToTry) {
+    const raw = localStorage.getItem(k);
+    if (raw) {
+      try {
+        const parsed = JSON.parse(raw);
+        if (parsed && (parsed.posts || parsed.stores)) {
+          loadedData = parsed;
+          break;
         }
-      ]
-    });
+      } catch(e) {}
+    }
   }
 
-  if (!state.stores.some(s => s.id === 'rakuya-034d4c34943093e' || s.id === '034d4c34943093e')) {
-    state.stores.unshift({
-      id: 'rakuya-034d4c34943093e',
-      title: '條通商圈店面（安家京漾）',
-      titleJa: '条通商圏・1+2階路面店（安家京漾・住商不動産）',
-      address: '台北市中山區南京東路一段（林森北路條通商圈）',
-      status: 'candidate',
-      statusLabel: '房仲推薦',
-      lat: 25.0526,
-      lng: 121.5262,
-      rent: 100000,
-      area: 40.48,
-      deposit: 300000,
-      freeRent: '1 個月',
-      realCost: 112110,
-      floor: '1~2 / 9 樓',
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '位於南京東路一段條通精華商圈（林森北路生活圈），周邊日式餐飲與時尚酒吧林立，1+2樓使用面積達40.48坪，商務客群與夜間消費力強。',
-      prosJa: '南京東路一段の条通商圏（林森北路エリア）に位置。日系飲食店やトレンドバーが集積し、1+2階で40.48坪を確保。夜間およびビジネス客の消費力大。',
-      cons: '條通巷弄車道較窄，主要依賴捷運中山站人流與夜間步行客群，白天非尖峰時段需精準社群曝光。',
-      consJa: '路地の人流は夜間に集中しやすいため、日中の集客にはSNSやブランドプロモーションが必要。',
-      url: 'https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent',
-      images: [
-        'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_1_b.jpeg',
-        'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_2_b.jpeg',
-        'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_3_b.jpeg'
-      ],
-      activeImgIdx: 0,
-      sourceType: 'rakuya'
-    });
+  if (loadedData) {
+    if (Array.isArray(loadedData.posts)) state.posts = loadedData.posts;
+    if (Array.isArray(loadedData.stores)) state.stores = loadedData.stores;
+    if (Array.isArray(loadedData.deletedLogs)) state.deletedLogs = loadedData.deletedLogs;
   }
 
-  if (!state.stores.some(s => s.id === 'AGY-A2610063')) {
-    state.stores.unshift({
-      id: 'AGY-A2610063',
-      title: '魔術真髮錦州店（東家國際地產 #A2610063）',
-      address: '台北市中山區錦州街 23 巷 7 號、9 號',
-      status: 'candidate',
-      statusLabel: '房仲資料',
-      lat: 25.0592,
-      lng: 121.5275,
-      rent: 250000,
-      area: 72.8,
-      deposit: 750000,
-      freeRent: '另議 (爭取1.5個月)',
-      realCost: 280275,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。',
-      cons: '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。',
-      url: 'agency_A2610063.jpg',
-      images: ['agency_A2610063.jpg'],
-      activeImgIdx: 0,
-      sourceType: 'agency'
-    });
-  }
+  // Purge any deleted items (and old sample placeholders) so they NEVER resurrect
+  const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
+  const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
 
-  if (!state.stores.some(s => s.id === '591-21939969')) {
-    state.stores.unshift({
-      id: '591-21939969',
-      title: '中山站商圈金店面',
-      address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0535,
-      lng: 121.5218,
-      rent: 285000,
-      area: 56,
-      deposit: 855000,
-      freeRent: '1.5 個月',
-      realCost: 319514,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
-      cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
-      url: 'https://business.591.com.tw/rent/21939969',
-      images: KNKNOWN_IMAGE('21939969'),
-      activeImgIdx: 0
-    });
-  }
+  state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
+  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
 
   // Ensure known items have authentic photos and metrics updated
   state.stores.forEach(s => {
@@ -2868,32 +2756,63 @@ async function syncCloudData() {
     const resp = await fetch('api_sync.php');
     if (resp.ok) {
       const data = await resp.json();
-      if (data && data.posts && Array.isArray(data.posts) && data.posts.length > 0) {
-        const localPostIds = new Set(state.posts.map(p => p.id));
+      if (data) {
+        // 1. Sync deleted logs first
+        if (Array.isArray(data.deletedLogs) && data.deletedLogs.length > 0) {
+          const localDelSet = new Set((state.deletedLogs || []).map(l => `${l.type}_${l.id}`));
+          data.deletedLogs.forEach(dl => {
+            const k = `${dl.type}_${dl.id}`;
+            if (!localDelSet.has(k)) {
+              state.deletedLogs.unshift(dl);
+              localDelSet.add(k);
+            }
+          });
+        }
+
+        const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
+        const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
+
         let updated = false;
-        data.posts.forEach(sp => {
-          if (!localPostIds.has(sp.id)) {
-            state.posts.push(sp);
-            updated = true;
-          }
-        });
-        if (data.stores && Array.isArray(data.stores)) {
-          const localStoreIds = new Set(state.stores.map(s => s.id));
-          data.stores.forEach(ss => {
-            if (!localStoreIds.has(ss.id)) {
-              state.stores.push(ss);
+
+        // 2. Merge cloud posts if not deleted
+        if (Array.isArray(data.posts) && data.posts.length > 0) {
+          const localPostIds = new Set(state.posts.map(p => p.id));
+          data.posts.forEach(sp => {
+            if (!localPostIds.has(sp.id) && !deletedPostIds.has(sp.id) && sp.id !== 201 && sp.id !== 202 && sp.id !== 203) {
+              state.posts.push(sp);
+              localPostIds.add(sp.id);
               updated = true;
             }
           });
         }
-        if (updated) {
-          state.posts.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+        // 3. Merge cloud stores if not deleted
+        if (Array.isArray(data.stores) && data.stores.length > 0) {
+          const localStoreIds = new Set(state.stores.map(s => s.id));
+          data.stores.forEach(ss => {
+            if (!localStoreIds.has(ss.id) && !deletedStoreIds.has(ss.id)) {
+              state.stores.push(ss);
+              localStoreIds.add(ss.id);
+              updated = true;
+            }
+          });
+        }
+
+        // 4. Ensure any deleted items are strictly purged
+        const prePostLen = state.posts.length;
+        const preStoreLen = state.stores.length;
+        state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
+        state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+        if (state.posts.length !== prePostLen || state.stores.length !== preStoreLen) {
+          updated = true;
+        }
+
+        if (updated || state.posts.length > 0) {
+          state.posts.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
           saveAppState(false);
           renderFeeds();
           renderStores();
         }
-      } else if (state.posts.length > 0) {
-        pushStateToCloud();
       }
     }
   } catch(e) {
