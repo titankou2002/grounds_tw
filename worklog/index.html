@@ -1540,7 +1540,7 @@
 
           <!-- Composer (X / Twitter Style Clean Design) -->
           <div class="composer-card">
-            <textarea class="composer-textarea" id="post-text-zh" placeholder="分享工作進展、貼上房仲網址..."></textarea>
+            <textarea class="composer-textarea" id="post-text-zh" placeholder="有什麼新進展？"></textarea>
             <div id="post-file-chip-box" style="display:none;margin-bottom:8px;"></div>
 
             <div class="composer-meta-row">
@@ -2490,7 +2490,73 @@ let state = {
   members: [],
   editingPostId: null,
   activeDetailStoreId: null,
-  posts: [],
+  posts: [
+    {
+      id: 1792619130313,
+      author: "Lynn",
+      date: "2026/10/22 05:45",
+      hours: 0.5,
+      tag: "門市選址",
+      zh: '<a href="https://business.591.com.tw/rent/21939969" onclick="event.preventDefault(); openStoreDetailModal(\'591-21939969\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 中山站商圈金店面</a>',
+      ja: '<a href="https://business.591.com.tw/rent/21939969" onclick="event.preventDefault(); openStoreDetailModal(\'591-21939969\')" class="post-property-link" title="物件詳細を見る">🏢 中山站商圈金店面</a>',
+      propId: "591-21939969",
+      propIds: ["591-21939969"],
+      attachment: null,
+      comments: []
+    },
+    {
+      id: 1792619106787,
+      author: "Lynn",
+      date: "2026/10/22 05:45",
+      hours: 0.5,
+      tag: "門市選址",
+      zh: '<a href="https://business.591.com.tw/rent/19364198" onclick="event.preventDefault(); openStoreDetailModal(\'591-19364198\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 🌟🌟大同區民生西路｜優質店面出租｜人潮不斷</a>\n<a href="https://business.591.com.tw/rent/22214183" onclick="event.preventDefault(); openStoreDetailModal(\'591-22214183\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 💖💖南西赤峰街小金店租到賺到💖💖</a>',
+      ja: '<a href="https://business.591.com.tw/rent/19364198" onclick="event.preventDefault(); openStoreDetailModal(\'591-19364198\')" class="post-property-link" title="物件詳細を見る">🏢 🌟🌟大同區民生西路｜優質店面出租｜人潮不斷</a>\n<a href="https://business.591.com.tw/rent/22214183" onclick="event.preventDefault(); openStoreDetailModal(\'591-22214183\')" class="post-property-link" title="物件詳細を見る">🏢 💖💖南西赤峰街小金店租到賺到💖💖</a>',
+      propId: "591-19364198",
+      propIds: ["591-19364198", "591-22214183"],
+      attachment: null,
+      comments: []
+    },
+    {
+      id: 1792619075026,
+      author: "Lynn",
+      date: "2026/10/22 05:44",
+      hours: 0.5,
+      tag: "門市選址",
+      zh: '<a href="https://business.591.com.tw/rent/22027639" onclick="event.preventDefault(); openStoreDetailModal(\'591-22027639\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 ✨屋主沒漲價🌟承德路二段商圈｜黃金1樓優質邊間店面🌟</a>',
+      ja: '<a href="https://business.591.com.tw/rent/22027639" onclick="event.preventDefault(); openStoreDetailModal(\'591-22027639\')" class="post-property-link" title="物件詳細を見る">🏢 ✨屋主沒漲價🌟承德路二段商圈｜黃金1樓優質邊間店面🌟</a>',
+      propId: "591-22027639",
+      propIds: ["591-22027639"],
+      attachment: null,
+      comments: []
+    },
+    {
+      id: 1792619058726,
+      author: "Lynn",
+      date: "2026/10/22 05:44",
+      hours: 0.5,
+      tag: "門市選址",
+      zh: '<a href="https://rent.rakuya.com.tw/item/016ee134336738a?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-016ee134336738a\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 樂屋網#016ee134336738a 精華商圈店面</a>',
+      ja: '<a href="https://rent.rakuya.com.tw/item/016ee134336738a?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-016ee134336738a\')" class="post-property-link" title="點擊檢視店面完整資訊">楽屋🏢# 016 ee 134336738 aエッセンス商店街店頭</a>',
+      propId: "rakuya-016ee134336738a",
+      propIds: ["rakuya-016ee134336738a"],
+      attachment: null,
+      comments: []
+    },
+    {
+      id: 1792619002223,
+      author: "Lynn",
+      date: "2026/10/22 05:43",
+      hours: 0.5,
+      tag: "進度回報",
+      zh: '<a href="https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-034d4c34943093e\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 條通商圈店面（安家京漾）</a>',
+      ja: '<a href="https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-034d4c34943093e\')" class="post-property-link" title="物件詳細を見る">🏢 条通商圏・1+2階路面店（安家京漾・住商不動産）</a>',
+      propId: "rakuya-034d4c34943093e",
+      propIds: ["rakuya-034d4c34943093e"],
+      attachment: null,
+      comments: []
+    }
+  ],
   stores: [
     {
       id: 'AGY-A2610063',
@@ -2657,6 +2723,75 @@ function loadAppState() {
   const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
 
   state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
+  if (state.posts.length === 0) {
+    state.posts = [
+      {
+        id: 1792619130313,
+        author: "Lynn",
+        date: "2026/10/22 05:45",
+        hours: 0.5,
+        tag: "門市選址",
+        zh: '<a href="https://business.591.com.tw/rent/21939969" onclick="event.preventDefault(); openStoreDetailModal(\'591-21939969\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 中山站商圈金店面</a>',
+        ja: '<a href="https://business.591.com.tw/rent/21939969" onclick="event.preventDefault(); openStoreDetailModal(\'591-21939969\')" class="post-property-link" title="物件詳細を見る">🏢 中山站商圈金店面</a>',
+        propId: "591-21939969",
+        propIds: ["591-21939969"],
+        attachment: null,
+        comments: []
+      },
+      {
+        id: 1792619106787,
+        author: "Lynn",
+        date: "2026/10/22 05:45",
+        hours: 0.5,
+        tag: "門市選址",
+        zh: '<a href="https://business.591.com.tw/rent/19364198" onclick="event.preventDefault(); openStoreDetailModal(\'591-19364198\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 🌟🌟大同區民生西路｜優質店面出租｜人潮不斷</a>\n<a href="https://business.591.com.tw/rent/22214183" onclick="event.preventDefault(); openStoreDetailModal(\'591-22214183\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 💖💖南西赤峰街小金店租到賺到💖💖</a>',
+        ja: '<a href="https://business.591.com.tw/rent/19364198" onclick="event.preventDefault(); openStoreDetailModal(\'591-19364198\')" class="post-property-link" title="物件詳細を見る">🏢 🌟🌟大同區民生西路｜優質店面出租｜人潮不斷</a>\n<a href="https://business.591.com.tw/rent/22214183" onclick="event.preventDefault(); openStoreDetailModal(\'591-22214183\')" class="post-property-link" title="物件詳細を見る">🏢 💖💖南西赤峰街小金店租到賺到💖💖</a>',
+        propId: "591-19364198",
+        propIds: ["591-19364198", "591-22214183"],
+        attachment: null,
+        comments: []
+      },
+      {
+        id: 1792619075026,
+        author: "Lynn",
+        date: "2026/10/22 05:44",
+        hours: 0.5,
+        tag: "門市選址",
+        zh: '<a href="https://business.591.com.tw/rent/22027639" onclick="event.preventDefault(); openStoreDetailModal(\'591-22027639\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 ✨屋主沒漲價🌟承德路二段商圈｜黃金1樓優質邊間店面🌟</a>',
+        ja: '<a href="https://business.591.com.tw/rent/22027639" onclick="event.preventDefault(); openStoreDetailModal(\'591-22027639\')" class="post-property-link" title="物件詳細を見る">🏢 ✨屋主沒漲價🌟承德路二段商圈｜黃金1樓優質邊間店面🌟</a>',
+        propId: "591-22027639",
+        propIds: ["591-22027639"],
+        attachment: null,
+        comments: []
+      },
+      {
+        id: 1792619058726,
+        author: "Lynn",
+        date: "2026/10/22 05:44",
+        hours: 0.5,
+        tag: "門市選址",
+        zh: '<a href="https://rent.rakuya.com.tw/item/016ee134336738a?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-016ee134336738a\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 樂屋網#016ee134336738a 精華商圈店面</a>',
+        ja: '<a href="https://rent.rakuya.com.tw/item/016ee134336738a?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-016ee134336738a\')" class="post-property-link" title="點擊檢視店面完整資訊">楽屋🏢# 016 ee 134336738 aエッセンス商店街店頭</a>',
+        propId: "rakuya-016ee134336738a",
+        propIds: ["rakuya-016ee134336738a"],
+        attachment: null,
+        comments: []
+      },
+      {
+        id: 1792619002223,
+        author: "Lynn",
+        date: "2026/10/22 05:43",
+        hours: 0.5,
+        tag: "進度回報",
+        zh: '<a href="https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-034d4c34943093e\')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 條通商圈店面（安家京漾）</a>',
+        ja: '<a href="https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent" onclick="event.preventDefault(); openStoreDetailModal(\'rakuya-034d4c34943093e\')" class="post-property-link" title="物件詳細を見る">🏢 条通商圏・1+2階路面店（安家京漾・住商不動産）</a>',
+        propId: "rakuya-034d4c34943093e",
+        propIds: ["rakuya-034d4c34943093e"],
+        attachment: null,
+        comments: []
+      }
+    ].filter(p => !deletedPostIds.has(p.id));
+  }
   state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
 
   // Ensure known items have authentic photos and metrics updated
@@ -2920,9 +3055,7 @@ function applyGlobalLanguageTexts() {
 
   const postText = document.getElementById('post-text-zh');
   if (postText) {
-    postText.placeholder = isJa 
-      ? '業務成果、確認事項、または591・楽屋網・永慶・信義等のURLを入力してください...'
-      : '填寫工作成果或直接貼入 591、樂屋網、永慶、信義等房仲網址（例如：https://community.rakuya.com.tw/...）...';
+    postText.placeholder = isJa ? 'いまどうしてる？' : '有什麼新進展？';
   }
   const btnSubmit = document.getElementById('btn-submit-post-label');
   if (btnSubmit) btnSubmit.textContent = isJa ? '投稿' : '發布';
@@ -2932,9 +3065,7 @@ function applyGlobalLanguageTexts() {
 
   const quickStoreUrl = document.getElementById('quick-store-url');
   if (quickStoreUrl) {
-    quickStoreUrl.placeholder = isJa
-      ? '591・楽屋網・永慶・信義等の不動産URLを貼り付けて即時追加...'
-      : '貼上 591、樂屋網、永慶、信義或各大房仲網址直接新增店面...';
+    quickStoreUrl.placeholder = isJa ? '不動産URLを貼り付け...' : '貼上房仲網址直接新增...';
   }
   const quickAddBtn = document.getElementById('quick-add-btn-text');
   if (quickAddBtn) {
@@ -5371,6 +5502,7 @@ document.addEventListener('click', (e) => {
 // Bootstrap
 loadAppState();
 renderFeeds();
+syncCloudData();
 </script>
 
 </body>
