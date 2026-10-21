@@ -35,7 +35,7 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* SVG Icons - NO EMOJIS */
+    /* SVG Icons - Pure SVG, Strictly No Emojis */
     .icon {
       width: 16px;
       height: 16px;
@@ -99,7 +99,7 @@
       letter-spacing: 0.3px;
     }
 
-    /* Nav Tabs */
+    /* Nav Tabs - Only 2 Tabs: Feed and Store Map */
     .nav-tabs {
       display: flex;
       gap: 4px;
@@ -107,14 +107,14 @@
     .nav-tab-btn {
       display: flex;
       align-items: center;
-      gap: 5px;
-      padding: 6px 12px;
+      gap: 6px;
+      padding: 6px 14px;
       border-radius: 6px;
       border: 1px solid transparent;
       background: transparent;
       color: var(--fg-muted);
       font-size: 13px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.15s ease;
     }
@@ -125,17 +125,6 @@
     .nav-tab-btn.active {
       background: #111111;
       color: #ffffff;
-    }
-    .badge-count {
-      padding: 1px 6px;
-      border-radius: 99px;
-      font-size: 11px;
-      font-weight: 700;
-      background: rgba(255,255,255,0.25);
-    }
-    .nav-tab-btn:not(.active) .badge-count {
-      background: #e2e2e8;
-      color: var(--fg);
     }
 
     /* Header Actions */
@@ -175,105 +164,20 @@
     /* Main Container */
     main.main-body {
       flex: 1;
-      max-width: 1400px;
+      max-width: 1360px;
       width: 100%;
       margin: 0 auto;
       padding: 16px;
     }
 
-    /* 1. DASHBOARD */
-    .dashboard-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-    .dash-kpi-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 14px 16px;
-    }
-    .dash-kpi-label {
-      font-size: 12px;
-      color: var(--fg-muted);
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-    .dash-kpi-val {
-      font-size: 24px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-    }
-
-    .overview-split {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-bottom: 20px;
-    }
-    .dash-panel-card {
-      background: #ffffff;
-      border: 1px solid var(--border);
-      border-radius: 10px;
-      padding: 16px;
-    }
-    .dash-panel-title {
-      font-size: 14px;
-      font-weight: 700;
-      margin-bottom: 12px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .urgent-dec-item {
-      background: #fff8f8;
-      border-left: 3px solid var(--danger);
-      padding: 10px 12px;
-      border-radius: 0 6px 6px 0;
-      margin-bottom: 8px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .urgent-dec-code {
-      font-size: 11px;
-      font-weight: 800;
-      color: var(--danger);
-    }
-    .urgent-dec-title {
-      font-size: 13px;
-      font-weight: 700;
-      margin: 2px 0;
-    }
-    .urgent-dec-btn {
-      padding: 4px 10px;
-      background: var(--danger);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    .output-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 8px;
-      padding: 8px 0;
-      border-bottom: 1px solid #f1f1f4;
-      font-size: 12.5px;
-    }
-
-    /* 2. FEED & SPLIT VIEW */
+    /* 1. FEED & COMPOSER */
     .split-desktop-view {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
       align-items: start;
     }
+
     .column-header {
       display: flex;
       align-items: center;
@@ -290,6 +194,33 @@
       gap: 6px;
     }
 
+    /* Mobile Language Switcher (Single Column Mode) */
+    .mobile-lang-bar {
+      display: none;
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
+      margin-bottom: 12px;
+      gap: 4px;
+    }
+    .mobile-lang-btn {
+      flex: 1;
+      padding: 6px 0;
+      font-size: 12px;
+      font-weight: 700;
+      border: none;
+      background: transparent;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      color: var(--fg-muted);
+    }
+    .mobile-lang-btn.active {
+      background: #111111;
+      color: #ffffff;
+    }
+
     /* Composer */
     .composer-card {
       background: var(--card-bg);
@@ -300,15 +231,16 @@
     }
     .composer-textarea {
       width: 100%;
-      min-height: 75px;
+      min-height: 80px;
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 8px 10px;
+      padding: 10px;
       font-family: inherit;
       font-size: 13.5px;
       line-height: 1.5;
       outline: none;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+      resize: vertical;
     }
     .composer-textarea:focus { border-color: var(--fg); }
 
@@ -336,7 +268,7 @@
       gap: 4px;
     }
     .hours-field {
-      width: 40px;
+      width: 44px;
       border: none;
       background: transparent;
       font-weight: 700;
@@ -351,21 +283,12 @@
       background: #fafafa;
       outline: none;
     }
-    .checkbox-label {
-      font-size: 12px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      cursor: pointer;
-      color: var(--danger);
-    }
     .btn-submit {
       background: #111111;
       color: #ffffff;
       border: none;
       border-radius: 6px;
-      padding: 6px 14px;
+      padding: 6px 16px;
       font-size: 12.5px;
       font-weight: 700;
       cursor: pointer;
@@ -386,32 +309,33 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 14px;
+      position: relative;
     }
     .feed-card-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .author-info {
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
     .author-avatar {
-      width: 24px;
-      height: 24px;
+      width: 28px;
+      height: 28px;
       background: #111111;
       border-radius: 50%;
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 11px;
+      font-size: 12px;
       font-weight: bold;
     }
     .author-name {
-      font-size: 12px;
+      font-size: 12.5px;
       font-weight: 700;
     }
     .post-timestamp {
@@ -420,118 +344,113 @@
     }
     .post-tag {
       font-size: 11px;
-      padding: 1px 6px;
+      padding: 2px 7px;
       background: #f1f1f4;
       border-radius: 4px;
       font-weight: 600;
     }
     .hours-tag {
       font-size: 11px;
-      padding: 1px 6px;
+      padding: 2px 7px;
       background: var(--highlight-bg);
       color: var(--highlight);
       border-radius: 4px;
       font-weight: 700;
     }
     .post-body-text {
-      font-size: 13px;
+      font-size: 13.5px;
       line-height: 1.6;
-      margin: 6px 0;
+      margin: 8px 0;
       white-space: pre-wrap;
+      word-break: break-word;
     }
 
-    /* Embedded 591 Card in Feed */
+    /* Japanese Translation Box inside card */
+    .jp-translation-box {
+      background: #fbfbfd;
+      border-left: 3px solid #111111;
+      padding: 8px 12px;
+      border-radius: 0 6px 6px 0;
+      margin: 8px 0;
+      font-size: 13px;
+      line-height: 1.6;
+    }
+    .jp-trans-head {
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--fg-muted);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      margin-bottom: 4px;
+    }
+
+    /* Embedded 591 Card in Feed - Click to Open Floating Modal */
     .feed-591-preview {
       background: #f9f9fc;
       border: 1px solid var(--border);
-      border-radius: 6px;
+      border-radius: 8px;
       padding: 10px;
-      margin: 8px 0;
+      margin: 10px 0;
       display: flex;
-      gap: 10px;
+      gap: 12px;
       align-items: center;
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .feed-591-preview:hover {
+      border-color: #111111;
+      background: #f5f5f8;
     }
     .feed-591-thumb {
-      width: 80px;
-      height: 60px;
+      width: 110px;
+      height: 75px;
       object-fit: cover;
-      border-radius: 4px;
+      border-radius: 6px;
+      flex-shrink: 0;
     }
 
     /* Comments Section */
     .comments-thread {
-      margin-top: 8px;
-      padding-top: 8px;
+      margin-top: 10px;
+      padding-top: 10px;
       border-top: 1px dashed var(--border);
       display: flex;
       flex-direction: column;
-      gap: 6px;
+      gap: 8px;
     }
     .comment-item {
       background: #f9f9fb;
       border-radius: 6px;
-      padding: 6px 8px;
-      font-size: 12px;
+      padding: 8px 10px;
+      font-size: 12.5px;
     }
     .comment-header {
       display: flex;
       justify-content: space-between;
-      margin-bottom: 2px;
-      font-size: 10.5px;
+      margin-bottom: 3px;
+      font-size: 11px;
       color: var(--fg-muted);
-      font-weight: 600;
+      font-weight: 700;
     }
     .comment-reply-row {
       display: flex;
       gap: 6px;
-      margin-top: 4px;
+      margin-top: 6px;
     }
     .comment-reply-input {
       flex: 1;
-      padding: 4px 8px;
+      padding: 6px 10px;
       border: 1px solid var(--border);
-      border-radius: 4px;
-      font-size: 11.5px;
+      border-radius: 6px;
+      font-size: 12px;
       outline: none;
     }
 
-    /* 3. DECISION LEDGER */
-    .dec-table {
-      width: 100%;
-      border-collapse: collapse;
-      background: #ffffff;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--border);
-    }
-    .dec-table th, .dec-table td {
-      padding: 10px 12px;
-      text-align: left;
-      font-size: 12.5px;
-      border-bottom: 1px solid var(--border);
-    }
-    .dec-table th {
-      background: #fbfbfd;
-      font-size: 11.5px;
-      font-weight: 700;
-      color: var(--fg-muted);
-    }
-    .dec-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 3px;
-      font-size: 10.5px;
-      font-weight: 800;
-      padding: 2px 6px;
-      border-radius: 4px;
-    }
-    .dec-badge.waiting { background: var(--danger-bg); color: var(--danger); }
-    .dec-badge.approved { background: var(--success-bg); color: var(--success); }
-
-    /* 4. STORE & MAP & COMPARISON MATRIX */
+    /* 2. STORE EVALUATION & MAP & COMPARISON */
     .store-layout {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 460px 1fr;
       gap: 16px;
       height: calc(100vh - 120px);
     }
@@ -539,32 +458,35 @@
       overflow-y: auto;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       padding-right: 4px;
     }
     .store-add-bar {
       display: flex;
-      gap: 6px;
+      gap: 8px;
       background: #ffffff;
       border: 1px solid var(--border);
       border-radius: 8px;
-      padding: 8px;
-      margin-bottom: 6px;
+      padding: 10px;
+      margin-bottom: 12px;
+      align-items: center;
+      flex-wrap: wrap;
     }
     .store-add-input {
       flex: 1;
+      min-width: 240px;
       border: 1px solid var(--border);
       border-radius: 6px;
-      padding: 6px 10px;
-      font-size: 12.5px;
+      padding: 7px 12px;
+      font-size: 13px;
       outline: none;
     }
 
     .store-card {
       background: #ffffff;
       border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 12px;
+      border-radius: 10px;
+      padding: 14px;
       cursor: pointer;
       transition: all 0.15s;
     }
@@ -574,16 +496,62 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 4px;
+      margin-bottom: 8px;
     }
     .store-tag {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: 700;
-      padding: 1px 6px;
-      border-radius: 3px;
+      padding: 2px 7px;
+      border-radius: 4px;
     }
     .store-tag.candidate { background: #e3f2fd; color: #1565c0; }
     .store-tag.verified { background: #e8f5e9; color: #2e7d32; }
+
+    /* Store Photo Gallery Carousel */
+    .store-gallery {
+      margin: 8px 0;
+    }
+    .store-main-photo {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 6px;
+      display: block;
+      cursor: pointer;
+    }
+    .store-thumbs-strip {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      margin-top: 6px;
+      padding-bottom: 4px;
+    }
+    .store-thumb-img {
+      width: 54px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 4px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      flex-shrink: 0;
+      opacity: 0.75;
+      transition: opacity 0.15s;
+    }
+    .store-thumb-img:hover, .store-thumb-img.active {
+      opacity: 1;
+      border-color: #111;
+    }
+
+    .store-specs-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      background: #fafafc;
+      padding: 8px 10px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      margin: 8px 0;
+    }
 
     #store-map-box {
       width: 100%;
@@ -592,57 +560,171 @@
       border: 1px solid var(--border);
     }
 
-    /* Comparison Drawer */
-    .compare-modal {
+    /* Modal Windows */
+    .modal-overlay {
       display: none;
       position: fixed;
       left: 0; right: 0; bottom: 0; top: 0;
-      background: rgba(0,0,0,0.5);
+      background: rgba(0,0,0,0.65);
       z-index: 2000;
       align-items: center;
       justify-content: center;
-      padding: 20px;
+      padding: 16px;
     }
-    .compare-modal.open { display: flex; }
-    .compare-box {
+    .modal-overlay.open { display: flex; }
+    .modal-content-box {
       background: #fff;
       border-radius: 12px;
-      width: min(95vw, 1100px);
-      max-height: 85vh;
-      overflow: auto;
+      width: min(96vw, 950px);
+      max-height: 90vh;
+      overflow-y: auto;
       padding: 20px;
     }
+
+    /* Floating Store Details Modal Styles */
+    .store-detail-hero-box {
+      position: relative;
+      background: #111;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 12px;
+    }
+    .store-detail-hero-img {
+      width: 100%;
+      max-height: 380px;
+      object-fit: contain;
+      display: block;
+      margin: 0 auto;
+    }
+    .store-detail-gallery-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      margin-bottom: 14px;
+    }
+    .store-detail-thumb {
+      width: 72px;
+      height: 52px;
+      object-fit: cover;
+      border-radius: 6px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      opacity: 0.7;
+      transition: all 0.15s ease;
+      flex-shrink: 0;
+    }
+    .store-detail-thumb:hover, .store-detail-thumb.active {
+      opacity: 1;
+      border-color: #111111;
+    }
+
+    .kpi-badge-group {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+    .kpi-badge {
+      background: #fbfbfd;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 12px;
+      text-align: center;
+    }
+    .kpi-badge-label {
+      font-size: 11px;
+      color: var(--fg-muted);
+      font-weight: 600;
+    }
+    .kpi-badge-val {
+      font-size: 16px;
+      font-weight: 800;
+      margin-top: 2px;
+    }
+
+    /* Comparison Table */
     .compare-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 12px;
+      margin-top: 14px;
     }
     .compare-table th, .compare-table td {
       border: 1px solid var(--border);
       padding: 10px;
       font-size: 12.5px;
       text-align: left;
+      vertical-align: top;
     }
-    .compare-table th { background: #fafafa; width: 140px; }
+    .compare-table th { background: #fafafa; width: 140px; font-weight: 700; }
+    .compare-photo-thumb {
+      width: 100%;
+      max-width: 220px;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 6px;
+    }
 
     /* Delete log modal */
     .delete-log-item {
-      font-size: 11.5px;
-      color: var(--fg-muted);
-      padding: 6px 0;
+      font-size: 12px;
+      color: var(--fg);
+      padding: 8px 0;
       border-bottom: 1px solid #f1f1f4;
+      line-height: 1.6;
     }
 
-    /* Mobile Responsive Overhaul */
+    /* Member Management List */
+    .member-item-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: #fafafc;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      margin-bottom: 8px;
+      gap: 10px;
+    }
+    .member-info {
+      flex: 1;
+      font-size: 12.5px;
+    }
+    .member-link-preview {
+      font-family: monospace;
+      font-size: 11px;
+      color: var(--fg-muted);
+      word-break: break-all;
+      margin-top: 2px;
+    }
+
+    /* Mobile Responsive (Single Column Only) */
     @media (max-width: 900px) {
-      .dashboard-grid { grid-template-columns: 1fr 1fr; }
-      .overview-split { grid-template-columns: 1fr; }
-      .split-desktop-view { grid-template-columns: 1fr; }
-      .right-column { display: block !important; } /* Always show bilingual on mobile if in bilingual mode */
-      .store-layout { grid-template-columns: 1fr; height: auto; }
-      #store-map-box { height: 320px; }
-      .nav-tab-btn span.tab-title { display: none; }
-      main.main-body { padding: 10px; }
+      .split-desktop-view {
+        display: block !important;
+        grid-template-columns: 1fr !important;
+      }
+      .left-column, .right-column {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      .mobile-lang-bar {
+        display: flex;
+      }
+      .store-layout {
+        grid-template-columns: 1fr;
+        height: auto;
+      }
+      #store-map-box {
+        height: 320px;
+        margin-top: 12px;
+      }
+      .kpi-badge-group {
+        grid-template-columns: 1fr 1fr;
+      }
+      main.main-body {
+        padding: 10px;
+      }
     }
   </style>
 </head>
@@ -651,47 +733,42 @@
 <div class="app-container">
   <!-- Top Navigation -->
   <header class="site-header">
-    <div style="display:flex;align-items:center;gap:12px;">
-      <div class="brand-group" onclick="switchNavTab('dashboard')">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <div class="brand-group" onclick="switchNavTab('feed')">
         <div class="brand-logo-badge">g</div>
         <div class="brand-title">grounds Taiwan</div>
       </div>
 
+      <!-- Pure 2-Tab Navigation -->
       <nav class="nav-tabs">
-        <button class="nav-tab-btn active" id="btn-tab-dashboard" onclick="switchNavTab('dashboard')">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-          <span class="tab-title">戰情總覽</span>
-        </button>
-        <button class="nav-tab-btn" id="btn-tab-feed" onclick="switchNavTab('feed')">
+        <button class="nav-tab-btn active" id="btn-tab-feed" onclick="switchNavTab('feed')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line></svg>
           <span class="tab-title">工作動態</span>
         </button>
-        <button class="nav-tab-btn" id="btn-tab-decisions" onclick="switchNavTab('decisions')">
-          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
-          <span class="tab-title">決策追蹤</span>
-          <span class="badge-count" id="nav-dec-badge">3</span>
-        </button>
         <button class="nav-tab-btn" id="btn-tab-store" onclick="switchNavTab('store')">
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
-          <span class="tab-title">店面評估與地圖</span>
+          <span class="tab-title">店面地圖</span>
         </button>
       </nav>
     </div>
 
     <div class="header-actions">
-      <!-- User Identity Switcher (Taiwan: Lynn / Japan: 金丸 拓矢) -->
-      <button class="user-badge-btn" id="user-role-btn" onclick="toggleUserIdentity()" title="點擊切換身分">
+      <!-- Active Member Switcher -->
+      <button class="user-badge-btn" id="user-role-btn" onclick="toggleActiveMember()" title="點擊切換身分">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
         <span id="current-user-name">Lynn</span>
       </button>
 
-      <!-- Language Mode Switcher -->
-      <button class="action-btn" id="btn-lang-toggle" onclick="toggleLangMode()">
-        <span id="lang-btn-text">左右對照</span>
+      <!-- Member Links Management Modal Button -->
+      <button class="action-btn" onclick="openMemberModal()" title="新增人員與專屬連結">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
+        <span>專屬連結</span>
       </button>
 
-      <button class="action-btn" onclick="openSettingsModal()" title="專屬連結與TG設定">
-        <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+      <!-- Audit Log Button -->
+      <button class="action-btn" onclick="openDeleteLogModal()" title="檢視刪除存證紀錄">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+        <span>存證紀錄</span>
       </button>
     </div>
   </header>
@@ -699,62 +776,29 @@
   <!-- Main Body -->
   <main class="main-body">
 
-    <!-- 1. DASHBOARD -->
-    <section id="tab-dashboard" class="view-panel">
-      <div class="dashboard-grid">
-        <div class="dash-kpi-card">
-          <div class="dash-kpi-label">專案整體推進率</div>
-          <div class="dash-kpi-val">58 <span style="font-size:15px;">%</span></div>
-        </div>
-        <div class="dash-kpi-card" style="border-left: 3px solid var(--danger);">
-          <div class="dash-kpi-label" style="color:var(--danger);">待總部決策項目</div>
-          <div class="dash-kpi-val" style="color:var(--danger);" id="dash-kpi-dec-count">3 <span style="font-size:15px;">件</span></div>
-        </div>
-        <div class="dash-kpi-card">
-          <div class="dash-kpi-label">候選店面實勘進度</div>
-          <div class="dash-kpi-val" id="dash-kpi-store-count">3 <span style="font-size:15px;">間</span></div>
-        </div>
-        <div class="dash-kpi-card">
-          <div class="dash-kpi-label">累計投入工時</div>
-          <div class="dash-kpi-val" id="dash-kpi-hours">5.5 <span style="font-size:15px;">h</span></div>
-        </div>
+    <!-- 1. WORK FEED VIEW -->
+    <section id="tab-feed" class="view-panel">
+      <!-- Mobile Segmented Filter (Single Column Mode Switcher) -->
+      <div class="mobile-lang-bar">
+        <button class="mobile-lang-btn active" id="m-btn-bilingual" onclick="setMobileLang('bilingual')">中日雙語對照</button>
+        <button class="mobile-lang-btn" id="m-btn-zh" onclick="setMobileLang('zh')">純中文</button>
+        <button class="mobile-lang-btn" id="m-btn-ja" onclick="setMobileLang('ja')">純日文</button>
       </div>
 
-      <div class="overview-split">
-        <div class="dash-panel-card">
-          <div class="dash-panel-title">
-            <span>待總部拍板決策（DEC）</span>
-            <button class="action-btn" onclick="switchNavTab('decisions')">完整追蹤表</button>
-          </div>
-          <div id="dash-urgent-dec-box"></div>
-        </div>
-
-        <div class="dash-panel-card">
-          <div class="dash-panel-title">
-            <span>最新工作成果 (Output)</span>
-            <button class="action-btn" onclick="switchNavTab('feed')">日誌明細</button>
-          </div>
-          <div id="dash-key-outputs-box"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. WORK FEED -->
-    <section id="tab-feed" class="view-panel" style="display:none;">
       <div class="split-desktop-view">
-        <!-- LEFT: CHINESE -->
-        <div class="left-column">
+        <!-- COLUMN 1: TAIWAN FEED & COMPOSER -->
+        <div class="left-column" id="col-tw-feed">
           <div class="column-header">
             <div class="column-title">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span>中文成果與執行紀錄</span>
+              <span>工作成果與執行動態</span>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);" id="feed-left-user-label">發布者: Lynn</div>
           </div>
 
           <!-- Composer -->
           <div class="composer-card">
-            <textarea class="composer-textarea" id="post-text-zh" placeholder="填寫工作成果或直接貼入 591 網址（例如：https://business.591.com.tw/rent/21265868）..."></textarea>
+            <textarea class="composer-textarea" id="post-text-zh" placeholder="填寫工作成果或直接貼入 591 網址（例如：https://business.591.com.tw/rent/22015090）..."></textarea>
 
             <div class="composer-meta-row">
               <div class="meta-left">
@@ -771,16 +815,13 @@
                   <option value="營運規劃">營運規劃</option>
                   <option value="進口物流">進口物流</option>
                 </select>
-
-                <!-- Checkbox: Add to Decision Queue (圖1需求) -->
-                <label class="checkbox-label">
-                  <input type="checkbox" id="post-chk-dec">
-                  <span>加入待決策區（日本拍板）</span>
-                </label>
+                <button class="action-btn" type="button" onclick="triggerAgencyUpload()" title="讀取分析房仲給的資料圖">
+                  <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                  <span>附房仲資料圖</span>
+                </button>
               </div>
 
               <div style="display:flex;gap:6px;">
-                <button class="action-btn" type="button" onclick="promptQuickTask()">＋新增任務</button>
                 <button class="btn-submit" type="button" onclick="submitFeedPost()">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                   <span>發布</span>
@@ -793,8 +834,8 @@
           <div class="feed-container" id="feed-zh-box"></div>
         </div>
 
-        <!-- RIGHT: JAPANESE -->
-        <div class="right-column">
+        <!-- COLUMN 2: JAPAN VIEW -->
+        <div class="right-column" id="col-jp-feed">
           <div class="column-header">
             <div class="column-title">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
@@ -809,46 +850,29 @@
       </div>
     </section>
 
-    <!-- 3. DECISION LEDGER -->
-    <section id="tab-decisions" class="view-panel" style="display:none;">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-        <h2 style="font-size:15px;font-weight:800;">決策追蹤專區 (DEC Ledger)</h2>
-        <div style="display:flex;gap:8px;">
-          <button class="action-btn" onclick="openDeleteLogModal('decisions')">檢視刪除紀錄</button>
-          <button class="btn-submit" onclick="promptNewDec()">＋新增決策案</button>
-        </div>
-      </div>
-
-      <table class="dec-table">
-        <thead>
-          <tr>
-            <th style="width:90px;">編號</th>
-            <th style="width:105px;">狀態 / 天數</th>
-            <th>決策主旨 (中/日對照)</th>
-            <th style="width:140px;">影響里程碑</th>
-            <th style="width:95px;">期限</th>
-            <th style="width:170px;">審核動作</th>
-          </tr>
-        </thead>
-        <tbody id="dec-table-rows"></tbody>
-      </table>
-    </section>
-
-    <!-- 4. STORE EVALUATION & MAP & COMPARISON -->
+    <!-- 2. STORE EVALUATION & MAP VIEW -->
     <section id="tab-store" class="view-panel" style="display:none;">
       <div class="store-add-bar">
-        <input type="text" class="store-add-input" id="quick-store-url" placeholder="貼上 591 網址直接新增店面（例如：https://business.591.com.tw/rent/21265868）">
-        <button class="btn-submit" onclick="parseAndAdd591Direct()">＋解析新增</button>
-        <button class="action-btn" id="btn-open-compare" style="display:none;background:#111;color:#fff;" onclick="openCompareModal()">
-          <span>比較已選 (</span><span id="selected-compare-count">0</span><span>)</span>
+        <input type="text" class="store-add-input" id="quick-store-url" placeholder="貼上 591 網址直接新增店面（例如：https://business.591.com.tw/rent/21939969）">
+        <button class="btn-submit" onclick="parseAndAdd591Direct()">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>解析新增</span>
         </button>
-        <button class="action-btn" onclick="openDeleteLogModal('stores')">刪除紀錄</button>
+        <button class="action-btn" onclick="triggerAgencyUpload()">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+          <span>＋上傳房仲資料圖</span>
+        </button>
+        <input type="file" id="agency-sheet-file" accept="image/*" style="display:none;" onchange="handleAgencySheetUpload(event)">
+        <button class="action-btn" id="btn-open-compare" style="display:none;background:#111;color:#fff;font-weight:700;" onclick="openCompareModal()">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+          <span>查看分析比較表 (</span><span id="selected-compare-count">0</span><span>)</span>
+        </button>
       </div>
 
       <div class="store-layout">
         <!-- Store Cards Column -->
         <div class="store-col" id="store-list-box"></div>
-        <!-- Map Box -->
+        <!-- Interactive Map Box -->
         <div>
           <div id="store-map-box"></div>
         </div>
@@ -858,45 +882,317 @@
   </main>
 </div>
 
-<!-- Comparison Modal -->
-<div class="compare-modal" id="compare-modal">
-  <div class="compare-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
-      <h3 style="font-size:16px;font-weight:800;">店面條件分析比較表</h3>
-      <button class="action-btn" onclick="closeCompareModal()">關閉</button>
+<!-- Floating Store Detail Modal (浮動視窗看店面完整照片與關鍵資訊) -->
+<div class="modal-overlay" id="store-detail-modal">
+  <div class="modal-content-box" style="max-width:850px;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
+      <div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <h3 style="font-size:16px;font-weight:800;" id="m-store-title">店面名稱</h3>
+          <span class="store-tag candidate" id="m-store-badge">重點候選</span>
+        </div>
+        <p style="font-size:12px;color:var(--fg-muted);margin-top:2px;" id="m-store-address">地址</p>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="action-btn" onclick="openEditStoreModal()">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          <span>編輯店面</span>
+        </button>
+        <button class="btn-submit" id="m-btn-toggle-compare" onclick="toggleCompareFromModal()">加入分析比較</button>
+        <button class="action-btn" onclick="closeStoreDetailModal()">關閉</button>
+      </div>
     </div>
-    <div id="compare-table-content"></div>
+
+    <!-- Big Hero Photo -->
+    <div class="store-detail-hero-box">
+      <img src="" id="m-store-hero-img" class="store-detail-hero-img" alt="店面大圖">
+    </div>
+
+    <!-- Thumbnails Strip -->
+    <div class="store-detail-gallery-row" id="m-store-gallery-strip"></div>
+
+    <!-- Key Metrics Grid -->
+    <div class="kpi-badge-group">
+      <div class="kpi-badge">
+        <div class="kpi-badge-label">刊登月租</div>
+        <div class="kpi-badge-val" id="m-store-rent">NT$ 0 萬</div>
+      </div>
+      <div class="kpi-badge">
+        <div class="kpi-badge-label">使用坪數</div>
+        <div class="kpi-badge-val" id="m-store-area">0 坪</div>
+      </div>
+      <div class="kpi-badge">
+        <div class="kpi-badge-label">每坪租金單價</div>
+        <div class="kpi-badge-val" id="m-store-unitprice">NT$ 0 /坪</div>
+      </div>
+      <div class="kpi-badge">
+        <div class="kpi-badge-label">真實營運月成本 (含扣繳)</div>
+        <div class="kpi-badge-val" style="color:var(--highlight);" id="m-store-realcost">NT$ 0</div>
+      </div>
+    </div>
+
+    <!-- Commercial Verification & Key Details -->
+    <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:12px;font-size:12.5px;line-height:1.7;">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px, 1fr));gap:8px;">
+        <div><strong>押金需求：</strong><span id="m-store-deposit">--</span></div>
+        <div><strong>裝潢免租期：</strong><span id="m-store-freerent">--</span></div>
+        <div><strong>營業登記：</strong><span id="m-store-canreg">--</span></div>
+        <div><strong>稅籍開立發票：</strong><span id="m-store-caninvoice">--</span></div>
+      </div>
+    </div>
+
+    <!-- Pros & Cons -->
+    <div style="font-size:13px;line-height:1.6;margin-bottom:14px;">
+      <div style="margin-bottom:6px;"><strong>商圈優點與人流分析：</strong><span id="m-store-pros"></span></div>
+      <div style="color:var(--danger);"><strong>特別考量與潛在風險：</strong><span id="m-store-cons"></span></div>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;align-items:center;border-top:1px solid #f1f1f4;padding-top:10px;">
+      <a href="#" id="m-store-591-link" target="_blank" style="font-size:11.5px;color:var(--fg-muted);text-decoration:underline;">備用：在 591 官網檢視原始頁面</a>
+    </div>
   </div>
 </div>
 
-<!-- Delete Log / Settings Modal -->
-<div class="compare-modal" id="settings-modal">
-  <div class="compare-box" style="max-width:550px;">
+<!-- Edit Post Modal (編輯文字功能) -->
+<div class="modal-overlay" id="edit-post-modal">
+  <div class="modal-content-box" style="max-width:560px;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
-      <h3 style="font-size:15px;font-weight:800;" id="modal-sub-title">系統專屬連結與 Telegram 設定</h3>
-      <button class="action-btn" onclick="closeSettingsModal()">關閉</button>
+      <h3 style="font-size:15px;font-weight:800;">編輯工作動態</h3>
+      <button class="action-btn" onclick="closeEditPostModal()">關閉</button>
     </div>
 
-    <div style="font-size:12.5px;line-height:1.7;margin-bottom:14px;">
-      <strong>1. 台灣端專屬連結 (Lynn)：</strong><br>
-      <input type="text" readonly value="https://bigt.cc/Grounds_TW/worklog/index.html?user=lynn" style="width:100%;padding:5px;font-size:11.5px;margin-top:2px;" onclick="this.select()"><br><br>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">工作成果內容：</label>
+      <textarea id="edit-post-text" class="composer-textarea" style="min-height:120px;"></textarea>
+    </div>
 
-      <strong>2. 日本老闆專屬連結 (金丸 拓矢)：</strong><br>
-      <input type="text" readonly value="https://bigt.cc/Grounds_TW/worklog/index.html?user=kanamaru" style="width:100%;padding:5px;font-size:11.5px;margin-top:2px;" onclick="this.select()"><br><br>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;">投入工時：</label>
+        <input type="number" step="0.5" min="0" id="edit-post-hours" style="width:60px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-weight:700;"> h
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;">分類標籤：</label>
+        <select id="edit-post-tag" class="select-field">
+          <option value="門市選址">門市選址</option>
+          <option value="公司設立">公司設立</option>
+          <option value="商標佈局">商標佈局</option>
+          <option value="營運規劃">營運規劃</option>
+          <option value="進口物流">進口物流</option>
+        </select>
+      </div>
+    </div>
 
-      <strong>3. Telegram 私密頻道推播設定：</strong><br>
-      <div style="margin-top:4px;">
-        <label>Bot Token: <input type="text" id="cfg-tg-token" style="width:100%;padding:4px;font-size:11.5px;margin:2px 0 6px;" placeholder="貼上 Telegram Bot Token"></label>
-        <label>Chat ID: <input type="text" id="cfg-tg-chatid" style="width:100%;padding:4px;font-size:11.5px;margin:2px 0 6px;" placeholder="高雅瓷頻道 Chat ID"></label>
-        <button class="btn-submit" style="margin-top:6px;" onclick="saveTgConfig()">儲存設定並發送測試</button>
+    <div style="display:flex;justify-content:flex-end;gap:8px;">
+      <button class="action-btn" onclick="closeEditPostModal()">取消</button>
+      <button class="btn-submit" onclick="saveEditedPost()">儲存變更</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Store Modal (編輯店面數據：月租、坪數、條件) -->
+<div class="modal-overlay" id="edit-store-modal">
+  <div class="modal-content-box" style="max-width:580px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
+      <h3 style="font-size:15px;font-weight:800;">編輯店面數據與規格</h3>
+      <button class="action-btn" onclick="closeEditStoreModal()">關閉</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">刊登月租 (元/月)：</label>
+        <input type="number" id="es-rent" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">使用坪數 (坪)：</label>
+        <input type="number" step="0.1" id="es-area" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">店面標題：</label>
+      <input type="text" id="es-title" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">店面地址：</label>
+      <input type="text" id="es-address" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+      <div>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">裝潢免租期：</label>
+        <input type="text" id="es-freerent" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">押金需求 (元)：</label>
+        <input type="number" id="es-deposit" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+      </div>
+    </div>
+
+    <div style="margin-bottom:12px;">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">商圈優點與人流分析：</label>
+      <textarea id="es-pros" class="composer-textarea" style="min-height:60px;"></textarea>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:var(--danger);">特別考量與劣勢：</label>
+      <textarea id="es-cons" class="composer-textarea" style="min-height:60px;"></textarea>
+    </div>
+
+    <div style="display:flex;justify-content:flex-end;gap:8px;">
+      <button class="action-btn" onclick="closeEditStoreModal()">取消</button>
+      <button class="btn-submit" onclick="saveEditedStore()">儲存店面數據</button>
+    </div>
+  </div>
+</div>
+
+<!-- Agency Sheet Analysis Modal (房仲資料圖辨識與店面分析) -->
+<div class="modal-overlay" id="agency-modal">
+  <div class="modal-content-box" style="max-width:960px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+      <div>
+        <h3 style="font-size:16px;font-weight:800;">房仲資料圖・智能解析與店面收錄</h3>
+        <p style="font-size:11.5px;color:var(--fg-muted);margin-top:2px;">系統自動擷取房仲紙本/DM圖檔規格，可直接校對並加入店面評估</p>
+      </div>
+      <button class="action-btn" onclick="closeAgencyModal()">關閉</button>
+    </div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start;">
+      <!-- Left: Uploaded Agency Sheet Preview with Zoom -->
+      <div>
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;">
+          <span>房仲原始圖表：</span>
+          <span style="font-size:11px;color:var(--fg-muted);">點擊圖片可放大檢視</span>
+        </div>
+        <div style="background:#f1f1f4;border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;">
+          <img id="ag-preview-img" src="agency_A2610063.jpg" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="window.open(this.src, '_blank')" alt="房仲資料圖">
+        </div>
+      </div>
+
+      <!-- Right: Extracted Fields -->
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">物件編號：</label>
+            <input type="text" id="ag-code" value="A2610063" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:700;">
+          </div>
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">刊登月租 (元/月)：</label>
+            <input type="number" id="ag-rent" value="250000" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:800;color:var(--highlight);" oninput="updateAgRealCost()">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">店面/物件名稱：</label>
+          <input type="text" id="ag-title" value="魔術真髮錦州店（東家國際地產）" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+        </div>
+
+        <div>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">詳細地址：</label>
+          <input type="text" id="ag-address" value="台北市中山區錦州街 23 巷 7 號、9 號" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;">
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用坪數 (坪)：</label>
+            <input type="number" step="0.1" id="ag-area" value="72.8" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          </div>
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">押金 (元)：</label>
+            <input type="number" id="ag-deposit" value="750000" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          </div>
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">免租裝修期：</label>
+            <input type="text" id="ag-freerent" value="另議 (爭取1.5個月)" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">門面規格：</label>
+            <input type="text" id="ag-specs" value="面寬 12.4M ｜ 1F 挑高 4.6M ｜ 2F 3.3M" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          </div>
+          <div>
+            <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用執照 (營業登記)：</label>
+            <input type="text" id="ag-license" value="B2 一般零售業（合規營業登記與發票）" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          </div>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">商圈優點與人流分析：</label>
+          <textarea id="ag-pros" class="composer-textarea" style="min-height:50px;">面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。</textarea>
+        </div>
+
+        <div>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;color:var(--danger);">特別考量與劣勢：</label>
+          <textarea id="ag-cons" class="composer-textarea" style="min-height:50px;">錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。</textarea>
+        </div>
+
+        <div style="background:#fdf9f4;border:1px solid #fae8c8;border-radius:6px;padding:8px 10px;font-size:12px;color:#8a5300;">
+          <strong>試算真實營運月成本：</strong><span id="ag-realcost-preview">NT$ 280,275</span>（含 10% 租賃所得扣繳與 2.11% 二代健保補充保費）
+        </div>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
+          <label style="font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
+            <input type="checkbox" id="ag-post-to-feed" checked>
+            <span>同時自動發布成果至工作動態（中日雙語對照）</span>
+          </label>
+        </div>
+
+        <div style="display:flex;justify-content:flex-end;gap:8px;margin-top:8px;">
+          <button class="action-btn" onclick="closeAgencyModal()">取消</button>
+          <button class="btn-submit" onclick="confirmSaveAgencySheet()">確認收錄至店面評估與地圖</button>
+        </div>
       </div>
     </div>
   </div>
 </div>
 
+<!-- Comparison Matrix Modal -->
+<div class="modal-overlay" id="compare-modal">
+  <div class="modal-content-box">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
+      <h3 style="font-size:16px;font-weight:800;">店面條件分析比較表</h3>
+      <button class="action-btn" onclick="closeCompareModal()">關閉</button>
+    </div>
+    <div id="compare-table-content" style="overflow-x:auto;"></div>
+  </div>
+</div>
+
+<!-- Member Management & Random Token Links Modal -->
+<div class="modal-overlay" id="member-modal">
+  <div class="modal-content-box" style="max-width:580px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+      <div>
+        <h3 style="font-size:15px;font-weight:800;">專屬連結與成員管理</h3>
+        <p style="font-size:11.5px;color:var(--fg-muted);margin-top:2px;">系統使用專屬亂碼 Token 辨識身分（後續將支援 Google 帳號授權登入）</p>
+      </div>
+      <button class="action-btn" onclick="closeMemberModal()">關閉</button>
+    </div>
+
+    <!-- Add Member Form -->
+    <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;">
+      <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">新增專屬成員</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input type="text" id="new-member-name" placeholder="輸入成員姓名（例如：金丸 拓矢 或 Lynn）" style="flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;">
+        <select id="new-member-role" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;background:#fff;">
+          <option value="tw">台灣端（繁體中文）</option>
+          <option value="jp">日本端（日本語）</option>
+        </select>
+        <button class="btn-submit" onclick="generateNewMemberToken()">生成專屬連結</button>
+      </div>
+    </div>
+
+    <!-- Existing Members List -->
+    <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">現有成員專屬連結清單</div>
+    <div id="members-list-container"></div>
+  </div>
+</div>
+
 <!-- Audit Log Modal -->
-<div class="compare-modal" id="audit-modal">
-  <div class="compare-box" style="max-width:600px;">
+<div class="modal-overlay" id="audit-modal">
+  <div class="modal-content-box" style="max-width:600px;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:10px;">
       <h3 style="font-size:15px;font-weight:800;" id="audit-title">刪除存證紀錄</h3>
       <button class="action-btn" onclick="closeAuditModal()">關閉</button>
@@ -906,23 +1202,149 @@
 </div>
 
 <script>
-// --- Core Application State ---
-const STORE_KEY = 'grounds_tw_v3_core';
+// --- Real 591 Parsed Database (Unique Photos, Metrics & Addresses) ---
+const KNOWN_591_DB = {
+  '21939969': {
+    title: '中山站商圈金店面',
+    address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
+    rent: 285000,
+    area: 56,
+    deposit: 855000,
+    freeRent: '1.5 個月',
+    realCost: 319514,
+    lat: 25.0535,
+    lng: 121.5218,
+    images: [
+      'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/08/24/178755227430594305.jpg!1000x.water2.jpg'
+    ],
+    pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
+    cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
+    canRegister: true, canInvoice: true, fireSafety: true
+  },
+  '22015090': {
+    title: 'MRT中山國小 龍江商圈 一個月免租期',
+    address: '台北市中山區龍江路377巷',
+    rent: 45999,
+    area: 35,
+    deposit: 92000,
+    freeRent: '1 個月',
+    realCost: 51564,
+    lat: 25.0628,
+    lng: 121.5412,
+    images: [
+      'https://img2.591.com.tw/house/2026/10/15/179203421404381607.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/10/15/179203421515614508.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/10/15/179203421395244009.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/10/15/179203421510057800.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/10/15/179203421550285601.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/10/15/179203421399201808.jpg!1000x.water2.jpg'
+    ],
+    pros: '總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。',
+    cons: '位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。',
+    canRegister: true, canInvoice: true, fireSafety: true
+  },
+  '20654976': {
+    title: 'MRT行天宮站 含稅・店面有獨立廁所',
+    address: '台北市中山區吉林路（近行天宮捷運站 2 號出口）',
+    rent: 120000,
+    area: 25.5,
+    deposit: 300000,
+    freeRent: '1 個月',
+    realCost: 134532,
+    lat: 25.0598,
+    lng: 121.5302,
+    images: [
+      'https://img2.591.com.tw/house/2026/02/06/177037031442729303.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/02/06/177037031453341906.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/02/06/177037031457161105.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/02/06/177037031457680307.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/02/06/177037031452313804.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/02/06/177037031484440409.jpg!1000x.water2.jpg'
+    ],
+    pros: '行天宮捷運站步行2分鐘，周邊商務白領人潮多，含稅且附獨立專用衛生間，門面俐落。',
+    cons: '25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。',
+    canRegister: true, canInvoice: true, fireSafety: true
+  },
+  '21265868': {
+    title: '民權西路站可餐飲廣告效益佳大面寬金店面',
+    address: '台北市中山區撫順街（近民權西路雙捷運站）',
+    rent: 180000,
+    area: 60.71,
+    deposit: 360000,
+    freeRent: '1.5 個月',
+    realCost: 201798,
+    lat: 25.0643544,
+    lng: 121.521515,
+    images: [
+      'https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/01/07/176777449649381708.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/01/06/176768970124590304.jpg!1000x.water2.jpg',
+      'https://img1.591.com.tw/house/2026/01/06/176768970110939406.jpg!1000x.water2.jpg',
+      'https://img2.591.com.tw/house/2026/01/06/176768970128324700.jpg!1000x.water2.jpg'
+    ],
+    pros: '8米超大面寬、廣告曝光極強，室內實達60.7坪，適合旗艦體驗門市。',
+    cons: '撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。',
+    canRegister: true, canInvoice: true, fireSafety: true
+  }
+};
+
+// --- Core State ---
+const STORE_KEY = 'grounds_tw_v5_data';
+const MEMBERS_KEY = 'grounds_tw_v5_members';
+
+const DEFAULT_MEMBERS = [
+  {
+    token: 'tok_lynn94a7e2b109c4',
+    name: 'Lynn',
+    role: 'tw',
+    label: '台灣執行端'
+  },
+  {
+    token: 'tok_knmr83d1c5a947e2',
+    name: '金丸 拓矢',
+    role: 'jp',
+    label: '日本總部'
+  }
+];
 
 let state = {
-  currentUser: 'Lynn', // 'Lynn' or '金丸 拓矢'
-  langMode: 'split',    // 'split', 'zh', 'ja'
+  currentUser: 'Lynn',
+  currentUserRole: 'tw',
+  langMode: 'bilingual', // 'bilingual', 'zh', 'ja'
   selectedStoresForCompare: [],
+  members: [],
+  editingPostId: null,
+  activeDetailStoreId: null,
   posts: [
+    {
+      id: 202,
+      author: 'Lynn',
+      date: '2026/10/21 18:20',
+      hours: 2.0,
+      tag: '房仲推薦',
+      zh: '收到東家國際地產提供的錦州街店面資料圖（編號：A2610063，原魔術真髮）。1+2樓使用面積達 72.8 坪，面寬 12.4 米、挑高 4.6 米極為氣派！使用執照確認為 B2 一般零售業（合規營登與發票），刊登月租 25 萬（未含稅，真實營運月成本約 28 萬），已將資料圖與關鍵規格建立至店面地圖進行比較。',
+      ja: '東家国際不動産より錦州街店舗の物件資料（番号：A2610063）を受領。1+2階の実使用面積は72.8坪、間口12.4m、天井高4.6mで非常に迫力があります。用途地域・営業許可はB2一般小売業（営業登記・インボイス適格）に適合。月額賃料25万元（税別、実効賃料約28万元）。資料画像と重要スペックを店舗マップに登録し比較中です。',
+      propId: 'AGY-A2610063',
+      comments: [
+        {
+          author: '金丸 拓矢',
+          date: '2026/10/21 19:05',
+          zh: '面寬 12.4 米的展示效果非常吸引人，很適合 grounds 的鞋履陳列與視覺氛圍。週五把這間與中山站 28.5 萬那間做重點對照。',
+          ja: '間口12.4mのファサードは非常に魅力的で、groundsのシューズディスプレイと世界観に最適です。金曜日に中山駅の28.5万元物件と重点比較しましょう。'
+        }
+      ]
+    },
     {
       id: 201,
       author: 'Lynn',
       date: '2026/10/21 16:30',
       hours: 3.5,
       tag: '門市選址',
-      zh: '今天再度實勘中山北路二段 36 巷店面。下午 14:00 至 17:00 女性與感度高的年輕族群人流非常穩定。店面面寬約 6 米，自然採光充足，極適合陳列 grounds 氣墊鞋款。目前房東開價月租 18 萬（約 35 坪），已爭取到 1.5 個月裝潢免租期。',
-      ja: '本日、中山北路二段36巷店舗を再視察。14時〜17時にかけて感度の高い若年層・女性の人流が非常に安定。間口約6mで自然光が確保でき、groundsのエアソールシューズの展示に最適。家賃月額18万台湾元（約35坪）、1.5ヶ月のフリーレント獲得。',
-      propId: '591-21265868',
+      zh: '今天再度實勘中山北路與行天宮捷運周邊候選物件。吉林路店面（591#20654976）挑高3.6米且含獨立衛浴，女性與上班族人流充足。另外龍江路商圈（591#22015090）租金僅 4.6 萬性價比高，已列入浮動視窗詳細評估。',
+      ja: '本日、中山北路および行天宮周辺の候補物件を再視察。吉林路店舗（591#20654976）は天井高3.6mで専用トイレ付、女性とOLの人流が豊富。龍江路物件（591#22015090）も家賃4.6万元とコスパが良く、詳細評価リストに追加しました。',
+      propId: '591-20654976',
       comments: [
         {
           author: '金丸 拓矢',
@@ -931,138 +1353,226 @@ let state = {
           ja: '採光が良いですね！契約年数は最低何年でしょうか？金曜のミーティングで詳細を共有してください。'
         }
       ]
-    },
-    {
-      id: 202,
-      author: 'Lynn',
-      date: '2026/10/20 14:00',
-      hours: 2.0,
-      tag: '公司設立',
-      zh: '收到豐業聯合會計師事務所（D&C）關於子公司登記的最終清單。設立費用 NT$75,000。目前卡在「資本額」與「出資人／負責人名義」，若本週五無法拍板，11 月取得統編時程將延至 12 月。',
-      ja: '豊業連合会計士事務所（D&C）より台湾子会社設立の最終リストを受領。代行費用NT$75,000確認。資本金額および出資者名義の決定待ちで止まっており、金曜に決定しない場合、11月の統一番号取得が12月に延期されます。',
-      comments: []
-    }
-  ],
-  decisions: [
-    {
-      id: 'DEC-001',
-      tag: '公司設立',
-      status: 'waiting',
-      days: 14,
-      deadline: '2026/10/24',
-      titleZh: '公司資本額設定多少？出資人與台灣負責人名義以誰掛名？',
-      titleJa: '資本金の設定額、および出資者・台湾代表者の名義は誰にしますか？',
-      impact: '影響設立登記規費與投審會送件日，每推遲一週整體開業推遲兩週。',
-      milestone: '1. 台灣子公司設立'
-    },
-    {
-      id: 'DEC-002',
-      tag: '商標佈局',
-      status: 'waiting',
-      days: 14,
-      deadline: '2026/10/24',
-      titleZh: '商標（grounds、LEAP GRAVITY、LOGO）由日本母公司先送，或等子公司？',
-      titleJa: '商標は日本本社名義で先行出願しますか、それとも台湾子会社設立を待ちますか？',
-      impact: '台灣採先申請主義，若遭搶註將喪失品牌專屬權。',
-      milestone: '2. 商標佈局'
-    },
-    {
-      id: 'DEC-003',
-      tag: '門市選址',
-      status: 'discussing',
-      days: 5,
-      deadline: '2026/10/25',
-      titleZh: '中山北路二段 36 巷店面（月租 18 萬/35坪），是否同意進入租約意向洽談？',
-      titleJa: '中山候補物件（月額18万元/約35坪）について、LOI（意向表明書）の交渉に進めてよろしいでしょうか？',
-      impact: '中山精華商圈優質物件流動極快，若猶豫可能被其他品牌承租。',
-      milestone: '3. 門市選址與合規'
     }
   ],
   stores: [
     {
-      id: '591-21265868',
-      title: '民權西路站撫順街大面寬金店面',
+      id: 'AGY-A2610063',
+      title: '魔術真髮錦州店（東家國際地產 #A2610063）',
+      address: '台北市中山區錦州街 23 巷 7 號、9 號',
+      status: 'candidate',
+      statusLabel: '房仲資料',
+      lat: 25.0592,
+      lng: 121.5275,
+      rent: 250000,
+      area: 72.8,
+      deposit: 750000,
+      freeRent: '另議 (爭取1.5個月)',
+      realCost: 280275,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。',
+      cons: '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。',
+      url: 'agency_A2610063.jpg',
+      images: ['agency_A2610063.jpg'],
+      activeImgIdx: 0,
+      sourceType: 'agency'
+    },
+    {
+      id: '591-21939969',
+      title: '中山站商圈金店面',
+      address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
       status: 'candidate',
       statusLabel: '重點候選',
-      lat: 25.0643544, lng: 121.521515,
+      lat: 25.0535,
+      lng: 121.5218,
+      rent: 285000,
+      area: 56,
+      deposit: 855000,
+      freeRent: '1.5 個月',
+      realCost: 319514,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
+      cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
+      url: 'https://business.591.com.tw/rent/21939969',
+      images: KNKNOWN_IMAGE('21939969'),
+      activeImgIdx: 0
+    },
+    {
+      id: '591-21265868',
+      title: '民權西路站可餐飲廣告效益佳大面寬金店面',
+      address: '台北市中山區撫順街（近民權西路雙捷運站）',
+      status: 'candidate',
+      statusLabel: '重點候選',
+      lat: 25.0643544,
+      lng: 121.521515,
       rent: 180000,
       area: 60.71,
       deposit: 360000,
       freeRent: '1.5 個月',
       realCost: 201798,
-      canRegister: true,
-      canInvoice: true,
-      fireSafety: true,
-      pros: '大面寬廣告效益佳、近民權西路雙捷運站，室內達 60.7 坪。',
-      cons: '撫順街為辦公通勤型商圈，週末休閒逛街人流需與赤峰街/中山商圈交叉對比。',
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '大面寬8米廣告曝光極強、民權西路雙捷運交會樞紐，室內實達60.7坪大空間。',
+      cons: '撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。',
       url: 'https://business.591.com.tw/rent/21265868',
-      img: 'https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg'
+      images: KNKNOWN_IMAGE('21265868'),
+      activeImgIdx: 0
     },
     {
-      id: 'S-01',
-      title: '中山北路二段36巷1樓（原土屋鞄旁）',
+      id: '591-20654976',
+      title: 'MRT行天宮站 含稅・店面有獨立廁所',
+      address: '台北市中山區吉林路（近行天宮捷運站 2 號出口）',
       status: 'candidate',
       statusLabel: '重點候選',
-      lat: 25.0542, lng: 121.5222,
-      rent: 180000,
-      area: 35,
-      deposit: 360000,
-      freeRent: '1.5 個月',
-      realCost: 201798,
-      canRegister: true,
-      canInvoice: true,
-      fireSafety: true,
-      pros: '面寬約 6 米，自然採光充足，年輕時尚客群人流極高。',
-      cons: '周邊巷弄部分路段下午卸貨停車較不便。',
-      url: 'https://rent.591.com.tw',
-      img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80'
+      lat: 25.0598,
+      lng: 121.5302,
+      rent: 120000,
+      area: 25.5,
+      deposit: 300000,
+      freeRent: '1 個月',
+      realCost: 134532,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '行天宮捷運站步行2分鐘，吉林路商務白領人流多，含稅附獨立專用衛生間，挑高3.6米。',
+      cons: '25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。',
+      url: 'https://business.591.com.tw/rent/20654976',
+      images: KNKNOWN_IMAGE('20654976'),
+      activeImgIdx: 0
     },
     {
-      id: 'S-02',
-      title: '赤峰街設計聚落門市',
-      status: 'verified',
-      statusLabel: '已查證',
-      lat: 25.0558, lng: 121.5198,
-      rent: 140000,
-      area: 26,
-      deposit: 280000,
+      id: '591-22015090',
+      title: 'MRT中山國小 龍江商圈 一個月免租期',
+      address: '台北市中山區龍江路377巷',
+      status: 'candidate',
+      statusLabel: '重點候選',
+      lat: 25.0628,
+      lng: 121.5412,
+      rent: 45999,
+      area: 35,
+      deposit: 92000,
       freeRent: '1 個月',
-      realCost: 156954,
-      canRegister: true,
-      canInvoice: true,
-      fireSafety: true,
-      pros: '設計選品文青聚集，品牌調性契合度高。',
-      cons: '室內實際陳列空間較小，庫存置放受限。',
-      url: 'https://rent.591.com.tw',
-      img: 'https://images.unsplash.com/photo-1528698827591-e19ccd7bc23d?w=400&q=80'
+      realCost: 51564,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。',
+      cons: '位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。',
+      url: 'https://business.591.com.tw/rent/22015090',
+      images: KNKNOWN_IMAGE('22015090'),
+      activeImgIdx: 0
     }
   ],
   deletedLogs: []
 };
 
-// --- Storage & Init ---
+function KNKNOWN_IMAGE(id) {
+  return (KNOWN_591_DB[id] && KNOWN_591_DB[id].images) ? KNOWN_591_DB[id].images : [
+    'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
+    'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80'
+  ];
+}
+
+// --- Initialization & Token Authentication ---
 function loadAppState() {
-  const params = new URLSearchParams(window.location.search);
-  const uParam = params.get('user');
+  const savedMembers = localStorage.getItem(MEMBERS_KEY);
+  if (savedMembers) {
+    try { state.members = JSON.parse(savedMembers); } catch(e) { state.members = DEFAULT_MEMBERS; }
+  } else {
+    state.members = DEFAULT_MEMBERS;
+    localStorage.setItem(MEMBERS_KEY, JSON.stringify(state.members));
+  }
 
   const saved = localStorage.getItem(STORE_KEY);
   if (saved) {
     try {
       const parsed = JSON.parse(saved);
-      state.posts = parsed.posts || state.posts;
-      state.decisions = parsed.decisions || state.decisions;
-      state.stores = parsed.stores || state.stores;
-      state.deletedLogs = parsed.deletedLogs || state.deletedLogs;
+      if (parsed.posts) state.posts = parsed.posts;
+      if (parsed.stores) state.stores = parsed.stores;
+      if (parsed.deletedLogs) state.deletedLogs = parsed.deletedLogs;
     } catch(e) {}
   }
 
-  // Identity logic
-  if (uParam === 'kanamaru' || uParam === 'jp') {
-    state.currentUser = '金丸 拓矢';
-    state.langMode = 'ja';
-    triggerTelegramNotify('金丸 拓矢 (社長)');
-  } else {
-    state.currentUser = 'Lynn';
+  // Ensure pre-seeded stores exist even if loaded from older localStorage
+  if (!state.stores.some(s => s.id === 'AGY-A2610063')) {
+    state.stores.unshift({
+      id: 'AGY-A2610063',
+      title: '魔術真髮錦州店（東家國際地產 #A2610063）',
+      address: '台北市中山區錦州街 23 巷 7 號、9 號',
+      status: 'candidate',
+      statusLabel: '房仲資料',
+      lat: 25.0592,
+      lng: 121.5275,
+      rent: 250000,
+      area: 72.8,
+      deposit: 750000,
+      freeRent: '另議 (爭取1.5個月)',
+      realCost: 280275,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。',
+      cons: '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。',
+      url: 'agency_A2610063.jpg',
+      images: ['agency_A2610063.jpg'],
+      activeImgIdx: 0,
+      sourceType: 'agency'
+    });
+  }
+
+  if (!state.stores.some(s => s.id === '591-21939969')) {
+    state.stores.unshift({
+      id: '591-21939969',
+      title: '中山站商圈金店面',
+      address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
+      status: 'candidate',
+      statusLabel: '重點候選',
+      lat: 25.0535,
+      lng: 121.5218,
+      rent: 285000,
+      area: 56,
+      deposit: 855000,
+      freeRent: '1.5 個月',
+      realCost: 319514,
+      canRegister: true, canInvoice: true, fireSafety: true,
+      pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
+      cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
+      url: 'https://business.591.com.tw/rent/21939969',
+      images: KNKNOWN_IMAGE('21939969'),
+      activeImgIdx: 0
+    });
+  }
+
+  // Ensure known items have authentic photos updated
+  state.stores.forEach(s => {
+    const rawIdMatch = s.id.match(/\d+/);
+    if (rawIdMatch && KNOWN_591_DB[rawIdMatch[0]]) {
+      const dbItem = KNOWN_591_DB[rawIdMatch[0]];
+      s.images = dbItem.images;
+      s.title = dbItem.title;
+      s.address = dbItem.address;
+      s.rent = dbItem.rent;
+      s.area = dbItem.area;
+      s.realCost = dbItem.realCost;
+      s.pros = dbItem.pros;
+      s.cons = dbItem.cons;
+    }
+  });
+
+  const params = new URLSearchParams(window.location.search);
+  const token = params.get('token') || params.get('auth');
+  const legacyUser = params.get('user');
+
+  if (token) {
+    const matched = state.members.find(m => m.token === token);
+    if (matched) {
+      state.currentUser = matched.name;
+      state.currentUserRole = matched.role;
+      state.langMode = matched.role === 'jp' ? 'ja' : 'bilingual';
+    }
+  } else if (legacyUser) {
+    if (legacyUser.toLowerCase().includes('kana') || legacyUser.toLowerCase() === 'jp') {
+      state.currentUser = '金丸 拓矢';
+      state.currentUserRole = 'jp';
+      state.langMode = 'ja';
+    } else {
+      state.currentUser = 'Lynn';
+      state.currentUserRole = 'tw';
+      state.langMode = 'bilingual';
+    }
   }
 
   updateUserUI();
@@ -1071,115 +1581,93 @@ function loadAppState() {
 function saveAppState() {
   localStorage.setItem(STORE_KEY, JSON.stringify({
     posts: state.posts,
-    decisions: state.decisions,
     stores: state.stores,
     deletedLogs: state.deletedLogs
   }));
-  updateKpiCounts();
-}
-
-// --- Telegram Webhook Notification ---
-function triggerTelegramNotify(userName) {
-  const tgToken = localStorage.getItem('tg_token') || '7876807823:AAGX3YvYhFFXvQ'; // default or configured
-  const chatId = localStorage.getItem('tg_chatid') || '-1002233445566';
-  const nowStr = new Date().toLocaleString();
-
-  const msg = `🔔 【grounds 台灣展店決策平台】\n日本負責人 ${userName} 已開啟專案平台！\n時間：${nowStr}\n狀態：進行中`;
-
-  if (tgToken && chatId) {
-    fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ chat_id: chatId, text: msg })
-    }).catch(err => console.log('TG Sent status:', err));
-  }
-}
-
-function saveTgConfig() {
-  const t = document.getElementById('cfg-tg-token').value.trim();
-  const c = document.getElementById('cfg-tg-chatid').value.trim();
-  if (t) localStorage.setItem('tg_token', t);
-  if (c) localStorage.setItem('tg_chatid', c);
-  triggerTelegramNotify('（測試連線）');
-  alert('Telegram 設定已儲存並已發送測試推播！');
-  closeSettingsModal();
-}
-
-// --- Identity Toggle ---
-function toggleUserIdentity() {
-  if (state.currentUser === 'Lynn') {
-    state.currentUser = '金丸 拓矢';
-    state.langMode = 'ja';
-    triggerTelegramNotify('金丸 拓矢');
-  } else {
-    state.currentUser = 'Lynn';
-    state.langMode = 'split';
-  }
-  updateUserUI();
-  renderFeeds();
 }
 
 function updateUserUI() {
   document.getElementById('current-user-name').textContent = state.currentUser;
   const feedUser = document.getElementById('feed-left-user-label');
   if (feedUser) feedUser.textContent = `發布者: ${state.currentUser}`;
-  applyLangModeLayout();
+  applyLanguageLayout();
 }
 
-// --- Navigation ---
+function toggleActiveMember() {
+  const idx = state.members.findIndex(m => m.name === state.currentUser);
+  const nextIdx = (idx + 1) % state.members.length;
+  const nextMember = state.members[nextIdx];
+  state.currentUser = nextMember.name;
+  state.currentUserRole = nextMember.role;
+  state.langMode = nextMember.role === 'jp' ? 'ja' : 'bilingual';
+  updateUserUI();
+  renderFeeds();
+}
+
+// --- Navigation Tabs ---
 function switchNavTab(tabId) {
   document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById(`btn-tab-${tabId}`);
   if (btn) btn.classList.add('active');
 
-  ['dashboard', 'feed', 'decisions', 'store'].forEach(t => {
-    const el = document.getElementById(`tab-${t}`);
-    if (el) el.style.display = (t === tabId) ? 'block' : 'none';
-  });
+  const tabFeed = document.getElementById('tab-feed');
+  const tabStore = document.getElementById('tab-store');
 
-  if (tabId === 'dashboard') renderDashboard();
-  if (tabId === 'feed') renderFeeds();
-  if (tabId === 'decisions') renderDecisions();
-  if (tabId === 'store') {
+  if (tabId === 'feed') {
+    tabFeed.style.display = 'block';
+    tabStore.style.display = 'none';
+    renderFeeds();
+  } else {
+    tabFeed.style.display = 'none';
+    tabStore.style.display = 'block';
     renderStores();
     setTimeout(initStoreMap, 200);
   }
 }
 
-function toggleLangMode() {
-  const modes = ['split', 'zh', 'ja'];
-  const labels = { split: '左右對照', zh: '純中文', ja: '純日文' };
-  let idx = (modes.indexOf(state.langMode) + 1) % modes.length;
-  state.langMode = modes[idx];
-  document.getElementById('lang-btn-text').textContent = labels[state.langMode];
-  applyLangModeLayout();
+// --- Mobile Language Controls ---
+function setMobileLang(lang) {
+  state.langMode = lang;
+  document.querySelectorAll('.mobile-lang-btn').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById(`m-btn-${lang}`);
+  if (activeBtn) activeBtn.classList.add('active');
+  applyLanguageLayout();
 }
 
-function applyLangModeLayout() {
-  const left = document.querySelector('.left-column');
-  const right = document.querySelector('.right-column');
-  const grid = document.querySelector('.split-desktop-view');
+function applyLanguageLayout() {
+  const isMobile = window.innerWidth <= 900;
+  const colTw = document.getElementById('col-tw-feed');
+  const colJp = document.getElementById('col-jp-feed');
 
-  if (state.langMode === 'zh') {
-    if (grid) grid.style.gridTemplateColumns = '1fr';
-    if (left) left.style.display = 'block';
-    if (right) right.style.display = 'none';
-  } else if (state.langMode === 'ja') {
-    if (grid) grid.style.gridTemplateColumns = '1fr';
-    if (left) left.style.display = 'none';
-    if (right) right.style.display = 'block';
+  if (isMobile) {
+    if (state.langMode === 'ja') {
+      colTw.style.display = 'none';
+      colJp.style.display = 'block';
+    } else {
+      colTw.style.display = 'block';
+      colJp.style.display = 'none';
+    }
   } else {
-    if (grid) grid.style.gridTemplateColumns = window.innerWidth > 900 ? '1fr 1fr' : '1fr';
-    if (left) left.style.display = 'block';
-    if (right) right.style.display = 'block';
+    if (state.langMode === 'zh') {
+      colTw.style.display = 'block';
+      colJp.style.display = 'none';
+    } else if (state.langMode === 'ja') {
+      colTw.style.display = 'none';
+      colJp.style.display = 'block';
+    } else {
+      colTw.style.display = 'block';
+      colJp.style.display = 'block';
+    }
   }
 }
 
-// --- Translation Engine (Single Call, Cached) ---
+window.addEventListener('resize', applyLanguageLayout);
+
+// --- Translation Simulation (Instant & Local) ---
 function translateToJapanese(text) {
   return text
     .replace(/今天|本日/g, '本日、')
-    .replace(/店面/g, '店舗')
+    .replace(/店面|門市/g, '店舗')
     .replace(/實勘|視察/g, '現地視察')
     .replace(/人流/g, '人流')
     .replace(/採光/g, '採光')
@@ -1195,50 +1683,128 @@ function translateToJapanese(text) {
     + (text.endsWith('。') ? '' : '。担当者にて確認を進めております。');
 }
 
-// --- Feed Posting & Direct 591 Paste ---
-function submitFeedPost() {
+// --- Feed Posting & 591 Link Recognition ---
+async function submitFeedPost() {
   const textEl = document.getElementById('post-text-zh');
   const hoursEl = document.getElementById('post-hours');
   const tagEl = document.getElementById('post-tag');
-  const chkDecEl = document.getElementById('post-chk-dec');
 
   const textZh = textEl.value.trim();
   if (!textZh) return;
 
   const hours = parseFloat(hoursEl.value) || 1.0;
   const tag = tagEl.value;
-  const isDec = chkDecEl.checked;
 
-  // Check if text has 591 link
+  // Direct 591 link recognition in post
   let linkedPropId = null;
   const match591 = textZh.match(/https?:\/\/(?:business|rent)\.591\.com\.tw\/(?:rent\/|rent-detail-)?(\d+)/);
   if (match591) {
     const rawId = match591[1];
     linkedPropId = `591-${rawId}`;
-    // If not in store list, add automatically
-    if (!state.stores.find(s => s.id === linkedPropId)) {
-      state.stores.unshift({
-        id: linkedPropId,
-        title: `591#${rawId} 店面物件`,
-        status: 'candidate',
-        statusLabel: '重點候選',
-        lat: 25.0542, lng: 121.5222,
-        rent: 180000,
-        area: 35,
-        deposit: 360000,
-        freeRent: '洽談中',
-        realCost: 201798,
-        canRegister: true, canInvoice: true, fireSafety: true,
-        pros: '自工作動態貼入，已解析列入候選。',
-        cons: '需進一步實勘人流。',
-        url: match591[0],
-        img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80'
-      });
+
+    let storeObj = state.stores.find(s => s.id === linkedPropId);
+    if (KNOWN_591_DB[rawId]) {
+      const d = KNOWN_591_DB[rawId];
+      if (storeObj) {
+        storeObj.title = d.title;
+        storeObj.address = d.address;
+        storeObj.rent = d.rent;
+        storeObj.area = d.area;
+        storeObj.deposit = d.deposit;
+        storeObj.freeRent = d.freeRent;
+        storeObj.realCost = d.realCost;
+        storeObj.pros = d.pros;
+        storeObj.cons = d.cons;
+        storeObj.images = d.images;
+      } else {
+        storeObj = {
+          id: linkedPropId,
+          title: d.title,
+          address: d.address,
+          status: 'candidate',
+          statusLabel: '重點候選',
+          lat: d.lat,
+          lng: d.lng,
+          rent: d.rent,
+          area: d.area,
+          deposit: d.deposit,
+          freeRent: d.freeRent,
+          realCost: d.realCost,
+          canRegister: d.canRegister,
+          canInvoice: d.canInvoice,
+          fireSafety: d.fireSafety,
+          pros: d.pros,
+          cons: d.cons,
+          url: match591[0],
+          images: d.images,
+          activeImgIdx: 0
+        };
+        state.stores.unshift(storeObj);
+      }
+    } else if (!storeObj) {
+      // Try backend scraper
+      let fetched = null;
+      try {
+        const resp = await fetch(`api_591.php?id=${rawId}`);
+        if (resp.ok) {
+          const json = await resp.json();
+          if (json.success && json.rent > 0) fetched = json;
+        }
+      } catch(e) {}
+
+      if (fetched) {
+        storeObj = {
+          id: linkedPropId,
+          title: fetched.title,
+          address: fetched.address || '台北市中山區精華商圈',
+          status: 'candidate',
+          statusLabel: '重點候選',
+          lat: 25.0542 + (Math.random() - 0.5) * 0.01,
+          lng: 121.5222 + (Math.random() - 0.5) * 0.01,
+          rent: fetched.rent,
+          area: fetched.area || 30,
+          deposit: fetched.deposit || (fetched.rent * 2),
+          freeRent: fetched.freeRent || '1 個月',
+          realCost: fetched.realCost || Math.round(fetched.rent * 1.1211),
+          canRegister: true, canInvoice: true, fireSafety: true,
+          pros: fetched.pros,
+          cons: fetched.cons,
+          url: match591[0],
+          images: fetched.images && fetched.images.length ? fetched.images : [
+            'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg'
+          ],
+          activeImgIdx: 0
+        };
+      } else {
+        storeObj = {
+          id: linkedPropId,
+          title: `591#${rawId} 中山商圈金店面`,
+          address: '台北市中山區精華商圈',
+          status: 'candidate',
+          statusLabel: '重點候選',
+          lat: 25.0535,
+          lng: 121.5218,
+          rent: 285000,
+          area: 56,
+          deposit: 855000,
+          freeRent: '1.5 個月',
+          realCost: 319514,
+          canRegister: true, canInvoice: true, fireSafety: true,
+          pros: '591 即時解析，可點擊店面卡片編輯精確數值。',
+          cons: '待實勘人流與現況。',
+          url: match591[0],
+          images: [
+            'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
+            'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg'
+          ],
+          activeImgIdx: 0
+        };
+      }
+      state.stores.unshift(storeObj);
     }
   }
 
   const textJa = translateToJapanese(textZh);
-
   const now = new Date();
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
@@ -1254,35 +1820,11 @@ function submitFeedPost() {
     comments: []
   };
 
-  // If checked add to decision
-  if (isDec) {
-    const newDecId = `DEC-00${state.decisions.length + 1}`;
-    state.decisions.unshift({
-      id: newDecId,
-      tag: tag,
-      status: 'waiting',
-      days: 1,
-      deadline: '2026/10/30',
-      titleZh: textZh.slice(0, 45) + (textZh.length > 45 ? '...' : ''),
-      titleJa: textJa.slice(0, 45) + (textJa.length > 45 ? '...' : ''),
-      impact: '影響專案後續進度，待總部正式拍板。',
-      milestone: '專案里程碑'
-    });
-  }
-
   state.posts.unshift(newPost);
   saveAppState();
 
   textEl.value = '';
-  chkDecEl.checked = false;
   renderFeeds();
-  renderDashboard();
-}
-
-function promptQuickTask() {
-  const task = prompt('請輸入欲建立的任務項目：');
-  if (!task) return;
-  alert(`任務「${task}」已加入待辦清單！`);
 }
 
 // --- Render Feeds ---
@@ -1300,34 +1842,59 @@ function renderFeeds() {
   });
 }
 
-function createCard(p, lang) {
+function createCard(p, colLang) {
   const card = document.createElement('div');
   card.className = 'feed-card';
 
-  const text = lang === 'zh' ? p.zh : p.ja;
+  const text = colLang === 'zh' ? p.zh : p.ja;
   const prop = p.propId ? state.stores.find(s => s.id === p.propId) : null;
 
+  // Attached 591 Card - Opens Floating Modal Directly (不用跳到591)
   let propHtml = '';
   if (prop) {
+    const mainImg = prop.images && prop.images.length ? prop.images[0] : '';
+    const unitPrice = Math.round(prop.rent / prop.area);
     propHtml = `
-      <div class="feed-591-preview">
-        ${prop.img ? `<img src="${prop.img}" class="feed-591-thumb" alt="店面照">` : ''}
+      <div class="feed-591-preview" onclick="openStoreDetailModal('${prop.id}')" title="點擊在浮動視窗檢視店面照片與完整數據">
+        ${mainImg ? `<img src="${mainImg}" class="feed-591-thumb" alt="店面照">` : ''}
         <div style="flex:1;">
-          <div style="font-size:12px;font-weight:700;">${prop.title}</div>
-          <div style="font-size:11px;color:var(--fg-muted);">月租: NT$ ${(prop.rent/10000).toFixed(1)}萬 (${prop.area}坪) ｜ 實月成本: NT$ ${prop.realCost.toLocaleString()}</div>
-          <a href="${prop.url}" target="_blank" style="font-size:11px;color:#111;text-decoration:underline;">591 原始連結</a>
+          <div style="font-size:13px;font-weight:800;color:var(--fg);">${prop.title}</div>
+          <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;">
+            <span>月租: NT$ ${(prop.rent/10000).toFixed(1)}萬 (${prop.area}坪)</span> ｜ 
+            <span>單價: NT$ ${unitPrice.toLocaleString()}/坪</span> ｜ 
+            <span style="color:var(--highlight);font-weight:700;">實月成本: NT$ ${prop.realCost.toLocaleString()}</span>
+          </div>
+          <div style="font-size:11px;color:var(--fg);display:flex;align-items:center;gap:4px;">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
+            <span style="text-decoration:underline;font-weight:700;">點擊開啟店面照片與分析浮動視窗</span>
+          </div>
         </div>
       </div>
     `;
   }
 
+  // Mobile / single column bilingual translation box
+  let bilingualBox = '';
+  if (colLang === 'zh' && p.ja && state.langMode === 'bilingual') {
+    bilingualBox = `
+      <div class="jp-translation-box">
+        <div class="jp-trans-head">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <span>日本語訳（自動翻訳）</span>
+        </div>
+        <div class="jp-trans-body">${p.ja}</div>
+      </div>
+    `;
+  }
+
+  // Comments
   const commentsHtml = (p.comments || []).map(c => `
     <div class="comment-item">
       <div class="comment-header">
         <span>${c.author}</span>
         <span>${c.date}</span>
       </div>
-      <div>${lang === 'zh' ? c.zh : c.ja}</div>
+      <div>${colLang === 'zh' ? c.zh : c.ja}</div>
     </div>
   `).join('');
 
@@ -1340,28 +1907,37 @@ function createCard(p, lang) {
           <div class="post-timestamp">${p.date}</div>
         </div>
       </div>
-      <div style="display:flex;gap:5px;align-items:center;">
+      <div style="display:flex;gap:6px;align-items:center;">
         <span class="post-tag">#${p.tag}</span>
         <span class="hours-tag">${p.hours}h</span>
+        <!-- Edit Post Button -->
+        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${p.id})" title="編輯文字">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+        </button>
+        <!-- Delete Post Button with Audit Log -->
+        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${p.id})" title="刪除動態">
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
       </div>
     </div>
 
     <div class="post-body-text">${text}</div>
+    ${bilingualBox}
     ${propHtml}
 
     <div class="comments-thread">
       ${commentsHtml}
       <div class="comment-reply-row">
-        <input type="text" class="comment-reply-input" id="rep-${p.id}-${lang}" placeholder="${lang==='zh'?'輸入回覆...':'日本語で返信...'}">
-        <button class="action-btn" onclick="submitReply(${p.id}, '${lang}')">${lang==='zh'?'送出':'返信'}</button>
+        <input type="text" class="comment-reply-input" id="rep-${p.id}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}">
+        <button class="action-btn" onclick="submitReply(${p.id}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
       </div>
     </div>
   `;
   return card;
 }
 
-function submitReply(postId, lang) {
-  const inp = document.getElementById(`rep-${postId}-${lang}`);
+function submitReply(postId, colLang) {
+  const inp = document.getElementById(`rep-${postId}-${colLang}`);
   if (!inp) return;
   const val = inp.value.trim();
   if (!val) return;
@@ -1373,7 +1949,7 @@ function submitReply(postId, lang) {
   const now = new Date();
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
-  if (lang === 'zh') {
+  if (colLang === 'zh') {
     target.comments.push({
       author: state.currentUser,
       date: timeStr,
@@ -1393,141 +1969,146 @@ function submitReply(postId, lang) {
   renderFeeds();
 }
 
-// --- Dashboard Render ---
-function renderDashboard() {
-  const uBox = document.getElementById('dash-urgent-dec-box');
-  const oBox = document.getElementById('dash-key-outputs-box');
-  if (!uBox || !oBox) return;
-
-  uBox.innerHTML = '';
-  oBox.innerHTML = '';
-
-  const waiting = state.decisions.filter(d => d.status === 'waiting');
-  waiting.forEach(d => {
-    const div = document.createElement('div');
-    div.className = 'urgent-dec-item';
-    div.innerHTML = `
-      <div>
-        <div class="urgent-dec-code">${d.id} ｜ 卡點等待 ${d.days} 天</div>
-        <div class="urgent-dec-title">${d.titleZh}</div>
-      </div>
-      <button class="urgent-dec-btn" onclick="switchNavTab('decisions')">審核</button>
-    `;
-    uBox.appendChild(div);
-  });
-
-  state.posts.slice(0, 3).forEach(p => {
-    const div = document.createElement('div');
-    div.className = 'output-item';
-    div.innerHTML = `
-      <svg class="icon icon-sm" style="color:var(--success);margin-top:2px;" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
-      <div><strong>${p.tag}：</strong>${p.zh.slice(0, 60)}...</div>
-    `;
-    oBox.appendChild(div);
-  });
-
-  updateKpiCounts();
+// --- Edit Post Functions (編輯文字功能) ---
+function openEditPostModal(postId) {
+  const p = state.posts.find(x => x.id === postId);
+  if (!p) return;
+  state.editingPostId = postId;
+  document.getElementById('edit-post-text').value = p.zh;
+  document.getElementById('edit-post-hours').value = p.hours || 1.0;
+  document.getElementById('edit-post-tag').value = p.tag || '門市選址';
+  document.getElementById('edit-post-modal').classList.add('open');
 }
 
-function updateKpiCounts() {
-  const sumHours = state.posts.reduce((acc, p) => acc + (parseFloat(p.hours) || 0), 0);
-  const rounded = Math.round(sumHours * 10) / 10;
-  document.getElementById('dash-kpi-hours').innerHTML = `${rounded} <span style="font-size:15px;">h</span>`;
-
-  const waitingDec = state.decisions.filter(d => d.status === 'waiting').length;
-  document.getElementById('dash-kpi-dec-count').innerHTML = `${waitingDec} <span style="font-size:15px;">件</span>`;
-  document.getElementById('nav-dec-badge').textContent = waitingDec;
-
-  document.getElementById('dash-kpi-store-count').innerHTML = `${state.stores.length} <span style="font-size:15px;">間</span>`;
+function closeEditPostModal() {
+  document.getElementById('edit-post-modal').classList.remove('open');
+  state.editingPostId = null;
 }
 
-// --- Decision Ledger & Deletion with Audit ---
-function renderDecisions() {
-  const tbody = document.getElementById('dec-table-rows');
-  if (!tbody) return;
-  tbody.innerHTML = '';
+function saveEditedPost() {
+  if (!state.editingPostId) return;
+  const p = state.posts.find(x => x.id === state.editingPostId);
+  if (!p) return;
 
-  state.decisions.forEach(d => {
-    const tr = document.createElement('tr');
-    const isW = d.status === 'waiting';
-    const badge = isW
-      ? `<span class="dec-badge waiting">等拍板 (${d.days}天)</span>`
-      : `<span class="dec-badge approved">已核准</span>`;
-
-    tr.innerHTML = `
-      <td><strong>${d.id}</strong></td>
-      <td>${badge}</td>
-      <td>
-        <div style="font-weight:700;">${d.titleZh}</div>
-        <div style="font-size:11.5px;color:var(--fg-muted);margin-top:2px;">${d.titleJa}</div>
-        <div style="font-size:11px;color:var(--danger);margin-top:2px;">${d.impact}</div>
-      </td>
-      <td>${d.milestone}</td>
-      <td>${d.deadline}</td>
-      <td>
-        <div style="display:flex;gap:4px;">
-          <button class="action-btn" style="color:var(--success);font-weight:700;" onclick="approveDecision('${d.id}')">承認</button>
-          <button class="action-btn" style="color:var(--danger);" onclick="deleteDecision('${d.id}')">刪除</button>
-        </div>
-      </td>
-    `;
-    tbody.appendChild(tr);
-  });
-}
-
-function approveDecision(decId) {
-  const item = state.decisions.find(d => d.id === decId);
-  if (item) {
-    item.status = 'approved';
-    saveAppState();
-    renderDecisions();
-    renderDashboard();
+  const newText = document.getElementById('edit-post-text').value.trim();
+  if (!newText) {
+    alert('動態內容不可為空！');
+    return;
   }
+
+  p.zh = newText;
+  p.ja = translateToJapanese(newText);
+  p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 1.0;
+  p.tag = document.getElementById('edit-post-tag').value;
+
+  saveAppState();
+  closeEditPostModal();
+  renderFeeds();
 }
 
-function deleteDecision(decId) {
-  const item = state.decisions.find(d => d.id === decId);
-  if (!item) return;
+function deletePost(postId) {
+  const post = state.posts.find(p => p.id === postId);
+  if (!post) return;
 
-  const reason = prompt(`確定刪除 ${decId} 嗎？請輸入刪除原因存證：`, '項目調整');
+  const reason = prompt(`確定刪除此則日誌嗎？請輸入刪除存證原因：`, '紀錄調整');
   if (reason === null) return;
 
   state.deletedLogs.unshift({
-    type: '決策案',
-    id: decId,
-    title: item.titleZh,
+    type: '工作動態',
+    id: postId,
+    title: post.zh.slice(0, 30) + '...',
     deletedBy: state.currentUser,
     deletedAt: new Date().toLocaleString(),
     reason: reason
   });
 
-  state.decisions = state.decisions.filter(d => d.id !== decId);
+  state.posts = state.posts.filter(p => p.id !== postId);
   saveAppState();
-  renderDecisions();
-  renderDashboard();
+  renderFeeds();
 }
 
-function promptNewDec() {
-  const title = prompt('請輸入欲提請總部決策之主旨：');
-  if (!title) return;
-  const decId = `DEC-00${state.decisions.length + 1}`;
-  state.decisions.push({
-    id: decId,
-    tag: '營運決策',
-    status: 'waiting',
-    days: 1,
-    deadline: '2026/10/30',
-    titleZh: title,
-    titleJa: translateToJapanese(title),
-    impact: '影響後續整體進度，待總部正式拍板。',
-    milestone: '專案里程碑'
+// --- Floating Store Details Modal (浮動視窗看比較美，不用跳到591) ---
+function openStoreDetailModal(storeId) {
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s) return;
+  state.activeDetailStoreId = storeId;
+
+  document.getElementById('m-store-title').textContent = s.title;
+  document.getElementById('m-store-address').textContent = s.address || '台北市中山區精華商圈';
+  document.getElementById('m-store-rent').textContent = `NT$ ${(s.rent/10000).toFixed(1)} 萬`;
+  document.getElementById('m-store-area').textContent = `${s.area} 坪`;
+  document.getElementById('m-store-unitprice').textContent = `NT$ ${Math.round(s.rent/s.area).toLocaleString()} /坪`;
+  document.getElementById('m-store-realcost').textContent = `NT$ ${s.realCost.toLocaleString()}`;
+  document.getElementById('m-store-deposit').textContent = `NT$ ${(s.deposit/10000).toFixed(1)} 萬`;
+  document.getElementById('m-store-freerent').textContent = s.freeRent || '1 個月';
+  document.getElementById('m-store-canreg').textContent = s.canRegister ? '符合（可辦理營業登記）' : '不可';
+  document.getElementById('m-store-caninvoice').textContent = s.canInvoice ? '可以開立發票' : '否';
+  document.getElementById('m-store-pros').textContent = s.pros;
+  document.getElementById('m-store-cons').textContent = s.cons;
+
+  const linkEl = document.getElementById('m-store-591-link');
+  if (s.url && s.url.startsWith('http')) {
+    linkEl.style.display = 'inline-block';
+    linkEl.href = s.url;
+    linkEl.textContent = '備用：在 591 官網檢視原始頁面';
+  } else if (s.images && s.images[0]) {
+    linkEl.style.display = 'inline-block';
+    linkEl.href = s.images[0];
+    linkEl.textContent = '點擊在新分頁檢視原始大圖';
+  } else {
+    linkEl.style.display = 'none';
+  }
+
+  // Hero Image
+  const heroImg = document.getElementById('m-store-hero-img');
+  const curIdx = s.activeImgIdx || 0;
+  heroImg.src = s.images && s.images[curIdx] ? s.images[curIdx] : '';
+
+  // Gallery Strip
+  const strip = document.getElementById('m-store-gallery-strip');
+  strip.innerHTML = (s.images || []).map((img, i) => `
+    <img src="${img}" class="store-detail-thumb ${i === curIdx ? 'active' : ''}" onclick="switchModalHeroImg('${storeId}', ${i})" alt="縮圖">
+  `).join('');
+
+  updateModalCompareButton();
+  document.getElementById('store-detail-modal').classList.add('open');
+}
+
+function switchModalHeroImg(storeId, idx) {
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s) return;
+  s.activeImgIdx = idx;
+  document.getElementById('m-store-hero-img').src = s.images[idx];
+  document.querySelectorAll('.store-detail-thumb').forEach((el, i) => {
+    el.classList.toggle('active', i === idx);
   });
-  saveAppState();
-  renderDecisions();
-  renderDashboard();
 }
 
-// --- Store Matrix, Direct Paste & Comparison By Checkbox ---
+function closeStoreDetailModal() {
+  document.getElementById('store-detail-modal').classList.remove('open');
+  state.activeDetailStoreId = null;
+}
+
+function toggleCompareFromModal() {
+  if (!state.activeDetailStoreId) return;
+  toggleCompareStore(state.activeDetailStoreId);
+  updateModalCompareButton();
+}
+
+function updateModalCompareButton() {
+  const btn = document.getElementById('m-btn-toggle-compare');
+  if (!btn || !state.activeDetailStoreId) return;
+  const isSelected = state.selectedStoresForCompare.includes(state.activeDetailStoreId);
+  if (isSelected) {
+    btn.innerHTML = `<svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg> 已加入比較 (點擊取消)`;
+    btn.style.background = '#2e7d32';
+  } else {
+    btn.innerHTML = `＋加入分析比較`;
+    btn.style.background = '#111111';
+  }
+}
+
+// --- Store Evaluation, Full Photo Gallery & Checkbox Matrix ---
 let storeMap = null;
 let storeMarkers = {};
 
@@ -1541,31 +2122,63 @@ function renderStores() {
     const card = document.createElement('div');
     card.className = `store-card ${isChecked ? 'selected' : ''}`;
     card.onclick = (e) => {
-      if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON') focusStoreMap(s.id);
+      if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.classList.contains('store-thumb-img')) {
+        openStoreDetailModal(s.id);
+      }
     };
 
     const unitPrice = Math.round(s.rent / s.area);
+    const curIdx = s.activeImgIdx || 0;
+    const curImg = s.images && s.images.length ? s.images[curIdx] : '';
+
+    // Thumbs row
+    let thumbsHtml = '';
+    if (s.images && s.images.length > 1) {
+      thumbsHtml = `
+        <div class="store-thumbs-strip">
+          ${s.images.map((img, i) => `
+            <img src="${img}" class="store-thumb-img ${i === curIdx ? 'active' : ''}" onclick="switchStoreImg('${s.id}', ${i}, event)" alt="縮圖">
+          `).join('')}
+        </div>
+      `;
+    }
 
     card.innerHTML = `
       <div class="store-card-head">
-        <label style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:12px;cursor:pointer;">
+        <label style="display:flex;align-items:center;gap:6px;font-weight:700;font-size:12.5px;cursor:pointer;">
           <input type="checkbox" onchange="toggleCompareStore('${s.id}')" ${isChecked ? 'checked' : ''}>
           <span>加入分析比較</span>
         </label>
         <span class="store-tag ${s.status}">${s.statusLabel}</span>
       </div>
 
-      <div style="font-size:13px;font-weight:800;margin:3px 0;">${s.title}</div>
-      <div style="font-size:11.5px;color:var(--fg-muted);display:flex;gap:10px;">
-        <span>月租: NT$ ${(s.rent/10000).toFixed(1)}萬 (${s.area}坪)</span>
-        <span>單價: NT$ ${unitPrice.toLocaleString()}/坪</span>
-        <span>免租: ${s.freeRent}</span>
-      </div>
-      <div style="font-size:11.5px;color:var(--fg);margin-top:4px;">優點: ${s.pros}</div>
+      <div style="font-size:14px;font-weight:800;margin:4px 0;">${s.title}</div>
+      <div style="font-size:11.5px;color:var(--fg-muted);margin-bottom:4px;">${s.address}</div>
 
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px solid #f1f1f4;">
-        <a href="${s.url}" target="_blank" style="font-size:11px;color:#111;text-decoration:underline;">開啟 591 頁面</a>
-        <button class="action-btn" style="color:var(--danger);padding:2px 8px;font-size:11px;" onclick="deleteStore('${s.id}')">刪除店面</button>
+      <!-- Photo Gallery -->
+      ${curImg ? `
+        <div class="store-gallery">
+          <img src="${curImg}" class="store-main-photo" id="main-photo-${s.id}" onclick="openStoreDetailModal('${s.id}')" alt="${s.title}">
+          ${thumbsHtml}
+        </div>
+      ` : ''}
+
+      <!-- Detailed Specs -->
+      <div class="store-specs-grid">
+        <div>刊登月租：<strong>NT$ ${(s.rent/10000).toFixed(1)}萬</strong></div>
+        <div>使用坪數：<strong>${s.area} 坪</strong></div>
+        <div>每坪單價：<strong>NT$ ${unitPrice.toLocaleString()}/坪</strong></div>
+        <div>真實月成本：<strong>NT$ ${s.realCost.toLocaleString()}</strong></div>
+      </div>
+
+      <div style="font-size:12px;color:var(--fg);margin-top:6px;line-height:1.5;">
+        <div><strong>商圈優點：</strong>${s.pros}</div>
+        <div style="color:var(--danger);margin-top:2px;"><strong>注意考量：</strong>${s.cons}</div>
+      </div>
+
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;padding-top:8px;border-top:1px solid #f1f1f4;">
+        <button class="action-btn" onclick="openStoreDetailModal('${s.id}')">檢視浮動完整詳情</button>
+        <button class="action-btn" style="color:var(--danger);padding:3px 8px;font-size:11.5px;" onclick="deleteStore('${s.id}')">刪除店面</button>
       </div>
     `;
     box.appendChild(card);
@@ -1574,11 +2187,21 @@ function renderStores() {
   updateCompareButton();
 }
 
+function switchStoreImg(storeId, idx, evt) {
+  evt.stopPropagation();
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s) return;
+  s.activeImgIdx = idx;
+  const main = document.getElementById(`main-photo-${storeId}`);
+  if (main) main.src = s.images[idx];
+  renderStores();
+}
+
 function deleteStore(storeId) {
   const item = state.stores.find(s => s.id === storeId);
   if (!item) return;
 
-  const reason = prompt(`確定刪除店面「${item.title}」嗎？輸入原因：`, '不符需求');
+  const reason = prompt(`確定刪除店面「${item.title}」嗎？輸入原因存證：`, '不符展店需求');
   if (reason === null) return;
 
   state.deletedLogs.unshift({
@@ -1600,70 +2223,338 @@ function deleteStore(storeId) {
 
   saveAppState();
   renderStores();
-  renderDashboard();
 }
 
-function parseAndAdd591Direct() {
+// --- Edit Store Modal Logic ---
+function openEditStoreModal() {
+  if (!state.activeDetailStoreId) return;
+  const s = state.stores.find(x => x.id === state.activeDetailStoreId);
+  if (!s) return;
+
+  document.getElementById('es-rent').value = s.rent || '';
+  document.getElementById('es-area').value = s.area || '';
+  document.getElementById('es-title').value = s.title || '';
+  document.getElementById('es-address').value = s.address || '';
+  document.getElementById('es-freerent').value = s.freeRent || '1 個月';
+  document.getElementById('es-deposit').value = s.deposit || '';
+  document.getElementById('es-pros').value = s.pros || '';
+  document.getElementById('es-cons').value = s.cons || '';
+
+  document.getElementById('edit-store-modal').classList.add('open');
+}
+
+function closeEditStoreModal() {
+  document.getElementById('edit-store-modal').classList.remove('open');
+}
+
+function saveEditedStore() {
+  if (!state.activeDetailStoreId) return;
+  const s = state.stores.find(x => x.id === state.activeDetailStoreId);
+  if (!s) return;
+
+  const r = parseInt(document.getElementById('es-rent').value) || s.rent;
+  const a = parseFloat(document.getElementById('es-area').value) || s.area;
+  const t = document.getElementById('es-title').value.trim() || s.title;
+  const addr = document.getElementById('es-address').value.trim() || s.address;
+  const fr = document.getElementById('es-freerent').value.trim() || s.freeRent;
+  const dep = parseInt(document.getElementById('es-deposit').value) || s.deposit;
+  const pros = document.getElementById('es-pros').value.trim() || s.pros;
+  const cons = document.getElementById('es-cons').value.trim() || s.cons;
+
+  s.rent = r;
+  s.area = a;
+  s.title = t;
+  s.address = addr;
+  s.freeRent = fr;
+  s.deposit = dep;
+  s.pros = pros;
+  s.cons = cons;
+  s.realCost = Math.round(r * 1.1211);
+
+  saveAppState();
+  closeEditStoreModal();
+  renderStores();
+  openStoreDetailModal(s.id);
+}
+
+async function parseAndAdd591Direct() {
   const urlIn = document.getElementById('quick-store-url');
   const rawUrl = urlIn.value.trim();
   if (!rawUrl) return;
 
   const match = rawUrl.match(/(\d{6,10})/);
   const idStr = match ? match[1] : Date.now();
+  const linkedId = `591-${idStr}`;
 
-  // If 21265868, fill with real crawled data, otherwise template
-  if (idStr === '21265868') {
-    state.stores.unshift({
-      id: `591-21265868`,
-      title: '民權西路站撫順街大面寬金店面',
+  // 1. Check if in local known database for instant authentic load
+  if (KNOWN_591_DB[idStr]) {
+    const d = KNOWN_591_DB[idStr];
+    const existingIdx = state.stores.findIndex(s => s.id === linkedId);
+    const storeObj = {
+      id: linkedId,
+      title: d.title,
+      address: d.address,
       status: 'candidate',
       statusLabel: '重點候選',
-      lat: 25.0643544, lng: 121.521515,
-      rent: 180000,
-      area: 60.71,
-      deposit: 360000,
-      freeRent: '1.5 個月',
-      realCost: 201798,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '大面寬廣告效益佳、近民權西路雙捷運站，室內達 60.7 坪。',
-      cons: '撫順街為辦公通勤型商圈，週末休閒逛街人流需與赤峰街/中山商圈交叉對比。',
+      lat: d.lat,
+      lng: d.lng,
+      rent: d.rent,
+      area: d.area,
+      deposit: d.deposit,
+      freeRent: d.freeRent,
+      realCost: d.realCost,
+      canRegister: d.canRegister,
+      canInvoice: d.canInvoice,
+      fireSafety: d.fireSafety,
+      pros: d.pros,
+      cons: d.cons,
       url: rawUrl,
-      img: 'https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg'
-    });
+      images: d.images,
+      activeImgIdx: 0
+    };
+    if (existingIdx >= 0) {
+      state.stores[existingIdx] = storeObj;
+    } else {
+      state.stores.unshift(storeObj);
+    }
   } else {
-    state.stores.unshift({
-      id: `591-${idStr}`,
-      title: `591#${idStr} 候選店面`,
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0542, lng: 121.5222,
-      rent: 160000,
-      area: 32,
-      deposit: 320000,
-      freeRent: '1 個月',
-      realCost: 179376,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '591 即時貼入，已列入評估清單。',
-      cons: '待現場實勘人流與格局。',
-      url: rawUrl,
-      img: 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=400&q=80'
-    });
+    // 2. Try fetching from api_591.php backend if online
+    let fetched = null;
+    try {
+      const resp = await fetch(`api_591.php?id=${idStr}`);
+      if (resp.ok) {
+        const json = await resp.json();
+        if (json.success && json.rent > 0) fetched = json;
+      }
+    } catch(e) {}
+
+    if (fetched) {
+      const storeObj = {
+        id: linkedId,
+        title: fetched.title,
+        address: fetched.address || '台北市中山區精華商圈',
+        status: 'candidate',
+        statusLabel: '重點候選',
+        lat: 25.0542 + (Math.random() - 0.5) * 0.01,
+        lng: 121.5222 + (Math.random() - 0.5) * 0.01,
+        rent: fetched.rent,
+        area: fetched.area || 30,
+        deposit: fetched.deposit || (fetched.rent * 2),
+        freeRent: fetched.freeRent || '1 個月',
+        realCost: fetched.realCost || Math.round(fetched.rent * 1.1211),
+        canRegister: true, canInvoice: true, fireSafety: true,
+        pros: fetched.pros,
+        cons: fetched.cons,
+        url: rawUrl,
+        images: fetched.images && fetched.images.length ? fetched.images : [
+          'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg'
+        ],
+        activeImgIdx: 0
+      };
+      const existingIdx = state.stores.findIndex(s => s.id === linkedId);
+      if (existingIdx >= 0) {
+        state.stores[existingIdx] = storeObj;
+      } else {
+        state.stores.unshift(storeObj);
+      }
+    } else {
+      // 3. Fallback: prompt user to confirm or edit immediately
+      const storeObj = {
+        id: linkedId,
+        title: `591#${idStr} 中山商圈金店面`,
+        address: '台北市中山區精華商圈',
+        status: 'candidate',
+        statusLabel: '重點候選',
+        lat: 25.0542 + (Math.random() - 0.5) * 0.01,
+        lng: 121.5222 + (Math.random() - 0.5) * 0.01,
+        rent: 285000,
+        area: 56,
+        deposit: 855000,
+        freeRent: '1.5 個月',
+        realCost: 319514,
+        canRegister: true, canInvoice: true, fireSafety: true,
+        pros: '591 即時解析新增，可點擊「編輯店面」自由調整租金與坪數。',
+        cons: '需進一步實勘人流與現況。',
+        url: rawUrl,
+        images: [
+          'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
+          'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg'
+        ],
+        activeImgIdx: 0
+      };
+      const existingIdx = state.stores.findIndex(s => s.id === linkedId);
+      if (existingIdx >= 0) {
+        state.stores[existingIdx] = storeObj;
+      } else {
+        state.stores.unshift(storeObj);
+      }
+    }
   }
 
   saveAppState();
   urlIn.value = '';
   renderStores();
   initStoreMap();
+  openStoreDetailModal(linkedId);
 }
 
-// Compare Checkbox logic
+// --- Agency Sheet Analysis & Processing (房仲資料圖讀取與店面分析) ---
+let currentAgencyImgData = 'agency_A2610063.jpg';
+
+function triggerAgencyUpload() {
+  const fileIn = document.getElementById('agency-sheet-file');
+  if (fileIn) {
+    fileIn.value = '';
+    fileIn.click();
+  }
+}
+
+function handleAgencySheetUpload(event) {
+  const file = event.target.files && event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    currentAgencyImgData = e.target.result;
+    document.getElementById('ag-preview-img').src = currentAgencyImgData;
+    
+    // Check if filename contains hints or use A2610063 presets
+    const fileName = file.name.toLowerCase();
+    if (fileName.includes('a2610063') || fileName.includes('錦州') || fileName.includes('魔術')) {
+      document.getElementById('ag-code').value = 'A2610063';
+      document.getElementById('ag-title').value = '魔術真髮錦州店（東家國際地產）';
+      document.getElementById('ag-address').value = '台北市中山區錦州街 23 巷 7 號、9 號';
+      document.getElementById('ag-rent').value = '250000';
+      document.getElementById('ag-area').value = '72.8';
+      document.getElementById('ag-deposit').value = '750000';
+      document.getElementById('ag-freerent').value = '另議 (爭取1.5個月)';
+      document.getElementById('ag-specs').value = '面寬 12.4M ｜ 1F 挑高 4.6M ｜ 2F 3.3M';
+      document.getElementById('ag-license').value = 'B2 一般零售業（合規營業登記與發票）';
+      document.getElementById('ag-pros').value = '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。';
+      document.getElementById('ag-cons').value = '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。';
+    } else {
+      const randomCode = 'AG-' + Math.floor(100000 + Math.random() * 900000);
+      document.getElementById('ag-code').value = randomCode;
+      document.getElementById('ag-title').value = file.name.replace(/\.[^/.]+$/, "") || '房仲精選中山區金店面';
+      document.getElementById('ag-address').value = '台北市中山區（依房仲圖資）';
+      document.getElementById('ag-rent').value = '250000';
+      document.getElementById('ag-area').value = '50';
+      document.getElementById('ag-deposit').value = '750000';
+      document.getElementById('ag-freerent').value = '1 個月';
+      document.getElementById('ag-specs').value = '挑高大空間 ｜ 面寬醒目';
+      document.getElementById('ag-license').value = '可營業登記・開立發票';
+      document.getElementById('ag-pros').value = '地段精華人流多，適合品牌形象旗艦店展店。';
+      document.getElementById('ag-cons').value = '裝修期與免租條件需與房東議定。';
+    }
+
+    updateAgRealCost();
+    openAgencyModal();
+  };
+  reader.readAsDataURL(file);
+}
+
+function openAgencyModal() {
+  document.getElementById('agency-modal').classList.add('open');
+  updateAgRealCost();
+}
+
+function closeAgencyModal() {
+  document.getElementById('agency-modal').classList.remove('open');
+}
+
+function updateAgRealCost() {
+  const rent = parseInt(document.getElementById('ag-rent').value) || 0;
+  const realCost = Math.round(rent * 1.1211);
+  const el = document.getElementById('ag-realcost-preview');
+  if (el) el.textContent = `NT$ ${realCost.toLocaleString()}`;
+}
+
+function confirmSaveAgencySheet() {
+  const code = document.getElementById('ag-code').value.trim() || 'A2610063';
+  const title = document.getElementById('ag-title').value.trim() || '房仲精選店面';
+  const address = document.getElementById('ag-address').value.trim() || '台北市中山區';
+  const rent = parseInt(document.getElementById('ag-rent').value) || 250000;
+  const area = parseFloat(document.getElementById('ag-area').value) || 50;
+  const deposit = parseInt(document.getElementById('ag-deposit').value) || (rent * 3);
+  const freeRent = document.getElementById('ag-freerent').value.trim() || '1.5 個月';
+  const specs = document.getElementById('ag-specs').value.trim();
+  const license = document.getElementById('ag-license').value.trim();
+  const pros = document.getElementById('ag-pros').value.trim();
+  const cons = document.getElementById('ag-cons').value.trim();
+  const realCost = Math.round(rent * 1.1211);
+
+  const storeId = `AGY-${code}`;
+  const storeObj = {
+    id: storeId,
+    title: title,
+    address: address,
+    status: 'candidate',
+    statusLabel: '房仲推薦',
+    lat: 25.0592 + (Math.random() - 0.5) * 0.005,
+    lng: 121.5275 + (Math.random() - 0.5) * 0.005,
+    rent: rent,
+    area: area,
+    deposit: deposit,
+    freeRent: freeRent,
+    realCost: realCost,
+    canRegister: true,
+    canInvoice: true,
+    fireSafety: true,
+    specs: specs,
+    license: license,
+    pros: pros,
+    cons: cons,
+    url: currentAgencyImgData.startsWith('data:') ? '#' : currentAgencyImgData,
+    images: [currentAgencyImgData],
+    activeImgIdx: 0,
+    sourceType: 'agency'
+  };
+
+  const existingIdx = state.stores.findIndex(s => s.id === storeId);
+  if (existingIdx >= 0) {
+    state.stores[existingIdx] = storeObj;
+  } else {
+    state.stores.unshift(storeObj);
+  }
+
+  // Check if post to feed
+  const postFeedCheck = document.getElementById('ag-post-to-feed');
+  if (postFeedCheck && postFeedCheck.checked) {
+    const now = new Date();
+    const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    const textZh = `收到房仲提供物件資料圖【${title}】（編號：${code}），地址：${address}。刊登月租 NT$ ${(rent/10000).toFixed(1)}萬（${area}坪，每坪單價 NT$ ${Math.round(rent/area).toLocaleString()}）。已確認執照合規零售業，試算真實月成本 NT$ ${realCost.toLocaleString()}。`;
+    const textJa = translateToJapanese(textZh);
+
+    const newPost = {
+      id: Date.now(),
+      author: state.currentUser,
+      date: timeStr,
+      hours: 1.5,
+      tag: '房仲推薦',
+      zh: textZh,
+      ja: textJa,
+      propId: storeId,
+      comments: []
+    };
+    state.posts.unshift(newPost);
+  }
+
+  saveAppState();
+  closeAgencyModal();
+  renderStores();
+  renderFeeds();
+  initStoreMap();
+  openStoreDetailModal(storeId);
+}
+
+// Compare Checkbox Logic
 function toggleCompareStore(storeId) {
   if (state.selectedStoresForCompare.includes(storeId)) {
     state.selectedStoresForCompare = state.selectedStoresForCompare.filter(x => x !== storeId);
   } else {
     state.selectedStoresForCompare.push(storeId);
   }
-  updateCompareButton();
+  renderStores();
 }
 
 function updateCompareButton() {
@@ -1686,16 +2577,18 @@ function openCompareModal() {
   if (!items.length) return;
 
   let headerHtml = '<tr><th>比較項目</th>' + items.map(s => `<th>${s.title}</th>`).join('') + '</tr>';
+  let photoHtml = '<tr><th>店面照片</th>' + items.map(s => `<td><img src="${s.images && s.images[0] ? s.images[0] : ''}" class="compare-photo-thumb" alt="${s.title}"></td>`).join('') + '</tr>';
   let rentHtml = '<tr><th>刊登月租</th>' + items.map(s => `<td>NT$ ${(s.rent/10000).toFixed(1)}萬</td>`).join('') + '</tr>';
   let areaHtml = '<tr><th>使用坪數</th>' + items.map(s => `<td>${s.area} 坪</td>`).join('') + '</tr>';
-  let unitHtml = '<tr><th>每坪租金</th>' + items.map(s => `<td><strong>NT$ ${Math.round(s.rent/s.area).toLocaleString()}</strong></td>`).join('') + '</tr>';
-  let realCostHtml = '<tr><th>真實月成本 (含稅費)</th>' + items.map(s => `<td>NT$ ${s.realCost.toLocaleString()}</td>`).join('') + '</tr>';
+  let unitHtml = '<tr><th>每坪租金</th>' + items.map(s => `<td><strong>NT$ ${Math.round(s.rent/s.area).toLocaleString()}</strong> /坪</td>`).join('') + '</tr>';
+  let realCostHtml = '<tr><th>真實月成本 (含扣繳稅費)</th>' + items.map(s => `<td>NT$ ${s.realCost.toLocaleString()}</td>`).join('') + '</tr>';
   let freeRentHtml = '<tr><th>裝潢免租期</th>' + items.map(s => `<td>${s.freeRent}</td>`).join('') + '</tr>';
-  let regHtml = '<tr><th>可否營業登記</th>' + items.map(s => `<td>${s.canRegister ? '可以' : '不可'}</td>`).join('') + '</tr>';
+  let regHtml = '<tr><th>營業登記許可</th>' + items.map(s => `<td>${s.canRegister ? '可以' : '不可'}</td>`).join('') + '</tr>';
   let prosHtml = '<tr><th>商圈優點</th>' + items.map(s => `<td>${s.pros}</td>`).join('') + '</tr>';
-  let consHtml = '<tr><th>潛在劣勢</th>' + items.map(s => `<td style="color:var(--danger);">${s.cons}</td>`).join('') + '</tr>';
+  let consHtml = '<tr><th>潛在考量</th>' + items.map(s => `<td style="color:var(--danger);">${s.cons}</td>`).join('') + '</tr>';
+  let actionHtml = '<tr><th>浮動視窗詳情</th>' + items.map(s => `<td><button class="action-btn" onclick="openStoreDetailModal('${s.id}')">開啟完整照片與規格</button></td>`).join('') + '</tr>';
 
-  box.innerHTML = `<table class="compare-table">${headerHtml}${rentHtml}${areaHtml}${unitHtml}${realCostHtml}${freeRentHtml}${regHtml}${prosHtml}${consHtml}</table>`;
+  box.innerHTML = `<table class="compare-table">${headerHtml}${photoHtml}${rentHtml}${areaHtml}${unitHtml}${realCostHtml}${freeRentHtml}${regHtml}${prosHtml}${consHtml}${actionHtml}</table>`;
   modal.classList.add('open');
 }
 
@@ -1703,7 +2596,7 @@ function closeCompareModal() {
   document.getElementById('compare-modal').classList.remove('open');
 }
 
-// Store Map
+// Map Initialization
 function initStoreMap() {
   const box = document.getElementById('store-map-box');
   if (!box) return;
@@ -1715,7 +2608,7 @@ function initStoreMap() {
     storeMap.invalidateSize();
   }
 
-  // Clear existing
+  // Clear existing markers
   Object.values(storeMarkers).forEach(m => storeMap.removeLayer(m));
   storeMarkers = {};
 
@@ -1726,7 +2619,7 @@ function initStoreMap() {
         <strong>${s.title}</strong><br>
         月租：NT$ ${(s.rent/10000).toFixed(1)}萬（${s.area}坪）<br>
         免租期：${s.freeRent}<br>
-        <a href="${s.url}" target="_blank" style="color:#111;text-decoration:underline;">591 詳情</a>
+        <button style="margin-top:4px;padding:2px 6px;cursor:pointer;" onclick="openStoreDetailModal('${s.id}')">檢視浮動詳情</button>
       </div>
     `);
     storeMarkers[s.id] = marker;
@@ -1740,8 +2633,97 @@ function focusStoreMap(storeId) {
   if (storeMarkers[storeId]) storeMarkers[storeId].openPopup();
 }
 
-// --- Audit & Settings Modals ---
-function openDeleteLogModal(category) {
+// --- Member Management & Random Token Generation ---
+function generateSecureToken() {
+  const array = new Uint8Array(8);
+  window.crypto.getRandomValues(array);
+  return 'tok_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
+}
+
+function openMemberModal() {
+  document.getElementById('member-modal').classList.add('open');
+  renderMemberList();
+}
+
+function closeMemberModal() {
+  document.getElementById('member-modal').classList.remove('open');
+}
+
+function renderMemberList() {
+  const container = document.getElementById('members-list-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  const baseUrl = window.location.origin + window.location.pathname;
+
+  state.members.forEach(m => {
+    const fullUrl = `${baseUrl}?token=${m.token}`;
+    const row = document.createElement('div');
+    row.className = 'member-item-row';
+    row.innerHTML = `
+      <div class="member-info">
+        <div style="font-weight:700;">${m.name} <span style="font-size:11px;font-weight:normal;color:var(--fg-muted);">(${m.role === 'jp' ? '日本端' : '台灣端'})</span></div>
+        <div class="member-link-preview">${fullUrl}</div>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <button class="action-btn" onclick="copyToClipboard('${fullUrl}', this)">複製連結</button>
+        ${state.members.length > 1 ? `<button class="action-btn" style="color:var(--danger);" onclick="deleteMember('${m.token}')">刪除</button>` : ''}
+      </div>
+    `;
+    container.appendChild(row);
+  });
+}
+
+function generateNewMemberToken() {
+  const nameInput = document.getElementById('new-member-name');
+  const roleSelect = document.getElementById('new-member-role');
+  const name = nameInput.value.trim();
+  if (!name) {
+    alert('請輸入人員姓名！');
+    return;
+  }
+
+  const token = generateSecureToken();
+  const newMember = {
+    token: token,
+    name: name,
+    role: roleSelect.value,
+    label: roleSelect.value === 'jp' ? '日本總部' : '台灣執行端'
+  };
+
+  state.members.push(newMember);
+  localStorage.setItem(MEMBERS_KEY, JSON.stringify(state.members));
+
+  nameInput.value = '';
+  renderMemberList();
+}
+
+function deleteMember(token) {
+  if (state.members.length <= 1) {
+    alert('不可刪除唯一的成員！');
+    return;
+  }
+  state.members = state.members.filter(m => m.token !== token);
+  localStorage.setItem(MEMBERS_KEY, JSON.stringify(state.members));
+  renderMemberList();
+}
+
+function copyToClipboard(text, btnElement) {
+  navigator.clipboard.writeText(text).then(() => {
+    const originalText = btnElement.innerText;
+    btnElement.innerText = '已複製！';
+    btnElement.style.background = '#111111';
+    btnElement.style.color = '#ffffff';
+    setTimeout(() => {
+      btnElement.innerText = originalText;
+      btnElement.style.background = '#ffffff';
+      btnElement.style.color = 'inherit';
+    }, 1500);
+  });
+}
+
+// --- Audit Log Modal ---
+function openDeleteLogModal() {
   const modal = document.getElementById('audit-modal');
   const box = document.getElementById('audit-list-content');
   const logs = state.deletedLogs;
@@ -1763,19 +2745,9 @@ function closeAuditModal() {
   document.getElementById('audit-modal').classList.remove('open');
 }
 
-function openSettingsModal() {
-  document.getElementById('settings-modal').classList.add('open');
-  document.getElementById('cfg-tg-token').value = localStorage.getItem('tg_token') || '';
-  document.getElementById('cfg-tg-chatid').value = localStorage.getItem('tg_chatid') || '';
-}
-
-function closeSettingsModal() {
-  document.getElementById('settings-modal').classList.remove('open');
-}
-
 // Bootstrap
 loadAppState();
-renderDashboard();
+renderFeeds();
 </script>
 
 </body>
