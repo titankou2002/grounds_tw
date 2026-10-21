@@ -8,15 +8,26 @@ if (!$text) {
     exit;
 }
 
-// 1. Call MyMemory Translation API
+// 1. Determine translation direction (zh-TW <-> ja)
+$pair = isset($_REQUEST['pair']) ? trim($_REQUEST['pair']) : '';
+if (!$pair) {
+    // If text contains Japanese Kana, default to Japanese -> Traditional Chinese
+    if (preg_match('/[\x{3040}-\x{309F}\x{30A0}-\x{30FF}]/u', $text)) {
+        $pair = 'ja|zh-TW';
+    } else {
+        $pair = 'zh-TW|ja';
+    }
+}
+
+// 2. Call MyMemory Translation API
 $encoded = urlencode($text);
-$apiUrl = "https://api.mymemory.translated.net/get?q={$encoded}&langpair=zh-TW|ja";
+$apiUrl = "https://api.mymemory.translated.net/get?q={$encoded}&langpair=" . urlencode($pair);
 
 $ch = curl_init();
 curl_setopt($ch, CURLOPT_URL, $apiUrl);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_TIMEOUT, 8);
+curl_setopt($ch, CURLOPT_TIMEOUT, 9);
 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
 $response = curl_exec($ch);
 curl_close($ch);
@@ -28,6 +39,7 @@ if ($response) {
         echo json_encode([
             'success' => true,
             'translation' => $trans,
+            'pair' => $pair,
             'source' => 'mymemory'
         ], JSON_UNESCAPED_UNICODE);
         exit;
@@ -37,5 +49,6 @@ if ($response) {
 echo json_encode([
     'success' => false,
     'translation' => $text,
+    'pair' => $pair,
     'error' => 'Translation service unavailable'
 ], JSON_UNESCAPED_UNICODE);

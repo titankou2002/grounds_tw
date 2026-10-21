@@ -667,7 +667,7 @@
       margin-top: 2px;
     }
 
-    /* Comparison Table */
+    /* Comparison Table & Rank Badges */
     .compare-table {
       width: 100%;
       border-collapse: collapse;
@@ -687,6 +687,141 @@
       height: 120px;
       object-fit: cover;
       border-radius: 6px;
+    }
+
+    .rank-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
+      line-height: 1;
+      padding: 3px 6px;
+      border-radius: 4px;
+      margin-right: 5px;
+      vertical-align: middle;
+      letter-spacing: 0.5px;
+    }
+    .rank-badge.rank-gold {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(217, 119, 6, 0.35);
+      border: 1px solid #b45309;
+    }
+    .rank-badge.rank-red {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      color: #ffffff;
+      box-shadow: 0 1px 3px rgba(220, 38, 38, 0.35);
+      border: 1px solid #b91c1c;
+    }
+
+    .comp-metric-box {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    .comp-val-main {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--fg);
+    }
+    .comp-val-sub {
+      font-size: 11px;
+      color: var(--fg-muted);
+      line-height: 1.35;
+    }
+    .comp-val-hl {
+      color: #0f766e;
+      font-weight: 800;
+    }
+
+    /* Post Publishing & Entering Animation */
+    @keyframes postSlideDown {
+      0% {
+        opacity: 0;
+        transform: translateY(-24px) scale(0.97);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+    .post-item-new {
+      animation: postSlideDown 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .spin-anim {
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes btnPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.75; transform: scale(0.98); }
+    }
+    .btn-loading {
+      pointer-events: none !important;
+      animation: btnPulse 1s infinite ease-in-out;
+    }
+
+    /* Toast Notification */
+    .toast-notice {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(30px);
+      background: #111111;
+      color: #ffffff;
+      padding: 10px 18px;
+      border-radius: 30px;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+      z-index: 9999;
+      opacity: 0;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      pointer-events: none;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .toast-notice.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* Mini Inline Translation Button & Bubble */
+    .btn-mini-trans {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      background: transparent;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.15s ease;
+    }
+    .btn-mini-trans:hover {
+      background: #f1f5f9;
+      color: #1e293b;
+      border-color: #cbd5e1;
+    }
+    .inline-trans-bubble {
+      background: #f8fafc;
+      border-left: 3px solid #3b82f6;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+      line-height: 1.5;
+      color: #1e293b;
+      animation: postSlideDown 0.25s ease-out;
     }
 
     /* Delete log modal */
@@ -777,6 +912,12 @@
     </div>
 
     <div class="header-actions">
+      <!-- Global One-Click Language Switcher (中文 / 日本語) -->
+      <div class="lang-switch-group" style="display:flex;align-items:center;background:#f1f1f4;border-radius:20px;padding:2px;border:1px solid var(--border);">
+        <button type="button" class="lang-toggle-btn active" id="hdr-lang-tw" onclick="setAppLanguage('bilingual')" style="padding:4px 9px;border:none;border-radius:16px;background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">TW 雙語</button>
+        <button type="button" class="lang-toggle-btn" id="hdr-lang-ja" onclick="setAppLanguage('ja')" style="padding:4px 9px;border:none;border-radius:16px;background:transparent;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--fg-muted);">JP 日本語</button>
+      </div>
+
       <!-- Current User Badge (Static - Not clickable) -->
       <div class="user-badge" id="current-user-badge" title="目前使用者">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -808,7 +949,7 @@
           <div class="column-header">
             <div class="column-title">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span>工作成果與執行動態</span>
+              <span id="col-tw-title">工作成果與執行動態</span>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);" id="feed-left-user-label">發布者: Lynn</div>
           </div>
@@ -838,16 +979,16 @@
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                   <span>條件</span>
                 </button>
-                <button class="action-btn" type="button" onclick="triggerAgencyUpload()" title="讀取分析房仲給的資料圖">
+                <button class="action-btn" type="button" onclick="triggerAgencyUpload()" title="上傳照片">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  <span>附房仲資料圖</span>
+                  <span>照片</span>
                 </button>
               </div>
 
               <div style="display:flex;gap:6px;">
-                <button class="btn-submit" type="button" onclick="submitFeedPost()">
+                <button class="btn-submit" type="button" id="btn-submit-post" onclick="submitFeedPost()">
                   <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                  <span>發布</span>
+                  <span id="btn-submit-post-label">發布</span>
                 </button>
               </div>
             </div>
@@ -881,9 +1022,9 @@
           <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           <span>解析新增</span>
         </button>
-        <button class="action-btn" onclick="triggerAgencyUpload()">
+        <button class="action-btn" onclick="triggerAgencyUpload()" title="上傳照片">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-          <span>＋上傳房仲資料圖</span>
+          <span>照片</span>
         </button>
         <input type="file" id="agency-sheet-file" accept="image/*" style="display:none;" onchange="handleAgencySheetUpload(event)">
         <button class="action-btn" id="btn-open-compare" style="display:none;background:#111;color:#fff;font-weight:700;" onclick="openCompareModal()">
@@ -1201,10 +1342,24 @@
 
 <!-- Comparison Matrix Modal -->
 <div class="modal-overlay" id="compare-modal">
-  <div class="modal-content-box">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;">
-      <h3 style="font-size:16px;font-weight:800;">店面條件分析比較表</h3>
-      <button class="action-btn" onclick="closeCompareModal()">關閉</button>
+  <div class="modal-content-box" style="width:min(98vw, 1300px);max-width:1300px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
+      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+        <h3 style="font-size:16px;font-weight:800;" id="cmp-modal-title">店面條件分析比較表</h3>
+        <!-- Comparison Modal Language Switcher -->
+        <div style="display:flex;background:#f1f1f4;border-radius:20px;padding:2px;border:1px solid var(--border);">
+          <button class="modal-lang-pill cmp-lang-pill active" id="cmp-lang-bilingual" onclick="setCompareModalLang('bilingual')">中日雙語對照</button>
+          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-ja" onclick="setCompareModalLang('ja')">日本語</button>
+          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-zh" onclick="setCompareModalLang('zh')">純中文</button>
+        </div>
+        <button class="action-btn" id="btn-cmp-ai-trans" onclick="translateAllCompareItemsAsync()" title="一鍵線上即時翻譯未轉日文之優點與考量" style="font-size:11px;padding:3px 8px;">
+          🌐 AI 即時翻譯
+        </button>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">金1</span> 第1名 ｜ <span class="rank-badge rank-red">紅2</span> 第2名</span>
+        <button class="action-btn" onclick="closeCompareModal()">關閉</button>
+      </div>
     </div>
     <div id="compare-table-content" style="overflow-x:auto;"></div>
   </div>
@@ -1645,6 +1800,7 @@ function loadAppState() {
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token') || params.get('auth');
   const legacyUser = params.get('user');
+  const paramLang = params.get('lang');
 
   if (token) {
     const matched = state.members.find(m => m.token === token);
@@ -1665,7 +1821,17 @@ function loadAppState() {
     }
   }
 
+  if (paramLang === 'ja' || paramLang === 'jp') {
+    state.langMode = 'ja';
+  } else if (paramLang === 'zh' || paramLang === 'tw') {
+    state.langMode = 'zh';
+  }
+
+  state.compareModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
+  state.storeModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
+
   updateUserUI();
+  applyGlobalLanguageTexts();
 }
 
 function saveAppState() {
@@ -1679,8 +1845,66 @@ function saveAppState() {
 function updateUserUI() {
   document.getElementById('current-user-name').textContent = state.currentUser;
   const feedUser = document.getElementById('feed-left-user-label');
-  if (feedUser) feedUser.textContent = `發布者: ${state.currentUser}`;
+  if (feedUser) feedUser.textContent = state.langMode === 'ja' ? `発信者: ${state.currentUser}` : `發布者: ${state.currentUser}`;
+
+  // Header language buttons state
+  const btnTw = document.getElementById('hdr-lang-tw');
+  const btnJa = document.getElementById('hdr-lang-ja');
+  if (state.langMode === 'ja') {
+    if (btnTw) { btnTw.style.background = 'transparent'; btnTw.style.color = 'var(--fg-muted)'; btnTw.classList.remove('active'); }
+    if (btnJa) { btnJa.style.background = '#111'; btnJa.style.color = '#fff'; btnJa.classList.add('active'); }
+  } else {
+    if (btnTw) { btnTw.style.background = '#fff'; btnTw.style.color = '#111'; btnTw.classList.add('active'); }
+    if (btnJa) { btnJa.style.background = 'transparent'; btnJa.style.color = 'var(--fg-muted)'; btnJa.classList.remove('active'); }
+  }
+
   applyLanguageLayout();
+}
+
+// --- Global One-Click Language Switcher (中文 / 日本語) ---
+function setAppLanguage(lang) {
+  state.langMode = lang;
+  state.compareModalLang = lang === 'ja' ? 'ja' : 'bilingual';
+  state.storeModalLang = lang === 'ja' ? 'ja' : 'bilingual';
+
+  updateUserUI();
+  applyGlobalLanguageTexts();
+  applyLanguageLayout();
+  renderFeeds();
+  renderStores();
+
+  const cmpModal = document.getElementById('compare-modal');
+  if (cmpModal && cmpModal.classList.contains('open')) {
+    setCompareModalLang(state.compareModalLang);
+  }
+}
+
+function applyGlobalLanguageTexts() {
+  const isJa = state.langMode === 'ja';
+
+  const tabFeedTitle = document.querySelector('#btn-tab-feed .tab-title');
+  if (tabFeedTitle) tabFeedTitle.textContent = isJa ? 'REPORT (日報)' : 'REPORT';
+  const tabStoreTitle = document.querySelector('#btn-tab-store .tab-title');
+  if (tabStoreTitle) tabStoreTitle.textContent = isJa ? 'MAP (店舗)' : 'MAP';
+
+  const postText = document.getElementById('post-text-zh');
+  if (postText) {
+    postText.placeholder = isJa 
+      ? '業務成果、確認事項、または591のURLを入力してください...'
+      : '填寫工作成果或直接貼入 591 網址（例如：https://business.591.com.tw/rent/22015090）...';
+  }
+  const btnSubmit = document.getElementById('btn-submit-post-label');
+  if (btnSubmit) btnSubmit.textContent = isJa ? '投稿' : '發布';
+
+  const colTwTitle = document.getElementById('col-tw-title');
+  if (colTwTitle) colTwTitle.textContent = isJa ? '業務成果と執行ログ' : '工作成果與執行動態';
+
+  const quickStoreUrl = document.getElementById('quick-store-url');
+  if (quickStoreUrl) {
+    quickStoreUrl.placeholder = isJa
+      ? '591のURLを貼り付けて即時追加（例: https://business.591.com.tw/rent/21939969）'
+      : '貼上 591 網址直接新增店面（例如：https://business.591.com.tw/rent/21939969）';
+  }
 }
 
 function toggleActiveMember() {
@@ -1753,14 +1977,19 @@ function applyLanguageLayout() {
 
 window.addEventListener('resize', applyLanguageLayout);
 
-// --- Real Translation Engine (Server Proxy translate.php + MyMemory API) ---
-async function translateToJapaneseAsync(text) {
+// --- Real Translation Engine (Bidirectional zh-TW <-> ja via translate.php) ---
+async function translateTextAsync(text, pair) {
   if (!text || !text.trim()) return '';
   const trimmed = text.trim();
 
+  if (!pair) {
+    const hasKana = /[\u3040-\u30ff]/.test(trimmed);
+    pair = hasKana ? 'ja|zh-TW' : 'zh-TW|ja';
+  }
+
   // 1. Try server proxy translate.php
   try {
-    const res = await fetch(`translate.php?text=${encodeURIComponent(trimmed)}`);
+    const res = await fetch(`translate.php?text=${encodeURIComponent(trimmed)}&pair=${encodeURIComponent(pair)}`);
     if (res.ok) {
       const data = await res.json();
       if (data.success && data.translation) {
@@ -1771,7 +2000,7 @@ async function translateToJapaneseAsync(text) {
 
   // 2. Direct client-side fetch to MyMemory API
   try {
-    const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=zh-TW|ja`;
+    const mmUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=${encodeURIComponent(pair)}`;
     const res2 = await fetch(mmUrl);
     if (res2.ok) {
       const data2 = await res2.json();
@@ -1781,17 +2010,108 @@ async function translateToJapaneseAsync(text) {
     }
   } catch(e) {}
 
-  // 3. Fallback dictionary (if completely offline)
-  return trimmed
-    .replace(/今天|本日/g, '本日、')
-    .replace(/店面|門市/g, '店舗')
-    .replace(/幾家/g, 'いくつかの')
-    .replace(/找了/g, '探しました、')
-    .replace(/請總部看一下|請總部確認/g, '本社にてご確認ください。');
+  // 3. Fallback
+  return trimmed;
+}
+
+async function translateToJapaneseAsync(text) {
+  return await translateTextAsync(text, 'zh-TW|ja');
+}
+
+async function translateToChineseAsync(text) {
+  return await translateTextAsync(text, 'ja|zh-TW');
 }
 
 function translateToJapanese(text) {
   return text;
+}
+
+// --- Inline Translation Toggles for Every Dialog/Post/Comment ---
+async function togglePostTranslation(postId, colLang, btnElement) {
+  const post = state.posts.find(p => p.id === postId);
+  if (!post) return;
+  const boxId = `trans-box-post-${postId}-${colLang}`;
+  const box = document.getElementById(boxId);
+  if (!box) return;
+
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+    return;
+  }
+
+  const origBtnText = btnElement.innerHTML;
+  btnElement.innerHTML = `<span>翻譯中...</span>`;
+
+  try {
+    if (colLang === 'zh') {
+      if (!post.ja || post.ja === post.zh) {
+        post.ja = await translateToJapaneseAsync(post.zh);
+        saveAppState();
+      }
+      box.innerHTML = `
+        <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳（翻訳）：</div>
+        <div>${post.ja}</div>
+      `;
+    } else {
+      if (!post.zh || post.zh === post.ja) {
+        post.zh = await translateToChineseAsync(post.ja);
+        saveAppState();
+      }
+      box.innerHTML = `
+        <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
+        <div>${post.zh}</div>
+      `;
+    }
+    box.style.display = 'block';
+  } catch(e) {
+    console.error(e);
+  } finally {
+    btnElement.innerHTML = origBtnText;
+  }
+}
+
+async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
+  const post = state.posts.find(p => p.id === postId);
+  if (!post || !post.comments || !post.comments[cIdx]) return;
+  const c = post.comments[cIdx];
+  const boxId = `trans-box-comm-${postId}-${cIdx}-${colLang}`;
+  const box = document.getElementById(boxId);
+  if (!box) return;
+
+  if (box.style.display === 'block') {
+    box.style.display = 'none';
+    return;
+  }
+
+  const origBtnText = btnElement.innerHTML;
+  btnElement.innerHTML = `<span>翻譯中...</span>`;
+
+  try {
+    if (colLang === 'zh') {
+      if (!c.ja || c.ja === c.zh) {
+        c.ja = await translateToJapaneseAsync(c.zh);
+        saveAppState();
+      }
+      box.innerHTML = `
+        <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳：</div>
+        <div>${c.ja}</div>
+      `;
+    } else {
+      if (!c.zh || c.zh === c.ja) {
+        c.zh = await translateToChineseAsync(c.ja);
+        saveAppState();
+      }
+      box.innerHTML = `
+        <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
+        <div>${c.zh}</div>
+      `;
+    }
+    box.style.display = 'block';
+  } catch(e) {
+    console.error(e);
+  } finally {
+    btnElement.innerHTML = origBtnText;
+  }
 }
 
 // --- Feed Posting & 591 Link Recognition ---
@@ -1799,6 +2119,7 @@ async function submitFeedPost() {
   const textEl = document.getElementById('post-text-zh');
   const hoursEl = document.getElementById('post-hours');
   const tagEl = document.getElementById('post-tag');
+  const submitBtn = document.getElementById('btn-submit-post');
 
   const textZh = textEl.value.trim();
   if (!textZh) return;
@@ -1806,149 +2127,182 @@ async function submitFeedPost() {
   const hours = parseFloat(hoursEl.value) || 0.0;
   const tag = (tagEl.value === '__ADD_NEW__' || !tagEl.value) ? '進度回報' : tagEl.value;
 
-  // Direct 591 link recognition in post
-  let linkedPropId = null;
-  const match591 = textZh.match(/https?:\/\/(?:business|rent)\.591\.com\.tw\/(?:rent\/|rent-detail-)?(\d+)/);
-  if (match591) {
-    const rawId = match591[1];
-    linkedPropId = `591-${rawId}`;
-
-    let storeObj = state.stores.find(s => s.id === linkedPropId);
-    if (KNOWN_591_DB[rawId]) {
-      const d = KNOWN_591_DB[rawId];
-      if (storeObj) {
-        storeObj.title = d.title;
-        storeObj.titleJa = d.titleJa || d.title;
-        storeObj.address = d.address;
-        storeObj.rent = d.rent;
-        storeObj.area = d.area;
-        storeObj.deposit = d.deposit;
-        storeObj.freeRent = d.freeRent;
-        storeObj.realCost = d.realCost;
-        storeObj.pros = d.pros;
-        storeObj.prosJa = d.prosJa || d.pros;
-        storeObj.cons = d.cons;
-        storeObj.consJa = d.consJa || d.cons;
-        storeObj.images = d.images;
-      } else {
-        storeObj = {
-          id: linkedPropId,
-          title: d.title,
-          titleJa: d.titleJa || d.title,
-          address: d.address,
-          status: 'candidate',
-          statusLabel: '重點候選',
-          lat: d.lat,
-          lng: d.lng,
-          rent: d.rent,
-          area: d.area,
-          deposit: d.deposit,
-          freeRent: d.freeRent,
-          realCost: d.realCost,
-          canRegister: d.canRegister,
-          canInvoice: d.canInvoice,
-          fireSafety: d.fireSafety,
-          pros: d.pros,
-          prosJa: d.prosJa || d.pros,
-          cons: d.cons,
-          consJa: d.consJa || d.cons,
-          url: match591[0],
-          images: d.images,
-          activeImgIdx: 0
-        };
-        state.stores.unshift(storeObj);
-      }
-    } else if (!storeObj) {
-      // Try backend scraper
-      let fetched = null;
-      try {
-        const resp = await fetch(`api_591.php?id=${rawId}`);
-        if (resp.ok) {
-          const json = await resp.json();
-          if (json.success && json.rent > 0) fetched = json;
-        }
-      } catch(e) {}
-
-      if (fetched) {
-        storeObj = {
-          id: linkedPropId,
-          title: fetched.title,
-          titleJa: fetched.title,
-          address: fetched.address || '台北市中山區精華商圈',
-          status: 'candidate',
-          statusLabel: '重點候選',
-          lat: 25.0542 + (Math.random() - 0.5) * 0.01,
-          lng: 121.5222 + (Math.random() - 0.5) * 0.01,
-          rent: fetched.rent,
-          area: fetched.area || 30,
-          deposit: fetched.deposit || (fetched.rent * 2),
-          freeRent: fetched.freeRent || '1 個月',
-          realCost: fetched.realCost || Math.round(fetched.rent * 1.1211),
-          canRegister: true, canInvoice: true, fireSafety: true,
-          pros: fetched.pros,
-          prosJa: fetched.pros,
-          cons: fetched.cons,
-          consJa: fetched.cons,
-          url: match591[0],
-          images: fetched.images && fetched.images.length ? fetched.images : [
-            'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg'
-          ],
-          activeImgIdx: 0
-        };
-      } else {
-        storeObj = {
-          id: linkedPropId,
-          title: `591#${rawId} 中山商圈金店面`,
-          titleJa: `591#${rawId} 中山区商業店舗`,
-          address: '台北市中山區精華商圈',
-          status: 'candidate',
-          statusLabel: '重點候選',
-          lat: 25.0535,
-          lng: 121.5218,
-          rent: 285000,
-          area: 56,
-          deposit: 855000,
-          freeRent: '1.5 個月',
-          realCost: 319514,
-          canRegister: true, canInvoice: true, fireSafety: true,
-          pros: '591 即時解析，可點擊店面卡片編輯精確數值。',
-          prosJa: '591即時解析、詳細条件は編集可能。',
-          cons: '待實勘人流與現況。',
-          consJa: '現地での人流および現況視察が必要。',
-          url: match591[0],
-          images: [
-            'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
-            'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg'
-          ],
-          activeImgIdx: 0
-        };
-      }
-      state.stores.unshift(storeObj);
-    }
+  // Visual publishing loading animation on the button
+  if (submitBtn) {
+    submitBtn.classList.add('btn-loading');
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = `
+      <svg class="icon icon-sm spin-anim" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
+      <span>${state.langMode === 'ja' ? '翻訳・投稿中...' : '發布與翻譯中...'}</span>
+    `;
   }
 
-  // Real asynchronous translation for Japanese column
-  const textJa = await translateToJapaneseAsync(textZh);
-  const now = new Date();
-  const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+  try {
+    // Direct 591 link recognition in post
+    let linkedPropId = null;
+    const match591 = textZh.match(/https?:\/\/(?:business|rent)\.591\.com\.tw\/(?:rent\/|rent-detail-)?(\d+)/);
+    if (match591) {
+      const rawId = match591[1];
+      linkedPropId = `591-${rawId}`;
 
-  const newPost = {
-    id: Date.now(),
-    author: state.currentUser,
-    date: timeStr,
-    hours: hours,
-    tag: tag,
-    zh: textZh,
-    ja: textJa,
-    propId: linkedPropId,
-    comments: []
-  };
+      let storeObj = state.stores.find(s => s.id === linkedPropId);
+      if (KNOWN_591_DB[rawId]) {
+        const d = KNOWN_591_DB[rawId];
+        if (storeObj) {
+          storeObj.title = d.title;
+          storeObj.titleJa = d.titleJa || d.title;
+          storeObj.address = d.address;
+          storeObj.rent = d.rent;
+          storeObj.area = d.area;
+          storeObj.deposit = d.deposit;
+          storeObj.freeRent = d.freeRent;
+          storeObj.realCost = d.realCost;
+          storeObj.pros = d.pros;
+          storeObj.prosJa = d.prosJa || d.pros;
+          storeObj.cons = d.cons;
+          storeObj.consJa = d.consJa || d.cons;
+          storeObj.images = d.images;
+        } else {
+          storeObj = {
+            id: linkedPropId,
+            title: d.title,
+            titleJa: d.titleJa || d.title,
+            address: d.address,
+            status: 'candidate',
+            statusLabel: '重點候選',
+            lat: d.lat,
+            lng: d.lng,
+            rent: d.rent,
+            area: d.area,
+            deposit: d.deposit,
+            freeRent: d.freeRent,
+            realCost: d.realCost,
+            canRegister: d.canRegister,
+            canInvoice: d.canInvoice,
+            fireSafety: d.fireSafety,
+            pros: d.pros,
+            prosJa: d.prosJa || d.pros,
+            cons: d.cons,
+            consJa: d.consJa || d.cons,
+            url: match591[0],
+            images: d.images,
+            activeImgIdx: 0
+          };
+          state.stores.unshift(storeObj);
+        }
+      } else if (!storeObj) {
+        // Try backend scraper
+        let fetched = null;
+        try {
+          const resp = await fetch(`api_591.php?id=${rawId}`);
+          if (resp.ok) {
+            const json = await resp.json();
+            if (json.success && json.rent > 0) fetched = json;
+          }
+        } catch(e) {}
 
-  state.posts.unshift(newPost);
-  saveAppState();
+        if (fetched) {
+          storeObj = {
+            id: linkedPropId,
+            title: fetched.title,
+            titleJa: fetched.title,
+            address: fetched.address || '台北市中山區精華商圈',
+            status: 'candidate',
+            statusLabel: '重點候選',
+            lat: 25.0542 + (Math.random() - 0.5) * 0.01,
+            lng: 121.5222 + (Math.random() - 0.5) * 0.01,
+            rent: fetched.rent,
+            area: fetched.area || 30,
+            deposit: fetched.deposit || (fetched.rent * 2),
+            freeRent: fetched.freeRent || '1 個月',
+            realCost: fetched.realCost || Math.round(fetched.rent * 1.1211),
+            canRegister: true, canInvoice: true, fireSafety: true,
+            pros: fetched.pros,
+            prosJa: fetched.pros,
+            cons: fetched.cons,
+            consJa: fetched.cons,
+            url: match591[0],
+            images: fetched.images && fetched.images.length ? fetched.images : [
+              'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg'
+            ],
+            activeImgIdx: 0
+          };
+        } else {
+          storeObj = {
+            id: linkedPropId,
+            title: `591#${rawId} 中山商圈金店面`,
+            titleJa: `591#${rawId} 中山区商業店舗`,
+            address: '台北市中山區精華商圈',
+            status: 'candidate',
+            statusLabel: '重點候選',
+            lat: 25.0535,
+            lng: 121.5218,
+            rent: 285000,
+            area: 56,
+            deposit: 855000,
+            freeRent: '1.5 個月',
+            realCost: 319514,
+            canRegister: true, canInvoice: true, fireSafety: true,
+            pros: '591 即時解析，可點擊店面卡片編輯精確數值。',
+            prosJa: '591即時解析、詳細条件は編集可能。',
+            cons: '待實勘人流與現況。',
+            consJa: '現地での人流および現況視察が必要。',
+            url: match591[0],
+            images: [
+              'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
+              'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg'
+            ],
+            activeImgIdx: 0
+          };
+        }
+        state.stores.unshift(storeObj);
+      }
+    }
 
-  textEl.value = '';
-  renderFeeds();
+    // Real asynchronous translation for Japanese column
+    const textJa = await translateToJapaneseAsync(textZh);
+    const now = new Date();
+    const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+
+    const newPostId = Date.now();
+    const newPost = {
+      id: newPostId,
+      author: state.currentUser,
+      date: timeStr,
+      hours: hours,
+      tag: tag,
+      zh: textZh,
+      ja: textJa,
+      propId: linkedPropId,
+      comments: []
+    };
+
+    state.justPostedId = newPostId;
+    state.posts.unshift(newPost);
+    saveAppState();
+
+    textEl.value = '';
+    renderFeeds();
+
+    // Trigger toast notification
+    const toastMsg = state.langMode === 'ja'
+      ? '投稿が完了しました！日台翻訳が同期されました。'
+      : '動態已成功發布！中日雙語翻譯已同步完成。';
+    showToast(toastMsg, 3500);
+
+  } catch (err) {
+    console.error(err);
+    alert('發布發生錯誤，請稍後重試');
+  } finally {
+    if (submitBtn) {
+      submitBtn.classList.remove('btn-loading');
+      submitBtn.disabled = false;
+      submitBtn.innerHTML = `
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+        <span id="btn-submit-post-label">${state.langMode === 'ja' ? '投稿' : '發布'}</span>
+      `;
+    }
+  }
 }
 
 // --- Render Feeds ---
@@ -1969,6 +2323,9 @@ function renderFeeds() {
 function createCard(p, colLang) {
   const card = document.createElement('div');
   card.className = 'feed-card';
+  if (state.justPostedId && p.id === state.justPostedId) {
+    card.classList.add('post-item-new');
+  }
 
   const text = colLang === 'zh' ? p.zh : p.ja;
   const prop = p.propId ? state.stores.find(s => s.id === p.propId) : null;
@@ -2003,7 +2360,7 @@ function createCard(p, colLang) {
     bilingualBox = `
       <div class="jp-translation-box">
         <div class="jp-trans-head">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+          <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>日本語訳（自動翻訳）</span>
         </div>
         <div class="jp-trans-body">${p.ja}</div>
@@ -2011,16 +2368,26 @@ function createCard(p, colLang) {
     `;
   }
 
-  // Comments
-  const commentsHtml = (p.comments || []).map(c => `
-    <div class="comment-item">
-      <div class="comment-header">
-        <span>${c.author}</span>
-        <span>${c.date}</span>
+  // Comments with per-message translation button
+  const commentsHtml = (p.comments || []).map((c, cIdx) => {
+    const cText = colLang === 'zh' ? c.zh : c.ja;
+    return `
+      <div class="comment-item">
+        <div class="comment-header">
+          <span>${c.author}</span>
+          <span>${c.date}</span>
+        </div>
+        <div class="comment-body">${cText}</div>
+        <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
+          <button class="btn-mini-trans" type="button" onclick="toggleCommentTranslation(${p.id}, ${cIdx}, '${colLang}', this)">
+            <svg class="icon icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
+            <span>${colLang === 'zh' ? '翻譯' : '翻訳'}</span>
+          </button>
+        </div>
+        <div id="trans-box-comm-${p.id}-${cIdx}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
       </div>
-      <div>${colLang === 'zh' ? c.zh : c.ja}</div>
-    </div>
-  `).join('');
+    `;
+  }).join('');
 
   card.innerHTML = `
     <div class="feed-card-header">
@@ -2046,6 +2413,14 @@ function createCard(p, colLang) {
     </div>
 
     <div class="post-body-text">${text}</div>
+    <div style="margin:4px 0 6px 0;display:flex;align-items:center;gap:6px;">
+      <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${p.id}, '${colLang}', this)">
+        <svg class="icon icon-sm" style="width:12px;height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+        <span>${colLang === 'zh' ? '🌐 翻譯' : '🌐 翻訳'}</span>
+      </button>
+    </div>
+    <div id="trans-box-post-${p.id}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
+
     ${bilingualBox}
     ${propHtml}
 
@@ -2073,25 +2448,38 @@ async function submitReply(postId, colLang) {
   const now = new Date();
   const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
-  if (colLang === 'zh') {
-    const jaTrans = await translateToJapaneseAsync(val);
-    target.comments.push({
-      author: state.currentUser,
-      date: timeStr,
-      zh: val,
-      ja: jaTrans
-    });
-  } else {
-    target.comments.push({
-      author: state.currentUser,
-      date: timeStr,
-      zh: val.replace(/です|ます|でしょうか/g, ''),
-      ja: val
-    });
-  }
+  inp.disabled = true;
 
-  saveAppState();
-  renderFeeds();
+  try {
+    let zhText = val;
+    let jaText = val;
+
+    // Detect language of the reply automatically
+    const hasKana = /[\u3040-\u30ff]/.test(val);
+    if (hasKana || colLang === 'ja') {
+      jaText = val;
+      zhText = await translateToChineseAsync(val);
+    } else {
+      zhText = val;
+      jaText = await translateToJapaneseAsync(val);
+    }
+
+    target.comments.push({
+      author: state.currentUser,
+      date: timeStr,
+      zh: zhText,
+      ja: jaText
+    });
+
+    saveAppState();
+    inp.value = '';
+    renderFeeds();
+    showToast(colLang === 'ja' ? '返信を投稿しました（日中双方向自動翻訳）' : '回覆已送出（中日雙向自動翻譯）', 3000);
+  } catch(e) {
+    console.error(e);
+  } finally {
+    if (inp) inp.disabled = false;
+  }
 }
 
 // --- Edit Post Functions (編輯文字功能) ---
@@ -2827,31 +3215,280 @@ function updateCompareButton() {
   }
 }
 
+// --- Ranking & Metric Utilities for Comparison Matrix ---
+function parseFreeRentMonths(val) {
+  if (!val) return 0;
+  const match = val.toString().match(/([\d\.]+)/);
+  return match ? parseFloat(match[1]) : 0;
+}
+
+function getRankMap(items, keyExtractor, ascending = true) {
+  const validItems = items.filter(x => {
+    const v = keyExtractor(x);
+    return v !== null && v !== undefined && !isNaN(v) && v > 0;
+  });
+  if (validItems.length < 2) return {};
+
+  const sorted = [...validItems].sort((a, b) => {
+    const va = keyExtractor(a);
+    const vb = keyExtractor(b);
+    return ascending ? (va - vb) : (vb - va);
+  });
+
+  const rankMap = {};
+  if (sorted[0]) rankMap[sorted[0].id] = 1; // 金1
+  if (sorted[1]) {
+    const v0 = keyExtractor(sorted[0]);
+    const v1 = keyExtractor(sorted[1]);
+    rankMap[sorted[1].id] = (v1 === v0) ? 1 : 2; // 紅2 (or tie 金1)
+  }
+  return rankMap;
+}
+
+function renderRankBadge(rank, isJa = false) {
+  if (rank === 1) {
+    return `<span class="rank-badge rank-gold" title="${isJa ? '第1位（最優秀）' : '第1名（最佳）'}">${isJa ? '金1位' : '金1'}</span>`;
+  }
+  if (rank === 2) {
+    return `<span class="rank-badge rank-red" title="${isJa ? '第2位' : '第2名'}">${isJa ? '紅2位' : '紅2'}</span>`;
+  }
+  return '';
+}
+
+function setCompareModalLang(lang) {
+  state.compareModalLang = lang;
+  document.querySelectorAll('.cmp-lang-pill').forEach(b => b.classList.remove('active'));
+  const targetBtn = document.getElementById(`cmp-lang-${lang}`);
+  if (targetBtn) targetBtn.classList.add('active');
+  renderCompareTable();
+}
+
 function openCompareModal() {
   const modal = document.getElementById('compare-modal');
-  const box = document.getElementById('compare-table-content');
-  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  if (!modal) return;
 
-  if (!items.length) return;
+  if (state.currentUserRole === 'jp' || state.langMode === 'ja') {
+    state.compareModalLang = 'ja';
+  } else if (!state.compareModalLang) {
+    state.compareModalLang = 'bilingual';
+  }
 
-  let headerHtml = '<tr><th>比較項目</th>' + items.map(s => `<th>${s.title}</th>`).join('') + '</tr>';
-  let photoHtml = '<tr><th>店面照片</th>' + items.map(s => `<td><img src="${s.images && s.images[0] ? s.images[0] : ''}" class="compare-photo-thumb" alt="${s.title}"></td>`).join('') + '</tr>';
-  let rentHtml = '<tr><th>刊登月租</th>' + items.map(s => `<td>NT$ ${(s.rent/10000).toFixed(1)}萬</td>`).join('') + '</tr>';
-  let areaHtml = '<tr><th>使用坪數</th>' + items.map(s => `<td>${s.area} 坪</td>`).join('') + '</tr>';
-  let unitHtml = '<tr><th>每坪租金</th>' + items.map(s => `<td><strong>NT$ ${Math.round(s.rent/s.area).toLocaleString()}</strong> /坪</td>`).join('') + '</tr>';
-  let realCostHtml = '<tr><th>真實月成本 (含扣繳稅費)</th>' + items.map(s => `<td>NT$ ${s.realCost.toLocaleString()}</td>`).join('') + '</tr>';
-  let freeRentHtml = '<tr><th>裝潢免租期</th>' + items.map(s => `<td>${s.freeRent}</td>`).join('') + '</tr>';
-  let regHtml = '<tr><th>營業登記許可</th>' + items.map(s => `<td>${s.canRegister ? '可以' : '不可'}</td>`).join('') + '</tr>';
-  let prosHtml = '<tr><th>商圈優點</th>' + items.map(s => `<td>${s.pros}</td>`).join('') + '</tr>';
-  let consHtml = '<tr><th>潛在考量</th>' + items.map(s => `<td style="color:var(--danger);">${s.cons}</td>`).join('') + '</tr>';
-  let actionHtml = '<tr><th>浮動視窗詳情</th>' + items.map(s => `<td><button class="action-btn" onclick="openStoreDetailModal('${s.id}')">開啟完整照片與規格</button></td>`).join('') + '</tr>';
+  document.querySelectorAll('.cmp-lang-pill').forEach(b => b.classList.remove('active'));
+  const activeBtn = document.getElementById(`cmp-lang-${state.compareModalLang}`);
+  if (activeBtn) activeBtn.classList.add('active');
 
-  box.innerHTML = `<table class="compare-table">${headerHtml}${photoHtml}${rentHtml}${areaHtml}${unitHtml}${realCostHtml}${freeRentHtml}${regHtml}${prosHtml}${consHtml}${actionHtml}</table>`;
+  renderCompareTable();
   modal.classList.add('open');
 }
 
 function closeCompareModal() {
-  document.getElementById('compare-modal').classList.remove('open');
+  const modal = document.getElementById('compare-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function renderCompareTable() {
+  const box = document.getElementById('compare-table-content');
+  if (!box) return;
+
+  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  if (!items.length) {
+    box.innerHTML = `
+      <div style="text-align:center;padding:40px 20px;color:var(--fg-muted);font-size:13px;">
+        <svg class="icon" style="width:36px;height:36px;margin:0 auto 10px;display:block;opacity:0.4;" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line></svg>
+        ${state.compareModalLang === 'ja'
+          ? '比較する店舗が選択されていません。店舗カードのチェックボックスを2つ以上選択してください。'
+          : '尚未勾選欲比較的店面。請在 MAP 店面卡片中勾選 2 間以上進行金1/紅2條件對照。'}
+      </div>
+    `;
+    return;
+  }
+
+  const mode = state.compareModalLang || 'bilingual';
+  const isJa = mode === 'ja';
+  const isBi = mode === 'bilingual';
+  const isZh = mode === 'zh';
+  const jpyRate = 4.8;
+
+  // Title in modal
+  const titleEl = document.getElementById('cmp-modal-title');
+  if (titleEl) {
+    titleEl.textContent = isJa ? '店舗条件・立地ポテンシャル分析比較表' : (isBi ? '店面條件分析比較表 / 店舗比較表' : '店面條件分析比較表');
+  }
+  const legendEl = document.getElementById('cmp-legend-note');
+  if (legendEl) {
+    legendEl.innerHTML = isJa
+      ? '順位表記：<span class="rank-badge rank-gold">金1位</span> 第1位 ｜ <span class="rank-badge rank-red">紅2位</span> 第2位'
+      : '標示說明：<span class="rank-badge rank-gold">金1</span> 第1名 ｜ <span class="rank-badge rank-red">紅2</span> 第2名';
+  }
+
+  // Calculate ranks
+  const rentRanks = getRankMap(items, s => s.rent, true);
+  const areaRanks = getRankMap(items, s => s.area, false);
+  const unitRanks = getRankMap(items, s => (s.rent / s.area), true);
+  const realCostRanks = getRankMap(items, s => s.realCost, true);
+  const freeRentRanks = getRankMap(items, s => parseFreeRentMonths(s.freeRent), false);
+
+  // Row header labels
+  const lblItem = isJa ? '比較項目' : (isBi ? '比較項目 / 比較項目' : '比較項目');
+  const lblPhoto = isJa ? '店舗写真' : (isBi ? '店面照片 / 店舗写真' : '店面照片');
+  const lblRent = isJa ? '掲載月額賃料' : (isBi ? '刊登月租 / 掲載賃料' : '刊登月租');
+  const lblArea = isJa ? '使用面積（坪・㎡）' : (isBi ? '使用面積 (坪・㎡)' : '使用面積 (坪・㎡)');
+  const lblUnit = isJa ? '面積単価（坪・㎡）' : (isBi ? '每坪與每㎡租金' : '每坪租金單價');
+  const lblReal = isJa ? '実質月額コスト（税・健保込）' : (isBi ? '真實月成本 (含扣繳稅費)' : '真實月成本 (含扣繳稅費)');
+  const lblFree = isJa ? 'フリーレント（内装工事）' : (isBi ? '裝潢免租期 / フリーレント' : '裝潢免租期');
+  const lblReg = isJa ? '会社設立・営業登記' : (isBi ? '營業登記許可' : '營業登記許可');
+  const lblInvoice = isJa ? 'インボイス・税籍適格' : (isBi ? '稅籍開立發票' : '稅籍開立發票');
+  const lblPros = isJa ? '立地の強み・人流分析' : (isBi ? '商圈優點與人流分析' : '商圈優點與人流分析');
+  const lblCons = isJa ? '留意点・潜在リスク' : (isBi ? '特別考量與潛在風險' : '特別考量與潛在風險');
+  const lblDetail = isJa ? '詳細スペック・写真' : (isBi ? '完整照片與規格' : '浮動視窗詳情');
+
+  // Build rows
+  let headerHtml = `<tr><th>${lblItem}</th>` + items.map(s => {
+    const titleText = isJa ? (s.titleJa || s.title) : (isBi ? `${s.title}<div style="font-size:11px;color:var(--fg-muted);font-weight:normal;margin-top:2px;">${s.titleJa || ''}</div>` : s.title);
+    return `<th style="min-width:180px;max-width:240px;">${titleText}</th>`;
+  }).join('') + '</tr>';
+
+  let photoHtml = `<tr><th>${lblPhoto}</th>` + items.map(s => `
+    <td>
+      <img src="${s.images && s.images[0] ? s.images[0] : ''}" class="compare-photo-thumb" onclick="openStoreDetailModal('${s.id}')" style="cursor:pointer;" alt="${s.title}">
+    </td>
+  `).join('') + '</tr>';
+
+  let rentHtml = `<tr><th>${lblRent}</th>` + items.map(s => {
+    const badge = renderRankBadge(rentRanks[s.id], isJa);
+    const wanTwd = (s.rent / 10000).toFixed(1);
+    const wanJpy = (s.rent * jpyRate / 10000).toFixed(1);
+    return `
+      <td>
+        <div class="comp-metric-box">
+          <div class="comp-val-main">${badge}NT$ ${wanTwd} 萬</div>
+          <div class="comp-val-sub">（約 ${wanJpy} 万円/月）</div>
+        </div>
+      </td>
+    `;
+  }).join('') + '</tr>';
+
+  let areaHtml = `<tr><th>${lblArea}</th>` + items.map(s => {
+    const badge = renderRankBadge(areaRanks[s.id], isJa);
+    const m2 = (s.area * 3.3058).toFixed(1);
+    return `
+      <td>
+        <div class="comp-metric-box">
+          <div class="comp-val-main">${badge}${s.area} 坪</div>
+          <div class="comp-val-sub">約 <strong style="color:#0f766e;">${m2} ㎡</strong> (平米)</div>
+        </div>
+      </td>
+    `;
+  }).join('') + '</tr>';
+
+  let unitHtml = `<tr><th>${lblUnit}</th>` + items.map(s => {
+    const badge = renderRankBadge(unitRanks[s.id], isJa);
+    const unitPing = Math.round(s.rent / s.area);
+    const unitM2 = Math.round(s.rent / (s.area * 3.3058));
+    const unitJpyM2 = Math.round(unitM2 * jpyRate);
+    return `
+      <td>
+        <div class="comp-metric-box">
+          <div class="comp-val-main">${badge}NT$ ${unitPing.toLocaleString()} /坪</div>
+          <div class="comp-val-sub">約 NT$ ${unitM2.toLocaleString()} /㎡</div>
+          <div class="comp-val-sub" style="color:#0f766e;font-weight:600;">（約 ${unitJpyM2.toLocaleString()} 円/㎡）</div>
+        </div>
+      </td>
+    `;
+  }).join('') + '</tr>';
+
+  let realCostHtml = `<tr><th>${lblReal}</th>` + items.map(s => {
+    const badge = renderRankBadge(realCostRanks[s.id], isJa);
+    const wanJpy = (s.realCost * jpyRate / 10000).toFixed(1);
+    return `
+      <td>
+        <div class="comp-metric-box">
+          <div class="comp-val-main">${badge}NT$ ${s.realCost.toLocaleString()}</div>
+          <div class="comp-val-sub">（約 ${wanJpy} 万円/月）</div>
+        </div>
+      </td>
+    `;
+  }).join('') + '</tr>';
+
+  let freeRentHtml = `<tr><th>${lblFree}</th>` + items.map(s => {
+    const badge = renderRankBadge(freeRentRanks[s.id], isJa);
+    const jaText = (s.freeRent || '1 個月').replace(/個月/g, 'ヶ月');
+    return `
+      <td>
+        <div class="comp-metric-box">
+          <div class="comp-val-main">${badge}${s.freeRent || '1 個月'}</div>
+          <div class="comp-val-sub">（${jaText}）</div>
+        </div>
+      </td>
+    `;
+  }).join('') + '</tr>';
+
+  let regHtml = `<tr><th>${lblReg}</th>` + items.map(s => `
+    <td>${s.canRegister ? (isJa ? '可能（登記可）' : '可以（会社設立登記可）') : (isJa ? '不可' : '不可')}</td>
+  `).join('') + '</tr>';
+
+  let invoiceHtml = `<tr><th>${lblInvoice}</th>` + items.map(s => `
+    <td>${s.canInvoice ? (isJa ? '適格（インボイス可）' : '可以開立發票（適格）') : (isJa ? '非適格' : '否')}</td>
+  `).join('') + '</tr>';
+
+  let prosHtml = `<tr><th>${lblPros}</th>` + items.map(s => {
+    let content = '';
+    if (isJa) {
+      content = s.prosJa || s.pros;
+    } else if (isZh) {
+      content = s.pros;
+    } else {
+      content = `<div>${s.pros}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${s.prosJa}</div>` : '');
+    }
+    return `<td>${content}</td>`;
+  }).join('') + '</tr>';
+
+  let consHtml = `<tr><th>${lblCons}</th>` + items.map(s => {
+    let content = '';
+    if (isJa) {
+      content = `<span style="color:var(--danger);">${s.consJa || s.cons}</span>`;
+    } else if (isZh) {
+      content = `<span style="color:var(--danger);">${s.cons}</span>`;
+    } else {
+      content = `<div style="color:var(--danger);">${s.cons}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${s.consJa}</div>` : '');
+    }
+    return `<td>${content}</td>`;
+  }).join('') + '</tr>';
+
+  let actionHtml = `<tr><th>${lblDetail}</th>` + items.map(s => `
+    <td>
+      <button class="action-btn" onclick="openStoreDetailModal('${s.id}')">${isJa ? '詳細を見る' : '開啟照片與規格'}</button>
+    </td>
+  `).join('') + '</tr>';
+
+  box.innerHTML = `<table class="compare-table">${headerHtml}${photoHtml}${rentHtml}${areaHtml}${unitHtml}${realCostHtml}${freeRentHtml}${regHtml}${invoiceHtml}${prosHtml}${consHtml}${actionHtml}</table>`;
+}
+
+async function translateAllCompareItemsAsync() {
+  const btn = document.getElementById('btn-cmp-ai-trans');
+  if (btn) {
+    btn.disabled = true;
+    btn.innerText = '翻譯處理中...';
+  }
+  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  for (let s of items) {
+    if (!s.titleJa && s.title) {
+      s.titleJa = await translateToJapaneseAsync(s.title);
+    }
+    if (!s.prosJa && s.pros) {
+      s.prosJa = await translateToJapaneseAsync(s.pros);
+    }
+    if (!s.consJa && s.cons) {
+      s.consJa = await translateToJapaneseAsync(s.cons);
+    }
+  }
+  saveAppState();
+  renderCompareTable();
+  if (btn) {
+    btn.disabled = false;
+    btn.innerText = '🌐 AI 即時翻譯';
+  }
+  showToast('比較表日文翻譯已同步更新！', 3000);
 }
 
 // Map Initialization
