@@ -1022,6 +1022,25 @@ let appData = {
   ],
   stores: [
     {
+      id: '591-21265868',
+      title: '民權西路站撫順街大面寬金店面',
+      status: 'candidate',
+      statusLabel: '重點候選',
+      lat: 25.0643544, lng: 121.521515,
+      rent: 180000,
+      area: 60.71,
+      deposit: 360000,
+      freeRent: '洽談中 (預計1~2個月)',
+      realCost: 201798,
+      canRegister: true,
+      canInvoice: true,
+      fireSafety: true,
+      pros: '面寬氣派、大面寬廣告效益佳、近民權西路雙捷運站，室內達 60.7 坪。',
+      cons: '撫順街屬辦公通勤型商圈，週末休閒逛街人流需與赤峰街/中山商圈交叉對比。',
+      url: 'https://business.591.com.tw/rent/21265868',
+      img: 'https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg'
+    },
+    {
       id: 'S-01',
       title: '中山北路二段36巷1樓（原土屋鞄旁）',
       status: 'candidate',
@@ -1084,7 +1103,17 @@ let appData = {
 function initData() {
   const saved = localStorage.getItem(DB_KEY);
   if (saved) {
-    try { appData = JSON.parse(saved); } catch (e) {}
+    try {
+      const parsed = JSON.parse(saved);
+      appData.posts = parsed.posts || appData.posts;
+      appData.decisions = parsed.decisions || appData.decisions;
+      const existingIds = new Set((parsed.stores || []).map(s => s.id));
+      const mergedStores = [...(parsed.stores || [])];
+      appData.stores.forEach(s => {
+        if (!existingIds.has(s.id)) mergedStores.unshift(s);
+      });
+      appData.stores = mergedStores;
+    } catch (e) {}
   }
 }
 function saveData() {
