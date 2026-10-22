@@ -1,6 +1,6 @@
 <?php
 // 密碼閘門：輸入正確密碼後，瀏覽器 cookie 記住 365 天
-// 密碼放在伺服器上的 worklog/.wl_pw（不進 repo）；檔案不存在時一律拒絕登入
+// 密碼存在伺服器上的 worklog/.wl_pw（不進 repo）。檔案不存在時，第一次輸入的密碼就成為密碼
 $pwFile = __DIR__ . '/.wl_pw';
 $PASSWORD = file_exists($pwFile) ? trim((string)file_get_contents($pwFile)) : '';
 $DAYS = 365;
@@ -22,6 +22,10 @@ if ($rel === '' || substr($rel, -1) === '/') $rel .= 'index.html';
 
 // 登入
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wl_pw'])) {
+    if ($PASSWORD === '' && trim((string)$_POST['wl_pw']) !== '') {
+        $PASSWORD = trim((string)$_POST['wl_pw']);
+        file_put_contents($pwFile, $PASSWORD);
+    }
     if ($PASSWORD !== '' && hash_equals($PASSWORD, (string)$_POST['wl_pw'])) {
         setcookie('wl_auth', $token, [
             'expires' => time() + 86400 * $DAYS, 'path' => $base ?: '/',
@@ -55,7 +59,7 @@ h1{font-size:17px;margin:0 0 4px}p{font-size:12.5px;color:#777;margin:0 0 18px}
 input{width:100%;box-sizing:border-box;padding:10px 12px;font-size:16px;border:1px solid #ccc;border-radius:8px;margin-bottom:12px}
 button{width:100%;padding:10px;font-size:15px;font-weight:700;background:#111;color:#fff;border:0;border-radius:8px;cursor:pointer}
 .e{color:#b91c1c;font-size:12.5px;margin-bottom:10px}</style></head>
-<body><form method="post"><h1>grounds Taiwan Worklog</h1><p>パスワード / 請輸入密碼</p>
+<body><form method="post"><h1>grounds Taiwan Worklog</h1><p><?php echo file_exists($pwFile) ? 'パスワード / 請輸入密碼' : '初回設定：好きなパスワードを入力 / 首次使用：請設定密碼'; ?></p>
 <?php if (!empty($error)) echo '<div class="e">パスワードが違います / 密碼錯誤</div>'; ?>
 <input type="password" name="wl_pw" autofocus autocomplete="current-password" inputmode="numeric">
 <button type="submit">OK</button></form></body></html>
