@@ -3478,6 +3478,12 @@ async function syncCloudData() {
               state.posts.push(sp);
               localPostIds.add(sp.id);
               updated = true;
+            } else if (localPostIds.has(sp.id) && (Number(sp.editedAt) || 0) > 0) {
+              const lp = state.posts.find(x => x.id === sp.id);
+              if (lp && (Number(sp.editedAt) || 0) > (Number(lp.editedAt) || 0)) {
+                ['zh', 'ja', 'hours', 'tag', 'editedAt'].forEach(k => { lp[k] = sp[k]; });
+                updated = true;
+              }
             }
           });
         }
@@ -3530,7 +3536,7 @@ async function syncCloudData() {
         }
 
         if (updated || state.posts.length > 0) {
-          state.posts.sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
+          sortPostsByStamp();
           saveAppState(false);
           renderFeeds();
           renderStores();
@@ -4297,7 +4303,7 @@ function fmtDateWd(str, lang) {
 function renderDailyLogs(box, colLang) {
   const days = {};
   state.posts.forEach(p => {
-    const d = (/^\d{4}\/\d{1,2}\/\d{1,2}/.exec(p.date || '') || ['未知日期'])[0];
+    const d = postDayKey(p);
     (days[d] = days[d] || []).push(p);
   });
   const cutoff = Date.now() - 7 * 86400000;
@@ -4305,7 +4311,7 @@ function renderDailyLogs(box, colLang) {
   Object.keys(days).sort().reverse().forEach(d => {
     const dm = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(d);
     const isOld = dm && new Date(+dm[1], +dm[2] - 1, +dm[3]).getTime() < cutoff;
-    const list = days[d].slice().sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
+    const list = days[d].slice().sort((a, b) => postStamp(b) - postStamp(a));
     const hours = Math.round(list.reduce((sum, p) => sum + (Number(p.hours) || 0), 0) * 100) / 100;
     const authors = Array.from(new Set(list.map(p => p.author))).join('、');
     const wrap = document.createElement('div');
@@ -4331,6 +4337,7 @@ function renderDailyLogs(box, colLang) {
 }
 
 function renderFeeds() {
+  sortPostsByStamp();
   scheduleFeedSeen();
   const zhBox = document.getElementById('feed-zh-box');
   const jaBox = document.getElementById('feed-ja-box');
@@ -4627,6 +4634,8 @@ async function saveEditedPost() {
   p.ja = await translateToJapaneseAsync(newText);
   p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 0.0;
   p.tag = document.getElementById('edit-post-tag').value;
+  p.editedAt = Date.now();
+  sortPostsByStamp();
 
   saveAppState();
   closeEditPostModal();
@@ -6202,13 +6211,23 @@ function changeUiZoom(d) { applyUiZoom(currentUiZoom() + d); }
 })();
 
 // --- 動態「NEW」：對方還沒看過就標示，對方看完就消失（已讀狀態存在雲端）---
+function postStamp(p) { return Number(p.editedAt) || Number(p.id) || 0; }
+function postDayKey(p) {
+  if (p.editedAt) {
+    const d = new Date(Number(p.editedAt));
+    return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
+  }
+  return (/^\d{4}\/\d{1,2}\/\d{1,2}/.exec(p.date || '') || ['未知日期'])[0];
+}
+function sortPostsByStamp() { state.posts.sort((a, b) => postStamp(b) - postStamp(a)); }
+
 function roleOfAuthor(name) {
   const m = (state.members || []).find(x => x.name === name);
   return m ? m.role : 'tw';
 }
 function postIsNew(p) {
   const other = roleOfAuthor(p.author) === 'jp' ? 'tw' : 'jp';
-  return (Number(state.seen[other]) || 0) < (Number(p.id) || 0);
+  return (Number(state.seen[other]) || 0) < postStamp(p);
 }
 function refreshNewPills() {
   document.querySelectorAll('.post-new-pill').forEach(el => {
@@ -6233,7 +6252,7 @@ async function markFeedSeen() {
   const tab = document.getElementById('tab-feed');
   if (!tab || tab.style.display === 'none') return;
   const role = state.currentUserRole === 'jp' ? 'jp' : 'tw';
-  const maxId = state.posts.reduce((m, p) => Math.max(m, Number(p.id) || 0), 0);
+  const maxId = state.posts.reduce((m, p) => Math.max(m, postStamp(p)), 0);
   if ((Number(state.seen[role]) || 0) >= maxId) return;
   try {
     const r = await fetch('api_sync.php');
