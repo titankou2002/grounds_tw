@@ -2,7 +2,7 @@
 <html lang="zh-TW">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
@@ -1798,6 +1798,40 @@
       background: #333333;
     }
 
+    /* ===== 手機版：選單固定在底部（比照每周匯報）、避開動態島與底部安全區、字級放大 ===== */
+    :root { --ui-zoom: 1; }
+    @media (max-width: 900px) {
+      :root { --nav-h: 3.7rem; --safe-top: env(safe-area-inset-top, 0px); --safe-bottom: env(safe-area-inset-bottom, 0px); }
+      header.site-header {
+        height: auto !important; min-height: calc(52px + var(--safe-top));
+        padding: var(--safe-top) 14px 0 14px !important; justify-content: space-between;
+      }
+      .brand-title { display: none !important; }
+      .nav-tabs {
+        position: fixed; left: 0; right: 0; bottom: 0; z-index: 1500;
+        display: flex; gap: 0; background: #fff; border-top: 1px solid var(--border);
+        box-shadow: 0 -3px 14px rgba(0,0,0,.08);
+        height: calc(var(--nav-h) + var(--safe-bottom)); padding: 0 6px var(--safe-bottom);
+        -webkit-transform: translate3d(0,0,0); transform: translate3d(0,0,0);
+      }
+      .nav-tab-btn {
+        flex: 1 1 0; flex-direction: column; justify-content: center; gap: 3px;
+        padding: 6px 4px !important; border-radius: 10px; margin: 5px 3px;
+        font-size: 12px !important; -webkit-tap-highlight-color: transparent;
+      }
+      .nav-tab-btn .tab-title { font-size: 12px !important; font-weight: 800; white-space: nowrap; }
+      .nav-tab-btn svg.icon { width: 22px !important; height: 22px !important; }
+      main.main-body { padding-bottom: calc(var(--nav-h) + var(--safe-bottom) + 16px) !important; zoom: var(--ui-zoom); }
+      .modal-content-box { zoom: var(--ui-zoom); }
+      .toast-notice { bottom: calc(var(--nav-h) + var(--safe-bottom) + 12px) !important; }
+      .user-badge { font-size: 13px !important; padding: 5px 10px !important; max-width: 120px; }
+      .user-badge #current-user-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      .icon-only-btn { width: 40px; height: 40px; }
+      .feed-591-preview { min-width: 0; }
+      .feed-591-preview .metric-pill { max-width: 100%; white-space: normal; word-break: break-word; }
+    }
+    .stg-size-row { display:flex; align-items:center; gap:10px; margin-top:16px; }
+    .stg-size-row button { width:44px; height:40px; font-size:15px; font-weight:800; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; }
   </style>
 </head>
 <body>
@@ -2394,6 +2428,12 @@
         <button type="button" class="stg-lang-btn" data-lang="bilingual" onclick="setAppLanguage('bilingual')">中日雙語對照</button>
         <button type="button" class="stg-lang-btn" data-lang="zh" onclick="setAppLanguage('zh')">純中文</button>
         <button type="button" class="stg-lang-btn" data-lang="ja" onclick="setAppLanguage('ja')">純日文</button>
+      </div>
+      <div class="stg-size-row">
+        <span style="font-size:13px;font-weight:700;flex:1;">字級 / 文字サイズ（手機）</span>
+        <button type="button" onclick="changeUiZoom(-0.1)">A−</button>
+        <span id="ui-zoom-label" style="min-width:44px;text-align:center;font-size:13px;font-weight:700;"></span>
+        <button type="button" onclick="changeUiZoom(0.1)">A＋</button>
       </div>
     </div>
 
@@ -5933,6 +5973,26 @@ function generateSecureToken() {
   return 'tok_' + Array.from(array, byte => byte.toString(16).padStart(2, '0')).join('');
 }
 
+// --- 手機字級（預設 1.15，可在設定調整 1.0–1.8）---
+const UI_ZOOM_KEY = 'grounds_tw_ui_zoom';
+function applyUiZoom(z) {
+  z = Math.min(1.8, Math.max(1.0, Math.round(z * 10) / 10));
+  document.documentElement.style.setProperty('--ui-zoom', String(z));
+  try { localStorage.setItem(UI_ZOOM_KEY, String(z)); } catch (e) {}
+  const lb = document.getElementById('ui-zoom-label');
+  if (lb) lb.textContent = Math.round(z * 100) + '%';
+  return z;
+}
+function currentUiZoom() {
+  return parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ui-zoom')) || 1;
+}
+function changeUiZoom(d) { applyUiZoom(currentUiZoom() + d); }
+(function initUiZoom() {
+  let z = 1.15;
+  try { const v = parseFloat(localStorage.getItem(UI_ZOOM_KEY)); if (v) z = v; } catch (e) {}
+  applyUiZoom(z);
+})();
+
 function openSettingsModal(tabName) {
   const modal = document.getElementById('settings-modal');
   if (modal) modal.classList.add('open');
@@ -5958,6 +6018,8 @@ function switchSettingsTab(tabName) {
   if (tabName === 'audit') renderAuditLogs();
   if (tabName === 'members') renderMemberList();
   updateUserUI();
+  const zl = document.getElementById('ui-zoom-label');
+  if (zl) zl.textContent = Math.round(currentUiZoom() * 100) + '%';
 }
 
 function openMemberModal() {
