@@ -1892,6 +1892,7 @@
     #preview-banner { display:none; position:fixed; left:8px; right:8px; bottom:calc(var(--nav-h, 0px) + var(--safe-bottom, 0px) + 8px); z-index:1600; align-items:center; justify-content:space-between; gap:10px; background:#b45309; color:#fff; padding:9px 12px; border-radius:12px; font-size:12.5px; font-weight:700; box-shadow:0 4px 16px rgba(0,0,0,.3); }
     #preview-banner button { flex:0 0 auto; background:#fff; color:#b45309; border:0; border-radius:14px; padding:5px 12px; font-size:12.5px; font-weight:800; cursor:pointer; }
     body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
+    .store-compact-metrics { flex-wrap: wrap; white-space: normal; overflow: visible; row-gap: 4px; }
     .store-open-detail-btn { display:none; }
     @media (max-width: 900px) {
       .store-compact-actions { display: none !important; }
@@ -5013,13 +5014,17 @@ let _storeJaBusy = false;
 async function ensureStoreJa() {
   if (state.langMode !== 'ja' || _storeJaBusy) return;
   const need = (zh, ja) => zh && (!ja || ja === zh);
-  const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.pros, s.prosJa) || need(s.cons, s.consJa)));
+  const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.title, s.titleJa) || need(s.pros, s.prosJa) || need(s.cons, s.consJa)));
   if (!todo.length) return;
   _storeJaBusy = true;
   let changed = false;
   for (const s of todo) {
     _storeJaTried.add(s.id);
     try {
+      if (need(s.title, s.titleJa)) {
+        const t = await translateTextAsync(String(s.title).slice(0, 300), 'zh-TW|ja');
+        if (t && t !== s.title) { s.titleJa = t; changed = true; }
+      }
       if (need(s.pros, s.prosJa)) {
         const t = await translateTextAsync(String(s.pros).slice(0, 450), 'zh-TW|ja');
         if (t && t !== s.pros) { s.prosJa = t; changed = true; }
