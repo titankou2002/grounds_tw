@@ -4852,6 +4852,7 @@ function openStoreDetailModal(storeId) {
   const depositJpyWan = Math.round((s.deposit || s.rent * 2) * jpyRate / 10000);
 
   document.getElementById('m-store-title').textContent = s.title;
+  refreshDetailBadge(s);
 
   // Deduplicate Title: If Japanese is identical to Chinese, do not duplicate
   const titleJaEl = document.getElementById('m-store-title-ja');
@@ -5039,12 +5040,76 @@ async function ensureStoreJa() {
   if (changed) { saveAppState(true); renderStores(); }
 }
 
+// --- 店面排序（MAP 排序列）---
+const STORE_SORT_KEY = 'grounds_tw_store_sort';
+state.storeSort = 'default';
+try { state.storeSort = localStorage.getItem(STORE_SORT_KEY) || 'default'; } catch (e) {}
+function sortedStores() {
+  const arr = state.stores.slice();
+  const unit = s => (Number(s.rent) || 0) / (Number(s.area) || 1);
+  if (state.storeSort === 'area') arr.sort((a, b) => (Number(b.area) || 0) - (Number(a.area) || 0));         // 大到小
+  else if (state.storeSort === 'rent') arr.sort((a, b) => (Number(a.rent) || 0) - (Number(b.rent) || 0));    // 低到高
+  else if (state.storeSort === 'unit') arr.sort((a, b) => unit(a) - unit(b));                                 // 低到高
+  return arr;
+}
+function updateSortChips() {
+  ['default', 'area', 'rent', 'unit'].forEach(m => {
+    const el = document.getElementById('sort-chip-' + m);
+    if (el) el.classList.toggle('active', state.storeSort === m);
+  });
+}
+function setStoreSort(mode) {
+  // 再點一次目前的排序 = 回到預設
+  state.storeSort = (state.storeSort === mode && mode !== 'default') ? 'default' : mode;
+  try { localStorage.setItem(STORE_SORT_KEY, state.storeSort); } catch (e) {}
+  updateSortChips();
+  renderStores();
+}
+
+// --- 店面狀態標籤編輯 ---
+function refreshDetailBadge(s) {
+  const b = document.getElementById('m-store-badge');
+  if (!b || !s) return;
+  b.textContent = storeStatusText(s) || '—';
+  b.className = 'store-tag ' + (s.status || 'candidate');
+}
+function openStatusEditorModal(storeId) {
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s) return;
+  state.statusEditingId = storeId;
+  const inp = document.getElementById('custom-status-text');
+  if (inp) inp.value = s.statusLabel || '';
+  document.getElementById('status-editor-modal').classList.add('open');
+}
+function closeStatusEditorModal() {
+  document.getElementById('status-editor-modal').classList.remove('open');
+}
+function setStoreStatus(storeId, label, cls) {
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s) return;
+  s.statusLabel = label;
+  s.status = cls || s.status || 'candidate';
+  saveAppState();
+  renderStores();
+  renderFeeds();
+  if (state.activeDetailStoreId === storeId) refreshDetailBadge(s);
+  closeStatusEditorModal();
+  showToast(tr('狀態已更新：', 'ステータスを更新：') + storeStatusText(s), 2000);
+}
+function applyQuickStatus(label, cls) { setStoreStatus(state.statusEditingId, label, cls); }
+function submitCustomStatus() {
+  const v = (document.getElementById('custom-status-text').value || '').trim();
+  if (!v) { showToast(tr('請輸入狀態文字', 'ステータスを入力してください'), 2000); return; }
+  setStoreStatus(state.statusEditingId, v, null);
+}
+
 function renderStores() {
   const box = document.getElementById('store-list-box');
   if (!box) return;
   box.innerHTML = '';
+  updateSortChips();
 
-  state.stores.forEach(s => {
+  sortedStores().forEach(s => {
     const isChecked = state.selectedStoresForCompare.includes(s.id);
     const card = document.createElement('div');
     card.id = `store-card-${s.id}`;
@@ -5998,7 +6063,7 @@ function initStoreMap() {
 
 // --- 日文介面用的字串／資料轉換 ---
 function tr(zh, ja) { return state.langMode === 'ja' ? ja : zh; }
-const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外' };
+const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
 function storeStatusText(s) { const l = s.statusLabel || ''; return state.langMode === 'ja' ? (STATUS_JA[l] || l) : l; }
 function storeTitleText(s) { return state.langMode === 'ja' ? (s.titleJa || s.title) : s.title; }
 function jaMonths(v) { return state.langMode === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : v; }
