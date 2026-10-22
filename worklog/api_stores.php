@@ -5,10 +5,17 @@ header('Cache-Control: no-store');
 
 $file = __DIR__ . '/grounds_data.json';
 $data = file_exists($file) ? json_decode(preg_replace('/^\xEF\xBB\xBF/', '', file_get_contents($file)), true) : null;
-$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','realCost','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url'];
+$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','realCost','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified'];
+$fixFile = __DIR__ . '/store_fixes.json';
+$fixes = file_exists($fixFile) ? (json_decode(file_get_contents($fixFile), true) ?: []) : [];
 $out = [];
 if (is_array($data) && isset($data['stores']) && is_array($data['stores'])) {
     foreach ($data['stores'] as $s) {
+        // 店面資料修正檔：版本較新的欄位覆蓋舊值（null = 刪除該欄位）
+        if (isset($s['id'], $fixes[$s['id']]) && (int)($s['fixV'] ?? 0) < (int)($fixes[$s['id']]['fixV'] ?? 0)) {
+            foreach ($fixes[$s['id']] as $fk => $fv) { if ($fv === null) unset($s[$fk]); else $s[$fk] = $fv; }
+            $s['unverified'] = false;
+        }
         $row = [];
         foreach ($keys as $k) { if (isset($s[$k])) $row[$k] = $s[$k]; }
         // 只允許 http(s) 或站內檔名的圖片／連結，避免夾帶其他內容

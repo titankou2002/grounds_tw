@@ -275,6 +275,7 @@ if ($isChallenge || !$html) {
     echo json_encode([
         'success' => true,
         'fallback' => true,
+        'unverified' => true,
         'platform' => $detectedPlatform,
         'platformName' => $pName,
         'platformNameJa' => $pName,
@@ -383,6 +384,7 @@ $deposit = $rent * 2;
 
 echo json_encode([
     'success' => true,
+    'unverified' => (!$rent || !$area),
     'platform' => $detectedPlatform,
     'id' => "{$detectedPlatform}-{$safeId}",
     'rawId' => $safeId,

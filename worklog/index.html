@@ -1900,6 +1900,7 @@
     .modal-x-btn { display: none; }
     #feed-left-user-label, #lbl-store-pros-sub, #cmp-legend-note { display: none !important; }
     @media (max-width: 900px) { .column-header { display: none !important; } }
+    .pill-warn { background:#fee2e2; color:#b91c1c; border:1px solid #fca5a5; font-weight:800; }
     .store-open-detail-btn { display:none; }
     @media (max-width: 900px) {
       .store-compact-actions { display: none !important; }
@@ -3496,6 +3497,12 @@ async function syncCloudData() {
               state.stores.push(ss);
               localStoreIds.add(ss.id);
               updated = true;
+            } else if (localStoreIds.has(ss.id) && (Number(ss.editedAt) || 0) > 0) {
+              const ls = state.stores.find(x => x.id === ss.id);
+              if (ls && (Number(ss.editedAt) || 0) > (Number(ls.editedAt) || 0)) {
+                Object.keys(ss).forEach(k => { if (k !== 'activeImgIdx') ls[k] = ss[k]; });
+                updated = true;
+              }
             }
           });
         }
@@ -4212,6 +4219,7 @@ async function submitFeedPost() {
               sourceType: platform
             };
           }
+          flagUnverified(storeObj, isRealScrape(fetched));
           state.stores.unshift(storeObj);
         }
 
@@ -5163,6 +5171,7 @@ function renderStores() {
           </div>
           <div class="store-compact-addr">${s.address}</div>
           <div class="store-compact-metrics">
+            ${s.unverified ? `<span class="metric-pill pill-warn">⚠ ${tr('數字待確認','数値要確認')}</span>` : ''}
             <span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
             <span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing * 3.3058)}㎡)</span>
             <span class="metric-pill metric-unit">${tr('單價','坪単価')} <strong>${unitPrice.toLocaleString()}/坪</strong></span>
@@ -5304,6 +5313,9 @@ function saveEditedStore() {
   s.pros = pros;
   s.cons = cons;
   s.realCost = Math.round(r * 1.1211);
+  if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
+  s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
+  s.editedAt = Date.now();
 
   saveAppState();
   closeEditStoreModal();
@@ -5457,12 +5469,14 @@ async function parseAndAddStoreDirect() {
 
   try {
     let storeData = null;
+    let storeVerified = false;
 
     // 1. Check local database for instant authentic load
     const lookupKeys = [rawId, finalId, propId, `rakuya-${rawId}`, `591-${rawId}`, `yc-${rawId}`, `sy-${rawId}`];
     for (const k of lookupKeys) {
       if (k && KNOWN_STORES_DB[k]) {
         storeData = KNOWN_STORES_DB[k];
+        storeVerified = true;
         break;
       }
     }
@@ -5473,7 +5487,7 @@ async function parseAndAddStoreDirect() {
         const resp = await fetch(`api_scrape.php?url=${encodeURIComponent(rawUrl)}&id=${encodeURIComponent(rawId)}&platform=${encodeURIComponent(platform)}`);
         if (resp.ok) {
           const json = await resp.json();
-          if (json.success) storeData = json;
+          if (json.success) { storeData = json; storeVerified = isRealScrape(json); }
         }
       } catch(e) {
         console.warn('api_scrape fetch failed, falling back:', e);
@@ -5538,6 +5552,7 @@ async function parseAndAddStoreDirect() {
       sourceType: platform
     };
 
+    flagUnverified(storeObj, storeVerified);
     const existingIdx = state.stores.findIndex(s => s.id === finalId);
     if (existingIdx >= 0) {
       state.stores[existingIdx] = storeObj;
@@ -6058,11 +6073,23 @@ function initStoreMap() {
 
 // --- 日文介面用的字串／資料轉換 ---
 function tr(zh, ja) { return state.langMode === 'ja' ? ja : zh; }
-const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
+const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外', '數字待確認': '数値要確認' };
 function storeStatusText(s) { const l = s.statusLabel || ''; return state.langMode === 'ja' ? (STATUS_JA[l] || l) : l; }
 function storeTitleText(s) { return state.langMode === 'ja' ? (s.titleJa || s.title) : s.title; }
 function jaMonths(v) { return state.langMode === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : v; }
 const isMobileView = () => window.innerWidth <= 900;
+
+// 無法讀到真實數字（例如被網站擋掉）時，店面標成「數字待確認」，不假裝是真資料
+function flagUnverified(obj, verified) {
+  if (verified || !obj) return obj;
+  obj.unverified = true;
+  obj.status = 'agency';
+  obj.statusLabel = '數字待確認';
+  obj.cons = '⚠ 金額、坪數為暫代值，尚未核對原網頁。' + (obj.cons ? ' ' + obj.cons : '');
+  obj.consJa = '⚠ 賃料・面積は仮の値です。元ページで要確認。' + (obj.consJa ? ' ' + obj.consJa : '');
+  return obj;
+}
+const isRealScrape = j => !!(j && j.success && !j.fallback && !j.unverified && Number(j.rent) && Number(j.area));
 
 // 點動態裡的店面連結／卡片：切到 MAP 分頁並定位到該店面
 function gotoStoreOnMap(storeId) {
@@ -6918,6 +6945,29 @@ loadAppState();
     applyLanguageLayout();
   } catch (e) {}
 })();
+// --- 店面資料修正：store_fixes.json 內版本較新的欄位，覆蓋本機與雲端的舊值 ---
+async function applyStoreFixes() {
+  try {
+    const r = await fetch('store_fixes.json', { cache: 'no-store' });
+    if (!r.ok) return;
+    const fixes = await r.json();
+    let changed = false;
+    Object.keys(fixes).forEach(id => {
+      const s = state.stores.find(x => x.id === id), f = fixes[id];
+      if (!s || (Number(s.fixV) || 0) >= (Number(f.fixV) || 0)) return;
+      Object.keys(f).forEach(k => { if (f[k] === null) delete s[k]; else s[k] = f[k]; });
+      s.unverified = false;
+      s.editedAt = Date.now();
+      changed = true;
+    });
+    if (changed) {
+      saveAppState(true);
+      renderStores();
+      if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
+    }
+  } catch (e) {}
+}
+
 // Lynn 點右上角的名字：一鍵切到日本端預覽／回到 Lynn
 (function badgeToggle() {
   const b = document.getElementById('current-user-badge');
@@ -6942,7 +6992,7 @@ function autoClearAuditOnce() {
     if (changed) saveAppState(true);
   } catch (e) {}
 }
-syncCloudData().then(autoClearAuditOnce, autoClearAuditOnce);
+syncCloudData().then(applyStoreFixes, applyStoreFixes).then(autoClearAuditOnce, autoClearAuditOnce);
 </script>
 
 </body>

@@ -1,0 +1,42 @@
+{
+  "rakuya-016ee134336738a": {
+    "fixV": 1,
+    "title": "中山北路優質金店面",
+    "titleJa": null,
+    "address": "台北市中山區中山北路二段",
+    "lat": 25.0583,
+    "lng": 121.5226,
+    "rent": 150000,
+    "area": 17.75,
+    "deposit": 600000,
+    "freeRent": "另議",
+    "realCost": 168165,
+    "floor": "1/3 樓",
+    "pros": "中山北路二段正面大馬路，廣告效益強；近馬偕商圈，捷運雙連站約206公尺、中山站約481公尺；1/3樓店面。",
+    "prosJa": null,
+    "cons": "使用面積僅17.75坪；押金60萬元（4個月租金）；已上架30天以上。地圖位置為依周邊站點推估的概略位置。",
+    "consJa": null,
+    "url": "https://rent.rakuya.com.tw/item/016ee134336738a",
+    "images": [
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_5_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_6_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_7_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_8_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_9_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_10_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_11_b.jpeg",
+      "https://static.rakuya.com.tw/r2/n738/7b/c0/34336738_12_b.jpeg"
+    ],
+    "activeImgIdx": 0
+  },
+  "rakuya-034d4c34943093e": {
+    "fixV": 1,
+    "area": 21.63,
+    "freeRent": "另議",
+    "floor": "1~2 / 9 樓",
+    "pros": "位於南京東路一段條通商圈（林森北路生活圈），日式餐飲與酒吧林立；1~2樓角窗店面，坪數21.63坪（附屬建物另計5.36坪）。",
+    "prosJa": null,
+    "cons": "條通巷弄車道較窄，主要依賴捷運松江南京站（約650公尺）、中山站（約800公尺）人流與夜間步行客群；管理費每月12,147元；押金為三個月租金。",
+    "consJa": null
+  }
+}

@@ -33,7 +33,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
 .addr{font-size:11.5px;color:var(--muted);margin-bottom:5px}
 .pills{display:flex;flex-wrap:wrap;gap:4px}
 .pill{font-size:11px;padding:2px 7px;border-radius:5px;border:1px solid;font-weight:700;white-space:nowrap}
-.p-rent{background:#fee2e2;color:#991b1b;border-color:#fca5a5}.p-ok{background:#dcfce7;color:#166534;border-color:#86efac}.p-mid{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.p-warn{background:#fee2e2;color:#b91c1c;border-color:#fca5a5}.p-rent{background:#fee2e2;color:#991b1b;border-color:#fca5a5}.p-ok{background:#dcfce7;color:#166534;border-color:#86efac}.p-mid{background:#fef3c7;color:#92400e;border-color:#fde68a}
 .p-area{background:#ccfbf1;color:#115e59;border-color:#99f6e4}.p-unit{background:#f1f5f9;color:#475569;border-color:#e2e8f0}.p-real{background:#fef3c7;color:#92400e;border-color:#fde68a}
 .more{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;line-height:1.6}
 .card.open .more{display:block}
@@ -72,7 +72,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     ja: { rent: '賃料', unit: '坪単価', real: '実質月額', wan: '万', rentL: '掲載賃料', areaL: '使用面積', unitL: '坪単価', realL: '実質月額', depL: '保証金', freeL: 'フリーレント', regL: '営業登記', invL: 'インボイス', pros: '強み', cons: '注意', yes: '可', no: '不可', src: '元ページ',
       sorts: [['default', '標準'], ['area', '面積'], ['rent', '賃料'], ['unit', '坪単価']], none: '店舗がありません' }
   };
-  var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
+  var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '數字待確認': '数値要確認', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
   var q = new URLSearchParams(location.search);
   var lang = (q.get('lang') === 'ja' || (!q.get('lang') && /^ja/i.test(navigator.language || '') && false)) ? 'ja' : 'zh';
   try { var sl = localStorage.getItem('gtw_map_lang'); if (!q.get('lang') && sl) lang = sl; } catch (e) {}
@@ -109,7 +109,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
       return '<div class="card" id="c-' + esc(s.id) + '" data-id="' + esc(s.id) + '"><div class="row">' +
         (img ? '<img class="thumb" src="' + esc(img) + '" alt="">' : '<div class="thumb"></div>') +
         '<div class="info"><span class="tag">' + esc(status(s)) + '</span><div class="title">' + esc(title(s)) + '</div><div class="addr">' + esc(s.address) + '</div>' +
-        '<div class="pills"><span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '（' + jw(s.rent) + '）</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
+        '<div class="pills">' + (s.unverified ? '<span class="pill p-warn">⚠ ' + (lang === 'ja' ? '数値要確認' : '數字待確認') + '</span>' : '') + '<span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '（' + jw(s.rent) + '）</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
         '<span class="pill p-unit">' + t.unit + ' ' + un.toLocaleString() + '/坪（' + jy(un) + '）</span><span class="pill p-real">' + t.real + ' NT$ ' + rc.toLocaleString() + '（' + jw(rc) + '）</span></div></div></div>' +
         '<div class="more">' +
         (imgs.length > 1 ? '<div class="strip">' + imgs.map(function (u) { return '<img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">'; }).join('') + '</div>' : '') +
