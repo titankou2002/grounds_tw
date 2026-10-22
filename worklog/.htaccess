@@ -6,3 +6,13 @@
         Header set Expires "0"
     </IfModule>
 </Files>
+
+# ---- 密碼閘門：所有請求都先經過 gate.php（登入後 cookie 記住一年） ----
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} !/gate\.php$
+    RewriteRule ^ gate.php [L]
+</IfModule>

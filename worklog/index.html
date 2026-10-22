@@ -851,6 +851,13 @@
       flex-direction: column;
       gap: 12px;
     }
+    .daily-old > summary { cursor:pointer; padding:8px 4px 12px; font-size:12.5px; font-weight:700; color:var(--fg-muted); }
+    .daily-log { border:1px solid var(--border); border-radius:12px; background:#fff; margin-bottom:16px; overflow:hidden; }
+    .daily-log-head { padding:10px 14px; background:#f6f6f4; border-bottom:1px solid var(--border); }
+    .daily-log-date { font-size:15px; font-weight:800; }
+    .daily-log-meta { font-size:11.5px; color:var(--fg-muted); margin-top:2px; }
+    .daily-log .feed-card { border:0; border-radius:0; box-shadow:none; margin:0; border-bottom:1px solid var(--border); }
+    .daily-log .feed-card:last-child { border-bottom:0; }
     .feed-card {
       background: var(--card-bg);
       border: 1px solid var(--border);
@@ -2892,132 +2899,9 @@ const DEFAULT_MEMBERS = [
   }
 ];
 
-const DEFAULT_BOARD_TOPICS = [
-  {
-    id: "board-1",
-    category: "品牌策略",
-    status: "discussing",
-    titleZh: "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
-    titleJa: "旗艦1号店の商圏ポジショニング策定：赤峰街路面店 vs 中山駅メインストリート",
-    summaryZh: "首店究竟要以赤峰街文青高黏著度小金店建立小眾潮流形象，還是以中山站56坪大坪數旗艦店打響全台知名度？",
-    summaryJa: "第1号店は赤峰街の路面店でストリートファッション・カルチャーの独自性を発信すべきか、中山駅前の56坪大型旗艦店で台湾全土の認知度を一気に高めるべきか？",
-    author: "Lynn",
-    date: "2026/10/22 06:00",
-    storeId: "591-21939969",
-    storeTitle: "中山站商圈金店面 (56.6坪)",
-    comments: [
-      {
-        id: "c1-1",
-        author: "坂部三樹郎",
-        role: "jp",
-        date: "2026/10/22 06:15",
-        textZh: "赤峰街的次文化感非常契合 grounds 的品牌靈魂，但空間若低於20坪可能無法完整展出 jewelry 系列全鞋款。",
-        textJa: "赤峰街のストリート感はブランドの世界観に合致するが、20坪未満だとjewelryの全ラインナップ展開に制限が出る懸念がある。"
-      },
-      {
-        id: "c1-2",
-        author: "Lynn",
-        role: "tw",
-        date: "2026/10/22 06:30",
-        textZh: "我們目前有鎖定承德路二段與民生西路雙門面22.8坪物件，兼具赤峰商圈人潮與足夠陳列面寬，本週五安排現勘。",
-        textJa: "現在、赤峰街至近の承徳路二段22.8坪（二面開口）に注目しており、集客力と陳列幅を両立できます。今週金曜に内見予定。"
-      }
-    ]
-  },
-  {
-    id: "board-2",
-    category: "租約談判",
-    status: "pending",
-    titleZh: "免租裝修期與首約免租期爭取談判底線",
-    titleJa: "フリーレント（内装工事猶予期間）の交渉下限ライン設定",
-    summaryZh: "台北一級商圈房東通常僅給 14~30 天免租期。考量日系極簡特殊規格陳列裝潢需 45~60 天，需定調爭取目標與租金補貼底線。",
-    summaryJa: "台北の商業地では通常14〜30日のフリーレントが通例だが、特殊什器と内装設計に45〜60日を要するため、交渉下限条件を確定させる必要がある。",
-    author: "陳律師 / 顧問",
-    date: "2026/10/22 05:30",
-    storeId: "",
-    storeTitle: "",
-    comments: [
-      {
-        id: "c2-1",
-        author: "陳顧問",
-        role: "tw",
-        date: "2026/10/22 05:40",
-        textZh: "建議正式合約載明起租日起算45天免租期；若房東堅持僅給30天，則要求前兩個月租金折抵20%作為補貼。",
-        textJa: "契約上のフリーレントを最低45日確保、不可なら初期2ヶ月の賃料20%減額を条件として提示することを推奨。"
-      }
-    ]
-  },
-  {
-    id: "board-3",
-    category: "智財法務",
-    status: "resolved",
-    titleZh: "台灣商標註冊與代理經銷授權書官方公證進度",
-    titleJa: "台湾商標登録状況および正規販売代理権ライセンス認証",
-    summaryZh: "第25類（鞋履服飾）台灣商標已進入經濟部智財局審定公告階段；日本總公司出具之台灣獨家代理授權書已完成外務省公證。",
-    summaryJa: "第25類（靴・アパレル）の商標出願は台湾経済部知財局にて公告段階。日本法人発行の台湾総代理授権書は公証完了。",
-    author: "陳律師 / 顧問",
-    date: "2026/10/21 18:00",
-    storeId: "",
-    storeTitle: "",
-    comments: [
-      {
-        id: "c3-1",
-        author: "陳顧問",
-        role: "tw",
-        date: "2026/10/21 18:30",
-        textZh: "商標優先權無爭議案件，官方證書預計於 3 個月內核發，不影響首店開幕營業與海關備案。",
-        textJa: "異議申し立てなく順調に推移しており、3ヶ月以内に正式証書が交付予定。店舗オープンおよび税関手続きに支障なし。"
-      }
-    ]
-  },
-
-  {
-    id: "board-5",
-    category: "空間設計",
-    status: "pending",
-    titleZh: "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
-    titleJa: "内装什器・ディスプレイツール：日本からの直輸入 vs 台湾現地特注製作",
-    summaryZh: "grounds 招牌透明氣泡鞋底造型的壓克力鞋架與金屬陳列架，是否由日本原廠整組海運來台，或由台灣精工工廠照圖打樣？",
-    summaryJa: "ブランド象徴である透明ソール什器・アクリル特注ラックについて、日本からのコンテナ輸送か、台湾の高品質アクリル工場でのライセンス製作か比較検討。",
-    author: "Lynn",
-    date: "2026/10/21 11:00",
-    storeId: "",
-    storeTitle: "",
-    comments: [
-      {
-        id: "c5-1",
-        author: "坂部三樹郎",
-        role: "jp",
-        date: "2026/10/21 13:00",
-        textZh: "日本有合作的特殊透明成型工廠，但海運材積與關稅成本較高。台灣若能找到能做出無氣泡高透光接合的工廠，先做1組樣品確認也是好方案。",
-        textJa: "日本の専属工場製が品質上最も確実だが輸送費・関税が嵩む。台湾で高透過無気泡アクリル加工が可能な先があれば、まずサンプル1台を試作検討したい。"
-      }
-    ]
-  },
-  {
-    id: "board-6",
-    category: "物流供應鏈",
-    status: "resolved",
-    titleZh: "首批現貨報關進口與保稅/溫控倉儲配合方案",
-    titleJa: "初回来日在庫の輸入通関および空調完備保管倉庫の選定",
-    summaryZh: "首批預計進口 1,200 雙（涵蓋 MOOPIE, JEWELRY 等全系列），已洽定具備空調恆溫之北部第三方電商物流倉。",
-    summaryJa: "初回輸入1,200足（MOOPIE, JEWELRY等）。台北近郊の空調完備フルフィルメント倉庫と基本合意。",
-    author: "物流部",
-    date: "2026/10/20 16:00",
-    storeId: "",
-    storeTitle: "",
-    comments: [
-      {
-        id: "c6-1",
-        author: "Lynn",
-        role: "tw",
-        date: "2026/10/20 17:10",
-        textZh: "鞋盒包裝完整度檢驗與條碼貼標作業已確認由倉儲方配合，支援門市日補貨與官網下單同倉配送。",
-        textJa: "検品・バーコード貼付・店舗向け即日補充配送およびオンライン受注出荷の一元管理体制が整備完了。"
-      }
-    ]
-  }
-];
+const DEFAULT_BOARD_TOPICS = [];
+// 舊版預載的 6 個範例議題 id（一律清除，BOARD 預設空白）
+const LEGACY_BOARD_IDS = new Set(['board-1','board-2','board-3','board-4','board-5','board-6']);
 
 
 let state = {
@@ -3282,9 +3166,8 @@ function loadAppState() {
     if (Array.isArray(loadedData.boardTopics) && loadedData.boardTopics.length > 0) state.boardTopics = loadedData.boardTopics;
     if (Array.isArray(loadedData.deletedLogs)) state.deletedLogs = loadedData.deletedLogs;
   }
-  if (!Array.isArray(state.boardTopics) || state.boardTopics.length === 0) {
-    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
-  }
+  if (!Array.isArray(state.boardTopics)) state.boardTopics = [];
+  state.boardTopics = state.boardTopics.filter(t => !LEGACY_BOARD_IDS.has(t.id));
 
   // Purge any deleted items (and old sample placeholders) so they NEVER resurrect
   const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
@@ -3512,7 +3395,7 @@ async function syncCloudData() {
         if (Array.isArray(data.boardTopics) && data.boardTopics.length > 0) {
           const localBoardIds = new Set(state.boardTopics.map(b => b.id));
           data.boardTopics.forEach(bt => {
-            if (!localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id)) {
+            if (!localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id) && !LEGACY_BOARD_IDS.has(bt.id)) {
               state.boardTopics.push(bt);
               localBoardIds.add(bt.id);
               updated = true;
@@ -4284,6 +4167,55 @@ async function submitFeedPost() {
 }
 
 // --- Render Feeds ---
+// 日期後加上星期：中文「（週四）」、日文「（木）」
+function fmtDateWd(str, lang) {
+  const m = /^(\d{4})\/(\d{1,2})\/(\d{1,2})(.*)$/.exec(String(str || '').trim());
+  if (!m) return str || '';
+  const wd = new Date(+m[1], +m[2] - 1, +m[3]).getDay();
+  const label = lang === 'ja' ? '日月火水木金土'[wd] : '日一二三四五六'[wd];
+  const wrap = lang === 'ja' ? `（${label}）` : `（週${label}）`;
+  const ymd = `${m[2].padStart(2, '0')}/${m[3].padStart(2, '0')}`;
+  const withYear = +m[1] !== new Date().getFullYear() ? `${m[1]}/` : '';
+  return `${withYear}${ymd}${wrap}${m[4]}`;
+}
+
+// Lynn 以外的人看到「每日工作日誌」：同一天的多筆動態合併成一篇
+function renderDailyLogs(box, colLang) {
+  const days = {};
+  state.posts.forEach(p => {
+    const d = (/^\d{4}\/\d{1,2}\/\d{1,2}/.exec(p.date || '') || ['未知日期'])[0];
+    (days[d] = days[d] || []).push(p);
+  });
+  const cutoff = Date.now() - 7 * 86400000;
+  let oldBox = null;
+  Object.keys(days).sort().reverse().forEach(d => {
+    const dm = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(d);
+    const isOld = dm && new Date(+dm[1], +dm[2] - 1, +dm[3]).getTime() < cutoff;
+    const list = days[d].slice().sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+    const hours = list.reduce((sum, p) => sum + (Number(p.hours) || 0), 0);
+    const authors = Array.from(new Set(list.map(p => p.author))).join('、');
+    const wrap = document.createElement('div');
+    wrap.className = 'daily-log';
+    wrap.innerHTML = `
+      <div class="daily-log-head">
+        <div class="daily-log-date">${fmtDateWd(d, colLang)}</div>
+        <div class="daily-log-meta">${colLang === 'ja' ? `${list.length} 件・合計 ${hours} 時間・${authors}` : `${list.length} 筆・合計 ${hours} 小時・${authors}`}</div>
+      </div>`;
+    list.forEach(p => wrap.appendChild(createCard(p, colLang)));
+    if (isOld) {
+      if (!oldBox) {
+        oldBox = document.createElement('details');
+        oldBox.className = 'daily-old';
+        oldBox.innerHTML = `<summary>${colLang === 'ja' ? '7日より前の日誌' : '7 天前的日誌'}</summary>`;
+        box.appendChild(oldBox);
+      }
+      oldBox.appendChild(wrap);
+    } else {
+      box.appendChild(wrap);
+    }
+  });
+}
+
 function renderFeeds() {
   const zhBox = document.getElementById('feed-zh-box');
   const jaBox = document.getElementById('feed-ja-box');
@@ -4291,6 +4223,12 @@ function renderFeeds() {
 
   zhBox.innerHTML = '';
   jaBox.innerHTML = '';
+
+  if (state.currentUser !== 'Lynn') {
+    renderDailyLogs(zhBox, 'zh');
+    renderDailyLogs(jaBox, 'ja');
+    return;
+  }
 
   state.posts.forEach(p => {
     zhBox.appendChild(createCard(p, 'zh'));
@@ -4406,7 +4344,7 @@ function createCard(p, colLang) {
       <div class="comment-item">
         <div class="comment-header">
           <span>${c.author}</span>
-          <span>${c.date}</span>
+          <span>${fmtDateWd(c.date, colLang)}</span>
         </div>
         <div class="comment-body">${cText}</div>
         ${commAttachHtml}
@@ -4427,7 +4365,7 @@ function createCard(p, colLang) {
         <div class="author-avatar">${p.author.slice(0, 1)}</div>
         <div>
           <div class="author-name">${p.author}</div>
-          <div class="post-timestamp">${p.date}</div>
+          <div class="post-timestamp">${fmtDateWd(p.date, colLang)}</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
@@ -6168,9 +6106,8 @@ function renderBoard() {
   const container = document.getElementById('board-topics-list');
   if (!container) return;
 
-  if (!Array.isArray(state.boardTopics) || state.boardTopics.length === 0) {
-    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
-  }
+  if (!Array.isArray(state.boardTopics)) state.boardTopics = [];
+  state.boardTopics = state.boardTopics.filter(t => !LEGACY_BOARD_IDS.has(t.id));
 
   // Update counter badges
   const allCount = state.boardTopics.length;
@@ -6238,7 +6175,7 @@ function renderBoard() {
             <span class="board-comment-role-tag ${c.role === 'jp' ? 'jp' : 'tw'}">${c.role === 'jp' ? 'JP 日本' : 'TW 台灣'}</span>
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
-            <span class="board-comment-date">${escapeHtml(c.date || '')}</span>
+            <span class="board-comment-date">${escapeHtml(fmtDateWd(c.date || '', state.langMode === 'ja' ? 'ja' : 'zh'))}</span>
             <button type="button" class="board-icon-btn danger" style="padding:1px 4px;font-size:11px;" onclick="deleteBoardComment('${t.id}', '${c.id}')" title="刪除留言">×</button>
           </div>
         </div>
@@ -6279,7 +6216,7 @@ function renderBoard() {
         <div class="board-meta-bar">
           <div style="display:flex;align-items:center;gap:12px;">
             <span>發起人：<b>${escapeHtml(t.author || 'Lynn')}</b></span>
-            <span>時間：${escapeHtml(t.date || '')}</span>
+            <span>時間：${escapeHtml(fmtDateWd(t.date || '', state.langMode === 'ja' ? 'ja' : 'zh'))}</span>
           </div>
           <div style="font-weight:700;">
             💬 ${comments.length} 則交流反饋
@@ -6439,9 +6376,7 @@ async function submitBoardTopic() {
     console.warn('Auto translation error:', e);
   }
 
-  if (!Array.isArray(state.boardTopics)) {
-    state.boardTopics = JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS));
-  }
+  if (!Array.isArray(state.boardTopics)) state.boardTopics = [];
 
   let storeTitle = '';
   if (storeId) {

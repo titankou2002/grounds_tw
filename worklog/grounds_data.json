@@ -79,6 +79,143 @@
   ],
   "stores": [
     {
+      "id": "AGY-A2610063",
+      "title": "魔術真髮錦州店（東家國際地產 #A2610063）",
+      "address": "台北市中山區錦州街 23 巷 7 號、9 號",
+      "status": "candidate",
+      "statusLabel": "房仲資料",
+      "lat": 25.0592,
+      "lng": 121.5275,
+      "rent": 250000,
+      "area": 72.8,
+      "deposit": 750000,
+      "freeRent": "另議 (爭取1.5個月)",
+      "realCost": 280275,
+      "canRegister": true,
+      "canInvoice": true,
+      "fireSafety": true,
+      "pros": "面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。",
+      "cons": "錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。",
+      "url": "agency_A2610063.jpg",
+      "images": [
+        "agency_A2610063.jpg"
+      ],
+      "activeImgIdx": 0,
+      "sourceType": "agency"
+    },
+    {
+      "id": "591-21939969",
+      "title": "中山站商圈金店面",
+      "address": "台北市中山區中山北路二段26巷（捷運中山站 206 公尺）",
+      "status": "candidate",
+      "statusLabel": "重點候選",
+      "lat": 25.0535,
+      "lng": 121.5218,
+      "rent": 285000,
+      "area": 56,
+      "deposit": 855000,
+      "freeRent": "1.5 個月",
+      "realCost": 319514,
+      "canRegister": true,
+      "canInvoice": true,
+      "fireSafety": true,
+      "pros": "捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。",
+      "cons": "月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。",
+      "url": "https://business.591.com.tw/rent/21939969",
+      "images": [
+        "https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/08/24/178755227430594305.jpg!1000x.water2.jpg"
+      ],
+      "activeImgIdx": 0
+    },
+    {
+      "id": "591-21265868",
+      "title": "民權西路站可餐飲廣告效益佳大面寬金店面",
+      "address": "台北市中山區撫順街（近民權西路雙捷運站）",
+      "status": "candidate",
+      "statusLabel": "重點候選",
+      "lat": 25.0643544,
+      "lng": 121.521515,
+      "rent": 180000,
+      "area": 60.71,
+      "deposit": 360000,
+      "freeRent": "1.5 個月",
+      "realCost": 201798,
+      "canRegister": true,
+      "canInvoice": true,
+      "fireSafety": true,
+      "pros": "大面寬8米廣告曝光極強、民權西路雙捷運交會樞紐，室內實達60.7坪大空間。",
+      "cons": "撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。",
+      "url": "https://business.591.com.tw/rent/21265868",
+      "images": [
+        "https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/01/07/176777449649381708.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/01/06/176768970124590304.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/01/06/176768970110939406.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/01/06/176768970128324700.jpg!1000x.water2.jpg"
+      ],
+      "activeImgIdx": 0
+    },
+    {
+      "id": "591-20654976",
+      "title": "MRT行天宮站 含稅・店面有獨立廁所",
+      "address": "台北市中山區吉林路（近行天宮捷運站 2 號出口）",
+      "status": "candidate",
+      "statusLabel": "重點候選",
+      "lat": 25.0598,
+      "lng": 121.5302,
+      "rent": 120000,
+      "area": 25.5,
+      "deposit": 300000,
+      "freeRent": "1 個月",
+      "realCost": 134532,
+      "canRegister": true,
+      "canInvoice": true,
+      "fireSafety": true,
+      "pros": "行天宮捷運站步行2分鐘，吉林路商務白領人流多，含稅附獨立專用衛生間，挑高3.6米。",
+      "cons": "25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。",
+      "url": "https://business.591.com.tw/rent/20654976",
+      "images": [
+        "https://img2.591.com.tw/house/2026/02/06/177037031442729303.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/02/06/177037031453341906.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/02/06/177037031457161105.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/02/06/177037031457680307.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/02/06/177037031452313804.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/02/06/177037031484440409.jpg!1000x.water2.jpg"
+      ],
+      "activeImgIdx": 0
+    },
+    {
+      "id": "591-22015090",
+      "title": "MRT中山國小 龍江商圈 一個月免租期",
+      "address": "台北市中山區龍江路377巷",
+      "status": "candidate",
+      "statusLabel": "重點候選",
+      "lat": 25.0628,
+      "lng": 121.5412,
+      "rent": 45999,
+      "area": 35,
+      "deposit": 92000,
+      "freeRent": "1 個月",
+      "realCost": 51564,
+      "canRegister": true,
+      "canInvoice": true,
+      "fireSafety": true,
+      "pros": "總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。",
+      "cons": "位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。",
+      "url": "https://business.591.com.tw/rent/22015090",
+      "images": [
+        "https://img2.591.com.tw/house/2026/10/15/179203421404381607.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/10/15/179203421515614508.jpg!1000x.water2.jpg",
+        "https://img1.591.com.tw/house/2026/10/15/179203421395244009.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/10/15/179203421510057800.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/10/15/179203421550285601.jpg!1000x.water2.jpg",
+        "https://img2.591.com.tw/house/2026/10/15/179203421399201808.jpg!1000x.water2.jpg"
+      ],
+      "activeImgIdx": 0
+    },
+    {
       "id": "rakuya-016ee134336738a",
       "title": "樂屋網#016ee134336738a 精華商圈店面",
       "titleJa": "樂屋網#016ee134336738a 商業エリア路面店",
@@ -230,156 +367,144 @@
       "activeImgIdx": 0,
       "consJa": "周囲の路地では、一時的な停車と荷降ろしのルートを検討する必要がある場合があります。",
       "prosJa": "MRTや商店街の成熟したエリアに近く、ビジネスやレジャーのお客様が集まる広く目を引くエリアです。"
-    },
-    {
-      "id": "AGY-A2610063",
-      "title": "魔術真髮錦州店（東家國際地產 #A2610063）",
-      "address": "台北市中山區錦州街 23 巷 7 號、9 號",
-      "status": "candidate",
-      "statusLabel": "房仲資料",
-      "lat": 25.0592,
-      "lng": 121.5275,
-      "rent": 250000,
-      "area": 72.8,
-      "deposit": 750000,
-      "freeRent": "另議 (爭取1.5個月)",
-      "realCost": 280275,
-      "canRegister": true,
-      "canInvoice": true,
-      "fireSafety": true,
-      "pros": "面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。",
-      "cons": "錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。",
-      "url": "agency_A2610063.jpg",
-      "images": [
-        "agency_A2610063.jpg"
-      ],
-      "activeImgIdx": 0,
-      "sourceType": "agency"
-    },
-    {
-      "id": "591-21939969",
-      "title": "中山站商圈金店面",
-      "address": "台北市中山區中山北路二段26巷（捷運中山站 206 公尺）",
-      "status": "candidate",
-      "statusLabel": "重點候選",
-      "lat": 25.0535,
-      "lng": 121.5218,
-      "rent": 285000,
-      "area": 56,
-      "deposit": 855000,
-      "freeRent": "1.5 個月",
-      "realCost": 319514,
-      "canRegister": true,
-      "canInvoice": true,
-      "fireSafety": true,
-      "pros": "捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。",
-      "cons": "月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。",
-      "url": "https://business.591.com.tw/rent/21939969",
-      "images": [
-        "https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/08/24/178755227430594305.jpg!1000x.water2.jpg"
-      ],
-      "activeImgIdx": 0,
-      "prosJa": "中山MRT駅は徒歩206メートルで、56坪の広大なビジネスエリア、南と西のコア路地、そして国際的なトレンドとブティックブランドがあります。",
-      "consJa": "月額賃料285,000円は一次旗艦予算に属し、台湾初の店舗の売上高・売上総利益モデルを総合的に評価する必要がある。"
-    },
-    {
-      "id": "591-21265868",
-      "title": "民權西路站可餐飲廣告效益佳大面寬金店面",
-      "address": "台北市中山區撫順街（近民權西路雙捷運站）",
-      "status": "candidate",
-      "statusLabel": "重點候選",
-      "lat": 25.0643544,
-      "lng": 121.521515,
-      "rent": 180000,
-      "area": 60.71,
-      "deposit": 360000,
-      "freeRent": "1.5 個月",
-      "realCost": 201798,
-      "canRegister": true,
-      "canInvoice": true,
-      "fireSafety": true,
-      "pros": "大面寬8米廣告曝光極強、民權西路雙捷運交會樞紐，室內實達60.7坪大空間。",
-      "cons": "撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。",
-      "url": "https://business.591.com.tw/rent/21265868",
-      "images": [
-        "https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/01/07/176777449649381708.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/01/06/176768970124590304.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/01/06/176768970110939406.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/01/06/176768970128324700.jpg!1000x.water2.jpg"
-      ],
-      "activeImgIdx": 0
-    },
-    {
-      "id": "591-20654976",
-      "title": "MRT行天宮站 含稅・店面有獨立廁所",
-      "address": "台北市中山區吉林路（近行天宮捷運站 2 號出口）",
-      "status": "candidate",
-      "statusLabel": "重點候選",
-      "lat": 25.0598,
-      "lng": 121.5302,
-      "rent": 120000,
-      "area": 25.5,
-      "deposit": 300000,
-      "freeRent": "1 個月",
-      "realCost": 134532,
-      "canRegister": true,
-      "canInvoice": true,
-      "fireSafety": true,
-      "pros": "行天宮捷運站步行2分鐘，吉林路商務白領人流多，含稅附獨立專用衛生間，挑高3.6米。",
-      "cons": "25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。",
-      "url": "https://business.591.com.tw/rent/20654976",
-      "images": [
-        "https://img2.591.com.tw/house/2026/02/06/177037031442729303.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/02/06/177037031453341906.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/02/06/177037031457161105.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/02/06/177037031457680307.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/02/06/177037031452313804.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/02/06/177037031484440409.jpg!1000x.water2.jpg"
-      ],
-      "activeImgIdx": 0
-    },
-    {
-      "id": "591-22015090",
-      "title": "MRT中山國小 龍江商圈 一個月免租期",
-      "address": "台北市中山區龍江路377巷",
-      "status": "candidate",
-      "statusLabel": "重點候選",
-      "lat": 25.0628,
-      "lng": 121.5412,
-      "rent": 45999,
-      "area": 35,
-      "deposit": 92000,
-      "freeRent": "1 個月",
-      "realCost": 51564,
-      "canRegister": true,
-      "canInvoice": true,
-      "fireSafety": true,
-      "pros": "總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。",
-      "cons": "位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。",
-      "url": "https://business.591.com.tw/rent/22015090",
-      "images": [
-        "https://img2.591.com.tw/house/2026/10/15/179203421404381607.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/10/15/179203421515614508.jpg!1000x.water2.jpg",
-        "https://img1.591.com.tw/house/2026/10/15/179203421395244009.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/10/15/179203421510057800.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/10/15/179203421550285601.jpg!1000x.water2.jpg",
-        "https://img2.591.com.tw/house/2026/10/15/179203421399201808.jpg!1000x.water2.jpg"
-      ],
-      "activeImgIdx": 5,
-      "prosJa": "総賃料負担は非常に軽く（ 46,000円/月）、広々とした35坪、レイアウトは独立した外部照明、装飾は1ヶ月間無料です。",
-      "consJa": "龍江商業区路地に位置し、平日は主に周辺住民の生活圏にあり、地域社会の正確な案内が必要である。"
     }
   ],
+  "boardTopics": [],
   "deletedLogs": [
     {
       "type": "決策議題",
-      "id": "board-4",
-      "title": "台灣實體公司設立架構與資本額外匯匯入時程",
+      "id": "board-5",
+      "title": "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
       "deletedBy": "Lynn",
-      "deletedAt": "2026/10/22 上午07:15:00",
+      "deletedAt": "2026/10/22 清晨7:40:20",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-2",
+      "title": "免租裝修期與首約免租期爭取談判底線",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:40:15",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-1",
+      "title": "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:40:08",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-6",
+      "title": "首批現貨報關進口與保稅/溫控倉儲配合方案",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:26:11",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-5",
+      "title": "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:26:07",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-3",
+      "title": "台灣商標註冊與代理經銷授權書官方公證進度",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:26:05",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-2",
+      "title": "免租裝修期與首約免租期爭取談判底線",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:55",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-1",
+      "title": "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:52",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-6",
+      "title": "首批現貨報關進口與保稅/溫控倉儲配合方案",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:49",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-5",
+      "title": "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:45",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-3",
+      "title": "台灣商標註冊與代理經銷授權書官方公證進度",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:35",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-2",
+      "title": "免租裝修期與首約免租期爭取談判底線",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:28",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-1",
+      "title": "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:25",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-6",
+      "title": "首批現貨報關進口與保稅/溫控倉儲配合方案",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:20",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-5",
+      "title": "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:18",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-3",
+      "title": "台灣商標註冊與代理經銷授權書官方公證進度",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:11",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-2",
+      "title": "免租裝修期與首約免租期爭取談判底線",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 清晨7:25:07",
       "reason": "議題結案/紀錄調整"
     },
     {
@@ -388,22 +513,6 @@
       "title": "於樂屋網（住商不動產）檢索到南京東路一段條通商圈安家京漾店面...",
       "deletedBy": "Lynn",
       "deletedAt": "2026/10/22 上午6:23:10",
-      "reason": "紀錄調整"
-    },
-    {
-      "type": "工作動態",
-      "id": 203,
-      "title": "於樂屋網（住商不動產）檢索到南京東路一段條通商圈安家京漾店面...",
-      "deletedBy": "Lynn",
-      "deletedAt": "2026/10/22 上午6:21:12",
-      "reason": "紀錄調整"
-    },
-    {
-      "type": "工作動態",
-      "id": 203,
-      "title": "於樂屋網（住商不動產）檢索到南京東路一段條通商圈安家京漾店面...",
-      "deletedBy": "Lynn",
-      "deletedAt": "2026/10/22 上午6:09:51",
       "reason": "紀錄調整"
     },
     {
@@ -460,14 +569,6 @@
       "title": "<a href=\"https://community.rak...",
       "deletedBy": "Lynn",
       "deletedAt": "2026/10/22 上午5:44:05",
-      "reason": "紀錄調整"
-    },
-    {
-      "type": "工作動態",
-      "id": 203,
-      "title": "於樂屋網（住商不動產）檢索到南京東路一段條通商圈安家京漾店面...",
-      "deletedBy": "Lynn",
-      "deletedAt": "2026/10/22 上午5:43:49",
       "reason": "紀錄調整"
     },
     {
@@ -533,132 +634,23 @@
       "deletedBy": "Lynn",
       "deletedAt": "2026/10/21 下午10:57:24",
       "reason": "紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-4",
+      "title": "台灣實體公司設立架構與資本額外匯匯入時程",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 上午07:15:00",
+      "reason": "議題結案/紀錄調整"
+    },
+    {
+      "type": "決策議題",
+      "id": "board-1",
+      "title": "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
+      "deletedBy": "Lynn",
+      "deletedAt": "2026/10/22 上午7:20:41",
+      "reason": "議題結案/紀錄調整"
     }
   ],
-  "updatedAt": 1792621390,
-  "boardTopics": [
-    {
-      "id": "board-1",
-      "category": "品牌策略",
-      "status": "discussing",
-      "titleZh": "首店商圈定位定調：赤峰街街邊店 vs 中山站主幹道",
-      "titleJa": "旗艦1号店の商圏ポジショニング策定：赤峰街路面店 vs 中山駅メインストリート",
-      "summaryZh": "首店究竟要以赤峰街文青高黏著度小金店建立小眾潮流形象，還是以中山站56坪大坪數旗艦店打響全台知名度？",
-      "summaryJa": "第1号店は赤峰街の路面店でストリートファッション・カルチャーの独自性を発信すべきか、中山駅前の56坪大型旗艦店で台湾全土の認知度を一気に高めるべきか？",
-      "author": "Lynn",
-      "date": "2026/10/22 06:00",
-      "storeId": "591-21939969",
-      "storeTitle": "中山站商圈金店面 (56.6坪)",
-      "comments": [
-        {
-          "id": "c1-1",
-          "author": "坂部三樹郎",
-          "role": "jp",
-          "date": "2026/10/22 06:15",
-          "textZh": "赤峰街的次文化感非常契合 grounds 的品牌靈魂，但空間若低於20坪可能無法完整展出 jewelry 系列全鞋款。",
-          "textJa": "赤峰街のストリート感はブランドの世界観に合致するが、20坪未満だとjewelryの全ラインナップ展開に制限が出る懸念がある。"
-        },
-        {
-          "id": "c1-2",
-          "author": "Lynn",
-          "role": "tw",
-          "date": "2026/10/22 06:30",
-          "textZh": "我們目前有鎖定承德路二段與民生西路雙門面22.8坪物件，兼具赤峰商圈人潮與足夠陳列面寬，本週五安排現勘。",
-          "textJa": "現在、赤峰街至近の承徳路二段22.8坪（二面開口）に注目しており、集客力と陳列幅を両立できます。今週金曜に内見予定。"
-        }
-      ]
-    },
-    {
-      "id": "board-2",
-      "category": "租約談判",
-      "status": "pending",
-      "titleZh": "免租裝修期與首約免租期爭取談判底線",
-      "titleJa": "フリーレント（内装工事猶予期間）の交渉下限ライン設定",
-      "summaryZh": "台北一級商圈房東通常僅給 14~30 天免租期。考量日系極簡特殊規格陳列裝潢需 45~60 天，需定調爭取目標與租金補貼底線。",
-      "summaryJa": "台北の商業地では通常14〜30日のフリーレントが通例だが、特殊什器と内装設計に45〜60日を要するため、交渉下限条件を確定させる必要がある。",
-      "author": "陳律師 / 顧問",
-      "date": "2026/10/22 05:30",
-      "storeId": "",
-      "storeTitle": "",
-      "comments": [
-        {
-          "id": "c2-1",
-          "author": "陳顧問",
-          "role": "tw",
-          "date": "2026/10/22 05:40",
-          "textZh": "建議正式合約載明起租日起算45天免租期；若房東堅持僅給30天，則要求前兩個月租金折抵20%作為補貼。",
-          "textJa": "契約上のフリーレントを最低45日確保、不可なら初期2ヶ月の賃料20%減額を条件として提示することを推奨。"
-        }
-      ]
-    },
-    {
-      "id": "board-3",
-      "category": "智財法務",
-      "status": "resolved",
-      "titleZh": "台灣商標註冊與代理經銷授權書官方公證進度",
-      "titleJa": "台湾商標登録状況および正規販売代理権ライセンス認証",
-      "summaryZh": "第25類（鞋履服飾）台灣商標已進入經濟部智財局審定公告階段；日本總公司出具之台灣獨家代理授權書已完成外務省公證。",
-      "summaryJa": "第25類（靴・アパレル）の商標出願は台湾経済部知財局にて公告段階。日本法人発行の台湾総代理授権書は公証完了。",
-      "author": "陳律師 / 顧問",
-      "date": "2026/10/21 18:00",
-      "storeId": "",
-      "storeTitle": "",
-      "comments": [
-        {
-          "id": "c3-1",
-          "author": "陳顧問",
-          "role": "tw",
-          "date": "2026/10/21 18:30",
-          "textZh": "商標優先權無爭議案件，官方證書預計於 3 個月內核發，不影響首店開幕營業與海關備案。",
-          "textJa": "異議申し立てなく順調に推移しており、3ヶ月以内に正式証書が交付予定。店舗オープンおよび税関手続きに支障なし。"
-        }
-      ]
-    },
-    {
-      "id": "board-5",
-      "category": "空間設計",
-      "status": "pending",
-      "titleZh": "門市裝潢與陳列道具：日本進口 vs 台灣在地精工製作",
-      "titleJa": "内装什器・ディスプレイツール：日本からの直輸入 vs 台湾現地特注製作",
-      "summaryZh": "grounds 招牌透明氣泡鞋底造型的壓克力鞋架與金屬陳列架，是否由日本原廠整組海運來台，或由台灣精工工廠照圖打樣？",
-      "summaryJa": "ブランド象徴である透明ソール什器・アクリル特注ラックについて、日本からのコンテナ輸送か、台湾の高品質アクリル工場でのライセンス製作か比較検討。",
-      "author": "Lynn",
-      "date": "2026/10/21 11:00",
-      "storeId": "",
-      "storeTitle": "",
-      "comments": [
-        {
-          "id": "c5-1",
-          "author": "坂部三樹郎",
-          "role": "jp",
-          "date": "2026/10/21 13:00",
-          "textZh": "日本有合作的特殊透明成型工廠，但海運材積與關稅成本較高。台灣若能找到能做出無氣泡高透光接合的工廠，先做1組樣品確認也是好方案。",
-          "textJa": "日本の専属工場製が品質上最も確実だが輸送費・関税が嵩む。台湾で高透過無気泡アクリル加工が可能な先があれば、まずサンプル1台を試作検討したい。"
-        }
-      ]
-    },
-    {
-      "id": "board-6",
-      "category": "物流供應鏈",
-      "status": "resolved",
-      "titleZh": "首批現貨報關進口與保稅/溫控倉儲配合方案",
-      "titleJa": "初回来日在庫の輸入通関および空調完備保管倉庫の選定",
-      "summaryZh": "首批預計進口 1,200 雙（涵蓋 MOOPIE, JEWELRY 等全系列），已洽定具備空調恆溫之北部第三方電商物流倉。",
-      "summaryJa": "初回輸入1,200足（MOOPIE, JEWELRY等）。台北近郊の空調完備フルフィルメント倉庫と基本合意。",
-      "author": "物流部",
-      "date": "2026/10/20 16:00",
-      "storeId": "",
-      "storeTitle": "",
-      "comments": [
-        {
-          "id": "c6-1",
-          "author": "Lynn",
-          "role": "tw",
-          "date": "2026/10/20 17:10",
-          "textZh": "鞋盒包裝完整度檢驗與條碼貼標作業已確認由倉儲方配合，支援門市日補貨與官網下單同倉配送。",
-          "textJa": "検品・バーコード貼付・店舗向け即日補充配送およびオンライン受注出荷の一元管理体制が整備完了。"
-        }
-      ]
-    }
-  ]
+  "updatedAt": 1792626021
 }

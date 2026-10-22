@@ -52,3 +52,5 @@
 # 本機交接文件（含內部設定，不公開）
 /CLAUDE.md
 /目前進度.md
+worklog/.wl_secret
+worklog/.wl_pw
