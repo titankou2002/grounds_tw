@@ -1892,6 +1892,12 @@
     #preview-banner { display:none; position:fixed; left:8px; right:8px; bottom:calc(var(--nav-h, 0px) + var(--safe-bottom, 0px) + 8px); z-index:1600; align-items:center; justify-content:space-between; gap:10px; background:#b45309; color:#fff; padding:9px 12px; border-radius:12px; font-size:12.5px; font-weight:700; box-shadow:0 4px 16px rgba(0,0,0,.3); }
     #preview-banner button { flex:0 0 auto; background:#fff; color:#b45309; border:0; border-radius:14px; padding:5px 12px; font-size:12.5px; font-weight:800; cursor:pointer; }
     body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
+    .store-open-detail-btn { display:none; }
+    @media (max-width: 900px) {
+      .store-compact-actions { display: none !important; }
+      .store-card { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+      .store-open-detail-btn { display: block; width: 100%; margin-top: 10px; padding: 10px; font-size: 14px; font-weight: 700; background: #111; color: #fff; border: 0; border-radius: 10px; }
+    }
   </style>
 </head>
 <body>
@@ -2010,18 +2016,18 @@
           </button>
           <button class="action-btn" onclick="triggerAgencyUpload()" title="上傳照片">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-            <span>照片</span>
+            <span id="agency-btn-label">照片</span>
           </button>
           <input type="file" id="agency-sheet-file" accept="image/*" style="display:none;" onchange="handleAgencySheetUpload(event)">
           <button class="action-btn" id="btn-open-compare" style="display:none;background:#111;color:#fff;font-weight:700;" onclick="openCompareModal()">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
-            <span>查看分析比較表 (</span><span id="selected-compare-count">0</span><span>)</span>
+            <span id="compare-btn-label">查看分析比較表 (</span><span id="selected-compare-count">0</span><span>)</span>
           </button>
         </div>
 
         <!-- Store Sorting Toolbar (按面積、按月租金、按坪單價) -->
         <div class="store-sort-bar">
-          <span style="font-size:11.5px;font-weight:700;color:var(--fg-muted);">排序：</span>
+          <span id="sort-label" style="font-size:11.5px;font-weight:700;color:var(--fg-muted);">排序：</span>
           <button type="button" class="sort-chip active" id="sort-chip-default" onclick="setStoreSort('default')">預設排序</button>
           <button type="button" class="sort-chip" id="sort-chip-area" onclick="setStoreSort('area')">按面積 ▾</button>
           <button type="button" class="sort-chip" id="sort-chip-rent" onclick="setStoreSort('rent')">按月租金 ▴</button>
@@ -3626,6 +3632,7 @@ function setAppLanguage(lang) {
   applyLanguageLayout();
   renderFeeds();
   renderStores();
+  if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
 
   const cmpModal = document.getElementById('compare-modal');
   if (cmpModal && cmpModal.classList.contains('open')) {
@@ -3668,6 +3675,14 @@ function applyGlobalLanguageTexts() {
   if (quickStoreUrl) {
     quickStoreUrl.placeholder = isJa ? '不動産URLを貼り付け...' : '貼上房仲網址直接新增...';
   }
+  const _setTxt = (id, zh, ja) => { const el = document.getElementById(id); if (el) el.textContent = isJa ? ja : zh; };
+  _setTxt('sort-label', '排序：', '並び替え：');
+  _setTxt('sort-chip-default', '預設排序', '標準順');
+  _setTxt('sort-chip-area', '按面積 ▾', '面積順 ▾');
+  _setTxt('sort-chip-rent', '按月租金 ▴', '賃料順 ▴');
+  _setTxt('sort-chip-unit', '按坪單價 ▴', '坪単価順 ▴');
+  _setTxt('agency-btn-label', '照片', '写真');
+  _setTxt('compare-btn-label', '查看分析比較表 (', '比較表を見る (');
   const quickAddBtn = document.getElementById('quick-add-btn-text');
   if (quickAddBtn) {
     quickAddBtn.textContent = isJa ? '解析追加' : '解析新增';
@@ -4992,6 +5007,33 @@ function updateModalCompareButton() {
 let storeMap = null;
 let storeMarkers = {};
 
+// 日文介面：店面的「優點／注意考量」若沒有日文版，自動翻譯一次並存起來（每筆只嘗試一次）
+const _storeJaTried = new Set();
+let _storeJaBusy = false;
+async function ensureStoreJa() {
+  if (state.langMode !== 'ja' || _storeJaBusy) return;
+  const need = (zh, ja) => zh && (!ja || ja === zh);
+  const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.pros, s.prosJa) || need(s.cons, s.consJa)));
+  if (!todo.length) return;
+  _storeJaBusy = true;
+  let changed = false;
+  for (const s of todo) {
+    _storeJaTried.add(s.id);
+    try {
+      if (need(s.pros, s.prosJa)) {
+        const t = await translateTextAsync(String(s.pros).slice(0, 450), 'zh-TW|ja');
+        if (t && t !== s.pros) { s.prosJa = t; changed = true; }
+      }
+      if (need(s.cons, s.consJa)) {
+        const t = await translateTextAsync(String(s.cons).slice(0, 450), 'zh-TW|ja');
+        if (t && t !== s.cons) { s.consJa = t; changed = true; }
+      }
+    } catch (e) {}
+  }
+  _storeJaBusy = false;
+  if (changed) { saveAppState(true); renderStores(); }
+}
+
 function renderStores() {
   const box = document.getElementById('store-list-box');
   if (!box) return;
@@ -5004,13 +5046,26 @@ function renderStores() {
     card.className = `store-card ${isChecked ? 'selected' : ''}`;
 
     // Click on card highlights it & centers map; double-click opens modal
+    // 電腦：點卡片定位地圖、雙擊開詳情。手機：點一下展開、再點收合、連點兩下開詳情
     card.onclick = (e) => {
-      if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'BUTTON' && !e.target.closest('button') && !e.target.closest('label')) {
-        highlightStoreCard(s.id);
-        focusStoreMap(s.id);
+      if (e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON' || e.target.closest('button') || e.target.closest('label') || e.target.closest('a')) return;
+      if (isMobileView()) {
+        const now = Date.now();
+        if (now - (card._lastTap || 0) < 350) {
+          card._lastTap = 0;
+          toggleStoreExpand(s.id);   // 還原第一下的展開／收合
+          openStoreDetailModal(s.id);
+          return;
+        }
+        card._lastTap = now;
+        toggleStoreExpand(s.id);
+        return;
       }
+      highlightStoreCard(s.id);
+      focusStoreMap(s.id);
     };
     card.ondblclick = (e) => {
+      if (isMobileView()) return;
       openStoreDetailModal(s.id);
     };
 
@@ -5026,27 +5081,27 @@ function renderStores() {
       <!-- Compact Top Row (橫向不折行、字樣完整防擠壓) -->
       <div class="store-compact-row">
         <!-- Thumbnail with photo count pill -->
-        <div class="store-compact-thumb-wrap" onclick="event.stopPropagation(); openStoreDetailModal('${s.id}')" title="點擊檢視大圖與輪播">
-          <img src="${curImg || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'}" class="store-compact-thumb" alt="${s.title}">
+        <div class="store-compact-thumb-wrap" onclick="if (isMobileView()) return; event.stopPropagation(); openStoreDetailModal('${s.id}')" title="${tr('點擊檢視大圖與輪播','タップして写真を表示')}">
+          <img src="${curImg || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'}" class="store-compact-thumb" alt="${storeTitleText(s)}">
           ${imgCount > 1 ? `<span class="store-photo-count-pill">📷 ${imgCount}</span>` : ''}
         </div>
 
         <!-- Info & Key Specs -->
         <div class="store-compact-info">
           <div class="store-compact-title-row">
-            <label class="store-compare-chk-pill" onclick="event.stopPropagation()" title="勾選加入多物件分析比較">
+            <label class="store-compare-chk-pill" onclick="event.stopPropagation()" title="${tr('勾選加入多物件分析比較','比較対象に追加')}">
               <input type="checkbox" onchange="event.stopPropagation(); toggleCompareStore('${s.id}')" ${isChecked ? 'checked' : ''}>
-              <span>比較</span>
+              <span>${tr('比較','比較')}</span>
             </label>
-            <span class="store-tag ${s.status}" style="cursor:pointer;" onclick="event.stopPropagation(); openStatusEditorModal('${s.id}')" title="點擊修改狀態標籤">${s.statusLabel} ✎</span>
-            <div class="store-compact-title" title="${s.title}">${s.title}</div>
+            <span class="store-tag ${s.status}" style="cursor:pointer;" onclick="event.stopPropagation(); openStatusEditorModal('${s.id}')" title="${tr('點擊修改狀態標籤','タップしてステータスを変更')}">${storeStatusText(s)} ✎</span>
+            <div class="store-compact-title" title="${storeTitleText(s)}">${storeTitleText(s)}</div>
           </div>
           <div class="store-compact-addr">${s.address}</div>
           <div class="store-compact-metrics">
-            <span class="metric-pill ${getRentColorClass(s.rent)}">月租 <strong>NT$ ${rentWan}萬</strong></span>
+            <span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
             <span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing * 3.3058)}㎡)</span>
-            <span class="metric-pill metric-unit">單價 <strong>${unitPrice.toLocaleString()}/坪</strong></span>
-            <span class="metric-pill metric-real">實月 <strong>NT$ ${realCost.toLocaleString()}</strong></span>
+            <span class="metric-pill metric-unit">${tr('單價','坪単価')} <strong>${unitPrice.toLocaleString()}/坪</strong></span>
+            <span class="metric-pill metric-real">${tr('實月','実質月額')} <strong>NT$ ${realCost.toLocaleString()}</strong></span>
           </div>
         </div>
 
@@ -5070,24 +5125,25 @@ function renderStores() {
 
         <!-- Specs Grid -->
         <div class="store-specs-grid">
-          <div>刊登月租：<span class="metric-pill ${getRentColorClass(s.rent)}">NT$ <strong>${rentWan}萬</strong></span></div>
-          <div>使用坪數：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
-          <div>每坪單價：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
-          <div>真實月成本：<span class="metric-pill metric-real">NT$ <strong>${realCost.toLocaleString()}</strong></span></div>
-          <div>押金需求：<strong>NT$ ${Math.round((s.deposit||s.rent*2)/10000)}萬</strong></div>
-          <div>裝潢免租：<strong>${s.freeRent || '1 個月'}</strong></div>
-          <div>營業登記：<strong>${s.canRegister ? '符合' : '不可'}</strong></div>
-          <div>發票適格：<strong>${s.canInvoice ? '可開立' : '否'}</strong></div>
+          <div>${tr('刊登月租','掲載賃料')}：<span class="metric-pill ${getRentColorClass(s.rent)}">NT$ <strong>${rentWan}${tr('萬','万')}</strong></span></div>
+          <div>${tr('使用坪數','使用面積')}：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
+          <div>${tr('每坪單價','坪単価')}：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
+          <div>${tr('真實月成本','実質月額コスト')}：<span class="metric-pill metric-real">NT$ <strong>${realCost.toLocaleString()}</strong></span></div>
+          <div>${tr('押金需求','保証金')}：<strong>NT$ ${Math.round((s.deposit||s.rent*2)/10000)}${tr('萬','万')}</strong></div>
+          <div>${tr('裝潢免租','フリーレント')}：<strong>${jaMonths(s.freeRent || tr('1 個月','1ヶ月'))}</strong></div>
+          <div>${tr('營業登記','営業登記')}：<strong>${s.canRegister ? tr('符合','可') : tr('不可','不可')}</strong></div>
+          <div>${tr('發票適格','インボイス')}：<strong>${s.canInvoice ? tr('可開立','発行可') : tr('否','不可')}</strong></div>
         </div>
 
         <div style="font-size:12px;color:var(--fg);margin-top:6px;line-height:1.5;">
-          <div><strong>商圈優點：</strong>${s.pros}</div>
-          <div style="color:var(--danger);margin-top:2px;"><strong>注意考量：</strong>${s.cons}</div>
+          <div><strong>${tr('商圈優點','立地の強み')}：</strong>${state.langMode === 'ja' ? (s.prosJa || s.pros) : s.pros}</div>
+          <div style="color:var(--danger);margin-top:2px;"><strong>${tr('注意考量','注意点')}：</strong>${state.langMode === 'ja' ? (s.consJa || s.cons) : s.cons}</div>
         </div>
+        <button type="button" class="store-open-detail-btn" onclick="openStoreDetailModal('${s.id}')">${tr('查看完整詳情 ↗','詳細を見る ↗')}</button>
 
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px dashed #e2e8f0;">
-          <a href="${s.url || '#'}" target="_blank" class="gmap-link-btn" style="text-decoration:none;">🔗 原始房仲網頁</a>
-          <button type="button" class="action-btn" style="color:var(--danger);padding:2px 8px;font-size:11px;" onclick="deleteStore('${s.id}')">刪除店面</button>
+          <a href="${s.url || '#'}" target="_blank" class="gmap-link-btn" style="text-decoration:none;">🔗 ${tr('原始房仲網頁','元の物件ページ')}</a>
+          <button type="button" class="action-btn" style="color:var(--danger);padding:2px 8px;font-size:11px;" onclick="deleteStore('${s.id}')">${tr('刪除店面','削除')}</button>
         </div>
       </div>
     `;
@@ -5095,6 +5151,7 @@ function renderStores() {
   });
 
   updateCompareButton();
+  ensureStoreJa();
 }
 
 function toggleStoreExpand(storeId, event) {
@@ -5104,10 +5161,10 @@ function toggleStoreExpand(storeId, event) {
   if (!body) return;
   if (body.style.display === 'block') {
     body.style.display = 'none';
-    if (btn) btn.innerHTML = '展開 ▾';
+    if (btn) btn.innerHTML = tr('展開 ▾', '展開 ▾');
   } else {
     body.style.display = 'block';
-    if (btn) btn.innerHTML = '收折 ▴';
+    if (btn) btn.innerHTML = tr('收折 ▴', '閉じる ▴');
   }
 }
 
@@ -5924,15 +5981,23 @@ function initStoreMap() {
 
     marker.bindPopup(`
       <div style="font-size:12px;font-family:sans-serif;line-height:1.5;">
-        <strong>${s.title}</strong><br>
-        月租：NT$ ${Math.round(s.rent/10000)}萬（${Math.round(s.area)}坪）<br>
-        免租期：${s.freeRent}<br>
-        <button style="margin-top:4px;padding:3px 8px;cursor:pointer;background:#111;color:#fff;border:none;border-radius:4px;" onclick="openStoreDetailModal('${s.id}')">檢視浮動詳情 ↗</button>
+        <strong>${storeTitleText(s)}</strong><br>
+        ${tr('月租','賃料')}：NT$ ${Math.round(s.rent/10000)}${tr('萬','万')}（${Math.round(s.area)}坪）<br>
+        ${tr('免租期','フリーレント')}：${jaMonths(s.freeRent)}<br>
+        <button style="margin-top:4px;padding:3px 8px;cursor:pointer;background:#111;color:#fff;border:none;border-radius:4px;" onclick="openStoreDetailModal('${s.id}')">${tr('檢視浮動詳情 ↗','詳細を見る ↗')}</button>
       </div>
     `);
     storeMarkers[s.id] = marker;
   });
 }
+
+// --- 日文介面用的字串／資料轉換 ---
+function tr(zh, ja) { return state.langMode === 'ja' ? ja : zh; }
+const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外' };
+function storeStatusText(s) { const l = s.statusLabel || ''; return state.langMode === 'ja' ? (STATUS_JA[l] || l) : l; }
+function storeTitleText(s) { return state.langMode === 'ja' ? (s.titleJa || s.title) : s.title; }
+function jaMonths(v) { return state.langMode === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : v; }
+const isMobileView = () => window.innerWidth <= 900;
 
 // 點動態裡的店面連結／卡片：切到 MAP 分頁並定位到該店面
 function gotoStoreOnMap(storeId) {
@@ -6164,6 +6229,7 @@ function applyIdentityView() {
   applyLanguageLayout();
   renderFeeds();
   renderStores();
+  if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
   renderBoard();
   closeSettingsModal();
   switchNavTab('feed');
@@ -6448,8 +6514,8 @@ function renderBoard() {
     container.innerHTML = `
       <div style="text-align:center;padding:48px 20px;background:#fff;border-radius:12px;border:1px dashed var(--border);color:var(--fg-muted);">
         <svg class="icon" style="width:36px;height:36px;margin-bottom:10px;opacity:0.4;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
-        <div style="font-size:14px;font-weight:700;">目前此狀態尚無審議議題</div>
-        <div style="font-size:12px;margin-top:4px;">點擊上方「＋ 發起新議題」建立跨國決策討論</div>
+        <div style="font-size:14px;font-weight:700;">${tr('目前此狀態尚無審議議題','このステータスの議題はまだありません')}</div>
+        <div style="font-size:12px;margin-top:4px;">${tr('點擊上方「發起新議題」建立跨國決策討論','上の「新規議題」から日台の意思決定ディスカッションを始めましょう')}</div>
       </div>
     `;
     return;
@@ -6502,17 +6568,17 @@ function renderBoard() {
       <div class="board-card" id="bcard-${t.id}">
         <div class="board-card-header">
           <div class="board-card-badges">
-            <span class="board-cat-badge">${escapeHtml(t.category || '專案審議')}</span>
-            <span class="board-status-badge ${statusClass}" onclick="cycleTopicStatus('${t.id}', event)" title="點擊直接切換狀態（審議中 ⇄ 待確認 ⇄ 已定案）">
+            <span class="board-cat-badge">${escapeHtml(t.category || tr('專案審議','プロジェクト審議'))}</span>
+            <span class="board-status-badge ${statusClass}" onclick="cycleTopicStatus('${t.id}', event)" title="${tr('點擊直接切換狀態（審議中 ⇄ 待確認 ⇄ 已定案）','タップでステータス切替（審議中 ⇄ 要確認 ⇄ 決定済）')}">
               ${statusText} ▾
             </span>
           </div>
           <div class="board-card-actions">
             ${boardIsNew(t) ? '<span class="board-new-pill">NEW</span>' : ''}
-            <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal('${t.id}')" title="編輯議題">
+            <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal('${t.id}')" title="${tr('編輯議題','議題を編集')}">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
-            <button type="button" class="board-icon-btn danger" onclick="confirmDeleteBoardTopic('${t.id}')" title="刪除議題">
+            <button type="button" class="board-icon-btn danger" onclick="confirmDeleteBoardTopic('${t.id}')" title="${tr('刪除議題','議題を削除')}">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -6530,11 +6596,11 @@ function renderBoard() {
 
         <div class="board-meta-bar">
           <div style="display:flex;align-items:center;gap:12px;">
-            <span>發起人：<b>${escapeHtml(t.author || 'Lynn')}</b></span>
-            <span>時間：${escapeHtml(fmtDateWd(t.date || '', state.langMode === 'ja' ? 'ja' : 'zh'))}</span>
+            <span>${tr('發起人','起案者')}：<b>${escapeHtml(t.author || 'Lynn')}</b></span>
+            <span>${tr('時間','日時')}：${escapeHtml(fmtDateWd(t.date || '', state.langMode === 'ja' ? 'ja' : 'zh'))}</span>
           </div>
           <div style="font-weight:700;">
-            💬 ${comments.length} 則交流反饋
+            💬 ${comments.length} ${tr('則交流反饋','件のやり取り')}
           </div>
         </div>
 
@@ -6542,7 +6608,7 @@ function renderBoard() {
         <div class="board-thread-container">
           <div class="board-thread-title">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
-            <span>雙向審議交流串 (${comments.length})</span>
+            <span>${tr('雙向審議交流串','日台ディスカッション')} (${comments.length})</span>
           </div>
 
           <div id="board-comments-list-${t.id}">
