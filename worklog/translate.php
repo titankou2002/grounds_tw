@@ -19,7 +19,33 @@ if (!$pair) {
     }
 }
 
-// 2. Call MyMemory Translation API
+// 1.5 優先使用 Gemini（經 Apps Script，金鑰只存在 Apps Script，不在這台主機）
+$gasUrl = 'https://script.google.com/macros/s/AKfycbyZog9Sw2JpEX0EsEyyunM3oTbvVQBoKiwQnj3B8SNLHRtrjpmFadoli9ioohLIH_a_1A/exec';
+if (mb_strlen($text) <= 1500) {
+    $ch0 = curl_init();
+    curl_setopt($ch0, CURLOPT_URL, $gasUrl);
+    curl_setopt($ch0, CURLOPT_POST, true);
+    curl_setopt($ch0, CURLOPT_POSTFIELDS, json_encode(['action' => 'wltranslate', 'text' => $text, 'pair' => $pair], JSON_UNESCAPED_UNICODE));
+    curl_setopt($ch0, CURLOPT_HTTPHEADER, ['Content-Type: text/plain']);
+    curl_setopt($ch0, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch0, CURLOPT_FOLLOWLOCATION, true);
+    curl_setopt($ch0, CURLOPT_TIMEOUT, 25);
+    $gres = curl_exec($ch0);
+    if ($gres) {
+        $gj = json_decode($gres, true);
+        if (is_array($gj) && !empty($gj['ok']) && !empty($gj['translation'])) {
+            echo json_encode([
+                'success' => true,
+                'translation' => $gj['translation'],
+                'pair' => $pair,
+                'source' => 'gemini'
+            ], JSON_UNESCAPED_UNICODE);
+            exit;
+        }
+    }
+}
+
+// 2. Fallback: MyMemory Translation API
 $encoded = urlencode($text);
 $apiUrl = "https://api.mymemory.translated.net/get?q={$encoded}&langpair=" . urlencode($pair);
 
@@ -30,7 +56,6 @@ curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 curl_setopt($ch, CURLOPT_TIMEOUT, 9);
 curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)');
 $response = curl_exec($ch);
-curl_close($ch);
 
 if ($response) {
     $data = json_decode($response, true);
