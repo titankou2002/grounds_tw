@@ -6237,6 +6237,7 @@ function applyIdentityView() {
 function startPreview(name) {
   const m = (state.members || []).find(x => x.name === name);
   if (!m || state.realRole !== 'tw') return;
+  try { sessionStorage.setItem('grounds_tw_preview', m.name); } catch (e) {}
   state.previewing = true;
   state.currentUser = m.name;
   state.currentUserRole = m.role;
@@ -6246,6 +6247,7 @@ function startPreview(name) {
   applyIdentityView();
 }
 function endPreview() {
+  try { sessionStorage.removeItem('grounds_tw_preview'); } catch (e) {}
   state.previewing = false;
   state.currentUser = state.realUser;
   state.currentUserRole = state.realRole;
@@ -6824,6 +6826,37 @@ document.addEventListener('click', (e) => {
 
 // Bootstrap
 loadAppState();
+// 重新整理後恢復「身分預覽」
+(function restorePreview() {
+  try {
+    const name = sessionStorage.getItem('grounds_tw_preview');
+    const m = name && (state.members || []).find(x => x.name === name && x.role === 'jp');
+    if (!m || state.realRole !== 'tw') return;
+    state.previewing = true;
+    state.currentUser = m.name;
+    state.currentUserRole = m.role;
+    state.langMode = 'ja';
+    state.compareModalLang = 'ja';
+    state.storeModalLang = 'ja';
+    document.body.classList.add('previewing');
+    ensurePreviewBanner();
+    updateUserUI();
+    applyGlobalLanguageTexts();
+    applyLanguageLayout();
+  } catch (e) {}
+})();
+// Lynn 點右上角的名字：一鍵切到日本端預覽／回到 Lynn
+(function badgeToggle() {
+  const b = document.getElementById('current-user-badge');
+  if (!b || state.realRole !== 'tw') return;
+  b.style.cursor = 'pointer';
+  b.title = '點一下：切換到日本端預覽 / 回到自己';
+  b.addEventListener('click', () => {
+    if (state.previewing) { endPreview(); return; }
+    const jp = (state.members || []).find(m => m.role === 'jp');
+    if (jp) startPreview(jp.name);
+  });
+})();
 renderFeeds();
 // 一次性：Lynn 第一次開啟新版時，把既有的刪除存證紀錄全部清空（隱藏；防復活墓碑保留）
 function autoClearAuditOnce() {
