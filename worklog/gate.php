@@ -38,7 +38,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wl_pw'])) {
     $error = true;
 }
 
-$ok = isset($_COOKIE['wl_auth']) && hash_equals($token, $_COOKIE['wl_auth']);
+$publicAsset = preg_match('/^(manifest\.json|favicon[\w-]*\.png|apple-touch-icon\.png)$/', $rel);
+$ok = $publicAsset || isset($_COOKIE['wl_auth']) && hash_equals($token, $_COOKIE['wl_auth']);
 
 if (!$ok) {
     if (preg_match('/\.(php|json)$/', $rel)) {

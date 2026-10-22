@@ -578,6 +578,14 @@
     }
 
     /* Mobile Language Switcher (Single Column Mode) */
+    .stg-lang-btn { padding:12px 14px; font-size:14px; font-weight:700; text-align:left; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; }
+    .stg-lang-btn.active { background:#111; color:#fff; border-color:#111; }
+    #settings-modal .modal-content-box > div:nth-child(2) { flex-wrap:wrap; }
+    @media (max-width: 600px) {
+      .user-badge { max-width: 84px; overflow: hidden; }
+      .user-badge #current-user-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+      header.site-header { padding-right: 12px; }
+    }
     .mobile-lang-bar {
       display: none;
       background: #ffffff;
@@ -1821,12 +1829,6 @@
     </div>
 
     <div class="header-actions">
-      <!-- Global One-Click Language Switcher (中文 / 日本語) -->
-      <div class="lang-switch-group" style="display:flex;align-items:center;background:#f1f1f4;border-radius:20px;padding:2px;border:1px solid var(--border);">
-        <button type="button" class="lang-toggle-btn active" id="hdr-lang-tw" onclick="setAppLanguage('bilingual')" style="padding:4px 9px;border:none;border-radius:16px;background:#fff;font-size:11.5px;font-weight:700;cursor:pointer;">TW 雙語</button>
-        <button type="button" class="lang-toggle-btn" id="hdr-lang-ja" onclick="setAppLanguage('ja')" style="padding:4px 9px;border:none;border-radius:16px;background:transparent;font-size:11.5px;font-weight:700;cursor:pointer;color:var(--fg-muted);">JP 日本語</button>
-      </div>
-
       <!-- Current User Badge (Static - Not clickable) -->
       <div class="user-badge" id="current-user-badge" title="目前使用者">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
@@ -1845,13 +1847,6 @@
 
     <!-- 1. WORK FEED VIEW -->
     <section id="tab-feed" class="view-panel">
-      <!-- Mobile Segmented Filter (Single Column Mode Switcher) -->
-      <div class="mobile-lang-bar">
-        <button class="mobile-lang-btn active" id="m-btn-bilingual" onclick="setMobileLang('bilingual')">中日雙語對照</button>
-        <button class="mobile-lang-btn" id="m-btn-zh" onclick="setMobileLang('zh')">純中文</button>
-        <button class="mobile-lang-btn" id="m-btn-ja" onclick="setMobileLang('ja')">純日文</button>
-      </div>
-
       <div class="split-desktop-view">
         <!-- COLUMN 1: TAIWAN FEED & COMPOSER -->
         <div class="left-column" id="col-tw-feed">
@@ -2375,7 +2370,10 @@
 
     <!-- Segmented Tab within Settings -->
     <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
-      <button class="action-btn active" id="stg-tab-members-btn" onclick="switchSettingsTab('members')" style="font-weight:700;">
+      <button class="action-btn active" id="stg-tab-lang-btn" onclick="switchSettingsTab('lang')" style="font-weight:700;">
+        <span>顯示語言</span>
+      </button>
+      <button class="action-btn" id="stg-tab-members-btn" onclick="switchSettingsTab('members')" style="font-weight:700;">
         <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="8.5" cy="7" r="4"></circle><line x1="20" y1="8" x2="20" y2="14"></line><line x1="23" y1="11" x2="17" y2="11"></line></svg>
         <span>專屬成員連結</span>
       </button>
@@ -2387,6 +2385,16 @@
         <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><path d="M12 2a10 10 0 0 0 0 20"></path></svg>
         <span>租金顏色級距設定</span>
       </button>
+    </div>
+
+    <!-- Settings Panel 0: Display Language -->
+    <div id="stg-panel-lang">
+      <div style="font-size:12.5px;color:var(--fg-muted);margin-bottom:12px;">選擇畫面顯示的語言（只影響你自己的畫面）</div>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <button type="button" class="stg-lang-btn" data-lang="bilingual" onclick="setAppLanguage('bilingual')">中日雙語對照</button>
+        <button type="button" class="stg-lang-btn" data-lang="zh" onclick="setAppLanguage('zh')">純中文</button>
+        <button type="button" class="stg-lang-btn" data-lang="ja" onclick="setAppLanguage('ja')">純日文</button>
+      </div>
     </div>
 
     <!-- Settings Panel 1: Members & Tokens -->
@@ -3497,16 +3505,10 @@ function updateUserUI() {
   const feedUser = document.getElementById('feed-left-user-label');
   if (feedUser) feedUser.textContent = state.langMode === 'ja' ? `発信者: ${state.currentUser}` : `發布者: ${state.currentUser}`;
 
-  // Header language buttons state
-  const btnTw = document.getElementById('hdr-lang-tw');
-  const btnJa = document.getElementById('hdr-lang-ja');
-  if (state.langMode === 'ja') {
-    if (btnTw) { btnTw.style.background = 'transparent'; btnTw.style.color = 'var(--fg-muted)'; btnTw.classList.remove('active'); }
-    if (btnJa) { btnJa.style.background = '#111'; btnJa.style.color = '#fff'; btnJa.classList.add('active'); }
-  } else {
-    if (btnTw) { btnTw.style.background = '#fff'; btnTw.style.color = '#111'; btnTw.classList.add('active'); }
-    if (btnJa) { btnJa.style.background = 'transparent'; btnJa.style.color = 'var(--fg-muted)'; btnJa.classList.remove('active'); }
-  }
+  // 設定視窗內的語言按鈕狀態
+  document.querySelectorAll('.stg-lang-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.lang === state.langMode);
+  });
 
   applyLanguageLayout();
 }
@@ -5934,7 +5936,7 @@ function generateSecureToken() {
 function openSettingsModal(tabName) {
   const modal = document.getElementById('settings-modal');
   if (modal) modal.classList.add('open');
-  switchSettingsTab(tabName || 'members');
+  switchSettingsTab(tabName || 'lang');
   const countEl = document.getElementById('stg-audit-count');
   if (countEl) countEl.textContent = (state.deletedLogs || []).length;
 }
@@ -5945,24 +5947,17 @@ function closeSettingsModal() {
 }
 
 function switchSettingsTab(tabName) {
-  const btnMembers = document.getElementById('stg-tab-members-btn');
-  const btnAudit = document.getElementById('stg-tab-audit-btn');
-  const panelMembers = document.getElementById('stg-panel-members');
-  const panelAudit = document.getElementById('stg-panel-audit');
-
-  if (tabName === 'audit') {
-    if (btnMembers) btnMembers.classList.remove('active');
-    if (btnAudit) btnAudit.classList.add('active');
-    if (panelMembers) panelMembers.style.display = 'none';
-    if (panelAudit) panelAudit.style.display = 'block';
-    renderAuditLogs();
-  } else {
-    if (btnMembers) btnMembers.classList.add('active');
-    if (btnAudit) btnAudit.classList.remove('active');
-    if (panelMembers) panelMembers.style.display = 'block';
-    if (panelAudit) panelAudit.style.display = 'none';
-    renderMemberList();
-  }
+  const tabs = ['lang', 'members', 'audit', 'rentcolor'];
+  if (tabs.indexOf(tabName) < 0) tabName = 'lang';
+  tabs.forEach(t => {
+    const btn = document.getElementById(`stg-tab-${t}-btn`);
+    const panel = document.getElementById(`stg-panel-${t}`);
+    if (btn) btn.classList.toggle('active', t === tabName);
+    if (panel) panel.style.display = t === tabName ? 'block' : 'none';
+  });
+  if (tabName === 'audit') renderAuditLogs();
+  if (tabName === 'members') renderMemberList();
+  updateUserUI();
 }
 
 function openMemberModal() {
