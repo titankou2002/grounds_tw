@@ -1832,6 +1832,35 @@
     }
     .stg-size-row { display:flex; align-items:center; gap:10px; margin-top:16px; }
     .stg-size-row button { width:44px; height:40px; font-size:15px; font-weight:800; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; }
+    /* ===== 發文卡片縮小成一行、工時選單 ===== */
+    .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
+    .composer-meta-row.cmp-one-row { display:flex; flex-wrap:nowrap; align-items:center; gap:6px; }
+    .cmp-icon-btn, .composer-post-btn.cmp-send { flex:0 0 auto; width:34px; height:34px; padding:0; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
+    .cmp-icon-btn svg, .composer-post-btn.cmp-send svg { width:18px; height:18px; flex:0 0 18px; }
+    .cmp-icon-btn { border:1px solid var(--border); background:#fff; cursor:pointer; }
+    .composer-post-btn.cmp-send { margin-left:auto; }
+    .cmp-select { height:34px; min-width:0; border:1px solid var(--border); border-radius:17px; padding:0 8px; font-size:12px; font-weight:600; background:#fff; }
+    .cmp-select.cmp-tag { flex:1 1 0; max-width:130px; text-overflow:ellipsis; }
+    .post-tag, .hours-tag { white-space:nowrap; }
+    /* BOARD 狀態色：審議中黃、待確認紅、已定案綠 */
+    #bf-discussing { background:#fef3c7; color:#b45309; border-color:#fcd34d; }
+    #bf-pending { background:#fee2e2; color:#b91c1c; border-color:#fca5a5; }
+    #bf-resolved { background:#dcfce7; color:#15803d; border-color:#86efac; }
+    #bf-discussing.active { background:#d97706; color:#fff; border-color:#d97706; }
+    #bf-pending.active { background:#dc2626; color:#fff; border-color:#dc2626; }
+    #bf-resolved.active { background:#16a34a; color:#fff; border-color:#16a34a; }
+    .board-new-pill { background:#e11d48; color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.5px; padding:2px 8px; border-radius:10px; margin-right:4px; }
+    .board-card-header { gap:8px; }
+    @media (max-width: 900px) {
+      .board-top-bar { padding:10px; gap:8px; }
+      .board-filter-group { gap:4px; width:100%; flex-wrap:nowrap; }
+      .board-filter-chip { flex:1 1 0; min-width:0; justify-content:center; gap:3px; padding:7px 2px; font-size:12px; white-space:nowrap; }
+      .board-filter-chip .board-count-badge { padding:0 5px; font-size:10px; }
+      .board-top-bar > div:last-child { width:100%; }
+      .board-top-bar > div:last-child .btn-submit { width:100%; justify-content:center; }
+      .board-card-header { flex-wrap:wrap; }
+      .board-card { padding:14px; }
+    }
   </style>
 </head>
 <body>
@@ -1897,40 +1926,25 @@
             <textarea class="composer-textarea" id="post-text-zh" placeholder="有什麼新進展？"></textarea>
             <div id="post-file-chip-box" style="display:none;margin-bottom:8px;"></div>
 
-            <div class="composer-meta-row">
-              <div class="meta-left">
-                <!-- Attachment Button (X Media Upload) -->
-                <input type="file" id="post-file-input" style="display:none;" accept="image/*,.pdf" onchange="handlePostFileSelected(event)">
-                <button class="action-btn" type="button" onclick="triggerPostFileUpload()" title="夾帶照片或文件" style="padding:4px 9px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:4px;">
-                  <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
-                  <span>夾帶</span>
-                </button>
-
-                <!-- Work Hours Pill -->
-                <div class="input-pill" title="投入工時" style="border-radius:20px;padding:3px 8px;">
-                  <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                  <input type="number" step="0.5" min="0" value="0.5" class="hours-field" id="post-hours">
-                  <span>h</span>
-                </div>
-
-                <!-- Tag Dropdown (includes ＋ 新增條件...) -->
-                <select class="select-field" id="post-tag" onchange="handleTagSelectChange(this)" style="border-radius:20px;padding:4px 10px;font-size:12px;font-weight:600;">
-                  <option value="進度回報" selected>#進度回報</option>
-                  <option value="門市選址">#門市選址</option>
-                  <option value="公司設立">#公司設立</option>
-                  <option value="商標佈局">#商標佈局</option>
-                  <option value="營運規劃">#營運規劃</option>
-                  <option value="進口物流">#進口物流</option>
-                  <option value="__ADD_NEW__">＋ 新增條件...</option>
-                </select>
-              </div>
-
-              <div>
-                <button class="composer-post-btn" type="button" id="btn-submit-post" onclick="submitFeedPost()">
-                  <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                  <span id="btn-submit-post-label">發布</span>
-                </button>
-              </div>
+            <div class="composer-meta-row cmp-one-row">
+              <input type="file" id="post-file-input" style="display:none;" accept="image/*,.pdf" onchange="handlePostFileSelected(event)">
+              <button class="cmp-icon-btn" type="button" onclick="triggerPostFileUpload()" title="夾帶照片或文件" aria-label="夾帶">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+              </button>
+              <select class="cmp-select" id="post-hours" title="投入工時" aria-label="投入工時"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option></select>
+              <select class="cmp-select cmp-tag" id="post-tag" onchange="handleTagSelectChange(this)" aria-label="分類">
+                <option value="進度回報" selected>#進度回報</option>
+                <option value="門市選址">#門市選址</option>
+                <option value="公司設立">#公司設立</option>
+                <option value="商標佈局">#商標佈局</option>
+                <option value="營運規劃">#營運規劃</option>
+                <option value="進口物流">#進口物流</option>
+                <option value="__ADD_NEW__">＋ 新增條件...</option>
+              </select>
+              <button class="composer-post-btn cmp-send" type="button" id="btn-submit-post" onclick="submitFeedPost()" aria-label="發布">
+                <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                <span id="btn-submit-post-label" class="sr-only">發布</span>
+              </button>
             </div>
           </div>
 
@@ -2003,19 +2017,19 @@
             <span id="bf-label-all">全部</span> <span class="board-count-badge" id="bcount-all">0</span>
           </button>
           <button type="button" class="board-filter-chip" id="bf-discussing" onclick="setBoardFilter('discussing')">
-            <span id="bf-label-disc">🟡 審議中</span> <span class="board-count-badge" id="bcount-discussing">0</span>
+            <span id="bf-label-disc">審議中</span> <span class="board-count-badge" id="bcount-discussing">0</span>
           </button>
           <button type="button" class="board-filter-chip" id="bf-pending" onclick="setBoardFilter('pending')">
-            <span id="bf-label-pend">🔴 待確認</span> <span class="board-count-badge" id="bcount-pending">0</span>
+            <span id="bf-label-pend">待確認</span> <span class="board-count-badge" id="bcount-pending">0</span>
           </button>
           <button type="button" class="board-filter-chip" id="bf-resolved" onclick="setBoardFilter('resolved')">
-            <span id="bf-label-res">🟢 已定案</span> <span class="board-count-badge" id="bcount-resolved">0</span>
+            <span id="bf-label-res">已定案</span> <span class="board-count-badge" id="bcount-resolved">0</span>
           </button>
         </div>
         <div style="display:flex;gap:8px;align-items:center;">
           <button class="btn-submit" onclick="openNewBoardTopicModal()" style="display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;font-size:12.5px;font-weight:700;">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span id="btn-new-topic-label">＋ 發起新議題</span>
+            <span id="btn-new-topic-label">發起新議題</span>
           </button>
         </div>
       </div>
@@ -2151,7 +2165,7 @@
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
       <div>
         <label style="font-size:12px;font-weight:700;">投入工時：</label>
-        <input type="number" step="0.5" min="0" id="edit-post-hours" style="width:60px;padding:4px 6px;border:1px solid var(--border);border-radius:4px;font-weight:700;"> h
+        <select id="edit-post-hours" class="cmp-select"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option></select>
       </div>
       <div>
         <label style="font-size:12px;font-weight:700;">分類標籤：</label>
@@ -2558,9 +2572,9 @@
         <div>
           <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">審議狀態：</label>
           <select id="board-topic-status" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
-            <option value="discussing">🟡 審議中 (In Discussion / 審議中)</option>
-            <option value="pending">🔴 待確認 (Pending Action / 要確認)</option>
-            <option value="resolved">🟢 已定案 (Resolved / 決定済)</option>
+            <option value="discussing">審議中 (In Discussion / 審議中)</option>
+            <option value="pending">待確認 (Pending Action / 要確認)</option>
+            <option value="resolved">已定案 (Resolved / 決定済)</option>
           </select>
         </div>
       </div>
@@ -3584,13 +3598,13 @@ function applyGlobalLanguageTexts() {
   const bfAll = document.getElementById('bf-label-all');
   if (bfAll) bfAll.textContent = isJa ? 'すべて' : '全部';
   const bfDisc = document.getElementById('bf-label-disc');
-  if (bfDisc) bfDisc.textContent = isJa ? '🟡 審議中' : '🟡 審議中';
+  if (bfDisc) bfDisc.textContent = '審議中';
   const bfPend = document.getElementById('bf-label-pend');
-  if (bfPend) bfPend.textContent = isJa ? '🔴 要確認' : '🔴 待確認';
+  if (bfPend) bfPend.textContent = isJa ? '要確認' : '待確認';
   const bfRes = document.getElementById('bf-label-res');
-  if (bfRes) bfRes.textContent = isJa ? '🟢 決定済' : '🟢 已定案';
+  if (bfRes) bfRes.textContent = isJa ? '決定済' : '已定案';
   const btnNewTopic = document.getElementById('btn-new-topic-label');
-  if (btnNewTopic) btnNewTopic.textContent = isJa ? '＋ 新規議題' : '＋ 發起新議題';
+  if (btnNewTopic) btnNewTopic.textContent = isJa ? '新規議題' : '發起新議題';
 
   const postText = document.getElementById('post-text-zh');
   if (postText) {
@@ -3625,6 +3639,8 @@ function toggleActiveMember() {
 
 // --- Navigation Tabs (REPORT / MAP / BOARD) ---
 function switchNavTab(tabId) {
+  const _tb = document.getElementById('tab-board');
+  if (tabId !== 'board' && _tb && _tb.style.display !== 'none' && _tb.style.display !== '') markBoardSeen();
   document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
   const btn = document.getElementById(`btn-tab-${tabId}`);
   if (btn) btn.classList.add('active');
@@ -4006,7 +4022,6 @@ async function submitFeedPost() {
     submitBtn.disabled = true;
     submitBtn.innerHTML = `
       <svg class="icon icon-sm spin-anim" viewBox="0 0 24 24"><path d="M21 12a9 9 0 1 1-6.219-8.56"></path></svg>
-      <span>${state.langMode === 'ja' ? '翻訳・投稿中...' : '發布與翻譯中...'}</span>
     `;
   }
 
@@ -4202,13 +4217,20 @@ async function submitFeedPost() {
       submitBtn.disabled = false;
       submitBtn.innerHTML = `
         <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-        <span id="btn-submit-post-label">${state.langMode === 'ja' ? '投稿' : '發布'}</span>
+        <span id="btn-submit-post-label" class="sr-only">${state.langMode === 'ja' ? '投稿' : '發布'}</span>
       `;
     }
   }
 }
 
 // --- Render Feeds ---
+// 工時顯示：1 小時以內用分鐘，其餘用小時
+function fmtHours(h, lang) {
+  h = Number(h) || 0;
+  if (h <= 1) return Math.round(h * 60) + (lang === 'ja' ? '分' : '分');
+  return (Math.round(h * 100) / 100) + 'h';
+}
+
 // 日期後加上星期：中文「（週四）」、日文「（木）」
 function fmtDateWd(str, lang) {
   const m = /^(\d{4})\/(\d{1,2})\/(\d{1,2})(.*)$/.exec(String(str || '').trim());
@@ -4234,7 +4256,7 @@ function renderDailyLogs(box, colLang) {
     const dm = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(d);
     const isOld = dm && new Date(+dm[1], +dm[2] - 1, +dm[3]).getTime() < cutoff;
     const list = days[d].slice().sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
-    const hours = list.reduce((sum, p) => sum + (Number(p.hours) || 0), 0);
+    const hours = Math.round(list.reduce((sum, p) => sum + (Number(p.hours) || 0), 0) * 100) / 100;
     const authors = Array.from(new Set(list.map(p => p.author))).join('、');
     const wrap = document.createElement('div');
     wrap.className = 'daily-log';
@@ -4291,6 +4313,10 @@ function createCard(p, colLang) {
   // Multi-link & single-link real estate candidate cards
   const propIdList = (p.propIds && p.propIds.length) ? p.propIds : (p.propId ? [p.propId] : []);
   const linkedStores = propIdList.map(id => state.stores.find(s => s.id === id)).filter(Boolean);
+  // 已有店面卡片時，內文裡的連結不再重複顯示；剩下的文字若是空的就整塊隱藏
+  const stripPropLinks = (html) => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
+  const bodyHtml = linkedStores.length ? stripPropLinks(text) : String(text || '').replace(/openStoreDetailModal\(/g, 'gotoStoreOnMap(');
+  const hideBody = linkedStores.length > 0 && !bodyHtml.replace(/<[^>]*>/g, '').trim();
 
   let propHtml = '';
   if (linkedStores.length > 0) {
@@ -4304,7 +4330,7 @@ function createCard(p, colLang) {
       const pLabel = prop.statusLabel || (prop.sourceType === 'agency' ? '房仲資料' : '店面物件');
 
       return `
-        <div class="feed-591-preview" onclick="openStoreDetailModal('${prop.id}')" title="${isJaCol ? 'クリックして物件写真と詳細・日本円換算を表示' : '點擊在浮動視窗檢視店面照片與完整數據'}">
+        <div class="feed-591-preview" onclick="gotoStoreOnMap('${prop.id}')" title="${isJaCol ? 'タップして地図で確認' : '點擊切換到 MAP 查看位置與評估'}">
           ${mainImg ? `<img src="${mainImg}" class="feed-591-thumb" alt="店面照">` : ''}
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;min-width:0;">
@@ -4318,7 +4344,7 @@ function createCard(p, colLang) {
             </div>
             <div style="font-size:11px;color:var(--fg);display:flex;align-items:center;gap:4px;">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
-              <span style="text-decoration:underline;font-weight:700;">${isJaCol ? '物件写真と分析モーダルを開く' : '點擊開啟店面照片與分析浮動視窗'}</span>
+              <span style="text-decoration:underline;font-weight:700;">${isJaCol ? '地図で見る' : '在 MAP 查看'}</span>
             </div>
           </div>
         </div>
@@ -4348,14 +4374,14 @@ function createCard(p, colLang) {
 
   // Mobile / single column bilingual translation box
   let bilingualBox = '';
-  if (colLang === 'zh' && p.ja && state.langMode === 'bilingual') {
+  if (colLang === 'zh' && p.ja && state.langMode === 'bilingual' && !hideBody) {
     bilingualBox = `
       <div class="jp-translation-box">
         <div class="jp-trans-head">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>日本語訳（自動翻訳）</span>
         </div>
-        <div class="jp-trans-body">${p.ja}</div>
+        <div class="jp-trans-body">${linkedStores.length ? stripPropLinks(p.ja) : p.ja}</div>
       </div>
     `;
   }
@@ -4412,7 +4438,7 @@ function createCard(p, colLang) {
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
         <span class="post-tag">#${p.tag}</span>
-        <span class="hours-tag">${p.hours}h</span>
+        <span class="hours-tag">${fmtHours(p.hours, colLang)}</span>
         <!-- Edit Post Button -->
         <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${p.id})" title="編輯文字">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -4424,9 +4450,9 @@ function createCard(p, colLang) {
       </div>
     </div>
 
-    <div class="post-body-text">${text}</div>
+    ${hideBody ? '' : `<div class="post-body-text">${bodyHtml}</div>`}
     ${postAttachHtml}
-    <div style="margin:4px 0 6px 0;display:flex;align-items:center;gap:6px;">
+    <div style="margin:4px 0 6px 0;display:${hideBody ? 'none' : 'flex'};align-items:center;gap:6px;">
       <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${p.id}, '${colLang}', this)">
         <svg class="icon icon-sm" style="width:12px;height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
         <span>${colLang === 'zh' ? '🌐 翻譯' : '🌐 翻訳'}</span>
@@ -4442,7 +4468,7 @@ function createCard(p, colLang) {
       <div id="rep-file-preview-${p.id}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
         <input type="file" id="rep-file-${p.id}-${colLang}" style="display:none;" accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${p.id}, '${colLang}')">
-        <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${p.id}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎 夾帶</button>
+        <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${p.id}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎</button>
         <input type="text" class="comment-reply-input" id="rep-${p.id}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${p.id}, '${colLang}')">
         <button class="action-btn" onclick="submitReply(${p.id}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
       </div>
@@ -4512,7 +4538,12 @@ function openEditPostModal(postId) {
   if (!p) return;
   state.editingPostId = postId;
   document.getElementById('edit-post-text').value = p.zh;
-  document.getElementById('edit-post-hours').value = p.hours || 0.0;
+  const editHoursSel = document.getElementById('edit-post-hours');
+  const hv = String(p.hours || 0.5);
+  if (![...editHoursSel.options].some(o => parseFloat(o.value) === parseFloat(hv))) {
+    editHoursSel.insertAdjacentHTML('beforeend', `<option value="${hv}">${fmtHours(parseFloat(hv))}</option>`);
+  }
+  editHoursSel.value = [...editHoursSel.options].find(o => parseFloat(o.value) === parseFloat(hv)).value;
   
   // Populate edit-post-tag
   const editTag = document.getElementById('edit-post-tag');
@@ -5853,6 +5884,12 @@ function initStoreMap() {
   });
 }
 
+// 點動態裡的店面連結／卡片：切到 MAP 分頁並定位到該店面
+function gotoStoreOnMap(storeId) {
+  switchNavTab('store');
+  setTimeout(() => { highlightStoreCard(storeId); focusStoreMap(storeId); }, 450);
+}
+
 function focusStoreMap(storeId) {
   const s = state.stores.find(x => x.id === storeId);
   if (!s || !storeMap) return;
@@ -6159,6 +6196,34 @@ function cycleTopicStatus(topicId, e) {
   renderBoard();
 }
 
+// --- BOARD「NEW」：對方（本機這位使用者）還沒看過的議題／留言 ---
+function boardSeenKey() { return 'grounds_tw_board_seen_' + (state.currentUser || ''); }
+function boardSeenMap() {
+  try { return JSON.parse(localStorage.getItem(boardSeenKey())) || {}; } catch (e) { return {}; }
+}
+function boardIsNew(t) {
+  const me = state.currentUser;
+  const seen = boardSeenMap();
+  const comments = Array.isArray(t.comments) ? t.comments : [];
+  if (!(t.id in seen)) {
+    return t.author !== me || comments.some(c => c.author !== me);
+  }
+  return comments.slice(seen[t.id] || 0).some(c => c.author !== me);
+}
+function markBoardSeen() {
+  const m = {};
+  (state.boardTopics || []).forEach(t => { m[t.id] = (Array.isArray(t.comments) ? t.comments : []).length; });
+  try { localStorage.setItem(boardSeenKey(), JSON.stringify(m)); } catch (e) {}
+}
+document.addEventListener('visibilitychange', () => {
+  const tb = document.getElementById('tab-board');
+  if (document.hidden && tb && tb.style.display !== 'none') markBoardSeen();
+});
+window.addEventListener('pagehide', () => {
+  const tb = document.getElementById('tab-board');
+  if (tb && tb.style.display !== 'none') markBoardSeen();
+});
+
 function renderBoard() {
   const container = document.getElementById('board-topics-list');
   if (!container) return;
@@ -6203,8 +6268,8 @@ function renderBoard() {
   container.innerHTML = filtered.map(t => {
     const statusClass = `status-${t.status || 'discussing'}`;
     const statusText = t.status === 'resolved'
-      ? (isJa ? '🟢 決定済' : '🟢 已定案')
-      : (t.status === 'pending' ? (isJa ? '🔴 要確認' : '🔴 待確認') : (isJa ? '🟡 審議中' : '🟡 審議中'));
+      ? (isJa ? '決定済' : '已定案')
+      : (t.status === 'pending' ? (isJa ? '要確認' : '待確認') : '審議中');
 
     const comments = Array.isArray(t.comments) ? t.comments : [];
 
@@ -6251,6 +6316,7 @@ function renderBoard() {
             </span>
           </div>
           <div class="board-card-actions">
+            ${boardIsNew(t) ? '<span class="board-new-pill">NEW</span>' : ''}
             <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal('${t.id}')" title="編輯議題">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
