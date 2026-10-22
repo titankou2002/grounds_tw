@@ -1826,12 +1826,12 @@
       .modal-overlay { padding: 10px 12px calc(10px + var(--safe-bottom)) 12px; }
       .modal-content-box { zoom: var(--ui-zoom); width: calc((100vw - 24px) / var(--ui-zoom)) !important; max-width: none !important; max-height: calc((100vh - 24px) / var(--ui-zoom)); padding: 14px !important; box-sizing: border-box; overflow-x: hidden; }
       /* 店面詳情：標題與按鈕上下排，不要左右擠 */
-      #store-detail-modal .modal-content-box > div:first-child { flex-direction: column; gap: 10px; }
-      #store-detail-modal .modal-content-box > div:first-child > div:first-child { width: 100%; min-width: 0; }
-      #store-detail-modal .modal-content-box > div:first-child > div:first-child > div:first-child { flex-wrap: wrap !important; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) { flex-direction: column; gap: 10px; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) > div:first-child { width: 100%; min-width: 0; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) > div:first-child > div:first-child { flex-wrap: wrap !important; }
       #m-store-title { flex: 1 1 100%; word-break: break-word; }
-      #store-detail-modal .modal-content-box > div:first-child > div:last-child { width: 100%; display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; }
-      #store-detail-modal .modal-content-box > div:first-child > div:last-child > button { justify-content: center; white-space: nowrap; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) > div:last-child { width: 100%; display: grid !important; grid-template-columns: 1fr 1fr; gap: 8px; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) > div:last-child > button { justify-content: center; white-space: nowrap; }
       #m-btn-toggle-compare { grid-column: 1 / -1; order: -1; }
       .modal-lang-pill, .gmap-link-btn, .modal-content-box .action-btn, .modal-content-box .btn-submit { white-space: nowrap; }
       /* MAP 店面卡片：指標換行、按鈕放到下一列，不再被切掉 */
@@ -1843,10 +1843,14 @@
       .store-compact-metrics { flex-wrap: wrap; white-space: normal; overflow: visible; row-gap: 4px; }
       .store-compact-actions { width: 100%; justify-content: flex-end; gap: 8px; }
       .store-compact-actions .action-btn, .store-compact-actions .btn-submit { flex: 1 1 0; justify-content: center; padding: 8px 10px !important; font-size: 13px !important; }
+      /* 店面詳情：不佔滿螢幕，右上固定關閉鈕，點外面的暗色區域也會關閉 */
+      #store-detail-modal.modal-overlay { padding: 8vh 16px 8vh 16px; }
+      #store-detail-modal .modal-content-box { width: calc((100vw - 32px) / var(--ui-zoom)) !important; max-height: calc(80vh / var(--ui-zoom)) !important; }
+      .modal-x-btn { display: block !important; position: sticky; top: 0; float: right; z-index: 6; width: 34px; height: 34px; margin: 0 0 4px 8px; border-radius: 50%; background: #111; color: #fff; border: 0; font-size: 15px; line-height: 34px; text-align: center; cursor: pointer; }
       .compare-table { min-width: 0; }
       .compare-table th { width: 76px !important; min-width: 76px; font-size: 12px; padding: 8px 6px !important; position: sticky; left: 0; z-index: 2; word-break: break-word; line-height: 1.35; max-width: 84px; font-size: 11.5px !important; }
       .compare-table td { min-width: 150px; }
-      #store-detail-modal .modal-content-box > div:first-child > div:first-child > div:nth-child(3) { flex-wrap: wrap; }
+      #store-detail-modal .modal-content-box > div:nth-of-type(1) > div:first-child > div:nth-child(3) { flex-wrap: wrap; }
       .kpi-badge-val { word-break: break-word; }
       .toast-notice { bottom: calc(var(--nav-h) + var(--safe-bottom) + 12px) !important; }
       .user-badge { font-size: 13px !important; padding: 5px 10px !important; max-width: 120px; }
@@ -1893,6 +1897,9 @@
     #preview-banner button { flex:0 0 auto; background:#fff; color:#b45309; border:0; border-radius:14px; padding:5px 12px; font-size:12.5px; font-weight:800; cursor:pointer; }
     body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
     .store-compact-metrics { flex-wrap: wrap; white-space: normal; overflow: visible; row-gap: 4px; }
+    .modal-x-btn { display: none; }
+    #feed-left-user-label, #lbl-store-pros-sub, #cmp-legend-note { display: none !important; }
+    @media (max-width: 900px) { .column-header { display: none !important; } }
     .store-open-detail-btn { display:none; }
     @media (max-width: 900px) {
       .store-compact-actions { display: none !important; }
@@ -1954,7 +1961,7 @@
           <div class="column-header">
             <div class="column-title">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
-              <span id="col-tw-title">工作成果與執行動態</span>
+              <span id="col-tw-title">中文</span>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);" id="feed-left-user-label">發布者: Lynn</div>
           </div>
@@ -1995,9 +2002,9 @@
           <div class="column-header">
             <div class="column-title">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
-              <span>日本語表示（意思決定・返信）</span>
+              <span>日本語</span>
             </div>
-            <div style="font-size:11.5px;color:var(--fg-muted);">閲覧・返信：金丸 拓矢</div>
+            
           </div>
 
           <!-- Feed Stream Right -->
@@ -2010,7 +2017,7 @@
     <section id="tab-store" class="view-panel" style="display:none;">
       <div class="store-add-bar">
         <div style="display:flex;gap:8px;align-items:center;width:100%;flex-wrap:wrap;">
-          <input type="text" class="store-add-input" id="quick-store-url" placeholder="貼上 591、樂屋網、永慶、信義或各大房仲網址直接新增店面...">
+          <input type="text" class="store-add-input" id="quick-store-url" placeholder="貼上房仲網址">
           <button class="btn-submit" onclick="parseAndAddStoreDirect()">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
             <span id="quick-add-btn-text">解析新增</span>
@@ -2082,6 +2089,7 @@
 <!-- Floating Store Detail Modal (浮動視窗看店面完整照片與關鍵資訊) -->
 <div class="modal-overlay" id="store-detail-modal">
   <div class="modal-content-box" style="max-width:850px;">
+    <button type="button" class="modal-x-btn" onclick="closeStoreDetailModal()" aria-label="關閉">✕</button>
     <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
       <div>
         <div style="display:flex;align-items:center;gap:8px;">
@@ -2182,7 +2190,7 @@
     </div>
 
     <div style="display:flex;justify-content:flex-end;align-items:center;border-top:1px solid #f1f1f4;padding-top:10px;">
-      <a href="#" id="m-store-591-link" target="_blank" style="font-size:11.5px;color:var(--fg-muted);text-decoration:underline;">備用：在 591 官網檢視原始頁面</a>
+      <a href="#" id="m-store-591-link" target="_blank" style="font-size:11.5px;color:var(--fg-muted);text-decoration:underline;">591 原始頁面</a>
     </div>
   </div>
 </div>
@@ -2265,12 +2273,12 @@
     </div>
 
     <div style="margin-bottom:12px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">商圈優點與人流分析：</label>
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">優點：</label>
       <textarea id="es-pros" class="composer-textarea" style="min-height:60px;"></textarea>
     </div>
 
     <div style="margin-bottom:16px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:var(--danger);">特別考量與劣勢：</label>
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:var(--danger);">注意：</label>
       <textarea id="es-cons" class="composer-textarea" style="min-height:60px;"></textarea>
     </div>
 
@@ -2287,7 +2295,6 @@
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
       <div>
         <h3 style="font-size:16px;font-weight:800;">房仲資料圖・智能解析與店面收錄</h3>
-        <p style="font-size:11.5px;color:var(--fg-muted);margin-top:2px;">系統自動擷取房仲紙本/DM圖檔規格，可直接校對並加入店面評估</p>
       </div>
       <button class="action-btn" onclick="closeAgencyModal()">關閉</button>
     </div>
@@ -2297,7 +2304,6 @@
       <div>
         <div style="font-size:12px;font-weight:700;margin-bottom:6px;display:flex;justify-content:space-between;">
           <span>房仲原始圖表：</span>
-          <span style="font-size:11px;color:var(--fg-muted);">點擊圖片可放大檢視</span>
         </div>
         <div style="background:#f1f1f4;border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;">
           <img id="ag-preview-img" src="agency_A2610063.jpg" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="window.open(this.src, '_blank')" alt="房仲資料圖">
@@ -2354,12 +2360,12 @@
         </div>
 
         <div>
-          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">商圈優點與人流分析：</label>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">優點：</label>
           <textarea id="ag-pros" class="composer-textarea" style="min-height:50px;">面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。</textarea>
         </div>
 
         <div>
-          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;color:var(--danger);">特別考量與劣勢：</label>
+          <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;color:var(--danger);">注意：</label>
           <textarea id="ag-cons" class="composer-textarea" style="min-height:50px;">錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。</textarea>
         </div>
 
@@ -2419,10 +2425,6 @@
       <button class="action-btn" onclick="closeStatusEditorModal()">關閉</button>
     </div>
 
-    <div style="font-size:12px;color:var(--fg-muted);margin-bottom:10px;">
-      可直接選擇常用預設狀態，或手動自訂任何標籤內容：
-    </div>
-
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;" id="status-quick-pills">
       <button type="button" class="action-btn" onclick="applyQuickStatus('重點候選', 'candidate')" style="padding:4px 8px;font-size:11.5px;">🌟 重點候選</button>
       <button type="button" class="action-btn" onclick="applyQuickStatus('房仲推薦', 'agency')" style="padding:4px 8px;font-size:11.5px;">🏢 房仲推薦</button>
@@ -2433,7 +2435,7 @@
 
     <div style="margin-bottom:14px;">
       <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">自訂狀態文字：</label>
-      <input type="text" id="custom-status-text" placeholder="例如：南西二號備案、暫緩實勘..." style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;">
+      <input type="text" id="custom-status-text" placeholder="" style="width:100%;padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;">
     </div>
 
     <div style="display:flex;justify-content:flex-end;gap:8px;">
@@ -2475,7 +2477,6 @@
 
     <!-- Settings Panel 0: Display Language -->
     <div id="stg-panel-lang">
-      <div style="font-size:12.5px;color:var(--fg-muted);margin-bottom:12px;">選擇畫面顯示的語言（只影響你自己的畫面）</div>
       <div style="display:flex;flex-direction:column;gap:8px;">
         <button type="button" class="stg-lang-btn" data-lang="bilingual" onclick="setAppLanguage('bilingual')">中日雙語對照</button>
         <button type="button" class="stg-lang-btn" data-lang="zh" onclick="setAppLanguage('zh')">純中文</button>
@@ -2493,15 +2494,12 @@
 
     <!-- Settings Panel 1: Members & Tokens -->
     <div id="stg-panel-members">
-      <div style="font-size:12px;color:var(--fg-muted);margin-bottom:12px;">
-        系統使用專屬亂碼 Token 辨識身分（後續將支援 Google 帳號授權登入）
-      </div>
 
       <!-- Add Member Form -->
       <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:12px;margin-bottom:14px;">
         <div style="font-size:12.5px;font-weight:700;margin-bottom:8px;">新增專屬成員</div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
-          <input type="text" id="new-member-name" placeholder="輸入成員姓名（例如：金丸 拓矢 或 Lynn）" style="flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;">
+          <input type="text" id="new-member-name" placeholder="姓名" style="flex:1;min-width:180px;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;">
           <select id="new-member-role" style="padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;background:#fff;">
             <option value="tw">台灣端（繁體中文）</option>
             <option value="jp">日本端（日本語）</option>
@@ -2516,16 +2514,10 @@
 
     <!-- Settings Panel 2: Audit Logs -->
     <div id="stg-panel-audit" style="display:none;">
-      <div style="font-size:12px;color:var(--fg-muted);margin-bottom:10px;">
-        所有動態日誌與店面物件的刪除原因與時間存證清單
-      </div>
       <div id="audit-list-content" style="max-height:360px;overflow-y:auto;"></div>
     </div>
     <!-- Settings Panel 3: Rent Color Thresholds -->
     <div id="stg-panel-rentcolor" style="display:none;">
-      <div style="font-size:12.5px;color:var(--fg-muted);margin-bottom:14px;line-height:1.5;">
-        自訂店面月租金的高亮警示顏色級距。設定完成後立即套用於店面卡片、詳細視窗與比較表：
-      </div>
 
       <div style="background:#fafafc;border:1px solid var(--border);border-radius:8px;padding:14px;margin-bottom:14px;display:flex;flex-direction:column;gap:12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;">
@@ -2565,9 +2557,6 @@
           <div style="display:flex;align-items:center;gap:8px;">
             <span class="metric-pill metric-rent-red-flash" style="font-size:11px;">紅＋閃爍 (超標警報!)</span>
           </div>
-          <div style="font-size:12px;color:var(--danger);font-weight:700;">
-            超過紅色上限即自動觸發紅光閃爍!
-          </div>
         </div>
       </div>
 
@@ -2598,42 +2587,42 @@
         <div>
           <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">議題分類：</label>
           <select id="board-topic-cat" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
-            <option value="品牌策略">品牌策略 (Brand Strategy)</option>
-            <option value="租約談判">租約談判 (Lease Negotiation)</option>
-            <option value="門市選址">門市選址 (Store Location)</option>
-            <option value="智財法務">智財法務 (Intellectual Property)</option>
-            <option value="公司設立">公司設立 (Corporate Entity)</option>
-            <option value="空間設計">空間設計 (Space Design)</option>
-            <option value="營運管理">營運管理 (Operations)</option>
-            <option value="物流供應鏈">物流供應鏈 (Logistics)</option>
-            <option value="其他">其他 (General)</option>
+            <option value="品牌策略">品牌策略</option>
+            <option value="租約談判">租約談判</option>
+            <option value="門市選址">門市選址</option>
+            <option value="智財法務">智財法務</option>
+            <option value="公司設立">公司設立</option>
+            <option value="空間設計">空間設計</option>
+            <option value="營運管理">營運管理</option>
+            <option value="物流供應鏈">物流供應鏈</option>
+            <option value="其他">其他</option>
           </select>
         </div>
         <div>
           <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">審議狀態：</label>
           <select id="board-topic-status" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
-            <option value="discussing">審議中 (In Discussion / 審議中)</option>
-            <option value="pending">待確認 (Pending Action / 要確認)</option>
-            <option value="resolved">已定案 (Resolved / 決定済)</option>
+            <option value="discussing">審議中</option>
+            <option value="pending">待確認</option>
+            <option value="resolved">已定案</option>
           </select>
         </div>
       </div>
 
       <div style="margin-bottom:12px;">
         <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">議題標題：</label>
-        <input type="text" id="board-topic-title-zh" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" placeholder="輸入清晰明確的決策審議標題..." required>
+        <input type="text" id="board-topic-title-zh" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" placeholder="" required>
       </div>
 
       <div style="margin-bottom:12px;">
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">關聯候選店面（選填）：</label>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">關聯店面：</label>
         <select id="board-topic-store" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;width:100%;">
           <option value="">-- 無關聯店面 --</option>
         </select>
       </div>
 
       <div style="margin-bottom:16px;">
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">決策背景與核心提案摘要：</label>
-        <textarea id="board-topic-summary-zh" class="composer-textarea" style="min-height:85px;padding:8px 10px;line-height:1.5;" placeholder="說明此決策的背景、待決事項、關鍵數字或各方意見..."></textarea>
+        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">摘要：</label>
+        <textarea id="board-topic-summary-zh" class="composer-textarea" style="min-height:85px;padding:8px 10px;line-height:1.5;" placeholder=""></textarea>
       </div>
 
       <div style="display:flex;justify-content:flex-end;gap:8px;">
@@ -2656,14 +2645,14 @@
     </div>
 
     <div style="margin-bottom:12px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">現有條件標籤（點擊 × 可移除）：</label>
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:6px;">標籤：</label>
       <div id="tag-manager-chips-list" style="display:flex;flex-wrap:wrap;gap:6px;min-height:38px;padding:8px;background:#f8fafc;border:1px solid var(--border);border-radius:6px;"></div>
     </div>
 
     <div style="margin-bottom:16px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">新增自訂條件標籤：</label>
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">新增標籤：</label>
       <div style="display:flex;gap:6px;">
-        <input type="text" id="new-tag-input" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" placeholder="例如：消防安檢、租金議價、水電勘驗..." onkeydown="if(event.key==='Enter')confirmAddCustomTag()">
+        <input type="text" id="new-tag-input" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" placeholder="" onkeydown="if(event.key==='Enter')confirmAddCustomTag()">
         <button class="btn-submit" type="button" onclick="confirmAddCustomTag()" style="white-space:nowrap;">新增條件</button>
       </div>
     </div>
@@ -2688,8 +2677,8 @@
     <p style="font-size:13px;line-height:1.5;margin-bottom:12px;" id="del-confirm-message">確定要刪除此項目嗎？此操作將記錄於團隊存證中。</p>
 
     <div style="margin-bottom:16px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">請填寫刪除原因存證：</label>
-      <input type="text" id="del-confirm-reason" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" value="紀錄調整" placeholder="請輸入刪除原因存證..." onkeydown="if(event.key==='Enter')executeDeleteConfirmed()">
+      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">刪除原因：</label>
+      <input type="text" id="del-confirm-reason" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin-bottom:0;" value="紀錄調整" placeholder="" onkeydown="if(event.key==='Enter')executeDeleteConfirmed()">
     </div>
 
     <div style="display:flex;justify-content:flex-end;gap:8px;">
@@ -3595,7 +3584,7 @@ function saveRentThresholds() {
   localStorage.setItem('grounds_tw_rent_thresholds', JSON.stringify(state.rentThresholds));
   renderStores();
   renderFeeds();
-  showToast('租金級距設定已儲存並生效！', 2500);
+  showToast('已儲存', 1500);
 }
 
 function resetRentThresholds() {
@@ -3606,7 +3595,7 @@ function resetRentThresholds() {
   document.getElementById('cfg-rent-red').value = 25;
   renderStores();
   renderFeeds();
-  showToast('已恢復預設租金級距（15/20/25萬）', 2500);
+  showToast('已恢復預設', 1500);
 }
 
 function updateUserUI() {
@@ -3670,11 +3659,11 @@ function applyGlobalLanguageTexts() {
   if (btnSubmit) btnSubmit.textContent = isJa ? '投稿' : '發布';
 
   const colTwTitle = document.getElementById('col-tw-title');
-  if (colTwTitle) colTwTitle.textContent = isJa ? '業務成果と執行ログ' : '工作成果與執行動態';
+  if (colTwTitle) colTwTitle.textContent = isJa ? '中国語' : '中文';
 
   const quickStoreUrl = document.getElementById('quick-store-url');
   if (quickStoreUrl) {
-    quickStoreUrl.placeholder = isJa ? '不動産URLを貼り付け...' : '貼上房仲網址直接新增...';
+    quickStoreUrl.placeholder = isJa ? '物件URLを貼り付け' : '貼上房仲網址';
   }
   const _setTxt = (id, zh, ja) => { const el = document.getElementById(id); if (el) el.textContent = isJa ? ja : zh; };
   _setTxt('sort-label', '排序：', '並び替え：');
@@ -4267,14 +4256,11 @@ async function submitFeedPost() {
     renderStores();
 
     // Trigger toast notification
-    const toastMsg = state.langMode === 'ja'
-      ? '投稿が完了しました！日台翻訳が同期されました。'
-      : '動態已成功發布！中日雙語翻譯已同步完成。';
-    showToast(toastMsg, 3500);
+    showToast(state.langMode === 'ja' ? '投稿しました' : '已發布', 1500);
 
   } catch (err) {
     console.error('Submit post error:', err);
-    showToast(state.langMode === 'ja' ? '投稿が完了しました' : '動態已成功發布！', 3000);
+    showToast(state.langMode === 'ja' ? '投稿しました' : '已發布', 1500);
   } finally {
     if (submitBtn) {
       submitBtn.classList.remove('btn-loading');
@@ -4444,7 +4430,7 @@ function createCard(p, colLang) {
       <div class="jp-translation-box">
         <div class="jp-trans-head">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
-          <span>日本語訳（自動翻訳）</span>
+          <span>日本語</span>
         </div>
         <div class="jp-trans-body">${linkedStores.length ? stripPropLinks(p.ja) : p.ja}</div>
       </div>
@@ -4590,7 +4576,7 @@ async function submitReply(postId, colLang) {
     saveAppState();
     inp.value = '';
     renderFeeds();
-    showToast(colLang === 'ja' ? '返信を投稿しました（日中双方向自動翻訳）' : '回覆已送出（中日雙向自動翻譯）', 3000);
+    showToast(colLang === 'ja' ? '返信しました' : '已送出', 1500);
   } catch(e) {
     console.error(e);
   } finally {
@@ -4633,7 +4619,7 @@ async function saveEditedPost() {
 
   const newText = document.getElementById('edit-post-text').value.trim();
   if (!newText) {
-    showToast(state.langMode === 'ja' ? '内容を入力してください！' : '動態內容不可為空！', 3000);
+    showToast(state.langMode === 'ja' ? '内容を入力' : '請輸入內容', 1500);
     return;
   }
 
@@ -4704,7 +4690,7 @@ function executeDeleteConfirmed() {
         state.posts = state.posts.filter(p => p.id !== id);
         saveAppState();
         renderFeeds();
-        showToast('動態已成功刪除並記入團隊存證', 2500);
+        showToast('已刪除', 1500);
       }
     } else if (type === 'store') {
       const item = state.stores.find(s => s.id === id);
@@ -4727,7 +4713,7 @@ function executeDeleteConfirmed() {
 
         saveAppState();
         renderStores();
-        showToast(`店面【${item.title}】已刪除並記錄存證`, 2500);
+        showToast('已刪除', 1500);
       }
     } else if (type === 'board') {
       const topic = (state.boardTopics || []).find(t => t.id === id);
@@ -4743,7 +4729,7 @@ function executeDeleteConfirmed() {
       state.boardTopics = (state.boardTopics || []).filter(t => t.id !== id);
       saveAppState();
       renderBoard();
-      showToast(`決策議題【${titleText}】已刪除並記錄存證`, 2500);
+      showToast('已刪除', 1500);
     }
   } catch(err) {
     console.error('Delete execution error:', err);
@@ -5094,7 +5080,7 @@ function setStoreStatus(storeId, label, cls) {
   renderFeeds();
   if (state.activeDetailStoreId === storeId) refreshDetailBadge(s);
   closeStatusEditorModal();
-  showToast(tr('狀態已更新：', 'ステータスを更新：') + storeStatusText(s), 2000);
+  showToast(storeStatusText(s), 1200);
 }
 function applyQuickStatus(label, cls) { setStoreStatus(state.statusEditingId, label, cls); }
 function submitCustomStatus() {
@@ -5444,7 +5430,7 @@ async function parseAndAddStoreDirect() {
 
   const detected = detectStorePlatform(rawUrl);
   if (!detected) {
-    showToast('請輸入有效房仲物件網址（591、樂屋網、永慶、信義或各大房仲網）', 3000);
+    showToast('請輸入房仲網址', 1800);
     return;
   }
 
@@ -5554,7 +5540,7 @@ async function parseAndAddStoreDirect() {
     urlIn.value = '';
     renderStores();
     initStoreMap();
-    showToast(state.langMode === 'ja' ? `物件【${storeObj.title}】を追加しました` : `成功解析並新增店面【${storeObj.title}】！`, 3000);
+    showToast(state.langMode === 'ja' ? '追加しました' : '已新增', 1800);
     openStoreDetailModal(finalId);
   } finally {
     if (btn && oldBtnContent) {
@@ -6016,7 +6002,7 @@ async function translateAllCompareItemsAsync() {
     btn.disabled = false;
     btn.innerText = '🌐 AI 即時翻譯';
   }
-  showToast('比較表日文翻譯已同步更新！', 3000);
+  showToast('已更新', 1500);
 }
 
 // Map Initialization
@@ -6168,15 +6154,15 @@ function confirmAddCustomTag() {
     saveCustomTags();
     renderTagManagerChips();
     inputEl.value = '';
-    showToast(`已新增分類標籤 #${val}`, 2000);
+    showToast(`已新增 #${val}`, 1500);
   } else {
-    showToast(`標籤 #${val} 已存在`, 2000);
+    showToast(`#${val} 已存在`, 1500);
   }
 }
 
 function removeCustomTag(tag) {
   if (state.customTags.length <= 1) {
-    showToast('請至少保留一個預設條件標籤', 2000);
+    showToast('至少保留一個標籤', 1500);
     return;
   }
   state.customTags = state.customTags.filter(t => t !== tag);
@@ -6274,10 +6260,9 @@ function renderPreviewBox() {
   if (state.realRole !== 'tw') { box.innerHTML = ''; return; }
   const jpMembers = (state.members || []).filter(m => m.role === 'jp');
   box.innerHTML = `
-    <div style="font-size:13px;font-weight:700;margin-bottom:6px;">身分預覽（檢查日本端看到的畫面）</div>
-    <div style="font-size:12px;color:var(--fg-muted);margin-bottom:8px;">預覽時不會標記已讀，也不能發文或回覆。</div>
+    <div style="font-size:13px;font-weight:700;margin-bottom:8px;">日本端預覽</div>
     <div style="display:flex;flex-direction:column;gap:8px;">
-      ${jpMembers.map(m => `<button type="button" class="stg-lang-btn ${state.previewing && state.currentUser === m.name ? 'active' : ''}" onclick="startPreview('${escapeHtml(m.name)}')">以「${escapeHtml(m.name)}」（日本端）身分預覽</button>`).join('') || '<div style="font-size:12px;color:var(--fg-muted);">尚無日本端成員</div>'}
+      ${jpMembers.map(m => `<button type="button" class="stg-lang-btn ${state.previewing && state.currentUser === m.name ? 'active' : ''}" onclick="startPreview('${escapeHtml(m.name)}')">${escapeHtml(m.name)}</button>`).join('') || '<div style="font-size:12px;color:var(--fg-muted);">尚無日本端成員</div>'}
       ${state.previewing ? `<button type="button" class="stg-lang-btn" onclick="endPreview()">回到 ${escapeHtml(state.realUser)}</button>` : ''}
     </div>`;
 }
@@ -6288,7 +6273,7 @@ function ensurePreviewBanner() {
     b.id = 'preview-banner';
     document.body.appendChild(b);
   }
-  b.innerHTML = `<span>預覽中：以「${escapeHtml(state.currentUser)}」身分檢視（不標記已讀・不能發文）</span><button type="button" onclick="endPreview()">回到 ${escapeHtml(state.realUser)}</button>`;
+  b.innerHTML = `<span>預覽：${escapeHtml(state.currentUser)}</span><button type="button" onclick="endPreview()">回到 ${escapeHtml(state.realUser)}</button>`;
   b.style.display = state.previewing ? 'flex' : 'none';
 }
 function applyIdentityView() {
@@ -6587,7 +6572,6 @@ function renderBoard() {
       <div style="text-align:center;padding:48px 20px;background:#fff;border-radius:12px;border:1px dashed var(--border);color:var(--fg-muted);">
         <svg class="icon" style="width:36px;height:36px;margin-bottom:10px;opacity:0.4;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
         <div style="font-size:14px;font-weight:700;">${tr('目前此狀態尚無審議議題','このステータスの議題はまだありません')}</div>
-        <div style="font-size:12px;margin-top:4px;">${tr('點擊上方「發起新議題」建立跨國決策討論','上の「新規議題」から日台の意思決定ディスカッションを始めましょう')}</div>
       </div>
     `;
     return;
