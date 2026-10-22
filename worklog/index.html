@@ -1861,6 +1861,12 @@
       .board-card-header { flex-wrap:wrap; }
       .board-card { padding:14px; }
     }
+    /* ===== 動態 NEW、身分預覽 ===== */
+    .post-new-pill { background:#e11d48; color:#fff; font-size:10.5px; font-weight:800; letter-spacing:.5px; padding:2px 8px; border-radius:10px; white-space:nowrap; }
+    .post-new-pill[hidden] { display:none; }
+    #preview-banner { display:none; position:fixed; left:8px; right:8px; bottom:calc(var(--nav-h, 0px) + var(--safe-bottom, 0px) + 8px); z-index:1600; align-items:center; justify-content:space-between; gap:10px; background:#b45309; color:#fff; padding:9px 12px; border-radius:12px; font-size:12.5px; font-weight:700; box-shadow:0 4px 16px rgba(0,0,0,.3); }
+    #preview-banner button { flex:0 0 auto; background:#fff; color:#b45309; border:0; border-radius:14px; padding:5px 12px; font-size:12.5px; font-weight:800; cursor:pointer; }
+    body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
   </style>
 </head>
 <body>
@@ -2417,7 +2423,7 @@
     </div>
 
     <!-- Segmented Tab within Settings -->
-    <div style="display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
+    <div id="stg-tabbar" style="display:flex;gap:6px;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:14px;">
       <button class="action-btn active" id="stg-tab-lang-btn" onclick="switchSettingsTab('lang')" style="font-weight:700;">
         <span>顯示語言</span>
       </button>
@@ -2443,6 +2449,8 @@
         <button type="button" class="stg-lang-btn" data-lang="zh" onclick="setAppLanguage('zh')">純中文</button>
         <button type="button" class="stg-lang-btn" data-lang="ja" onclick="setAppLanguage('ja')">純日文</button>
       </div>
+      <div id="stg-preview-box" style="margin-top:22px;border-top:1px solid var(--border);padding-top:14px;"></div>
+
       <div class="stg-size-row">
         <span style="font-size:13px;font-weight:700;flex:1;">字級 / 文字サイズ（手機）</span>
         <button type="button" onclick="changeUiZoom(-0.1)">A−</button>
@@ -2972,6 +2980,10 @@ let state = {
   langMode: 'bilingual', // 'bilingual', 'zh', 'ja'
   storeModalLang: 'bilingual',
   boardFilter: 'all',
+  seen: { tw: 0, jp: 0 },
+  previewing: false,
+  realUser: 'Lynn',
+  realRole: 'tw',
   boardTopics: JSON.parse(JSON.stringify(DEFAULT_BOARD_TOPICS)),
   customTags: ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流'],
   selectedStoresForCompare: [],
@@ -3227,6 +3239,7 @@ function loadAppState() {
     if (Array.isArray(loadedData.stores)) state.stores = loadedData.stores;
     if (Array.isArray(loadedData.boardTopics) && loadedData.boardTopics.length > 0) state.boardTopics = loadedData.boardTopics;
     if (Array.isArray(loadedData.deletedLogs)) state.deletedLogs = loadedData.deletedLogs;
+    if (loadedData.seen) state.seen = { tw: Number(loadedData.seen.tw) || 0, jp: Number(loadedData.seen.jp) || 0 };
   }
   if (!Array.isArray(state.boardTopics)) state.boardTopics = [];
   state.boardTopics = state.boardTopics.filter(t => !LEGACY_BOARD_IDS.has(t.id));
@@ -3365,6 +3378,8 @@ function loadAppState() {
 
   state.compareModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
   state.storeModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
+  state.realUser = state.currentUser;
+  state.realRole = state.currentUserRole;
 
   updateUserUI();
   applyGlobalLanguageTexts();
@@ -3376,7 +3391,8 @@ function saveAppState(pushToCloud = true) {
       posts: state.posts,
       stores: state.stores,
       boardTopics: state.boardTopics,
-      deletedLogs: state.deletedLogs
+      deletedLogs: state.deletedLogs,
+      seen: state.seen
     }));
   } catch (err) {
     console.warn('localStorage quota warning, attempting lightweight storage:', err);
@@ -3391,7 +3407,8 @@ function saveAppState(pushToCloud = true) {
         posts: safePosts,
         stores: state.stores,
         boardTopics: state.boardTopics,
-        deletedLogs: state.deletedLogs
+        deletedLogs: state.deletedLogs,
+        seen: state.seen
       }));
     } catch (e2) {
       console.warn('Could not persist all state to localStorage; session remains fully functional in memory.', e2);
@@ -3410,6 +3427,8 @@ async function syncCloudData() {
     if (resp.ok) {
       const data = await resp.json();
       if (data) {
+        mergeSeenFromCloud(data.seen);
+
         // 1. Sync deleted logs first
         if (Array.isArray(data.deletedLogs) && data.deletedLogs.length > 0) {
           const localDelSet = new Set((state.deletedLogs || []).map(l => `${l.type}_${l.id}`));
@@ -3418,6 +3437,9 @@ async function syncCloudData() {
             if (!localDelSet.has(k)) {
               state.deletedLogs.unshift(dl);
               localDelSet.add(k);
+            } else if (dl.hidden) {
+              const lo = state.deletedLogs.find(x => `${x.type}_${x.id}` === k);
+              if (lo) lo.hidden = true;
             }
           });
         }
@@ -3506,7 +3528,8 @@ function pushStateToCloud() {
       posts: state.posts,
       stores: state.stores,
       boardTopics: state.boardTopics,
-      deletedLogs: state.deletedLogs
+      deletedLogs: state.deletedLogs,
+      seen: state.seen
     });
     fetch('api_sync.php', {
       method: 'POST',
@@ -4255,7 +4278,7 @@ function renderDailyLogs(box, colLang) {
   Object.keys(days).sort().reverse().forEach(d => {
     const dm = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(d);
     const isOld = dm && new Date(+dm[1], +dm[2] - 1, +dm[3]).getTime() < cutoff;
-    const list = days[d].slice().sort((a, b) => (Number(a.id) || 0) - (Number(b.id) || 0));
+    const list = days[d].slice().sort((a, b) => (Number(b.id) || 0) - (Number(a.id) || 0));
     const hours = Math.round(list.reduce((sum, p) => sum + (Number(p.hours) || 0), 0) * 100) / 100;
     const authors = Array.from(new Set(list.map(p => p.author))).join('、');
     const wrap = document.createElement('div');
@@ -4281,6 +4304,7 @@ function renderDailyLogs(box, colLang) {
 }
 
 function renderFeeds() {
+  scheduleFeedSeen();
   const zhBox = document.getElementById('feed-zh-box');
   const jaBox = document.getElementById('feed-ja-box');
   if (!zhBox || !jaBox) return;
@@ -4437,6 +4461,7 @@ function createCard(p, colLang) {
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
+        <span class="post-new-pill" data-pid="${p.id}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
         <span class="post-tag">#${p.tag}</span>
         <span class="hours-tag">${fmtHours(p.hours, colLang)}</span>
         <!-- Edit Post Button -->
@@ -6030,12 +6055,121 @@ function changeUiZoom(d) { applyUiZoom(currentUiZoom() + d); }
   applyUiZoom(z);
 })();
 
+// --- 動態「NEW」：對方還沒看過就標示，對方看完就消失（已讀狀態存在雲端）---
+function roleOfAuthor(name) {
+  const m = (state.members || []).find(x => x.name === name);
+  return m ? m.role : 'tw';
+}
+function postIsNew(p) {
+  const other = roleOfAuthor(p.author) === 'jp' ? 'tw' : 'jp';
+  return (Number(state.seen[other]) || 0) < (Number(p.id) || 0);
+}
+function refreshNewPills() {
+  document.querySelectorAll('.post-new-pill').forEach(el => {
+    const p = state.posts.find(x => String(x.id) === el.dataset.pid);
+    el.hidden = !(p && postIsNew(p));
+  });
+}
+function mergeSeenFromCloud(cloudSeen) {
+  if (!cloudSeen) return;
+  ['tw', 'jp'].forEach(r => {
+    state.seen[r] = Math.max(Number(state.seen[r]) || 0, Number(cloudSeen[r]) || 0);
+  });
+}
+let _feedSeenTimer = null;
+function scheduleFeedSeen() {
+  clearTimeout(_feedSeenTimer);
+  if (state.previewing) return;
+  _feedSeenTimer = setTimeout(markFeedSeen, 3000);
+}
+async function markFeedSeen() {
+  if (state.previewing || document.hidden) return;
+  const tab = document.getElementById('tab-feed');
+  if (!tab || tab.style.display === 'none') return;
+  const role = state.currentUserRole === 'jp' ? 'jp' : 'tw';
+  const maxId = state.posts.reduce((m, p) => Math.max(m, Number(p.id) || 0), 0);
+  if ((Number(state.seen[role]) || 0) >= maxId) return;
+  try {
+    const r = await fetch('api_sync.php');
+    if (r.ok) { const d = await r.json(); if (d) mergeSeenFromCloud(d.seen); }
+  } catch (e) {}
+  state.seen[role] = Math.max(Number(state.seen[role]) || 0, maxId);
+  saveAppState(true);
+  refreshNewPills();
+}
+async function pullSeenOnly() {
+  if (document.hidden) return;
+  try {
+    const r = await fetch('api_sync.php');
+    if (r.ok) { const d = await r.json(); if (d) { mergeSeenFromCloud(d.seen); refreshNewPills(); } }
+  } catch (e) {}
+}
+setInterval(pullSeenOnly, 30000);
+document.addEventListener('visibilitychange', () => { if (!document.hidden) { pullSeenOnly(); scheduleFeedSeen(); } });
+
+// --- 身分預覽：Lynn 以日本端身分檢視畫面（不標記已讀、不能發文）---
+function renderPreviewBox() {
+  const box = document.getElementById('stg-preview-box');
+  if (!box) return;
+  if (state.realRole !== 'tw') { box.innerHTML = ''; return; }
+  const jpMembers = (state.members || []).filter(m => m.role === 'jp');
+  box.innerHTML = `
+    <div style="font-size:13px;font-weight:700;margin-bottom:6px;">身分預覽（檢查日本端看到的畫面）</div>
+    <div style="font-size:12px;color:var(--fg-muted);margin-bottom:8px;">預覽時不會標記已讀，也不能發文或回覆。</div>
+    <div style="display:flex;flex-direction:column;gap:8px;">
+      ${jpMembers.map(m => `<button type="button" class="stg-lang-btn ${state.previewing && state.currentUser === m.name ? 'active' : ''}" onclick="startPreview('${escapeHtml(m.name)}')">以「${escapeHtml(m.name)}」（日本端）身分預覽</button>`).join('') || '<div style="font-size:12px;color:var(--fg-muted);">尚無日本端成員</div>'}
+      ${state.previewing ? `<button type="button" class="stg-lang-btn" onclick="endPreview()">回到 ${escapeHtml(state.realUser)}</button>` : ''}
+    </div>`;
+}
+function ensurePreviewBanner() {
+  let b = document.getElementById('preview-banner');
+  if (!b) {
+    b = document.createElement('div');
+    b.id = 'preview-banner';
+    document.body.appendChild(b);
+  }
+  b.innerHTML = `<span>預覽中：以「${escapeHtml(state.currentUser)}」身分檢視（不標記已讀・不能發文）</span><button type="button" onclick="endPreview()">回到 ${escapeHtml(state.realUser)}</button>`;
+  b.style.display = state.previewing ? 'flex' : 'none';
+}
+function applyIdentityView() {
+  document.body.classList.toggle('previewing', state.previewing);
+  ensurePreviewBanner();
+  updateUserUI();
+  applyGlobalLanguageTexts();
+  applyLanguageLayout();
+  renderFeeds();
+  renderStores();
+  renderBoard();
+  closeSettingsModal();
+  switchNavTab('feed');
+}
+function startPreview(name) {
+  const m = (state.members || []).find(x => x.name === name);
+  if (!m || state.realRole !== 'tw') return;
+  state.previewing = true;
+  state.currentUser = m.name;
+  state.currentUserRole = m.role;
+  state.langMode = m.role === 'jp' ? 'ja' : 'bilingual';
+  state.compareModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
+  state.storeModalLang = state.compareModalLang;
+  applyIdentityView();
+}
+function endPreview() {
+  state.previewing = false;
+  state.currentUser = state.realUser;
+  state.currentUserRole = state.realRole;
+  state.langMode = 'bilingual';
+  state.compareModalLang = 'bilingual';
+  state.storeModalLang = 'bilingual';
+  applyIdentityView();
+}
+
 function openSettingsModal(tabName) {
   const modal = document.getElementById('settings-modal');
   if (modal) modal.classList.add('open');
   switchSettingsTab(tabName || 'lang');
   const countEl = document.getElementById('stg-audit-count');
-  if (countEl) countEl.textContent = (state.deletedLogs || []).length;
+  if (countEl) countEl.textContent = visibleAuditCount();
 }
 
 function closeSettingsModal() {
@@ -6045,6 +6179,14 @@ function closeSettingsModal() {
 
 function switchSettingsTab(tabName) {
   const tabs = ['lang', 'members', 'audit', 'rentcolor'];
+  const isAdmin = state.realRole === 'tw';
+  if (!isAdmin) tabName = 'lang';
+  tabs.slice(1).forEach(t => {
+    const btn = document.getElementById(`stg-tab-${t}-btn`);
+    if (btn) btn.style.display = isAdmin ? '' : 'none';
+  });
+  const tabbar = document.getElementById('stg-tabbar');
+  if (tabbar) tabbar.style.display = isAdmin ? 'flex' : 'none';
   if (tabs.indexOf(tabName) < 0) tabName = 'lang';
   tabs.forEach(t => {
     const btn = document.getElementById(`stg-tab-${t}-btn`);
@@ -6054,6 +6196,7 @@ function switchSettingsTab(tabName) {
   });
   if (tabName === 'audit') renderAuditLogs();
   if (tabName === 'members') renderMemberList();
+  if (tabName === 'lang') renderPreviewBox();
   updateUserUI();
   const zl = document.getElementById('ui-zoom-label');
   if (zl) zl.textContent = Math.round(currentUiZoom() * 100) + '%';
@@ -6149,19 +6292,43 @@ function closeAuditModal() {
   closeSettingsModal();
 }
 
+// 存證紀錄的「刪除」只是從清單隱藏（hidden），底層墓碑保留，避免已刪除的動態／店面／議題被同步回來
+function visibleAuditCount() {
+  return (state.deletedLogs || []).filter(l => !l.hidden).length;
+}
+function hideAuditLog(idx) {
+  const l = (state.deletedLogs || [])[idx];
+  if (!l) return;
+  l.hidden = true;
+  saveAppState();
+  renderAuditLogs();
+}
+function hideAllAuditLogs(btn) {
+  if (!btn.dataset.armed) {
+    btn.dataset.armed = '1';
+    btn.textContent = '再按一次確認清空';
+    setTimeout(() => { delete btn.dataset.armed; btn.textContent = '全部清空'; }, 3000);
+    return;
+  }
+  (state.deletedLogs || []).forEach(l => { l.hidden = true; });
+  saveAppState();
+  renderAuditLogs();
+}
 function renderAuditLogs() {
   const box = document.getElementById('audit-list-content');
   if (!box) return;
-  const logs = state.deletedLogs || [];
+  const all = state.deletedLogs || [];
   const countEl = document.getElementById('stg-audit-count');
-  if (countEl) countEl.textContent = logs.length;
+  if (countEl) countEl.textContent = visibleAuditCount();
 
-  if (!logs.length) {
+  const rows = all.map((l, i) => ({ l, i })).filter(x => !x.l.hidden);
+  if (!rows.length) {
     box.innerHTML = '<div style="font-size:12px;color:var(--fg-muted);padding:14px 0;text-align:center;">尚無任何刪除存證紀錄。</div>';
   } else {
-    box.innerHTML = logs.map(l => `
-      <div class="delete-log-item" style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;">
-        <div style="font-weight:700;">[${l.type}] ${l.title || ''} <span style="font-size:11px;color:var(--fg-muted);">(${l.id})</span></div>
+    box.innerHTML = `<div style="text-align:right;margin-bottom:8px;"><button type="button" class="action-btn" onclick="hideAllAuditLogs(this)">全部清空</button></div>` + rows.map(({ l, i }) => `
+      <div class="delete-log-item" style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;position:relative;">
+        <button type="button" class="board-icon-btn danger" style="position:absolute;top:6px;right:6px;" onclick="hideAuditLog(${i})" title="刪除這筆紀錄">×</button>
+        <div style="font-weight:700;padding-right:24px;">[${l.type}] ${l.title || ''} <span style="font-size:11px;color:var(--fg-muted);">(${l.id})</span></div>
         <div style="color:var(--danger);margin:3px 0;">刪除原因：${l.reason || '無填寫'}</div>
         <div style="font-size:11px;color:var(--fg-muted);">執行人：${l.deletedBy} ｜ 時間：${l.deletedAt}</div>
       </div>
@@ -6567,7 +6734,18 @@ document.addEventListener('click', (e) => {
 // Bootstrap
 loadAppState();
 renderFeeds();
-syncCloudData();
+// 一次性：Lynn 第一次開啟新版時，把既有的刪除存證紀錄全部清空（隱藏；防復活墓碑保留）
+function autoClearAuditOnce() {
+  const KEY = 'grounds_tw_audit_cleared_v1';
+  try {
+    if (state.realRole !== 'tw' || localStorage.getItem(KEY)) return;
+    let changed = false;
+    (state.deletedLogs || []).forEach(l => { if (!l.hidden) { l.hidden = true; changed = true; } });
+    localStorage.setItem(KEY, '1');
+    if (changed) saveAppState(true);
+  } catch (e) {}
+}
+syncCloudData().then(autoClearAuditOnce, autoClearAuditOnce);
 </script>
 
 </body>
