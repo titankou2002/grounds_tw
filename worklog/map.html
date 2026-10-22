@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>grounds Taiwan MAP</title>
+<link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<style>
+:root{--fg:#111;--muted:#6b7280;--line:#e5e7eb;--bg:#f6f6f4;--zoom:1.1}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"Noto Sans TC","Hiragino Sans",sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px solid var(--line);padding:calc(8px + env(safe-area-inset-top)) 14px 8px;display:flex;align-items:center;gap:10px}
+.logo{width:34px;height:34px;border-radius:8px;background:#111;color:#fff;font:bold 21px Georgia,serif;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
+.ttl{font-weight:800;font-size:15px;flex:1}
+.lang{display:flex;background:#f1f1f4;border-radius:18px;padding:2px}
+.lang button{border:0;background:transparent;border-radius:16px;padding:6px 12px;font-size:13px;font-weight:700;color:var(--muted);cursor:pointer}
+.lang button.on{background:#111;color:#fff}
+.wrap{max-width:1360px;margin:0 auto;padding:12px 12px calc(16px + env(safe-area-inset-bottom))}
+.sort{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:18px;padding:6px 12px;font-size:12.5px;font-weight:700;cursor:pointer}
+.chip.on{background:#111;color:#fff;border-color:#111}
+.layout{display:grid;grid-template-columns:minmax(0,520px) 1fr;gap:14px;align-items:start}
+#map{height:calc(100vh - 140px);min-height:360px;border-radius:12px;border:1px solid var(--line);position:sticky;top:76px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.card.focus{box-shadow:0 0 0 2px #2563eb}
+.row{display:flex;gap:10px;align-items:flex-start}
+.thumb{width:84px;height:64px;border-radius:8px;object-fit:cover;background:#eee;flex:0 0 auto}
+.info{flex:1;min-width:0}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:10px;background:#eff6ff;color:#1d4ed8;border:1px solid #bfdbfe;margin-bottom:4px}
+.title{font-size:14px;font-weight:800;line-height:1.35;margin:0 0 3px}
+.addr{font-size:11.5px;color:var(--muted);margin-bottom:5px}
+.pills{display:flex;flex-wrap:wrap;gap:4px}
+.pill{font-size:11px;padding:2px 7px;border-radius:5px;border:1px solid;font-weight:700;white-space:nowrap}
+.p-rent{background:#fee2e2;color:#991b1b;border-color:#fca5a5}.p-ok{background:#dcfce7;color:#166534;border-color:#86efac}.p-mid{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.p-area{background:#ccfbf1;color:#115e59;border-color:#99f6e4}.p-unit{background:#f1f5f9;color:#475569;border-color:#e2e8f0}.p-real{background:#fef3c7;color:#92400e;border-color:#fde68a}
+.more{display:none;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line);font-size:12.5px;line-height:1.6}
+.card.open .more{display:block}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;margin-bottom:8px}
+.strip{display:flex;gap:6px;overflow-x:auto;margin-bottom:8px}
+.strip img{height:64px;border-radius:6px;cursor:zoom-in}
+.neg{color:#b91c1c}
+.src{display:inline-block;margin-top:6px;color:#2563eb;font-weight:700;text-decoration:none}
+#lb{display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:3000;align-items:center;justify-content:center;padding:16px}
+#lb.on{display:flex}#lb img{max-width:100%;max-height:100%;border-radius:8px}
+#lb button{position:absolute;top:calc(14px + env(safe-area-inset-top));right:14px;width:40px;height:40px;border-radius:50%;border:0;background:#fff;font-size:18px}
+.empty{text-align:center;color:var(--muted);padding:40px 0}
+@media(max-width:900px){
+  .layout{grid-template-columns:1fr}
+  #map{position:relative;top:auto;height:300px;min-height:0;order:-1}
+  .title{font-size:16px}.addr{font-size:13px}.pill{font-size:12.5px;padding:3px 8px}.tag{font-size:12px}
+  .chip{font-size:14px;padding:8px 14px}.lang button{font-size:14px}.more{font-size:14px}.thumb{width:92px;height:70px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">g</div><div class="ttl">MAP</div>
+  <div class="lang"><button id="l-zh" class="on">中文</button><button id="l-ja">日本語</button></div>
+</header>
+<div class="wrap">
+  <div class="sort" id="sort"></div>
+  <div class="layout"><div id="list"></div><div id="map"></div></div>
+</div>
+<div id="lb"><button aria-label="close">✕</button><img alt=""></div>
+<script>
+(function () {
+  var L10N = {
+    zh: { rent: '月租', unit: '單價', real: '實月', wan: '萬', rentL: '刊登月租', areaL: '使用坪數', unitL: '每坪單價', realL: '真實月成本', depL: '押金', freeL: '裝潢免租', regL: '營業登記', invL: '發票', pros: '優點', cons: '注意', yes: '可', no: '不可', src: '原始頁面',
+      sorts: [['default', '預設'], ['area', '面積'], ['rent', '月租'], ['unit', '坪單價']], none: '尚無店面' },
+    ja: { rent: '賃料', unit: '坪単価', real: '実質月額', wan: '万', rentL: '掲載賃料', areaL: '使用面積', unitL: '坪単価', realL: '実質月額', depL: '保証金', freeL: 'フリーレント', regL: '営業登記', invL: 'インボイス', pros: '強み', cons: '注意', yes: '可', no: '不可', src: '元ページ',
+      sorts: [['default', '標準'], ['area', '面積'], ['rent', '賃料'], ['unit', '坪単価']], none: '店舗がありません' }
+  };
+  var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
+  var q = new URLSearchParams(location.search);
+  var lang = (q.get('lang') === 'ja' || (!q.get('lang') && /^ja/i.test(navigator.language || '') && false)) ? 'ja' : 'zh';
+  try { var sl = localStorage.getItem('gtw_map_lang'); if (!q.get('lang') && sl) lang = sl; } catch (e) {}
+  var stores = [], sort = 'default', map, markers = {}, mobile = function () { return innerWidth <= 900; };
+  var $ = function (id) { return document.getElementById(id); };
+  var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var T = function () { return L10N[lang]; };
+  var title = function (s) { return lang === 'ja' ? (s.titleJa || s.title) : s.title; };
+  var tx = function (zh, ja) { return lang === 'ja' ? (ja && ja !== zh ? ja : zh) : zh; };
+  var status = function (s) { var l = s.statusLabel || ''; return lang === 'ja' ? (STATUS_JA[l] || l) : l; };
+  var months = function (v) { return lang === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : (v || ''); };
+  var rentCls = function (r) { var w = r / 10000; return w < 15 ? 'p-ok' : w < 20 ? 'p-mid' : 'p-rent'; };
+
+  function sorted() {
+    var a = stores.slice(), u = function (s) { return (s.rent || 0) / (s.area || 1); };
+    if (sort === 'area') a.sort(function (x, y) { return (y.area || 0) - (x.area || 0); });
+    else if (sort === 'rent') a.sort(function (x, y) { return (x.rent || 0) - (y.rent || 0); });
+    else if (sort === 'unit') a.sort(function (x, y) { return u(x) - u(y); });
+    return a;
+  }
+  function renderSort() {
+    $('sort').innerHTML = T().sorts.map(function (s) { return '<button class="chip' + (sort === s[0] ? ' on' : '') + '" data-s="' + s[0] + '">' + s[1] + '</button>'; }).join('');
+    Array.prototype.forEach.call($('sort').children, function (b) { b.onclick = function () { sort = (sort === b.dataset.s) ? 'default' : b.dataset.s; renderSort(); renderList(); }; });
+  }
+  function renderList() {
+    var t = T(), list = $('list');
+    if (!stores.length) { list.innerHTML = '<div class="empty">' + t.none + '</div>'; return; }
+    list.innerHTML = sorted().map(function (s) {
+      var rw = Math.round(s.rent / 10000), ar = Math.round(s.area), un = Math.round(s.rent / s.area), rc = Math.round(s.realCost || 0), dep = Math.round((s.deposit || s.rent * 2) / 10000);
+      var imgs = s.images || [], img = imgs[0] || '';
+      return '<div class="card" id="c-' + esc(s.id) + '" data-id="' + esc(s.id) + '"><div class="row">' +
+        (img ? '<img class="thumb" src="' + esc(img) + '" alt="">' : '<div class="thumb"></div>') +
+        '<div class="info"><span class="tag">' + esc(status(s)) + '</span><div class="title">' + esc(title(s)) + '</div><div class="addr">' + esc(s.address) + '</div>' +
+        '<div class="pills"><span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
+        '<span class="pill p-unit">' + t.unit + ' ' + un.toLocaleString() + '/坪</span><span class="pill p-real">' + t.real + ' NT$ ' + rc.toLocaleString() + '</span></div></div></div>' +
+        '<div class="more">' +
+        (imgs.length > 1 ? '<div class="strip">' + imgs.map(function (u) { return '<img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">'; }).join('') + '</div>' : '') +
+        '<div class="grid"><div>' + t.rentL + '：<b>NT$ ' + rw + t.wan + '</b></div><div>' + t.areaL + '：<b>' + ar + ' 坪</b></div><div>' + t.unitL + '：<b>' + un.toLocaleString() + '</b></div><div>' + t.realL + '：<b>' + rc.toLocaleString() + '</b></div>' +
+        '<div>' + t.depL + '：<b>NT$ ' + dep + t.wan + '</b></div><div>' + t.freeL + '：<b>' + esc(months(s.freeRent)) + '</b></div><div>' + t.regL + '：<b>' + (s.canRegister ? t.yes : t.no) + '</b></div><div>' + t.invL + '：<b>' + (s.canInvoice ? t.yes : t.no) + '</b></div></div>' +
+        (s.pros ? '<div><b>' + t.pros + '：</b>' + esc(tx(s.pros, s.prosJa)) + '</div>' : '') +
+        (s.cons ? '<div class="neg"><b>' + t.cons + '：</b>' + esc(tx(s.cons, s.consJa)) + '</div>' : '') +
+        (/^https?:/i.test(s.url || '') ? '<a class="src" href="' + esc(s.url) + '" target="_blank" rel="noopener">🔗 ' + t.src + '</a>' : '') +
+        '</div></div>';
+    }).join('');
+    Array.prototype.forEach.call(list.querySelectorAll('.card'), function (c) {
+      c.onclick = function (e) {
+        if (e.target.closest('a')) return;
+        if (e.target.dataset && e.target.dataset.big) { $('lb').querySelector('img').src = e.target.dataset.big; $('lb').classList.add('on'); return; }
+        c.classList.toggle('open');
+        if (!mobile()) focusStore(c.dataset.id);   // 手機：只展開／收合，不動地圖
+      };
+    });
+  }
+  function focusStore(id) {
+    var s = stores.filter(function (x) { return x.id === id; })[0];
+    Array.prototype.forEach.call(document.querySelectorAll('.card.focus'), function (c) { c.classList.remove('focus'); });
+    var c = $('c-' + id); if (c) c.classList.add('focus');
+    if (s && map && markers[id]) { map.setView([s.lat, s.lng], 16); markers[id].openPopup(); }
+  }
+  function renderMap() {
+    if (!window.L) return;
+    if (!map) { map = L.map('map').setView([25.056, 121.5218], 14); L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '© OpenStreetMap' }).addTo(map); }
+    Object.keys(markers).forEach(function (k) { map.removeLayer(markers[k]); }); markers = {};
+    var t = T(), pts = [];
+    stores.forEach(function (s) {
+      if (typeof s.lat !== 'number' || typeof s.lng !== 'number') return;
+      var m = L.marker([s.lat, s.lng]).addTo(map);
+      m.bindPopup('<b>' + esc(title(s)) + '</b><br>' + t.rent + ' NT$ ' + Math.round(s.rent / 10000) + t.wan + '（' + Math.round(s.area) + '坪）');
+      m.on('click', function () { if (!mobile()) { var c = $('c-' + s.id); if (c) { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } });
+      markers[s.id] = m; pts.push([s.lat, s.lng]);
+    });
+    if (pts.length) map.fitBounds(pts, { padding: [30, 30], maxZoom: 15 });
+    setTimeout(function () { map.invalidateSize(); }, 200);
+  }
+  function setLang(l) {
+    lang = l; document.documentElement.lang = l === 'ja' ? 'ja' : 'zh-TW';
+    $('l-zh').classList.toggle('on', l === 'zh'); $('l-ja').classList.toggle('on', l === 'ja');
+    try { localStorage.setItem('gtw_map_lang', l); } catch (e) {}
+    renderSort(); renderList(); renderMap();
+  }
+  $('l-zh').onclick = function () { setLang('zh'); }; $('l-ja').onclick = function () { setLang('ja'); };
+  $('lb').onclick = function () { $('lb').classList.remove('on'); };
+  fetch('api_stores.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { stores = d.stores || []; setLang(lang); }).catch(function () { setLang(lang); });
+})();
+</script>
+</body>
+</html>
