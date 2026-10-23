@@ -54,3 +54,6 @@
 /目前進度.md
 worklog/.wl_secret
 worklog/.wl_pw
+
+worklog/store_overrides.json
+worklog/uploads/

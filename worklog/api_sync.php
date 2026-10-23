@@ -16,6 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $content = file_get_contents($dataFile);
         if ($content && trim($content) !== '') {
             $content = preg_replace('/^\xEF\xBB\xBF/', '', $content);
+            // 套用 MAP 頁的線上修改，讓原本的頁面也看得到
+            require_once __DIR__ . '/lib_overrides.php';
+            $ov = wl_ov_load(); $d = json_decode($content, true);
+            if ($ov && is_array($d) && isset($d['stores']) && is_array($d['stores'])) {
+                foreach ($d['stores'] as $i => $s) { $d['stores'][$i] = wl_ov_apply($s, $ov); }
+                $content = json_encode($d, JSON_UNESCAPED_UNICODE);
+            }
             echo $content;
             exit;
         }

@@ -8,6 +8,8 @@ $data = file_exists($file) ? json_decode(preg_replace('/^\xEF\xBB\xBF/', '', fil
 $keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','realCost','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified'];
 $fixFile = __DIR__ . '/store_fixes.json';
 $fixes = file_exists($fixFile) ? (json_decode(file_get_contents($fixFile), true) ?: []) : [];
+require_once __DIR__ . '/lib_overrides.php';
+$ov = wl_ov_load();
 $out = [];
 if (is_array($data) && isset($data['stores']) && is_array($data['stores'])) {
     foreach ($data['stores'] as $s) {
@@ -16,6 +18,7 @@ if (is_array($data) && isset($data['stores']) && is_array($data['stores'])) {
             foreach ($fixes[$s['id']] as $fk => $fv) { if ($fv === null) unset($s[$fk]); else $s[$fk] = $fv; }
             $s['unverified'] = false;
         }
+        $s = wl_ov_apply($s, $ov);   // MAP 頁線上修改永遠最後套用
         $row = [];
         foreach ($keys as $k) { if (isset($s[$k])) $row[$k] = $s[$k]; }
         // 只允許 http(s) 或站內檔名的圖片／連結，避免夾帶其他內容
