@@ -1913,6 +1913,13 @@
     .star-btn.on { background: #f59e0b; color: #fff; }
     .kpi-badge:last-child { }
     @media (max-width: 900px) { .kpi-badge-group { grid-template-columns: 1fr 1fr; } .kpi-badge-group .kpi-badge:last-child { grid-column: 1 / -1; } }
+    /* 日報內的比較表 */
+    .post-cmp-wrap { overflow-x: auto; margin-top: 6px; -webkit-overflow-scrolling: touch; }
+    .post-cmp-table { border-collapse: collapse; font-size: 12px; min-width: 100%; }
+    .post-cmp-table th, .post-cmp-table td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; min-width: 120px; line-height: 1.5; }
+    .post-cmp-table th:first-child { min-width: 64px; background: #fafafa; white-space: nowrap; position: sticky; left: 0; }
+    .post-cmp-table th { background: #fafafa; }
+    .post-cmp-table img { width: 110px; height: 76px; object-fit: cover; border-radius: 6px; display: block; }
   </style>
 </head>
 <body>
@@ -2406,6 +2413,7 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
+        <button class="action-btn" id="btn-cmp-report" onclick="createCompareReportPost()">建立到日報</button>
         <button class="action-btn" id="btn-cmp-edit" onclick="toggleCompareEdit()">編輯</button>
         <button class="btn-submit" id="btn-cmp-save" onclick="saveCompareEdits()" style="display:none;">儲存</button>
         <button class="action-btn" id="btn-cmp-cancel" onclick="cancelCompareEdit()" style="display:none;">取消</button>
@@ -5508,6 +5516,7 @@ function updateCompareEditButtons() {
   const e = state.compareEditing;
   const set = (id, show) => { const b = document.getElementById(id); if (b) b.style.display = show ? '' : 'none'; };
   set('btn-cmp-edit', !e && !state.previewing);
+  set('btn-cmp-report', !e && !state.previewing);
   set('btn-cmp-save', e);
   set('btn-cmp-cancel', e);
 }
@@ -5567,6 +5576,81 @@ async function saveCompareEdits() {
   renderCompareTable(); renderStores(); renderFeeds();
   if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
   showToast(tr('已儲存', '保存しました'), 1500);
+}
+
+// 比較表 → 日報動態（當下內容的快照，中日兩個版本）
+function buildCompareReportHtml(items, lang) {
+  const ja = lang === 'ja';
+  const L = ja
+    ? { title: '店舗比較表', item: '項目', rent: '賃料', area: '面積', unit: '坪単価', dep: '保証金', free: 'フリーレント', reg: '営業登記', inv: 'インボイス', pros: '強み', cons: '注意点', wan: '万', yes: '可', no: '不可' }
+    : { title: '店面比較表', item: '項目', rent: '月租', area: '坪數', unit: '每坪單價', dep: '押金', free: '裝潢免租', reg: '營業登記', inv: '發票', pros: '優點', cons: '注意', wan: '萬', yes: '可', no: '不可' };
+  const jpy = n => Math.round(n * 4.8 / 10000);
+  const t = s => esc_(ja ? (s.titleJa || s.title) : s.title);
+  const dep = s => {
+    const n = Number(s.deposit) > 0, txt = s.depositText ? (ja ? (DEP_JA[s.depositText] || s.depositText) : s.depositText) : '';
+    if (n) return `NT$ ${fmtWan(s.deposit)}${L.wan}（約${jpy(s.deposit)}万円）` + (txt ? ` ${esc_(txt)}` : '');
+    return esc_(txt || '未確認');
+  };
+  const row = (label, fn) => `<tr><th>${label}</th>` + items.map(s => `<td>${fn(s)}</td>`).join('') + '</tr>';
+  const d = new Date();
+  const dateStr = fmtDateWd(`${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, ja ? 'ja' : 'zh');
+  return `<div class="post-cmp"><b>${L.title}</b>（${dateStr}）<div class="post-cmp-wrap"><table class="post-cmp-table">` +
+    `<tr><th>${L.item}</th>` + items.map(s => `<th>${t(s)}</th>`).join('') + '</tr>' +
+    row(ja ? '写真' : '照片', s => coverOf(s) ? `<img src="${esc_(coverOf(s))}" alt="">` : '—') +
+    row(L.rent, s => hasNums(s) ? `NT$ ${fmtWan(s.rent)}${L.wan}（約${jpy(s.rent)}万円）` : '—') +
+    row(L.area, s => hasNums(s) ? `${fmtPing(s.area)} 坪（${Math.round(s.area * 3.3058)}㎡）` : '—') +
+    row(L.unit, s => hasNums(s) ? `NT$ ${unitOf(s).toLocaleString()}/坪` : '—') +
+    row(L.dep, dep) +
+    row(L.free, s => esc_(ja ? jaMonths(s.freeRent || '洽詢') : (s.freeRent || '洽詢'))) +
+    row(L.reg, s => triBool(s.canRegister, L.yes, L.no)) +
+    row(L.inv, s => triBool(s.canInvoice, L.yes, L.no)) +
+    row(L.pros, s => esc_(ja ? (s.prosJa || s.pros || '') : (s.pros || ''))) +
+    row(L.cons, s => esc_(ja ? (s.consJa || s.cons || '') : (s.cons || ''))) +
+    '</table></div></div>';
+}
+
+async function createCompareReportPost() {
+  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  if (items.length < 2) { showToast(tr('請先勾選 2 間以上', '2件以上選択してください'), 1800); return; }
+  const btn = document.getElementById('btn-cmp-report');
+  const oldLabel = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = tr('翻譯中…', '翻訳中…'); }
+  try {
+    // 日文版：沒有日文的名稱／優點／注意先翻譯（翻過的會存回店面，之後不用再翻）
+    const jobs = [];
+    items.forEach(s => {
+      [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
+        const zh = String(s[zhK] || '').trim();
+        if (zh && (!s[jaK] || s[jaK] === zh)) {
+          jobs.push(Promise.race([translateTextAsync(zh.slice(0, 450), 'zh-TW|ja'), new Promise(r => setTimeout(() => r(''), 30000))]).then(j => { if (j && j !== zh) { s[jaK] = j; return true; } return false; }).catch(() => false));
+        }
+      });
+    });
+    const changed = (await Promise.all(jobs)).some(Boolean);   // 同時翻譯，不要一個一個等
+    if (changed) saveAppState(true);
+    const now = new Date();
+    const timeStr = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    state.posts.unshift({
+      id: Date.now(),
+      author: state.currentUser,
+      date: timeStr,
+      hours: 0.5,
+      tag: '門市選址',
+      zh: buildCompareReportHtml(items, 'zh'),
+      ja: buildCompareReportHtml(items, 'ja'),
+      propId: null,
+      propIds: [],
+      attachment: null,
+      comments: []
+    });
+    saveAppState(true);
+    closeCompareModal();
+    switchNavTab('feed');
+    renderFeeds();
+    showToast(tr('已建立到日報', '日報に作成しました'), 1800);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = oldLabel; }
+  }
 }
 
 async function translateAllCompareItemsAsync() {
