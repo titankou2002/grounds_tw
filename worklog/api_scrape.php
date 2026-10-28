@@ -68,8 +68,14 @@ if ($url) {
     }
 }
 
-if ($platform) {
+// 有網址時以網址的主機為準，不讓 platform 參數把任意網址說成 591。
+// 只有「沒給網址、只給物件編號」時，才用 platform 組出允許清單裡的網址。
+$allowedPlatforms = array('591', 'rakuya', 'yungching', 'sinyi', 'hbhousing', 'cthouse', 'twhg');
+if (!$url && $platform && in_array($platform, $allowedPlatforms, true)) {
     $detectedPlatform = $platform;
+}
+if ($extractedId !== '' && !preg_match('/^[A-Za-z0-9]{1,40}$/', $extractedId)) {
+    $extractedId = '';
 }
 
 $lookupKey = strtolower($extractedId);
@@ -101,42 +107,65 @@ if (!$url) {
     exit;
 }
 
-// Real-time cURL Scraper
-$ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, $url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
-curl_setopt($ch, CURLOPT_TIMEOUT, 8);
-curl_setopt($ch, CURLOPT_HTTPHEADER, [
-    'User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
-    'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
-    'Accept-Language: zh-TW,zh;q=0.9,ja;q=0.8,en;q=0.7',
-    'Cache-Control: no-cache',
-    'Pragma: no-cache'
-]);
+require_once __DIR__ . '/lib_fetch.php';
 
-$html = curl_exec($ch);
-$httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-$effectiveUrl = curl_getinfo($ch, CURLINFO_EFFECTIVE_URL);
-curl_close($ch);
+$platformNames = [
+    'rakuya' => '樂屋網',
+    'yungching' => '永慶房屋',
+    'sinyi' => '信義房屋',
+    '591' => '591 房屋交易',
+    'hbhousing' => '住商不動產',
+    'cthouse' => '中信房屋',
+    'twhg' => '台灣房屋',
+    'general' => '房仲平台'
+];
+
+// 不在允許的房仲主機就不要連。允許的主機若解析到內網或查無 IP，也不連，改走下面的「讀不到網頁」空白結果。
+$targetOk = wl_validate_fetch_target($url);
+$html = '';
+$httpCode = 0;
+$effectiveUrl = $url;
+$hostForCheck = parse_url($url, PHP_URL_HOST);
+$allowedHost = $hostForCheck && wl_host_allowed($hostForCheck);
+if (!$targetOk['ok'] && !($allowedHost && in_array($targetOk['error'], array('dns', 'ip'), true))) {
+    $safeId = ($extractedId !== '' && preg_match('/^[A-Za-z0-9]{1,40}$/', $extractedId)) ? $extractedId : substr(md5($url), 0, 8);
+    $pName = isset($platformNames[$detectedPlatform]) ? $platformNames[$detectedPlatform] : '房仲網';
+    $echoUrl = '';
+    $pu = parse_url($url);
+    if ($pu && !empty($pu['scheme']) && preg_match('#^https?$#i', $pu['scheme']) && empty($pu['user']) && empty($pu['pass']) && !empty($pu['host'])) {
+        $echoUrl = $url;
+    }
+    echo json_encode([
+        'success' => true,
+        'fallback' => true,
+        'unverified' => true,
+        'unsupported' => true,
+        'platform' => $detectedPlatform,
+        'platformName' => $pName,
+        'id' => "{$detectedPlatform}-{$safeId}",
+        'rawId' => $safeId,
+        'url' => $echoUrl,
+        'title' => '',
+        'rent' => null,
+        'area' => null,
+        'address' => '',
+        'images' => [],
+        'deposit' => null,
+        'freeRent' => ''
+    ], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+if ($targetOk['ok']) {
+    $fetched = wl_http_get($url);
+    $html = !empty($fetched['ok']) ? $fetched['body'] : '';
+    $httpCode = (int)(isset($fetched['code']) ? $fetched['code'] : 0);
+    if (!empty($fetched['ok']) && !empty($fetched['url'])) $effectiveUrl = $fetched['url'];
+}
 
 // If anti-bot challenge (403, 503, or Cloudflare / AWS WAF challenge page)
-$isChallenge = ($httpCode >= 400) || (stripos($html, 'challenge-error-text') !== false) || (stripos($html, 'x-amzn-waf') !== false) || (stripos($html, 'Just a moment...') !== false);
+$isChallenge = ($httpCode >= 400) || ($html !== '' && ((stripos($html, 'challenge-error-text') !== false) || (stripos($html, 'x-amzn-waf') !== false) || (stripos($html, 'Just a moment...') !== false)));
 
 if ($isChallenge || !$html) {
-    // Generate an intelligent structured fallback rather than crashing
-    $platformNames = [
-        'rakuya' => '樂屋網',
-        'yungching' => '永慶房屋',
-        'sinyi' => '信義房屋',
-        '591' => '591 房屋交易',
-        'hbhousing' => '住商不動產',
-        'cthouse' => '中信房屋',
-        'twhg' => '台灣房屋',
-        'general' => '房仲平台'
-    ];
     $pName = isset($platformNames[$detectedPlatform]) ? $platformNames[$detectedPlatform] : '房仲網';
     $safeId = $extractedId ?: substr(md5($url), 0, 8);
     $propId = "{$detectedPlatform}-{$safeId}";
@@ -160,8 +189,8 @@ if ($isChallenge || !$html) {
     exit;
 }
 
-// Successful HTML parsing
-$title = "{$detectedPlatform} 店面物件";
+// Successful HTML parsing。標題只採用網頁自己寫的，不另外編一個。
+$title = '';
 if (preg_match('/<title>(.*?)<\/title>/is', $html, $tm)) {
     $cleanT = trim(preg_replace('/[-|_].*$/', '', $tm[1]));
     if ($cleanT) $title = $cleanT;

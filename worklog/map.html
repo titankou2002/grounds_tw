@@ -51,6 +51,8 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
 .strip .ph{position:relative;flex:0 0 auto}
 .strip .ph i.star{position:absolute;top:-4px;left:-4px;width:22px;height:22px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;font-style:normal;font-size:14px;display:flex;align-items:center;justify-content:center;cursor:pointer}.strip .ph i.star.on{background:#f59e0b}
 .strip .ph b{position:absolute;top:-4px;right:-4px;width:20px;height:20px;border-radius:50%;background:#b91c1c;color:#fff;font-size:12px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.strip .mv{display:flex;justify-content:space-between;margin-top:2px}
+.strip .mv button{width:22px;height:18px;border:1px solid var(--line);background:#fff;border-radius:4px;padding:0;font-weight:700;cursor:pointer;line-height:16px}
 .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
 .btn.pri{background:#111;color:#fff;border-color:#111}
 .note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:7px 9px;margin-bottom:6px;white-space:pre-wrap;word-break:break-word}
@@ -84,11 +86,11 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
   var L10N = {
     zh: { rent: '月租', unit: '單價', real: '實月', wan: '萬', rentL: '刊登月租', areaL: '使用坪數', unitL: '每坪單價', realL: '真實月成本', depL: '押金', freeL: '裝潢免租', regL: '營業登記', invL: '發票', pros: '優點', cons: '注意', yes: '可', no: '不可', src: '原始頁面',
       sorts: [['default', '預設'], ['area', '面積'], ['rent', '月租'], ['unit', '坪單價']], none: '尚無店面',
-      lockIn: '🔑 編輯', lockOn: '✏️ 編輯中', pw: '請輸入密碼', pwBad: '密碼錯誤', addPh: '＋ 照片', photos: '照片', notes: '備註', noteAdd: '新增備註', notePh: '例如：跟房仲聊完要注意的地方…', del: '刪除', editBtn: '✏️ 修改資料', save: '儲存', cancel: '取消', saved: '已儲存', fail: '失敗，請再試一次', coverOn: '已設為主圖', coverOff: '已取消指定', delPh: '刪除這張照片？', delNote: '刪除這則備註？',
+      lockIn: '🔑 編輯', lockOn: '✏️ 編輯中', pw: '請輸入密碼', pwBad: '密碼錯誤', addPh: '＋ 照片', photos: '照片', photoHint: '可一次選多張，手機可拍照或從相簿選。★ 主圖，‹ › 調整順序。', notes: '備註', noteAdd: '新增備註', notePh: '例如：跟房仲聊完要注意的地方…', del: '刪除', editBtn: '✏️ 修改資料', save: '儲存', cancel: '取消', saved: '已儲存', fail: '失敗，請再試一次', coverOn: '已設為主圖', coverOff: '已取消指定', delPh: '刪除這張照片？', delNote: '刪除這則備註？', left: '往前', right: '往後',
       f: { title: '名稱', address: '地址', rent: '月租 (NT$)', area: '坪數', deposit: '押金 (NT$)', depositText: '押金備註（面議／二個月…）', realCost: '真實月成本 (NT$)', freeRent: '裝潢免租', statusLabel: '狀態', pros: '優點', cons: '注意', url: '原始頁面連結', canRegister: '可營業登記', canInvoice: '可開發票' } },
     ja: { rent: '賃料', unit: '坪単価', real: '実質月額', wan: '万', rentL: '掲載賃料', areaL: '使用面積', unitL: '坪単価', realL: '実質月額', depL: '保証金', freeL: 'フリーレント', regL: '営業登記', invL: 'インボイス', pros: '強み', cons: '注意', yes: '可', no: '不可', src: '元ページ',
       sorts: [['default', '標準'], ['area', '面積'], ['rent', '賃料'], ['unit', '坪単価']], none: '店舗がありません',
-      coverOn: 'メイン画像にしました', coverOff: '指定を解除', lockIn: '🔑 編集', lockOn: '✏️ 編集中', pw: 'パスワード', pwBad: 'パスワードが違います', addPh: '＋ 写真', photos: '写真', notes: 'メモ', noteAdd: 'メモを追加', notePh: '例：仲介との話で注意する点…', del: '削除', editBtn: '✏️ 情報を編集', save: '保存', cancel: 'キャンセル', saved: '保存しました', fail: '失敗しました', delPh: 'この写真を削除しますか？', delNote: 'このメモを削除しますか？',
+      coverOn: 'メイン画像にしました', coverOff: '指定を解除', lockIn: '🔑 編集', lockOn: '✏️ 編集中', pw: 'パスワード', pwBad: 'パスワードが違います', addPh: '＋ 写真', photos: '写真', photoHint: '複数選択可。カメラまたはアルバム。★ メイン、‹ › で順番。', notes: 'メモ', noteAdd: 'メモを追加', notePh: '例：仲介との話で注意する点…', del: '削除', editBtn: '✏️ 情報を編集', save: '保存', cancel: 'キャンセル', saved: '保存しました', fail: '失敗しました', delPh: 'この写真を削除しますか？', delNote: 'このメモを削除しますか？', left: '前へ', right: '次へ',
       f: { title: '名称', address: '住所', rent: '賃料 (NT$)', area: '坪数', deposit: '保証金 (NT$)', depositText: '保証金メモ', realCost: '実質月額 (NT$)', freeRent: 'フリーレント', statusLabel: 'ステータス', pros: '強み', cons: '注意', url: '元ページURL', canRegister: '営業登記可', canInvoice: 'インボイス可' } }
   };
   var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '數字待確認': '数値要確認', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外', '已下架': '掲載終了' };
@@ -152,8 +154,8 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     var t = T(), ns = notes[s.id] || [];
     return '<div class="edit" data-id="' + esc(s.id) + '"><h4>' + t.notes + '</h4>' +
       ns.map(function (n) { return '<div class="note">' + esc(n.text) + '<small>' + new Date(n.ts * 1000).toLocaleString(lang === 'ja' ? 'ja-JP' : 'zh-TW') + '<a data-act="ndel" data-n="' + esc(n.id) + '">' + t.del + '</a></small></div>'; }).join('') +
-      '<textarea rows="2" placeholder="' + esc(t.notePh) + '" data-note></textarea><div style="margin:6px 0 10px"><button class="btn pri" data-act="nadd">' + t.noteAdd + '</button> ' +
-      '<label class="btn" style="display:inline-block">' + t.addPh + '<input type="file" accept="image/*" multiple hidden data-photo></label></div>' +
+      '<textarea rows="2" placeholder="' + esc(t.notePh) + '" data-note></textarea><div style="margin:6px 0 4px"><button class="btn pri" data-act="nadd">' + t.noteAdd + '</button> ' +
+      '<label class="btn" style="display:inline-block">' + t.addPh + '<input type="file" accept="image/*" multiple hidden data-photo></label></div><div style="font-size:11.5px;color:var(--muted);margin:0 0 10px;">' + esc(t.photoHint) + '</div>' +
       (editing[s.id] ? editForm(s) : '<button class="btn" data-act="edit">' + t.editBtn + '</button>') + '</div>';
   }
   function onEditClick(e) {
@@ -191,7 +193,19 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     else if (act === 'pdel') {
       if (!confirm(t.delPh)) return;
       var u = el.dataset.u;
-      api({ action: 'img_del', id: id, url: u }).then(function () { s.images = (s.images || []).filter(function (x) { return x !== u; }); rerender(id); }).catch(function () { toast(t.fail); });
+      api({ action: 'img_del', id: id, url: u }).then(function () {
+        s.images = (s.images || []).filter(function (x) { return x !== u; });
+        if (s.coverImg === u) {
+          s.coverImg = s.images[0] || '';
+          return api({ action: 'edit', id: id, fields: { coverImg: s.coverImg } });
+        }
+      }).then(function () { rerender(id); }).catch(function () { toast(t.fail); });
+    }
+    else if (act === 'pleft' || act === 'pright') {
+      var imgs = (s.images || []).slice(), i = imgs.indexOf(el.dataset.u), j = i + (act === 'pleft' ? -1 : 1);
+      if (i < 0 || j < 0 || j >= imgs.length) return;
+      var tmp = imgs[i]; imgs[i] = imgs[j]; imgs[j] = tmp;
+      api({ action: 'img_set', id: id, images: imgs }).then(function () { s.images = imgs; rerender(id); }).catch(function () { toast(t.fail); });
     }
   }
   function onPhoto(e) {
@@ -238,7 +252,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
         '<div class="pills">' + (s.unverified ? '<span class="pill p-warn">⚠ ' + (lang === 'ja' ? '数値要確認' : '數字待確認') + '</span>' : '') + (nn ? '<span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '（' + jw(s.rent) + '）</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
         '<span class="pill p-unit">' + t.unit + ' ' + un.toLocaleString() + '/坪（' + jy(un) + '）</span>' : '') + '</div></div></div>' +
         '<div class="more">' +
-        (imgs.length > 1 || (canEdit && imgs.length) ? '<div class="strip">' + imgs.map(function (u) { return '<div class="ph"><img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">' + (canEdit ? '<b data-act="pdel" data-u="' + esc(u) + '">×</b><i data-act="cover" data-u="' + esc(u) + '" class="star' + (u === cover ? ' on' : '') + '">' + (u === cover ? '★' : '☆') + '</i>' : '') + '</div>'; }).join('') + '</div>' : '') +
+        (imgs.length > 1 || (canEdit && imgs.length) ? '<div class="strip">' + imgs.map(function (u) { return '<div class="ph"><img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">' + (canEdit ? '<b data-act="pdel" data-u="' + esc(u) + '">×</b><i data-act="cover" data-u="' + esc(u) + '" class="star' + (u === cover ? ' on' : '') + '">' + (u === cover ? '★' : '☆') + '</i><span class="mv"><button type="button" data-act="pleft" data-u="' + esc(u) + '" title="' + esc(t.left) + '">‹</button><button type="button" data-act="pright" data-u="' + esc(u) + '" title="' + esc(t.right) + '">›</button></span>' : '') + '</div>'; }).join('') + '</div>' : '') +
         '<div class="grid">' + (nn ? '<div>' + t.rentL + '：<b>NT$ ' + rw + t.wan + '</b><br>' + jw(s.rent) + '/月</div><div>' + t.areaL + '：<b>' + ar + ' 坪</b><br>' + Math.round(ar * 3.3058) + '㎡</div><div>' + t.unitL + '：<b>NT$ ' + un.toLocaleString() + '</b><br>' + jy(un) + '</div>' : '') +
         '<div>' + t.depL + '：<b>' + esc(depLabel(s)) + '</b>' + (Number(s.deposit) > 0 ? '<br>' + jw(s.deposit) : '') + '</div><div>' + t.freeL + '：<b>' + esc(months(s.freeRent || '洽詢')) + '</b></div><div>' + t.regL + '：<b>' + tri(s.canRegister, t.yes, t.no) + '</b></div><div>' + t.invL + '：<b>' + tri(s.canInvoice, t.yes, t.no) + '</b></div></div>' +
         (s.pros ? '<div><b>' + t.pros + '：</b>' + esc(tx(s.pros, s.prosJa)) + '</div>' : '') +
@@ -286,7 +300,13 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
   }
   $('l-zh').onclick = function () { setLang('zh'); }; $('l-ja').onclick = function () { setLang('ja'); };
   $('lb').onclick = function () { $('lb').classList.remove('on'); };
-  fetch('api_stores.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { stores = d.stores || []; return loadAuth(); }).then(function () { setLang(lang); }).catch(function () { setLang(lang); });
+  function dropData(s) {
+    s.images = (s.images || []).filter(function (u) { return typeof u === 'string' && u.indexOf('data:') !== 0 && !/^javascript:/i.test(u); });
+    if (typeof s.coverImg === 'string' && (s.coverImg.indexOf('data:') === 0 || /^javascript:/i.test(s.coverImg))) delete s.coverImg;
+    if (typeof s.url === 'string' && /^javascript:/i.test(s.url)) delete s.url;
+    return s;
+  }
+  fetch('api_stores.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { stores = (d.stores || []).map(dropData); return loadAuth(); }).then(function () { setLang(lang); }).catch(function () { setLang(lang); });
 })();
 </script>
 </body>

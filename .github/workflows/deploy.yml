@@ -10,6 +10,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      # SamKirkland/FTP-Deploy-Action@v4.3.5 沒有 delete 這個參數。
+      # 它預設會刪掉「上一份 .ftp-deploy-sync-state.json 有、這次本機沒有」的檔案。
+      # exclude 會先從伺服器狀態裡拿掉這些路徑，所以既不上傳、也不刪除。
+      # 不要開 dangerous-clean-slate：那個選項會連 exclude 的檔案一起清掉。
       - name: Deploy to cPanel via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
@@ -18,9 +22,22 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: ${{ secrets.FTP_TARGET_DIR }}
+          dangerous-clean-slate: false
           exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
             .git/**
             .gitignore
             .github/**
             tools/**
-          delete: false
+            grounds_data.json
+            **/grounds_data.json
+            **/grounds_data.json.tmp.*
+            **/grounds_data.lock
+            store_overrides.json
+            **/store_overrides.json
+            **/.wl_pw
+            **/.wl_secret
+            **/uploads/**
+            **/files/**

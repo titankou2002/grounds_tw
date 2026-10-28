@@ -3,6 +3,7 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 require_once __DIR__ . '/lib_overrides.php';
+require_once __DIR__ . '/lib_images.php';
 
 function out($a, $code = 200) { http_response_code($code); echo json_encode($a, JSON_UNESCAPED_UNICODE); exit; }
 
@@ -41,9 +42,15 @@ if ($action === 'edit') {
     $f = is_array($in['fields'] ?? null) ? $in['fields'] : [];
     foreach ($f as $k => $v) {
         if ((in_array($k, $num, true) || in_array($k, $bool, true)) && $v === null) { $o['fields'][$k] = null; continue; }
-        if ($k === 'coverImg') {   // 主頁顯示的圖片（星號）。空字串 = 取消指定
+        if ($k === 'coverImg') {   // 主頁顯示的圖片（星號）。空字串 = 取消指定。data: 先存成檔案，不寫進 json。
             $v = trim((string)$v);
-            if ($v === '' || preg_match('#^(https?://|data:image/|[\w./-]+\.(jpe?g|png|webp)$)#i', $v)) $o['fields']['coverImg'] = mb_substr($v, 0, 500);
+            if ($v === '') { $o['fields']['coverImg'] = ''; continue; }
+            if (stripos($v, 'data:') === 0) {
+                $saved = wl_data_image_to_file($v);
+                if (is_string($saved) && $saved !== '') $o['fields']['coverImg'] = $saved;
+                continue;
+            }
+            if (wl_public_image_ref($v) || wl_public_http_url($v)) $o['fields']['coverImg'] = mb_substr($v, 0, 500);
             continue;
         }
         if (in_array($k, $num, true)) { if (!is_numeric($v) || $v < 0 || $v > 1e9) continue; $o['fields'][$k] = $v + 0; }
@@ -65,7 +72,24 @@ if ($action === 'edit') {
 } elseif ($action === 'img_del') {
     $u = (string)($in['url'] ?? '');
     $o['imgAdd'] = array_values(array_diff($o['imgAdd'] ?? [], [$u]));
-    if (!in_array($u, $o['imgDel'] ?? [], true)) $o['imgDel'][] = $u;
+    if (isset($o['imgOrder']) && is_array($o['imgOrder'])) {
+        $o['imgOrder'] = array_values(array_filter($o['imgOrder'], function ($x) use ($u) { return $x !== $u; }));
+    } elseif (!in_array($u, $o['imgDel'] ?? [], true)) $o['imgDel'][] = $u;
+} elseif ($action === 'img_set') {
+    // 編輯後的完整照片順序。只收 http(s) 或 uploads/、files/ 的圖，不收 data:。
+    $list = is_array($in['images'] ?? null) ? $in['images'] : null;
+    if ($list === null) { flock($fp, LOCK_UN); out(['success' => false, 'error' => 'bad images'], 400); }
+    $clean = array();
+    foreach ($list as $u) {
+        if (!is_string($u)) continue;
+        $u = trim($u);
+        if ($u === '' || stripos($u, 'data:') === 0 || strlen($u) > 500) continue;
+        if (!wl_public_image_ref($u) && !wl_public_http_url($u)) continue;
+        if (!in_array($u, $clean, true)) $clean[] = $u;
+        if (count($clean) >= 40) break;
+    }
+    $o['imgOrder'] = $clean;
+    $result['images'] = $clean;
 } elseif ($action === 'img_add' && $isUpload) {
     $p = $_FILES['photo'];
     $info = ($p['error'] === UPLOAD_ERR_OK && $p['size'] <= 6 * 1024 * 1024) ? @getimagesize($p['tmp_name']) : false;
@@ -75,7 +99,8 @@ if ($action === 'edit') {
     if (!is_dir($dir)) mkdir($dir, 0755, true);
     $name = 'uploads/' . bin2hex(random_bytes(8)) . '.' . $ext;
     if (!move_uploaded_file($p['tmp_name'], __DIR__ . '/' . $name)) { flock($fp, LOCK_UN); out(['success' => false, 'error' => 'save failed'], 500); }
-    $o['imgAdd'][] = $name;
+    if (isset($o['imgOrder']) && is_array($o['imgOrder'])) $o['imgOrder'][] = $name;
+    else $o['imgAdd'][] = $name;
     $result['url'] = $name;
 } else {
     flock($fp, LOCK_UN);

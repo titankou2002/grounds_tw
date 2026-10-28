@@ -9,23 +9,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $dataFile = __DIR__ . '/grounds_data.json';
+require_once __DIR__ . '/lib_images.php';
+require_once __DIR__ . '/lib_overrides.php';
 
-// GET: Retrieve the shared cloud data
+// GET: Retrieve the shared cloud data。檔案不存在就回空的，讓新主機也能開。
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    if (file_exists($dataFile)) {
-        $content = file_get_contents($dataFile);
-        if ($content && trim($content) !== '') {
-            $content = preg_replace('/^\xEF\xBB\xBF/', '', $content);
-            // 套用 MAP 頁的線上修改，讓原本的頁面也看得到
-            require_once __DIR__ . '/lib_overrides.php';
-            $ov = wl_ov_load(); $d = json_decode($content, true);
-            if ($ov && is_array($d) && isset($d['stores']) && is_array($d['stores'])) {
-                foreach ($d['stores'] as $i => $s) { $d['stores'][$i] = wl_ov_apply($s, $ov); }
-                $content = json_encode($d, JSON_UNESCAPED_UNICODE);
+    $d = wl_migrate_grounds_file($dataFile);
+    wl_migrate_overrides_file();
+    if (is_array($d)) {
+        // 套用 MAP 頁的線上修改，讓原本的頁面也看得到
+        $ov = wl_ov_load();
+        if ($ov && isset($d['stores']) && is_array($d['stores'])) {
+            foreach ($d['stores'] as $i => $s) {
+                if (is_array($s)) $d['stores'][$i] = wl_ov_apply($s, $ov);
             }
-            echo $content;
-            exit;
         }
+        echo json_encode($d, JSON_UNESCAPED_UNICODE);
+        exit;
     }
     // Return empty fallback
     echo json_encode([
@@ -153,6 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (is_array($d)) $old = $d;
     }
     $merged = wl_merge_state($old, $json);
+    wl_scrub_data_array($merged);   // data: 圖片轉成 uploads/ 檔，不再寫進 json
     $merged['updatedAt'] = time();
 
     // Atomic write to prevent file corruption

@@ -4,11 +4,13 @@ header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
 $file = __DIR__ . '/grounds_data.json';
-$data = file_exists($file) ? json_decode(preg_replace('/^\xEF\xBB\xBF/', '', file_get_contents($file)), true) : null;
+require_once __DIR__ . '/lib_images.php';
+require_once __DIR__ . '/lib_overrides.php';
+$data = wl_migrate_grounds_file($file);
+wl_migrate_overrides_file();
 $keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
 $fixFile = __DIR__ . '/store_fixes.json';
 $fixes = file_exists($fixFile) ? (json_decode(file_get_contents($fixFile), true) ?: []) : [];
-require_once __DIR__ . '/lib_overrides.php';
 $ov = wl_ov_load();
 $out = [];
 if (is_array($data) && isset($data['stores']) && is_array($data['stores'])) {
@@ -21,10 +23,11 @@ if (is_array($data) && isset($data['stores']) && is_array($data['stores'])) {
         $s = wl_ov_apply($s, $ov);   // MAP 頁線上修改永遠最後套用
         $row = [];
         foreach ($keys as $k) { if (isset($s[$k])) $row[$k] = $s[$k]; }
-        // 只允許 http(s) 或站內檔名的圖片／連結，避免夾帶其他內容
-        if (isset($row['url']) && !preg_match('#^(https?://|[\w.-]+\.(jpe?g|png|webp)$)#i', $row['url'])) unset($row['url']);
+        // 只允許 http(s) 或站內圖檔。data: 一律不輸出（讀檔時已盡量轉成 uploads/）。
+        if (isset($row['url']) && !(wl_public_http_url($row['url']) || wl_public_image_ref($row['url']))) unset($row['url']);
+        if (isset($row['coverImg']) && !wl_public_image_ref($row['coverImg'])) unset($row['coverImg']);
         if (isset($row['images']) && is_array($row['images'])) {
-            $row['images'] = array_values(array_filter($row['images'], function ($u) { return is_string($u) && preg_match('#^(https?://|data:image/|[\w./-]+\.(jpe?g|png|webp)$)#i', $u); }));
+            $row['images'] = array_values(array_filter($row['images'], 'wl_public_image_ref'));
         }
         $out[] = $row;
     }
