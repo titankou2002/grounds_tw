@@ -1200,7 +1200,7 @@
 
     .kpi-badge-group {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       margin-bottom: 14px;
     }
@@ -1907,6 +1907,12 @@
       .store-card { cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
       .store-open-detail-btn { display: block; width: 100%; margin-top: 10px; padding: 10px; font-size: 14px; font-weight: 700; background: #111; color: #fff; border: 0; border-radius: 10px; }
     }
+    /* 星號：指定主頁顯示的圖片 */
+    .thumb-wrap { position: relative; display: inline-block; flex: 0 0 auto; }
+    .star-btn { position: absolute; top: 3px; right: 3px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; font-size: 15px; line-height: 26px; padding: 0; text-align: center; cursor: pointer; }
+    .star-btn.on { background: #f59e0b; color: #fff; }
+    .kpi-badge:last-child { }
+    @media (max-width: 900px) { .kpi-badge-group { grid-template-columns: 1fr 1fr; } .kpi-badge-group .kpi-badge:last-child { grid-column: 1 / -1; } }
   </style>
 </head>
 <body>
@@ -2152,11 +2158,6 @@
         <div class="kpi-badge-val" id="m-store-unitprice">NT$ 0 /坪</div>
         <div id="m-store-unitprice-ja" style="font-size:11px;color:var(--fg-muted);margin-top:2px;"></div>
       </div>
-      <div class="kpi-badge">
-        <div class="kpi-badge-label" id="lbl-store-realcost">真實營運月成本 (含扣繳)</div>
-        <div class="kpi-badge-val" style="color:var(--highlight);" id="m-store-realcost">NT$ 0</div>
-        <div id="m-store-realcost-ja" style="font-size:11px;color:var(--highlight);font-weight:700;margin-top:2px;"></div>
-      </div>
     </div>
 
     <!-- Commercial Verification & Key Details -->
@@ -2307,7 +2308,7 @@
           <span>房仲原始圖表：</span>
         </div>
         <div style="background:#f1f1f4;border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;">
-          <img id="ag-preview-img" src="agency_A2610063.jpg" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="window.open(this.src, '_blank')" alt="房仲資料圖">
+          <img id="ag-preview-img" src="" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="window.open(this.src, '_blank')" alt="房仲資料圖">
         </div>
       </div>
 
@@ -2316,63 +2317,60 @@
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">物件編號：</label>
-            <input type="text" id="ag-code" value="A2610063" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:700;">
+            <input type="text" id="ag-code" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:700;">
           </div>
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">刊登月租 (元/月)：</label>
-            <input type="number" id="ag-rent" value="250000" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:800;color:var(--highlight);" oninput="updateAgRealCost()">
+            <input type="number" id="ag-rent" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;font-weight:800;color:var(--highlight);">
           </div>
         </div>
 
         <div>
           <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">店面/物件名稱：</label>
-          <input type="text" id="ag-title" value="魔術真髮錦州店（東家國際地產）" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          <input type="text" id="ag-title" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
         </div>
 
         <div>
           <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">詳細地址：</label>
-          <input type="text" id="ag-address" value="台北市中山區錦州街 23 巷 7 號、9 號" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+          <input type="text" id="ag-address" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
         </div>
 
         <div style="display:grid;grid-template-columns:repeat(3, 1fr);gap:8px;">
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用坪數 (坪)：</label>
-            <input type="number" step="0.1" id="ag-area" value="72.8" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+            <input type="number" step="0.1" id="ag-area" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
           </div>
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">押金 (元)：</label>
-            <input type="number" id="ag-deposit" value="750000" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+            <input type="number" id="ag-deposit" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
           </div>
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">免租裝修期：</label>
-            <input type="text" id="ag-freerent" value="另議 (爭取1.5個月)" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+            <input type="text" id="ag-freerent" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
           </div>
         </div>
 
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">門面規格：</label>
-            <input type="text" id="ag-specs" value="面寬 12.4M ｜ 1F 挑高 4.6M ｜ 2F 3.3M" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+            <input type="text" id="ag-specs" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
           </div>
           <div>
             <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用執照 (營業登記)：</label>
-            <input type="text" id="ag-license" value="B2 一般零售業（合規營業登記與發票）" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
+            <input type="text" id="ag-license" value="" class="composer-textarea" style="min-height:34px;padding:5px 8px;">
           </div>
         </div>
 
         <div>
           <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">優點：</label>
-          <textarea id="ag-pros" class="composer-textarea" style="min-height:50px;">面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。</textarea>
+          <textarea id="ag-pros" class="composer-textarea" style="min-height:50px;"></textarea>
         </div>
 
         <div>
           <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;color:var(--danger);">注意：</label>
-          <textarea id="ag-cons" class="composer-textarea" style="min-height:50px;">錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。</textarea>
+          <textarea id="ag-cons" class="composer-textarea" style="min-height:50px;"></textarea>
         </div>
 
-        <div style="background:#fdf9f4;border:1px solid #fae8c8;border-radius:6px;padding:8px 10px;font-size:12px;color:#8a5300;">
-          <strong>試算真實營運月成本：</strong><span id="ag-realcost-preview">NT$ 280,275</span>（含 10% 租賃所得扣繳與 2.11% 二代健保補充保費）
-        </div>
 
         <div style="display:flex;align-items:center;justify-content:space-between;margin-top:6px;">
           <label style="font-size:12px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px;">
@@ -2408,6 +2406,9 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
+        <button class="action-btn" id="btn-cmp-edit" onclick="toggleCompareEdit()">編輯</button>
+        <button class="btn-submit" id="btn-cmp-save" onclick="saveCompareEdits()" style="display:none;">儲存</button>
+        <button class="action-btn" id="btn-cmp-cancel" onclick="cancelCompareEdit()" style="display:none;">取消</button>
         <button class="action-btn" onclick="closeCompareModal()">關閉</button>
       </div>
     </div>
@@ -3741,7 +3742,6 @@ async function submitFeedPost() {
               area: Number(storeData.area) || 35.0,
               deposit: storeData.deposit,
               freeRent: storeData.freeRent,
-              realCost: storeData.realCost,
               canRegister: storeData.canRegister !== false,
               canInvoice: storeData.canInvoice !== false,
               fireSafety: storeData.fireSafety !== false,
@@ -3939,11 +3939,10 @@ function createCard(p, colLang) {
   let propHtml = '';
   if (linkedStores.length > 0) {
     propHtml = linkedStores.map(prop => {
-      const mainImg = prop.images && prop.images.length ? prop.images[0] : '';
+      const mainImg = coverOf(prop);
       const unitPrice = unitOf(prop);
       const m2Area = Math.round(prop.area * 3.3058);
       const jpyRentWan = Math.round(prop.rent * 4.8 / 10000);
-      const jpyRealWan = Math.round(prop.realCost * 4.8 / 10000);
       const dispTitle = (isJaCol && prop.titleJa) ? prop.titleJa : prop.title;
       const pLabel = prop.statusLabel || (prop.sourceType === 'agency' ? '房仲資料' : '店面物件');
 
@@ -3958,7 +3957,6 @@ function createCard(p, colLang) {
             <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${fmtWan(prop.rent)}萬</strong> (約 ${jpyRentWan}万円)</span>
               <span class="metric-pill metric-area"><strong>${fmtPing(prop.area)} 坪</strong> (${m2Area}㎡)</span>
-              <span class="metric-pill metric-real">${isJaCol ? '実質月次' : '實月成本'}: <strong>NT$ ${Math.round(prop.realCost).toLocaleString()}</strong></span>
             </div>
             <div style="font-size:11px;color:var(--fg);display:flex;align-items:center;gap:4px;">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M15 3h6v6"></path><path d="M10 14L21 3"></path><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path></svg>
@@ -4333,7 +4331,6 @@ function setStoreModalLang(lang) {
     document.getElementById('lbl-store-rent').textContent = '掲載賃料';
     document.getElementById('lbl-store-area').textContent = '使用面積';
     document.getElementById('lbl-store-unit').textContent = '坪単価';
-    document.getElementById('lbl-store-realcost').textContent = '実効総コスト (税込)';
     document.getElementById('lbl-store-deposit').textContent = '敷金 (保証金)：';
     document.getElementById('lbl-store-freerent').textContent = 'フリーレント期間：';
     document.getElementById('lbl-store-canreg').textContent = '営業登記：';
@@ -4353,7 +4350,6 @@ function setStoreModalLang(lang) {
     document.getElementById('lbl-store-rent').textContent = '刊登月租';
     document.getElementById('lbl-store-area').textContent = '使用坪數';
     document.getElementById('lbl-store-unit').textContent = '每坪租金單價';
-    document.getElementById('lbl-store-realcost').textContent = '真實營運月成本 (含扣繳)';
     document.getElementById('lbl-store-deposit').textContent = '押金需求：';
     document.getElementById('lbl-store-freerent').textContent = '裝潢免租期：';
     document.getElementById('lbl-store-canreg').textContent = '營業登記：';
@@ -4373,7 +4369,6 @@ function setStoreModalLang(lang) {
     document.getElementById('lbl-store-rent').textContent = '刊登月租';
     document.getElementById('lbl-store-area').textContent = '使用坪數';
     document.getElementById('lbl-store-unit').textContent = '每坪租金單價';
-    document.getElementById('lbl-store-realcost').textContent = '真實營運月成本 (含扣繳)';
     document.getElementById('lbl-store-deposit').textContent = '押金需求 (敷金)：';
     document.getElementById('lbl-store-freerent').textContent = '裝潢免租期 (フリーレント)：';
     document.getElementById('lbl-store-canreg').textContent = '營業登記 (営業登記)：';
@@ -4401,8 +4396,6 @@ function openStoreDetailModal(storeId) {
   const areaPing = fmtPing(s.area);
   const areaSqm = Math.round(s.area * 3.3058);
   const unitJpy = Math.round(unitPrice * jpyRate).toLocaleString();
-  const realCost = Math.round(s.realCost);
-  const realCostJpyWan = Math.round(s.realCost * jpyRate / 10000);
   const depositWan = Math.round((s.deposit || s.rent * 2) / 10000);
   const depositJpyWan = Math.round((s.deposit || s.rent * 2) * jpyRate / 10000);
 
@@ -4438,8 +4431,6 @@ function openStoreDetailModal(storeId) {
   document.getElementById('m-store-unitprice').textContent = nn ? `NT$ ${unitPrice.toLocaleString()} /坪` : '—';
   document.getElementById('m-store-unitprice-ja').textContent = nn ? `（約 ${unitJpy} 円/坪）` : '';
 
-  document.getElementById('m-store-realcost').textContent = Number(s.realCost) > 0 ? `NT$ ${realCost.toLocaleString()}` : '—';
-  document.getElementById('m-store-realcost-ja').textContent = Number(s.realCost) > 0 ? `（約 ${realCostJpyWan} 万円/月）` : '';
 
   const depNum = Number(s.deposit) > 0;
   document.getElementById('m-store-deposit').textContent = depositLabel(s);
@@ -4491,18 +4482,16 @@ function openStoreDetailModal(storeId) {
 
   // Hero Image & Counter
   const heroImg = document.getElementById('m-store-hero-img');
-  const curIdx = s.activeImgIdx || 0;
+  const curIdx = Math.max(0, (s.images || []).indexOf(coverOf(s)));
+  s.activeImgIdx = curIdx;
   heroImg.src = s.images && s.images[curIdx] ? s.images[curIdx] : '';
   const counterEl = document.getElementById('m-photo-counter');
   if (counterEl) {
     counterEl.textContent = `${curIdx + 1} / ${(s.images && s.images.length) ? s.images.length : 1}`;
   }
 
-  // Gallery Strip
-  const strip = document.getElementById('m-store-gallery-strip');
-  strip.innerHTML = (s.images || []).map((img, i) => `
-    <img src="${img}" class="store-detail-thumb ${i === curIdx ? 'active' : ''}" onclick="switchModalHeroImg('${storeId}', ${i})" alt="縮圖">
-  `).join('');
+  // Gallery Strip（每張縮圖有星號：指定主頁顯示的圖片）
+  renderDetailGallery(s, curIdx);
 
   updateModalCompareButton();
 
@@ -4660,6 +4649,40 @@ function submitCustomStatus() {
   setStoreStatus(state.statusEditingId, v, null);
 }
 
+// 主頁顯示的圖片（星號指定；沒指定就用第一張）
+function coverOf(s) { const imgs = (s && s.images) || []; return (s && s.coverImg && imgs.indexOf(s.coverImg) >= 0) ? s.coverImg : (imgs[0] || ''); }
+// 把修改同步到伺服器的覆蓋層（MAP 獨立頁讀的是這裡）
+function postStoreEdit(id, fields) {
+  try { return fetch('api_edit.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'edit', id, fields }) }).catch(() => {}); } catch (e) { return Promise.resolve(); }
+}
+function starHtml(s, img, i) {
+  const on = coverOf(s) === img;
+  return `<button type="button" class="star-btn${on ? ' on' : ''}" title="${tr('設為主頁顯示的圖片','メイン画像に設定')}" onclick="toggleCoverImage('${s.id}', ${i}, event)">${on ? '★' : '☆'}</button>`;
+}
+function toggleCoverImage(storeId, idx, ev) {
+  if (ev) { ev.stopPropagation(); ev.preventDefault(); }
+  const s = state.stores.find(x => x.id === storeId);
+  if (!s || !(s.images || [])[idx]) return;
+  const url = s.images[idx];
+  if (s.coverImg === url) delete s.coverImg; else s.coverImg = url;
+  s.editedAt = Date.now();
+  saveAppState(true);
+  postStoreEdit(storeId, { coverImg: s.coverImg || '' });
+  const open = Array.prototype.map.call(document.querySelectorAll('.store-expand-body'), b => b.style.display === 'block' ? b.id : null).filter(Boolean);
+  renderStores();
+  open.forEach(id => { const b = document.getElementById(id); if (b) b.style.display = 'block'; });
+  renderFeeds();
+  if (state.activeDetailStoreId === storeId) renderDetailGallery(s, Math.max(0, s.images.indexOf(url)));
+  showToast(s.coverImg ? tr('已設為主圖', 'メイン画像にしました') : tr('已取消指定', '指定を解除'), 1200);
+}
+function renderDetailGallery(s, curIdx) {
+  const strip = document.getElementById('m-store-gallery-strip');
+  if (!strip) return;
+  strip.innerHTML = (s.images || []).map((img, i) => `
+    <div class="thumb-wrap"><img src="${img}" class="store-detail-thumb ${i === curIdx ? 'active' : ''}" onclick="switchModalHeroImg('${s.id}', ${i})" alt="縮圖">${starHtml(s, img, i)}</div>
+  `).join('');
+}
+
 function renderStores() {
   const box = document.getElementById('store-list-box');
   if (!box) return;
@@ -4699,11 +4722,10 @@ function renderStores() {
     const unitPrice = unitOf(s);
     const noNum = !hasNums(s);
     const curIdx = s.activeImgIdx || 0;
-    const curImg = s.images && s.images.length ? s.images[curIdx] : '';
+    const curImg = coverOf(s);
     const imgCount = s.images ? s.images.length : 0;
     const rentWan = fmtWan(s.rent);
     const areaPing = fmtPing(s.area);
-    const realCost = Math.round(s.realCost);
 
     card.innerHTML = `
       <!-- Compact Top Row (橫向不折行、字樣完整防擠壓) -->
@@ -4729,8 +4751,7 @@ function renderStores() {
             ${s.unverified ? `<span class="metric-pill pill-warn">⚠ ${tr('數字待確認','数値要確認')}</span>` : ''}
             ${noNum ? '' : `<span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
             <span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing * 3.3058)}㎡)</span>
-            <span class="metric-pill metric-unit">${tr('單價','坪単価')} <strong>${unitPrice.toLocaleString()}/坪</strong></span>
-            <span class="metric-pill metric-real">${tr('實月','実質月額')} <strong>NT$ ${realCost.toLocaleString()}</strong></span>`}
+            <span class="metric-pill metric-unit">${tr('單價','坪単価')} <strong>${unitPrice.toLocaleString()}/坪</strong></span>`}
           </div>
         </div>
 
@@ -4747,7 +4768,7 @@ function renderStores() {
         ${(s.images && s.images.length > 1) ? `
           <div class="store-thumbs-strip" style="margin-bottom:8px;">
             ${s.images.map((img, i) => `
-              <img src="${img}" class="store-thumb-img ${i === curIdx ? 'active' : ''}" onclick="switchStoreImg('${s.id}', ${i}, event)" alt="縮圖">
+              <div class="thumb-wrap"><img src="${img}" class="store-thumb-img ${i === curIdx ? 'active' : ''}" onclick="switchStoreImg('${s.id}', ${i}, event)" alt="縮圖">${starHtml(s, img, i)}</div>
             `).join('')}
           </div>
         ` : ''}
@@ -4757,7 +4778,6 @@ function renderStores() {
           <div>${tr('刊登月租','掲載賃料')}：<span class="metric-pill ${getRentColorClass(s.rent)}">NT$ <strong>${rentWan}${tr('萬','万')}</strong></span></div>
           <div>${tr('使用坪數','使用面積')}：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
           <div>${tr('每坪單價','坪単価')}：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
-          <div>${tr('真實月成本','実質月額コスト')}：<span class="metric-pill metric-real">NT$ <strong>${realCost.toLocaleString()}</strong></span></div>
           <div>${tr('押金需求','保証金')}：<strong>${depositLabel(s)}</strong></div>
           <div>${tr('裝潢免租','フリーレント')}：<strong>${jaMonths(s.freeRent || tr('洽詢','要問い合わせ'))}</strong></div>
           <div>${tr('營業登記','営業登記')}：<strong>${triBool(s.canRegister, tr('可','可'), tr('不可','不可'))}</strong></div>
@@ -4811,10 +4831,8 @@ function switchStoreImg(storeId, idx, evt) {
   evt.stopPropagation();
   const s = state.stores.find(x => x.id === storeId);
   if (!s) return;
-  s.activeImgIdx = idx;
-  const main = document.getElementById(`main-photo-${storeId}`);
-  if (main) main.src = s.images[idx];
-  renderStores();
+  openStoreDetailModal(storeId);
+  switchModalHeroImg(storeId, idx);
 }
 
 function deleteStore(storeId) {
@@ -4868,10 +4886,10 @@ function saveEditedStore() {
   s.deposit = dep;
   s.pros = pros;
   s.cons = cons;
-  s.realCost = Math.round(r * 1.1211);
   if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
   s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
   s.editedAt = Date.now();
+  postStoreEdit(s.id, { title: s.title, address: s.address, rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '' });
   if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }   // 地址改了，推估座標作廢
   geocodeStoreIfNeeded(s);
 
@@ -5101,36 +5119,8 @@ function handleAgencySheetUpload(event) {
     currentAgencyImgData = e.target.result;
     document.getElementById('ag-preview-img').src = currentAgencyImgData;
     
-    // Check if filename contains hints or use A2610063 presets
-    const fileName = file.name.toLowerCase();
-    if (fileName.includes('a2610063') || fileName.includes('錦州') || fileName.includes('魔術')) {
-      document.getElementById('ag-code').value = 'A2610063';
-      document.getElementById('ag-title').value = '魔術真髮錦州店（東家國際地產）';
-      document.getElementById('ag-address').value = '台北市中山區錦州街 23 巷 7 號、9 號';
-      document.getElementById('ag-rent').value = '250000';
-      document.getElementById('ag-area').value = '72.8';
-      document.getElementById('ag-deposit').value = '750000';
-      document.getElementById('ag-freerent').value = '另議 (爭取1.5個月)';
-      document.getElementById('ag-specs').value = '面寬 12.4M ｜ 1F 挑高 4.6M ｜ 2F 3.3M';
-      document.getElementById('ag-license').value = 'B2 一般零售業（合規營業登記與發票）';
-      document.getElementById('ag-pros').value = '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。';
-      document.getElementById('ag-cons').value = '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。';
-    } else {
-      const randomCode = 'AG-' + Math.floor(100000 + Math.random() * 900000);
-      document.getElementById('ag-code').value = randomCode;
-      document.getElementById('ag-title').value = file.name.replace(/\.[^/.]+$/, "") || '房仲精選中山區金店面';
-      document.getElementById('ag-address').value = '台北市中山區（依房仲圖資）';
-      document.getElementById('ag-rent').value = '250000';
-      document.getElementById('ag-area').value = '50';
-      document.getElementById('ag-deposit').value = '750000';
-      document.getElementById('ag-freerent').value = '1 個月';
-      document.getElementById('ag-specs').value = '挑高大空間 ｜ 面寬醒目';
-      document.getElementById('ag-license').value = '可營業登記・開立發票';
-      document.getElementById('ag-pros').value = '地段精華人流多，適合品牌形象旗艦店展店。';
-      document.getElementById('ag-cons').value = '裝修期與免租條件需與房東議定。';
-    }
-
-    updateAgRealCost();
+    // 不預填任何數字：金額、坪數、押金一律由人依房仲資料表填入
+    ['ag-code','ag-title','ag-address','ag-rent','ag-area','ag-deposit','ag-freerent','ag-specs','ag-license','ag-pros','ag-cons'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
     openAgencyModal();
   };
   reader.readAsDataURL(file);
@@ -5138,18 +5128,10 @@ function handleAgencySheetUpload(event) {
 
 function openAgencyModal() {
   document.getElementById('agency-modal').classList.add('open');
-  updateAgRealCost();
 }
 
 function closeAgencyModal() {
   document.getElementById('agency-modal').classList.remove('open');
-}
-
-function updateAgRealCost() {
-  const rent = parseInt(document.getElementById('ag-rent').value) || 0;
-  const realCost = Math.round(rent * 1.1211);
-  const el = document.getElementById('ag-realcost-preview');
-  if (el) el.textContent = `NT$ ${realCost.toLocaleString()}`;
 }
 
 function confirmSaveAgencySheet() {
@@ -5165,7 +5147,6 @@ function confirmSaveAgencySheet() {
   const license = document.getElementById('ag-license').value.trim();
   const pros = document.getElementById('ag-pros').value.trim();
   const cons = document.getElementById('ag-cons').value.trim();
-  const realCost = Math.round(rent * 1.1211);
 
   const storeId = `AGY-${code}`;
   const storeObj = {
@@ -5181,7 +5162,6 @@ function confirmSaveAgencySheet() {
     deposit: deposit,
     depositText: deposit > 0 ? undefined : '未填',
     freeRent: freeRent,
-    realCost: realCost,
     specs: specs,
     license: license,
     pros: pros,
@@ -5205,7 +5185,7 @@ function confirmSaveAgencySheet() {
   if (postFeedCheck && postFeedCheck.checked) {
     const now = new Date();
     const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
-    const textZh = `收到房仲提供物件資料圖【${title}】（編號：${code}），地址：${address}。刊登月租 NT$ ${(rent/10000).toFixed(1)}萬（${area}坪，每坪單價 NT$ ${Math.round(rent/area).toLocaleString()}）。已確認執照合規零售業，試算真實月成本 NT$ ${realCost.toLocaleString()}。`;
+    const textZh = `收到房仲提供物件資料圖【${title}】（編號：${code}），地址：${address}。刊登月租 NT$ ${(rent/10000).toFixed(1)}萬（${area}坪，每坪單價 NT$ ${Math.round(rent/area).toLocaleString()}）。`;
     const textJa = translateToJapanese(textZh);
 
     const newPost = {
@@ -5302,6 +5282,8 @@ function setCompareModalLang(lang) {
 }
 
 function openCompareModal() {
+  state.compareEditing = false;
+  updateCompareEditButtons();
   const modal = document.getElementById('compare-modal');
   if (!modal) return;
 
@@ -5362,8 +5344,7 @@ function renderCompareTable() {
   // Calculate ranks
   const rentRanks = getRankMap(items, s => s.rent, true);
   const areaRanks = getRankMap(items, s => s.area, false);
-  const unitRanks = getRankMap(items, s => (s.rent / s.area), true);
-  const realCostRanks = getRankMap(items, s => s.realCost, true);
+  const unitRanks = getRankMap(items, s => (hasNums(s) ? s.rent / s.area : NaN), true);
   const freeRentRanks = getRankMap(items, s => parseFreeRentMonths(s.freeRent), false);
 
   // Row header labels
@@ -5372,7 +5353,6 @@ function renderCompareTable() {
   const lblRent = isJa ? '掲載月額賃料' : (isBi ? '刊登月租 / 掲載賃料' : '刊登月租');
   const lblArea = isJa ? '使用面積（坪・㎡）' : (isBi ? '使用面積 (坪・㎡)' : '使用面積 (坪・㎡)');
   const lblUnit = isJa ? '面積単価（坪・㎡）' : (isBi ? '每坪與每㎡租金' : '每坪租金單價');
-  const lblReal = isJa ? '実質月額コスト（税・健保込）' : (isBi ? '真實月成本 (含扣繳稅費)' : '真實月成本 (含扣繳稅費)');
   const lblFree = isJa ? 'フリーレント（内装工事）' : (isBi ? '裝潢免租期 / フリーレント' : '裝潢免租期');
   const lblReg = isJa ? '会社設立・営業登記' : (isBi ? '營業登記許可' : '營業登記許可');
   const lblInvoice = isJa ? 'インボイス・税籍適格' : (isBi ? '稅籍開立發票' : '稅籍開立發票');
@@ -5388,7 +5368,7 @@ function renderCompareTable() {
 
   let photoHtml = `<tr><th>${lblPhoto}</th>` + items.map(s => `
     <td>
-      <img src="${s.images && s.images[0] ? s.images[0] : ''}" class="compare-photo-thumb" onclick="openStoreDetailModal('${s.id}')" style="cursor:pointer;" alt="${s.title}">
+      <img src="${coverOf(s)}" class="compare-photo-thumb" onclick="openStoreDetailModal('${s.id}')" style="cursor:pointer;" alt="${s.title}">
     </td>
   `).join('') + '</tr>';
 
@@ -5439,26 +5419,23 @@ function renderCompareTable() {
     `;
   }).join('') + '</tr>';
 
-  let realCostHtml = `<tr><th>${lblReal}</th>` + items.map(s => {
-    const badge = renderRankBadge(realCostRanks[s.id], isJa, items.length);
-    const wanJpy = Math.round(s.realCost * jpyRate / 10000);
-    return `
-      <td>
-        <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}<span class="metric-pill metric-real">NT$ ${Math.round(s.realCost).toLocaleString()}</span></div>
-          <div class="comp-val-sub">（約 ${wanJpy} 万円/月）</div>
-        </div>
-      </td>
-    `;
-  }).join('') + '</tr>';
+  const lblDeposit = isJa ? '敷金（保証金）' : '押金';
+  let depositHtml = `<tr><th>${lblDeposit}</th>` + items.map(s => `
+    <td>
+      <div class="comp-metric-box">
+        <div class="comp-val-main">${depositLabel(s)}</div>
+        ${Number(s.deposit) > 0 ? `<div class="comp-val-sub">（約 ${Math.round(s.deposit * jpyRate / 10000)} 万円）</div>` : ''}
+      </div>
+    </td>
+  `).join('') + '</tr>';
 
   let freeRentHtml = `<tr><th>${lblFree}</th>` + items.map(s => {
     const badge = renderRankBadge(freeRentRanks[s.id], isJa, items.length);
-    const jaText = (s.freeRent || '1 個月').replace(/個月/g, 'ヶ月');
+    const jaText = jaMonths(s.freeRent || '洽詢');
     return `
       <td>
         <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}${s.freeRent || '1 個月'}</div>
+          <div class="comp-val-main">${badge}${s.freeRent || '洽詢'}</div>
           <div class="comp-val-sub">（${jaText}）</div>
         </div>
       </td>
@@ -5466,11 +5443,11 @@ function renderCompareTable() {
   }).join('') + '</tr>';
 
   let regHtml = `<tr><th>${lblReg}</th>` + items.map(s => `
-    <td>${s.canRegister ? (isJa ? '可能（登記可）' : '可以（会社設立登記可）') : (isJa ? '不可' : '不可')}</td>
+    <td>${triBool(s.canRegister, (isJa ? '可能（登記可）' : '可以（会社設立登記可）'), '不可')}</td>
   `).join('') + '</tr>';
 
   let invoiceHtml = `<tr><th>${lblInvoice}</th>` + items.map(s => `
-    <td>${s.canInvoice ? (isJa ? '適格（インボイス可）' : '可以開立發票（適格）') : (isJa ? '非適格' : '否')}</td>
+    <td>${triBool(s.canInvoice, (isJa ? '適格（インボイス可）' : '可以開立發票（適格）'), (isJa ? '非適格' : '否'))}</td>
   `).join('') + '</tr>';
 
   let prosHtml = `<tr><th>${lblPros}</th>` + items.map(s => {
@@ -5478,9 +5455,9 @@ function renderCompareTable() {
     if (isJa) {
       content = s.prosJa || s.pros;
     } else if (isZh) {
-      content = s.pros;
+      content = s.pros || '';
     } else {
-      content = `<div>${s.pros}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${s.prosJa}</div>` : '');
+      content = `<div>${s.pros || ''}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${s.prosJa}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
@@ -5490,9 +5467,9 @@ function renderCompareTable() {
     if (isJa) {
       content = `<span style="color:var(--danger);">${s.consJa || s.cons}</span>`;
     } else if (isZh) {
-      content = `<span style="color:var(--danger);">${s.cons}</span>`;
+      content = `<span style="color:var(--danger);">${s.cons || ''}</span>`;
     } else {
-      content = `<div style="color:var(--danger);">${s.cons}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${s.consJa}</div>` : '');
+      content = `<div style="color:var(--danger);">${s.cons || ''}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${s.consJa}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
@@ -5503,7 +5480,93 @@ function renderCompareTable() {
     </td>
   `).join('') + '</tr>';
 
-  box.innerHTML = `<table class="compare-table">${headerHtml}${photoHtml}${rentHtml}${areaHtml}${unitHtml}${realCostHtml}${freeRentHtml}${regHtml}${invoiceHtml}${prosHtml}${consHtml}${actionHtml}</table>`;
+  if (state.compareEditing) {
+    const inp = (sid, k, type, val, extra) => `<input type="${type}" data-sid="${sid}" data-k="${k}" value="${esc_(val)}" ${extra || ''} style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;">`;
+    const sel = (sid, k, v) => `<select data-sid="${sid}" data-k="${k}" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;"><option value=""${v === undefined || v === null ? ' selected' : ''}>未確認 / 未確認</option><option value="true"${v === true ? ' selected' : ''}>可</option><option value="false"${v === false ? ' selected' : ''}>不可</option></select>`;
+    const ta = (sid, k, v) => `<textarea data-sid="${sid}" data-k="${k}" rows="4" style="width:100%;padding:6px 8px;border:1px solid var(--border);border-radius:6px;font-size:13px;">${esc_(v)}</textarea>`;
+    const row = (label, fn) => `<tr><th>${label}</th>` + items.map(s => `<td>${fn(s)}</td>`).join('') + '</tr>';
+    box.innerHTML = `<table class="compare-table">` +
+      row(isJa ? '名称' : '名稱', s => inp(s.id, 'title', 'text', s.title)) + photoHtml +
+      row(isJa ? '賃料 (NT$/月)' : '刊登月租 (NT$/月)', s => inp(s.id, 'rent', 'number', Number(s.rent) > 0 ? s.rent : '', 'step="1" min="0"')) +
+      row(isJa ? '坪数' : '使用坪數', s => inp(s.id, 'area', 'number', Number(s.area) > 0 ? s.area : '', 'step="0.01" min="0"')) +
+      row(isJa ? '保証金 (NT$)' : '押金 (NT$)', s => inp(s.id, 'deposit', 'number', Number(s.deposit) > 0 ? s.deposit : '', 'step="1" min="0"') + `<div style="height:4px"></div>` + inp(s.id, 'depositText', 'text', s.depositText || '', 'placeholder="面議／二個月…"')) +
+      row(lblFree, s => inp(s.id, 'freeRent', 'text', s.freeRent || '')) +
+      row(lblReg, s => sel(s.id, 'canRegister', s.canRegister)) +
+      row(lblInvoice, s => sel(s.id, 'canInvoice', s.canInvoice)) +
+      row(lblPros, s => ta(s.id, 'pros', s.pros || '')) +
+      row(lblCons, s => ta(s.id, 'cons', s.cons || '')) +
+      `</table>`;
+    return;
+  }
+
+  box.innerHTML = `<table class="compare-table">${headerHtml}${photoHtml}${rentHtml}${areaHtml}${unitHtml}${depositHtml}${freeRentHtml}${regHtml}${invoiceHtml}${prosHtml}${consHtml}${actionHtml}</table>`;
+}
+
+const esc_ = v => String(v == null ? '' : v).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+
+function updateCompareEditButtons() {
+  const e = state.compareEditing;
+  const set = (id, show) => { const b = document.getElementById(id); if (b) b.style.display = show ? '' : 'none'; };
+  set('btn-cmp-edit', !e && !state.previewing);
+  set('btn-cmp-save', e);
+  set('btn-cmp-cancel', e);
+}
+function toggleCompareEdit() { state.compareEditing = true; updateCompareEditButtons(); renderCompareTable(); }
+function cancelCompareEdit() { state.compareEditing = false; updateCompareEditButtons(); renderCompareTable(); }
+
+// 比較表編輯 → 存回店面資料（雲端＋MAP 頁），只送出有改的欄位
+async function saveCompareEdits() {
+  const changes = {};
+  const NUM = ['rent', 'area', 'deposit'], BOOL = ['canRegister', 'canInvoice'];
+  let bad = false;
+  document.querySelectorAll('#compare-table-content [data-sid]').forEach(el => {
+    const id = el.dataset.sid, k = el.dataset.k, s = state.stores.find(x => x.id === id);
+    if (!s) return;
+    let v = el.value, cur = s[k];
+    if (NUM.indexOf(k) >= 0) {
+      v = String(v).trim() === '' ? null : Number(v);
+      if (v !== null && !(v >= 0)) { bad = true; return; }
+      if ((k === 'rent' || k === 'area') && !(v > 0)) { if (Number(cur) > 0 || v !== null) { bad = true; } return; }
+      cur = Number(cur) > 0 ? Number(cur) : null;
+      if (v === 0) v = null;
+    } else if (BOOL.indexOf(k) >= 0) {
+      v = v === 'true' ? true : (v === 'false' ? false : null);
+      cur = (cur === true || cur === false) ? cur : null;
+    } else {
+      v = String(v).trim(); cur = String(cur == null ? '' : cur).trim();
+    }
+    if (v !== cur) (changes[id] = changes[id] || {})[k] = v;
+  });
+  if (bad) { showToast(tr('月租與坪數需為大於 0 的數字', '賃料・坪数は0より大きい数値'), 2200); return; }
+  const ids = Object.keys(changes);
+  if (!ids.length) { cancelCompareEdit(); return; }
+  const posts = [];
+  ids.forEach(id => {
+    const s = state.stores.find(x => x.id === id), c = changes[id], send = {};
+    Object.keys(c).forEach(k => {
+      const v = c[k];
+      if (v === null) { delete s[k]; send[k] = null; }
+      else { s[k] = v; send[k] = v; }
+    });
+    if ('title' in c) delete s.titleJa;
+    if ('pros' in c) delete s.prosJa;
+    if ('cons' in c) delete s.consJa;
+    if (s.unverified && hasNums(s)) {
+      s.unverified = false;
+      if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; send.statusLabel = '房仲推薦'; }
+      s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
+      send.cons = s.cons;
+    }
+    s.editedAt = Date.now();
+    posts.push(postStoreEdit(id, send));
+  });
+  saveAppState(true);
+  await Promise.all(posts);
+  state.compareEditing = false;
+  updateCompareEditButtons();
+  renderCompareTable(); renderStores(); renderFeeds();
+  if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
+  showToast(tr('已儲存', '保存しました'), 1500);
 }
 
 async function translateAllCompareItemsAsync() {
@@ -5613,7 +5676,6 @@ function makeStoreFromSource(o) {
     lng: pos(src.lng) || null,
     rent, area,
     deposit: pos(src.deposit),
-    realCost: pos(src.realCost) || (rent ? Math.round(rent * 1.1211) : 0),
     freeRent: src.freeRent || '洽詢',
     floor: src.floor || '',
     canRegister: bool(src.canRegister),

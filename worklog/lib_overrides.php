@@ -16,5 +16,6 @@ function wl_ov_apply(array $s, array $ov) {
     foreach (($o['imgAdd'] ?? []) as $u) { if (!in_array($u, $imgs, true)) $imgs[] = $u; }
     if ($imgs || isset($s['images']) || !empty($o['imgAdd'])) $s['images'] = $imgs;
     if (!empty($o['notes'])) $s['notes'] = $o['notes'];
+    if (!empty($o['ts'])) $s['editedAt'] = max((int)($s['editedAt'] ?? 0), (int)$o['ts']);
     return $s;
 }

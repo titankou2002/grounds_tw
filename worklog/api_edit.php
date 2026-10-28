@@ -40,6 +40,12 @@ $result = ['success' => true];
 if ($action === 'edit') {
     $f = is_array($in['fields'] ?? null) ? $in['fields'] : [];
     foreach ($f as $k => $v) {
+        if ((in_array($k, $num, true) || in_array($k, $bool, true)) && $v === null) { $o['fields'][$k] = null; continue; }
+        if ($k === 'coverImg') {   // 主頁顯示的圖片（星號）。空字串 = 取消指定
+            $v = trim((string)$v);
+            if ($v === '' || preg_match('#^(https?://|data:image/|[\w./-]+\.(jpe?g|png|webp)$)#i', $v)) $o['fields']['coverImg'] = mb_substr($v, 0, 500);
+            continue;
+        }
         if (in_array($k, $num, true)) { if (!is_numeric($v) || $v < 0 || $v > 1e9) continue; $o['fields'][$k] = $v + 0; }
         elseif (isset($str[$k])) {
             $v = trim(mb_substr((string)$v, 0, $str[$k]));
@@ -76,6 +82,7 @@ if ($action === 'edit') {
     out(['success' => false, 'error' => 'bad action'], 400);
 }
 
+$o['ts'] = (int)round(microtime(true) * 1000);
 $ov[$id] = $o;
 ftruncate($fp, 0); rewind($fp);
 fwrite($fp, json_encode($ov, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT));

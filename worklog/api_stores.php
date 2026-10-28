@@ -5,7 +5,7 @@ header('Cache-Control: no-store');
 
 $file = __DIR__ . '/grounds_data.json';
 $data = file_exists($file) ? json_decode(preg_replace('/^\xEF\xBB\xBF/', '', file_get_contents($file)), true) : null;
-$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','realCost','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified','depositText','floor'];
+$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
 $fixFile = __DIR__ . '/store_fixes.json';
 $fixes = file_exists($fixFile) ? (json_decode(file_get_contents($fixFile), true) ?: []) : [];
 require_once __DIR__ . '/lib_overrides.php';
