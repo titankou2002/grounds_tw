@@ -2497,6 +2497,8 @@
       </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
+        <button class="action-btn" id="btn-cmp-share" onclick="shareCompareLink()">分享連結</button>
+        <button class="action-btn" id="btn-cmp-pdf" onclick="printComparePdf()">PDF</button>
         <button class="action-btn" id="btn-cmp-report" onclick="createCompareReportPost()">建立到日報</button>
         <button class="action-btn" id="btn-cmp-edit" onclick="toggleCompareEdit()">編輯</button>
         <button class="btn-submit" id="btn-cmp-save" onclick="saveCompareEdits()" style="display:none;">儲存</button>
@@ -6301,6 +6303,8 @@ function updateCompareEditButtons() {
   const set = (id, show) => { const b = document.getElementById(id); if (b) b.style.display = show ? '' : 'none'; };
   set('btn-cmp-edit', !e && !state.previewing);
   set('btn-cmp-report', !e && !state.previewing);
+  set('btn-cmp-share', !e && !state.previewing);
+  set('btn-cmp-pdf', !e);
   set('btn-cmp-save', e);
   set('btn-cmp-cancel', e);
 }
@@ -6428,6 +6432,99 @@ function buildCompareReportHtml(items, lang, covers) {
     row(L.pros, s => esc_(ja ? (s.prosJa || s.pros || '') : (s.pros || ''))) +
     row(L.cons, s => esc_(ja ? (s.consJa || s.cons || '') : (s.cons || ''))) +
     '</table></div></div>';
+}
+
+async function shareCompareLink() {
+  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  if (items.length < 2) { showToast(tr('請先勾選 2 間以上', '2件以上選択してください'), 1800); return; }
+  const btn = document.getElementById('btn-cmp-share');
+  const oldLabel = btn ? btn.textContent : '';
+  if (btn) { btn.disabled = true; btn.textContent = tr('產生中…', '作成中…'); }
+  try {
+    const r = await fetch('api_share.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        action: 'create',
+        ids: items.map(s => s.id),
+        lang: state.compareModalLang || 'bilingual'
+      })
+    });
+    const d = await r.json().catch(() => ({}));
+    if (!r.ok || !d || !d.success || !d.id) {
+      showToast(tr('分享失敗，請再試一次', '共有に失敗しました'), 2200);
+      return;
+    }
+    const url = new URL('share.html?id=' + encodeURIComponent(d.id), location.href.replace(/index\.html(?:\?.*)?$/, '')).href;
+    let copied = false;
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(url);
+        copied = true;
+      }
+    } catch (e) {}
+    if (copied) {
+      showToast(tr('已複製分享連結', '共有リンクをコピーしました'), 2200);
+    } else {
+      try { window.prompt(tr('請複製這個連結', 'このリンクをコピーしてください'), url); } catch (e2) {}
+      showToast(url, 6000);
+    }
+  } catch (e) {
+    showToast(tr('分享失敗，請再試一次', '共有に失敗しました'), 2200);
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = oldLabel || '分享連結'; }
+  }
+}
+
+function printComparePdf() {
+  const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
+  if (!items.length) { showToast(tr('請先勾選店面', '店舗を選択してください'), 1800); return; }
+  const src = document.getElementById('compare-table-content');
+  if (!src || !src.innerHTML.trim()) { showToast(tr('沒有可輸出的表格', '出力する表がありません'), 1800); return; }
+  const mode = state.compareModalLang || 'bilingual';
+  const isJa = mode === 'ja', isBi = mode === 'bilingual';
+  const title = isJa ? '店舗条件・立地ポテンシャル分析比較表' : (isBi ? '店面條件分析比較表 / 店舗比較表' : '店面條件分析比較表');
+  const now = new Date();
+  const dateStr = `${now.getFullYear()}/${now.getMonth() + 1}/${now.getDate()}`;
+  const css = `
+    @page{size:A4 landscape;margin:10mm}
+    body{font-family:-apple-system,"Noto Sans TC","Hiragino Sans",sans-serif;color:#111;margin:0}
+    h1{font-size:16px;margin:0 0 4px} .meta{font-size:12px;color:#555;margin:0 0 10px}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #e2e2e8;padding:6px 8px;vertical-align:top;font-size:11px;line-height:1.4}
+    th{background:#fafafa;text-align:left;width:120px;font-weight:700}
+    img.compare-photo-thumb,.compare-photo-thumb{width:120px;height:72px;object-fit:cover;border-radius:6px;display:block}
+    .comp-val-main{font-weight:700}.comp-val-sub{font-size:10.5px;color:#555;margin-top:2px}
+    .metric-pill{display:inline-block;padding:1px 6px;border-radius:999px;font-weight:800}
+    .metric-area{background:#ccfbf1;color:#115e59}.p-ok{background:#dcfce7;color:#166534}.p-mid{background:#fef3c7;color:#92400e}.p-rent{background:#fee2e2;color:#991b1b}
+    .rank-badge-corner{display:inline-block;background:#111;color:#fff;font-size:9px;font-weight:800;padding:1px 5px;border-radius:999px;margin-right:3px}
+    button,.action-btn{display:none !important}
+    *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  `;
+  // 把相對圖片路徑改成絕對，列印視窗才讀得到
+  const absHtml = src.innerHTML.replace(/(src=["'])(?!https?:|data:|\/\/)([^"']+)/gi, (m, pre, path) => {
+    try { return pre + new URL(path, location.href).href; } catch (e) { return m; }
+  });
+  const w = window.open('', '_blank');
+  if (!w) { showToast(tr('請允許彈出視窗後再試', 'ポップアップを許可してください'), 2500); return; }
+  w.document.open();
+  w.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>${escapeHtml(title)}</title><style>${css}</style></head><body>`);
+  w.document.write(`<h1>${escapeHtml(title)}</h1><p class="meta">${escapeHtml(dateStr)} · ${items.length}${isJa ? '物件' : ' 間'}</p>`);
+  w.document.write(absHtml);
+  w.document.write('</body></html>');
+  w.document.close();
+  const trigger = () => { try { w.focus(); w.print(); } catch (e) {} };
+  // 等圖片載入再印
+  const imgs = Array.from(w.document.images || []);
+  if (!imgs.length) { setTimeout(trigger, 250); return; }
+  let left = imgs.length;
+  const done = () => { if (--left <= 0) setTimeout(trigger, 150); };
+  imgs.forEach(img => {
+    if (img.complete) done();
+    else { img.onload = done; img.onerror = done; }
+  });
+  setTimeout(trigger, 4000); // 保險：最久等 4 秒
 }
 
 async function createCompareReportPost() {

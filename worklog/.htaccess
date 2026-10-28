@@ -1,5 +1,5 @@
 # Disable caching for index.html so mobile devices always get the latest version
-<FilesMatch "^(index|map)\.html$">
+<FilesMatch "^(index|map|share)\.html$">
     <IfModule mod_headers.c>
         Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
         Header set Pragma "no-cache"

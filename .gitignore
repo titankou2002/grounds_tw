@@ -62,3 +62,7 @@ worklog/store_overrides.json
 worklog/uploads/
 worklog/files/
 worklog/grounds_data.lock
+
+# 比較表分享快照（伺服器端，不進 git、部署不覆蓋）
+worklog/compare_shares/
+worklog/compare_shares/**

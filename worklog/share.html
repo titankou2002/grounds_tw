@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<title>grounds Taiwan 店面比較表</title>
+<link rel="icon" href="favicon.png">
+<style>
+:root{--fg:#111;--muted:#555;--line:#e2e2e8;--bg:#f7f7f9;--danger:#b91c1c}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"Noto Sans TC","Hiragino Sans",sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{width:34px;height:34px;border-radius:8px;background:#111;color:#fff;font:bold 21px Georgia,serif;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
+.ttl{font-weight:800;font-size:15px;flex:1;min-width:140px}
+.meta{font-size:12px;color:var(--muted);width:100%;margin-top:-2px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lang{display:flex;background:#f1f1f4;border-radius:18px;padding:2px;border:1px solid var(--line)}
+.lang button{border:0;background:transparent;border-radius:16px;padding:6px 10px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.lang button.on{background:#111;color:#fff}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.btn.pri{background:#111;color:#fff;border-color:#111}
+.wrap{max-width:1280px;margin:0 auto;padding:14px 12px calc(24px + env(safe-area-inset-bottom));overflow-x:auto}
+.err,.loading{text-align:center;color:var(--muted);padding:60px 16px;font-size:14px}
+.compare-table{width:100%;border-collapse:collapse;background:#fff;min-width:640px}
+.compare-table th,.compare-table td{border:1px solid var(--line);padding:10px 12px;vertical-align:top;font-size:13px;line-height:1.45}
+.compare-table th{background:#fafafa;width:140px;font-weight:700;text-align:left}
+.compare-table td{min-width:160px}
+.compare-photo-thumb{width:100%;max-width:220px;height:120px;object-fit:cover;border-radius:8px;background:#eee;display:block}
+.comp-metric-box{position:relative}
+.comp-val-main{font-weight:700;font-size:14px}
+.comp-val-sub{font-size:11.5px;color:var(--muted);margin-top:3px}
+.metric-pill{display:inline-block;padding:2px 8px;border-radius:999px;font-size:12.5px;font-weight:800}
+.metric-area{background:#ccfbf1;color:#115e59}
+.p-ok{background:#dcfce7;color:#166534}.p-mid{background:#fef3c7;color:#92400e}.p-rent{background:#fee2e2;color:#991b1b}
+.rank-badge-corner{display:inline-block;background:#111;color:#fff;font-size:10px;font-weight:800;padding:2px 6px;border-radius:999px;margin-right:4px;vertical-align:middle}
+.legend{font-size:12px;color:var(--muted);margin:0 0 10px}
+@media print{
+  @page{size:A4 landscape;margin:10mm}
+  body{background:#fff}
+  header .actions .lang, header .btn, .no-print{display:none !important}
+  header{position:static;border:0;padding:0 0 8px}
+  .wrap{padding:0;max-width:none;overflow:visible}
+  .compare-table{min-width:0;width:100%}
+  .compare-table th,.compare-table td{padding:6px 8px;font-size:11px}
+  .compare-photo-thumb{height:72px;max-width:140px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .metric-pill,.rank-badge-corner,.p-ok,.p-mid,.p-rent,.metric-area{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+@media(max-width:720px){
+  .compare-table th{width:76px;font-size:11.5px;padding:8px 6px;position:sticky;left:0;z-index:2;background:#fafafa}
+  .compare-table td{min-width:140px}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">g</div>
+  <div class="ttl" id="title">店面條件分析比較表</div>
+  <div class="actions">
+    <div class="lang">
+      <button type="button" id="l-bi" class="on" onclick="setLang('bilingual')">中日雙語</button>
+      <button type="button" id="l-ja" onclick="setLang('ja')">日本語</button>
+      <button type="button" id="l-zh" onclick="setLang('zh')">純中文</button>
+    </div>
+    <button type="button" class="btn pri" onclick="printPdf()">PDF</button>
+  </div>
+  <div class="meta" id="meta"></div>
+</header>
+<div class="wrap">
+  <div class="legend" id="legend"></div>
+  <div id="box" class="loading">載入中… / 読み込み中…</div>
+</div>
+<script>
+(function () {
+  var JPY = 4.8;
+  var DEP_JA = { '面議': '要相談', '二個月': '2ヶ月分', '三個月': '3ヶ月分', '四個月': '4ヶ月分', '無法核對': '確認不可' };
+  var state = { lang: 'bilingual', stores: [], createdAt: 0, id: '' };
+
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');
+  }
+  function hasNums(s) { return Number(s.rent) > 0 && Number(s.area) > 0; }
+  function fmtWan(n) { var w = (Number(n) || 0) / 10000; return String(Math.round(w * 100) / 100); }
+  function fmtPing(a) { return String(Math.round((Number(a) || 0) * 100) / 100); }
+  function coverOf(s) {
+    var imgs = (s && s.images) || [];
+    if (s && s.coverImg && imgs.indexOf(s.coverImg) >= 0) return s.coverImg;
+    return imgs[0] || '';
+  }
+  function safeImg(raw) {
+    var s = String(raw || '').trim();
+    if (!s || /[\u0000-\u001f\s"'<>\\]/.test(s) || s.indexOf('..') >= 0) return '';
+    if (/^(javascript|vbscript|data):/i.test(s)) return '';
+    if (/^(uploads|files)\/[\w./-]+\.(jpe?g|png|gif|webp)$/i.test(s)) return s;
+    if (/^[\w.-]+\.(jpe?g|png|gif|webp)$/i.test(s)) return s;
+    try {
+      var u = new URL(s);
+      if ((u.protocol === 'http:' || u.protocol === 'https:') && !u.username && !u.password) return u.href;
+    } catch (e) {}
+    return '';
+  }
+  function tri(v, y, n) { return v === true ? y : (v === false ? n : '—'); }
+  function jaMonths(v) {
+    return String(v || '').replace(/個月/g, 'ヶ月').replace(/裝修期另議/g, '改装期間は要相談')
+      .replace(/洽詢/g, '要問い合わせ').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標');
+  }
+  function rentCls(r) { var w = r / 10000; return w < 15 ? 'p-ok' : w < 20 ? 'p-mid' : 'p-rent'; }
+  function parseFree(v) {
+    var m = String(v || '').match(/(\d+(?:\.\d+)?)/);
+    return m ? parseFloat(m[1]) : NaN;
+  }
+  function ranks(items, fn, asc) {
+    var scored = items.map(function (s) { return { id: s.id, v: fn(s) }; }).filter(function (x) { return isFinite(x.v); });
+    scored.sort(function (a, b) { return asc ? a.v - b.v : b.v - a.v; });
+    var map = {};
+    if (!scored.length) return map;
+    var best = scored[0].v;
+    scored.forEach(function (x) { if (x.v === best) map[x.id] = 1; });
+    var same = scored.every(function (x) { return x.v === best; });
+    if (same) return {};
+    return map;
+  }
+  function badge(r) { return r === 1 ? '<span class="rank-badge-corner">1位</span>' : ''; }
+  function depLabel(s, ja) {
+    var n = Number(s.deposit) > 0;
+    var txt = s.depositText ? (ja ? (DEP_JA[s.depositText] || s.depositText) : s.depositText) : '';
+    if (n) return 'NT$ ' + Math.round(s.deposit / 10000) + (ja ? '万' : '萬') + (txt ? '（' + esc(txt) + '）' : '');
+    return esc(txt || '—');
+  }
+  function dash() { return '—'; }
+
+  function setLang(lang) {
+    state.lang = lang;
+    ['bi','ja','zh'].forEach(function (k) {
+      var el = document.getElementById('l-' + k);
+      if (el) el.classList.toggle('on', (k === 'bi' ? 'bilingual' : k) === lang);
+    });
+    render();
+  }
+
+  function render() {
+    var items = state.stores;
+    var mode = state.lang;
+    var isJa = mode === 'ja', isBi = mode === 'bilingual', isZh = mode === 'zh';
+    var title = isJa ? '店舗条件・立地ポテンシャル分析比較表' : (isBi ? '店面條件分析比較表 / 店舗比較表' : '店面條件分析比較表');
+    document.getElementById('title').textContent = title;
+    document.title = 'grounds · ' + title;
+
+    var d = state.createdAt ? new Date(state.createdAt * 1000) : new Date();
+    var y = d.getFullYear(), m = d.getMonth() + 1, day = d.getDate();
+    var dateStr = y + '/' + m + '/' + day;
+    document.getElementById('meta').textContent = (isJa ? '作成日：' : '建立日期：') + dateStr + (items.length ? ' · ' + items.length + (isJa ? '物件' : ' 間店面') : '');
+
+    document.getElementById('legend').innerHTML = isJa
+      ? '順位表記：<span class="rank-badge-corner">1位</span> 最優位項目（同一数値は非表示）'
+      : '標示說明：<span class="rank-badge-corner">1位</span> 條件最佳優選（數據相同不予標註）';
+
+    var box = document.getElementById('box');
+    if (!items.length) {
+      box.className = 'err';
+      box.textContent = isJa ? '比較データがありません' : '沒有可比較的資料';
+      return;
+    }
+
+    var rentR = ranks(items, function (s) { return hasNums(s) ? Number(s.rent) : NaN; }, true);
+    var areaR = ranks(items, function (s) { return hasNums(s) ? Number(s.area) : NaN; }, false);
+    var unitR = ranks(items, function (s) { return hasNums(s) ? s.rent / s.area : NaN; }, true);
+    var freeR = ranks(items, function (s) { return parseFree(s.freeRent); }, false);
+
+    function L(zh, ja, bi) { return isJa ? ja : (isBi ? (bi || zh) : zh); }
+    var lblItem = L('比較項目', '比較項目', '比較項目 / 比較項目');
+    var lblPhoto = L('店面照片', '店舗写真', '店面照片 / 店舗写真');
+    var lblRent = L('刊登月租', '掲載月額賃料', '刊登月租 / 掲載賃料');
+    var lblArea = L('使用面積 (坪・㎡)', '使用面積（坪・㎡）');
+    var lblUnit = L('每坪租金單價', '面積単価（坪・㎡）', '每坪與每㎡租金');
+    var lblDep = isJa ? '敷金（保証金）' : '押金';
+    var lblFree = L('裝潢免租期', 'フリーレント（内装工事）', '裝潢免租期 / フリーレント');
+    var lblReg = L('營業登記許可', '会社設立・営業登記', '營業登記許可');
+    var lblInv = L('稅籍開立發票', 'インボイス・税籍適格', '稅籍開立發票');
+    var lblPros = L('商圈優點與人流分析', '立地の強み・人流分析');
+    var lblCons = L('特別考量與潛在風險', '留意点・潜在リスク');
+
+    var header = '<tr><th>' + lblItem + '</th>' + items.map(function (s) {
+      var t = isJa ? esc(s.titleJa || s.title) : (isBi ? esc(s.title) + (s.titleJa ? '<div style="font-size:11px;color:var(--muted);font-weight:normal;margin-top:2px;">' + esc(s.titleJa) + '</div>' : '') : esc(s.title));
+      return '<th style="min-width:180px;max-width:240px;">' + t + '</th>';
+    }).join('') + '</tr>';
+
+    var photo = '<tr><th>' + lblPhoto + '</th>' + items.map(function (s) {
+      var src = safeImg(coverOf(s));
+      return '<td>' + (src ? '<img class="compare-photo-thumb" src="' + esc(src) + '" alt="">' : dash()) + '</td>';
+    }).join('') + '</tr>';
+
+    var rent = '<tr><th>' + lblRent + '</th>' + items.map(function (s) {
+      if (!hasNums(s)) return '<td>' + dash() + '</td>';
+      var wanJpy = Math.round(s.rent * JPY / 10000);
+      return '<td><div class="comp-metric-box">' + badge(rentR[s.id]) +
+        '<div class="comp-val-main"><span class="metric-pill ' + rentCls(s.rent) + '">NT$ ' + fmtWan(s.rent) + ' 萬</span></div>' +
+        '<div class="comp-val-sub">（約 ' + wanJpy + ' 万円/月）</div></div></td>';
+    }).join('') + '</tr>';
+
+    var area = '<tr><th>' + lblArea + '</th>' + items.map(function (s) {
+      if (!hasNums(s)) return '<td>' + dash() + '</td>';
+      var m2 = Math.round(s.area * 3.3058);
+      return '<td><div class="comp-metric-box">' + badge(areaR[s.id]) +
+        '<div class="comp-val-main"><span class="metric-pill metric-area">' + fmtPing(s.area) + ' 坪</span></div>' +
+        '<div class="comp-val-sub">約 <strong style="color:#0f766e;">' + m2 + ' ㎡</strong></div></div></td>';
+    }).join('') + '</tr>';
+
+    var unit = '<tr><th>' + lblUnit + '</th>' + items.map(function (s) {
+      if (!hasNums(s)) return '<td>' + dash() + '</td>';
+      var unitPing = Math.round(s.rent / s.area);
+      var unitM2 = Math.round(s.rent / (s.area * 3.3058));
+      var unitJpyM2 = Math.round(unitM2 * JPY);
+      return '<td><div class="comp-metric-box"><div class="comp-val-main">' + badge(unitR[s.id]) + 'NT$ ' + unitPing.toLocaleString() + ' /坪</div>' +
+        '<div class="comp-val-sub">約 NT$ ' + unitM2.toLocaleString() + ' /㎡</div>' +
+        '<div class="comp-val-sub" style="color:#0f766e;font-weight:600;">（約 ' + unitJpyM2.toLocaleString() + ' 円/㎡）</div></div></td>';
+    }).join('') + '</tr>';
+
+    var dep = '<tr><th>' + lblDep + '</th>' + items.map(function (s) {
+      var main = depLabel(s, isJa);
+      var sub = Number(s.deposit) > 0 ? '<div class="comp-val-sub">（約 ' + Math.round(s.deposit * JPY / 10000) + ' 万円）</div>' : '';
+      return '<td><div class="comp-metric-box"><div class="comp-val-main">' + main + '</div>' + sub + '</div></td>';
+    }).join('') + '</tr>';
+
+    var free = '<tr><th>' + lblFree + '</th>' + items.map(function (s) {
+      var raw = s.freeRent ? String(s.freeRent) : '';
+      if (!raw) return '<td>' + dash() + '</td>';
+      var show = isJa ? jaMonths(raw) : raw;
+      var sub = (!isJa && jaMonths(raw) !== raw) ? '<div class="comp-val-sub">（' + esc(jaMonths(raw)) + '）</div>' : '';
+      return '<td><div class="comp-metric-box"><div class="comp-val-main">' + badge(freeR[s.id]) + esc(show) + '</div>' + sub + '</div></td>';
+    }).join('') + '</tr>';
+
+    var reg = '<tr><th>' + lblReg + '</th>' + items.map(function (s) {
+      return '<td>' + tri(s.canRegister, isJa ? '可能（登記可）' : '可以（会社設立登記可）', '不可') + '</td>';
+    }).join('') + '</tr>';
+
+    var inv = '<tr><th>' + lblInv + '</th>' + items.map(function (s) {
+      return '<td>' + tri(s.canInvoice, isJa ? '適格（インボイス可）' : '可以開立發票（適格）', isJa ? '非適格' : '否') + '</td>';
+    }).join('') + '</tr>';
+
+    var pros = '<tr><th>' + lblPros + '</th>' + items.map(function (s) {
+      var content;
+      if (isJa) content = esc(s.prosJa || s.pros || '') || dash();
+      else if (isZh) content = esc(s.pros || '') || dash();
+      else content = '<div>' + (esc(s.pros || '') || dash()) + '</div>' + (s.prosJa ? '<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">' + esc(s.prosJa) + '</div>' : '');
+      return '<td>' + content + '</td>';
+    }).join('') + '</tr>';
+
+    var cons = '<tr><th>' + lblCons + '</th>' + items.map(function (s) {
+      var content;
+      if (isJa) content = '<span style="color:var(--danger);">' + (esc(s.consJa || s.cons || '') || dash()) + '</span>';
+      else if (isZh) content = '<span style="color:var(--danger);">' + (esc(s.cons || '') || dash()) + '</span>';
+      else content = '<div style="color:var(--danger);">' + (esc(s.cons || '') || dash()) + '</div>' + (s.consJa ? '<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">' + esc(s.consJa) + '</div>' : '');
+      return '<td>' + content + '</td>';
+    }).join('') + '</tr>';
+
+    box.className = '';
+    box.innerHTML = '<table class="compare-table">' + header + photo + rent + area + unit + dep + free + reg + inv + pros + cons + '</table>';
+  }
+
+  function printPdf() { window.print(); }
+
+  var params = new URLSearchParams(location.search);
+  var id = String(params.get('id') || '').toLowerCase();
+  if (!/^[a-f0-9]{32}$/.test(id)) {
+    document.getElementById('box').className = 'err';
+    document.getElementById('box').textContent = '連結無效 / リンクが無効です';
+    return;
+  }
+  fetch('api_share.php?id=' + encodeURIComponent(id), { cache: 'no-store' })
+    .then(function (r) { return r.json().then(function (d) { return { ok: r.ok, d: d }; }); })
+    .then(function (x) {
+      if (!x.ok || !x.d || !x.d.success || !Array.isArray(x.d.stores)) throw new Error('fail');
+      state.id = x.d.id;
+      state.createdAt = x.d.createdAt || 0;
+      state.stores = x.d.stores;
+      state.lang = (x.d.lang === 'ja' || x.d.lang === 'zh' || x.d.lang === 'bilingual') ? x.d.lang : 'bilingual';
+      setLang(state.lang);
+    })
+    .catch(function () {
+      document.getElementById('box').className = 'err';
+      document.getElementById('box').textContent = '找不到這份比較表 / 比較表が見つかりません';
+    });
+
+  window.printPdf = printPdf;
+  window.setLang = setLang;
+})();
+</script>
+</body>
+</html>

@@ -41,3 +41,5 @@ jobs:
             **/.wl_secret
             **/uploads/**
             **/files/**
+            compare_shares/**
+            **/compare_shares/**
