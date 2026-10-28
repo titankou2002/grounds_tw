@@ -1,11 +1,11 @@
 # Disable caching for index.html so mobile devices always get the latest version
-<Files "index.html">
+<FilesMatch "^(index|map)\.html$">
     <IfModule mod_headers.c>
         Header set Cache-Control "no-cache, no-store, must-revalidate, max-age=0"
         Header set Pragma "no-cache"
         Header set Expires "0"
     </IfModule>
-</Files>
+</FilesMatch>
 
 # ---- 密碼閘門：所有請求都先經過 gate.php（登入後 cookie 記住一年） ----
 <FilesMatch "^\.">

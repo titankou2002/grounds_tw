@@ -3,6 +3,7 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 require_once __DIR__ . '/lib_overrides.php';
+require_once __DIR__ . '/lib_images.php';
 
 function out($a, $code = 200) { http_response_code($code); echo json_encode($a, JSON_UNESCAPED_UNICODE); exit; }
 
@@ -41,9 +42,15 @@ if ($action === 'edit') {
     $f = is_array($in['fields'] ?? null) ? $in['fields'] : [];
     foreach ($f as $k => $v) {
         if ((in_array($k, $num, true) || in_array($k, $bool, true)) && $v === null) { $o['fields'][$k] = null; continue; }
-        if ($k === 'coverImg') {   // 主頁顯示的圖片（星號）。空字串 = 取消指定
+        if ($k === 'coverImg') {   // 主頁顯示的圖片（星號）。空字串 = 取消指定。data: 先存成檔案，不寫進 json。
             $v = trim((string)$v);
-            if ($v === '' || preg_match('#^(https?://|data:image/|[\w./-]+\.(jpe?g|png|webp)$)#i', $v)) $o['fields']['coverImg'] = mb_substr($v, 0, 500);
+            if ($v === '') { $o['fields']['coverImg'] = ''; continue; }
+            if (stripos($v, 'data:') === 0) {
+                $saved = wl_data_image_to_file($v);
+                if (is_string($saved) && $saved !== '') $o['fields']['coverImg'] = $saved;
+                continue;
+            }
+            if (wl_public_image_ref($v) || wl_public_http_url($v)) $o['fields']['coverImg'] = mb_substr($v, 0, 500);
             continue;
         }
         if (in_array($k, $num, true)) { if (!is_numeric($v) || $v < 0 || $v > 1e9) continue; $o['fields'][$k] = $v + 0; }

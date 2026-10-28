@@ -3157,6 +3157,22 @@ function mergeReactionsInto(local, cloud) {
   return { list: [...m.values()], changed };
 }
 
+// 伺服器把 data: 照片轉成檔案後，本機要改跟那份網址，避免再把超大字串傳回去
+function takeMigratedImages(localStore, cloudStore) {
+  if (!localStore || !cloudStore) return false;
+  const cloudImgs = (cloudStore.images || []).filter(u => typeof u === 'string' && u.indexOf('data:') !== 0);
+  const localData = (localStore.images || []).some(u => typeof u === 'string' && u.indexOf('data:') === 0)
+    || (typeof localStore.coverImg === 'string' && localStore.coverImg.indexOf('data:') === 0)
+    || (typeof localStore.url === 'string' && localStore.url.indexOf('data:') === 0);
+  if (!localData || !cloudImgs.length) return false;
+  localStore.images = cloudImgs.slice();
+  if (typeof cloudStore.coverImg === 'string' && cloudStore.coverImg.indexOf('data:') !== 0) localStore.coverImg = cloudStore.coverImg;
+  else if (typeof localStore.coverImg === 'string' && localStore.coverImg.indexOf('data:') === 0) delete localStore.coverImg;
+  if (typeof localStore.url === 'string' && localStore.url.indexOf('data:') === 0) {
+    localStore.url = (typeof cloudStore.url === 'string' && cloudStore.url.indexOf('data:') !== 0) ? cloudStore.url : '';
+  }
+  return true;
+}
 // 回傳 { updated, stores }：有沒有任何變動、店面有沒有變動
 function mergeFromCloud(data) {
   const res = { updated: false, stores: false };
@@ -3198,6 +3214,7 @@ function mergeFromCloud(data) {
     if (deletedStoreIds.has(ss.id)) return;
     const ls = state.stores.find(x => x.id === ss.id);
     if (!ls) { state.stores.push(ss); res.updated = res.stores = true; return; }
+    if (takeMigratedImages(ls, ss)) { res.updated = true; res.stores = true; }
     if ((Number(ss.editedAt) || 0) > (Number(ls.editedAt) || 0)) {
       Object.keys(ss).forEach(k => { if (k !== 'activeImgIdx') ls[k] = ss[k]; });
       res.updated = res.stores = true;
@@ -3600,21 +3617,21 @@ async function togglePostTranslation(postId, colLang, btnElement) {
   try {
     if (colLang === 'zh') {
       if (!post.ja || post.ja === post.zh) {
-        post.ja = await translateToJapaneseAsync(post.zh);
+        post.ja = await translateToJapaneseAsync(storedTextToPlain(post.zh));
         saveAppState();
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳（翻訳）：</div>
-        <div>${post.ja}</div>
+        <div>${linkifyUserText(post.ja, 'ja')}</div>
       `;
     } else {
       if (!post.zh || post.zh === post.ja) {
-        post.zh = await translateToChineseAsync(post.ja);
+        post.zh = await translateToChineseAsync(storedTextToPlain(post.ja));
         saveAppState();
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
-        <div>${post.zh}</div>
+        <div>${linkifyUserText(post.zh, 'zh')}</div>
       `;
     }
     box.style.display = 'block';
@@ -3644,21 +3661,21 @@ async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
   try {
     if (colLang === 'zh') {
       if (!c.ja || c.ja === c.zh) {
-        c.ja = await translateToJapaneseAsync(c.zh);
+        c.ja = await translateToJapaneseAsync(storedTextToPlain(c.zh));
         saveAppState();
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳：</div>
-        <div>${c.ja}</div>
+        <div>${linkifyUserText(c.ja, 'ja')}</div>
       `;
     } else {
       if (!c.zh || c.zh === c.ja) {
-        c.zh = await translateToChineseAsync(c.ja);
+        c.zh = await translateToChineseAsync(storedTextToPlain(c.ja));
         saveAppState();
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
-        <div>${c.zh}</div>
+        <div>${linkifyUserText(c.zh, 'zh')}</div>
       `;
     }
     box.style.display = 'block';
@@ -3848,8 +3865,118 @@ function closeImageLightbox() {
 }
 
 function escapeHtml(str) {
-  if (!str) return '';
-  return str.toString().replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  if (!str && str !== 0) return '';
+  return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+}
+// 放進 onclick="fn(HERE)" 的值。數字維持數字；其他一律 JSON 字串再做成 HTML 實體，避免雲端資料把屬性切斷。
+function jsArg(v) {
+  if (typeof v === 'number' && isFinite(v)) return String(v);
+  const s = String(v == null ? '' : v);
+  if (/^\d{1,16}$/.test(s)) return s;
+  return escapeHtml(JSON.stringify(s));
+}
+function safeClass(v) {
+  const s = String(v == null ? '' : v);
+  return /^[a-z0-9_-]{1,32}$/i.test(s) ? s : 'candidate';
+}
+function safeHttpUrl(raw) {
+  try {
+    const u = new URL(String(raw || '').trim());
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return '';
+    if (u.username || u.password) return '';
+    return u.href;
+  } catch (e) { return ''; }
+}
+function listingHostOk(href) {
+  try {
+    const u = new URL(href);
+    const host = u.hostname.toLowerCase().replace(/\.$/, '');
+    return /(^|\.)((591|rakuya|yungching|sinyi|hbhousing|cthouse|twhg)\.com\.tw)$/.test(host);
+  } catch (e) { return false; }
+}
+function safeAssetUrl(raw) {
+  const s = String(raw || '').trim();
+  if (!s || /[\u0000-\u001f\s"'<>\\]/.test(s) || s.indexOf('..') >= 0) return '';
+  if (/^(javascript|vbscript|data):/i.test(s)) return '';
+  if (/^(uploads|files)\/[\w./-]+\.(jpe?g|png|gif|webp|pdf)$/i.test(s)) return s;
+  if (/^[\w.-]+\.(jpe?g|png|gif|webp|pdf)$/i.test(s)) return s;
+  return safeHttpUrl(s);
+}
+function safeHref(raw) { return safeAssetUrl(raw) || '#'; }
+function safeImgSrc(raw) {
+  const s = String(raw || '').trim();
+  if (/^data:image\/(png|jpe?g|gif|webp);base64,[a-z0-9+/=\r\n]+$/i.test(s)) return s;
+  return safeAssetUrl(s);
+}
+function safeFileHref(raw) {
+  const s = String(raw || '').trim();
+  if (/^data:(image\/(png|jpe?g|gif|webp)|application\/pdf);base64,[a-z0-9+/=\r\n]+$/i.test(s)) return s;
+  return safeAssetUrl(s);
+}
+// 舊動態把 <a> 存進文字。這裡只留下 http(s) 網址，其餘標籤當文字，之後再跳脫。
+function storedTextToPlain(text) {
+  let s = String(text == null ? '' : text);
+  if (s.indexOf('<') === -1) return s;
+  s = s.replace(/<a\b[^>]*\bhref\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s"'=<>`]+))[^>]*>([\s\S]*?)<\/a>/gi, function (_m, d, q, bare, inner) {
+    const href = safeHttpUrl(d || q || bare);
+    const textOnly = String(inner || '').replace(/<[^>]*>/g, '');
+    return href ? (' ' + href + ' ') : (' ' + textOnly + ' ');
+  });
+  return s;
+}
+function storeForListingUrl(href) {
+  if (!listingHostOk(href)) return null;
+  const d = detectStorePlatform(href);
+  if (d && d.platform !== 'general' && d.propId) {
+    const hit = state.stores.find(s => s.id === d.propId);
+    if (hit) return hit;
+  }
+  return state.stores.find(s => s && /^https?:/i.test(s.url || '') && (href === s.url || href.indexOf(s.url) === 0)) || null;
+}
+function plainBodyWithoutStores(text, stores) {
+  const list = stores || [];
+  let plain = storedTextToPlain(text);
+  if (!list.length) return plain;
+  return plain.replace(/https?:\/\/[^\s<>"'）)」]+/g, function (u) {
+    let raw = u;
+    const tm = raw.match(/[.,;:!?，。、)）]+$/);
+    if (tm) raw = raw.slice(0, -tm[0].length);
+    const href = safeHttpUrl(raw);
+    if (!href || !listingHostOk(href)) return u;
+    const hit = storeForListingUrl(href);
+    if (hit && list.some(s => s.id === hit.id)) return '';
+    return u;
+  });
+}
+// 使用者文字（含翻譯、雲端舊 HTML）先跳脫，再把房仲網址做成安全的 <a>。
+function linkifyUserText(text, lang) {
+  const plain = storedTextToPlain(text);
+  const re = /https?:\/\/[^\s<>"'）)」]+/g;
+  let out = '', last = 0, m;
+  while ((m = re.exec(plain))) {
+    out += escapeHtml(plain.slice(last, m.index));
+    let raw = m[0];
+    let trail = '';
+    const tm = raw.match(/[.,;:!?，。、)）]+$/);
+    if (tm) { trail = tm[0]; raw = raw.slice(0, -trail.length); }
+    const href = safeHttpUrl(raw);
+    if (href && listingHostOk(href)) {
+      const store = storeForListingUrl(href);
+      const label = store ? ((lang === 'ja' && (store.titleJa || store.title)) ? (store.titleJa || store.title) : (store.title || href)) : href;
+      const detected = detectStorePlatform(href);
+      const id = store ? store.id : (detected && detected.platform !== 'general' ? detected.propId : '');
+      const click = id ? ' onclick="event.preventDefault(); gotoStoreOnMap(' + jsArg(id) + ')"' : '';
+      out += '<a href="' + escapeHtml(href) + '" class="post-property-link"' + click + '>🏢 ' + escapeHtml(label) + '</a>';
+    } else if (href) {
+      out += '<a href="' + escapeHtml(href) + '" target="_blank" rel="noopener noreferrer">' + escapeHtml(href) + '</a>';
+    } else {
+      out += escapeHtml(raw);
+    }
+    out += escapeHtml(trail);
+    last = m.index + m[0].length;
+  }
+  out += escapeHtml(plain.slice(last));
+  return out;
 }
 
 // --- Feed Posting & Multi-Link Real Estate Recognition ---
@@ -3880,7 +4007,6 @@ async function submitFeedPost() {
     // Multi-link recognition: supports 1~5 URLs pasted at once!
     const rawUrls = textZh.match(/https?:\/\/[^\s<>"'\)]+/g) || [];
     const linkedPropIds = [];
-    const urlReplacements = [];
 
     for (const rawUrl of rawUrls) {
       const detected = detectStorePlatform(rawUrl);
@@ -3949,27 +4075,11 @@ async function submitFeedPost() {
           state.stores.unshift(storeObj);
           geocodeStoreIfNeeded(storeObj);
         }
-
-        urlReplacements.push({
-          rawUrl: rawUrl,
-          zhLink: `<a href="${matchedUrl}" onclick="event.preventDefault(); openStoreDetailModal('${storeObj.id}')" class="post-property-link" title="點擊檢視店面完整資訊">🏢 ${storeObj.title}</a>`,
-          jaLink: `<a href="${matchedUrl}" onclick="event.preventDefault(); openStoreDetailModal('${storeObj.id}')" class="post-property-link" title="物件詳細を見る">🏢 ${storeObj.titleJa || storeObj.title}</a>`
-        });
       }
     }
 
-    // Replace URLs in text with listing titles
-    let replacedZh = textZh;
-    for (const r of urlReplacements) {
-      replacedZh = replacedZh.split(r.rawUrl).join(r.zhLink);
-    }
-
-    // Real asynchronous translation for Japanese column
+    // 內文只存純文字。房仲網址在畫面上才換成店名連結（見 linkifyUserText）。
     let textJa = await translateToJapaneseAsync(textZh);
-    let replacedJa = textJa;
-    for (const r of urlReplacements) {
-      replacedJa = replacedJa.split(r.rawUrl).join(r.jaLink);
-    }
 
     const now = new Date();
     const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
@@ -3980,8 +4090,8 @@ async function submitFeedPost() {
       date: timeStr,
       hours: hours,
       tag: tag,
-      zh: replacedZh,
-      ja: replacedJa,
+      zh: textZh,
+      ja: textJa,
       propId: linkedPropIds[0] || null,
       propIds: linkedPropIds,
       attachment: null,
@@ -4055,7 +4165,7 @@ function renderDailyLogs(box, colLang) {
     wrap.innerHTML = `
       <div class="daily-log-head">
         <div class="daily-log-date">${fmtDateWd(d, colLang)}</div>
-        <div class="daily-log-meta">${colLang === 'ja' ? `${list.length} 件・合計 ${hours} 時間・${authors}` : `${list.length} 筆・合計 ${hours} 小時・${authors}`}</div>
+        <div class="daily-log-meta">${colLang === 'ja' ? `${list.length} 件・合計 ${hours} 時間・${escapeHtml(authors)}` : `${list.length} 筆・合計 ${hours} 小時・${escapeHtml(authors)}`}</div>
       </div>`;
     list.forEach(p => wrap.appendChild(createCard(p, colLang)));
     if (isOld) {
@@ -4105,8 +4215,8 @@ function reactionsOf(obj) {
 }
 function reactionHtml(postId, commentId, obj) {
   const m = reactionsOf(obj), me = state.currentUser;
-  const pills = Object.keys(m).map(e => `<button type="button" class="react-pill${m[e].includes(me) ? ' mine' : ''}" title="${escapeHtml(m[e].join('、'))}" onclick="toggleReaction(${postId},'${commentId || ''}','${e}',event)">${e} <b>${m[e].length}</b></button>`).join('');
-  const picker = REACTION_SET.map(e => `<button type="button" onclick="toggleReaction(${postId},'${commentId || ''}','${e}',event)">${e}</button>`).join('');
+  const pills = Object.keys(m).map(e => `<button type="button" class="react-pill${m[e].includes(me) ? ' mine' : ''}" title="${escapeHtml(m[e].join('、'))}" onclick="toggleReaction(${jsArg(postId)},${jsArg(commentId || '')},${jsArg(e)},event)">${escapeHtml(e)} <b>${m[e].length}</b></button>`).join('');
+  const picker = REACTION_SET.map(e => `<button type="button" onclick="toggleReaction(${jsArg(postId)},${jsArg(commentId || '')},${jsArg(e)},event)">${escapeHtml(e)}</button>`).join('');
   return `<div class="react-row">${pills}<span class="react-add"><button type="button" class="react-plus" onclick="toggleReactPicker(this,event)" title="${tr('表情回應','リアクション')}">☺＋</button><span class="react-picker">${picker}</span></span></div>`;
 }
 function toggleReactPicker(btn, ev) {
@@ -4142,8 +4252,8 @@ function attachmentsHtml(list) {
   if (!list.length) return '';
   const imgs = list.filter(a => a.type === 'image'), pdfs = list.filter(a => a.type === 'pdf');
   return '<div class="att-wrap">' +
-    (imgs.length ? `<div class="att-grid att-n${Math.min(imgs.length, 4)}">${imgs.map(a => `<img src="${escapeHtml(a.url)}" onclick="openImageLightbox('${escapeHtml(a.url)}')" loading="lazy" alt="${escapeHtml(a.name)}">`).join('')}</div>` : '') +
-    pdfs.map(a => `<a class="att-pdf" href="${escapeHtml(a.url)}" target="_blank" rel="noopener"><span class="att-pdf-ico">PDF</span><span class="att-pdf-name">${escapeHtml(a.name)}</span><small>${fmtSize(a.size)}</small></a>`).join('') +
+    (imgs.length ? `<div class="att-grid att-n${Math.min(imgs.length, 4)}">${imgs.map(a => { const src = safeImgSrc(a.url); return src ? `<img src="${escapeHtml(src)}" onclick="openImageLightbox(${jsArg(src)})" loading="lazy" alt="${escapeHtml(a.name)}">` : ''; }).join('')}</div>` : '') +
+    pdfs.map(a => { const href = safeFileHref(a.url); return href ? `<a class="att-pdf" href="${escapeHtml(href)}" target="_blank" rel="noopener"><span class="att-pdf-ico">PDF</span><span class="att-pdf-name">${escapeHtml(a.name)}</span><small>${fmtSize(a.size)}</small></a>` : ''; }).join('') +
     '</div>';
 }
 // 文字裡的 YouTube／Google Drive 連結 → 內嵌卡片（縮圖用 YouTube 官方縮圖網址；標題只取自 YouTube 本身，取不到就不顯示）
@@ -4193,10 +4303,10 @@ function createCard(p, colLang) {
   // Multi-link & single-link real estate candidate cards
   const propIdList = (p.propIds && p.propIds.length) ? p.propIds : (p.propId ? [p.propId] : []);
   const linkedStores = propIdList.map(id => state.stores.find(s => s.id === id)).filter(Boolean);
-  // 已有店面卡片時，內文裡的連結不再重複顯示；剩下的文字若是空的就整塊隱藏
-  const stripPropLinks = (html) => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
-  const bodyHtml = linkedStores.length ? stripPropLinks(text) : String(text || '').replace(/openStoreDetailModal\(/g, 'gotoStoreOnMap(');
-  const hideBody = linkedStores.length > 0 && !bodyHtml.replace(/<[^>]*>/g, '').trim();
+  // 已有店面卡片時，內文裡的物件網址不再重複顯示；剩下的文字若是空的就整塊隱藏
+  const bodyPlain = linkedStores.length ? plainBodyWithoutStores(text, linkedStores) : storedTextToPlain(text);
+  const bodyHtml = linkifyUserText(bodyPlain, colLang);
+  const hideBody = linkedStores.length > 0 && !String(bodyPlain || '').replace(/\s+/g, '').trim();
 
   let propHtml = '';
   if (linkedStores.length > 0) {
@@ -4208,13 +4318,14 @@ function createCard(p, colLang) {
       const dispTitle = (isJaCol && prop.titleJa) ? prop.titleJa : prop.title;
       const pLabel = prop.statusLabel || (prop.sourceType === 'agency' ? '房仲資料' : '店面物件');
 
+      const thumb = safeImgSrc(mainImg);
       return `
-        <div class="feed-591-preview" onclick="gotoStoreOnMap('${prop.id}')" title="${isJaCol ? 'タップして地図で確認' : '點擊切換到 MAP 查看位置與評估'}">
-          ${mainImg ? `<img src="${mainImg}" class="feed-591-thumb" alt="店面照">` : ''}
+        <div class="feed-591-preview" onclick="gotoStoreOnMap(${jsArg(prop.id)})" title="${isJaCol ? 'タップして地図で確認' : '點擊切換到 MAP 查看位置與評估'}">
+          ${thumb ? `<img src="${escapeHtml(thumb)}" class="feed-591-thumb" alt="店面照">` : ''}
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;min-width:0;">
-              <span class="store-tag ${prop.status || 'candidate'}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${pLabel}</span>
-              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${dispTitle}">${dispTitle}</div>
+              <span class="store-tag ${safeClass(prop.status || 'candidate')}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${escapeHtml(pLabel)}</span>
+              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${escapeHtml(dispTitle)}">${escapeHtml(dispTitle)}</div>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${fmtWan(prop.rent)}萬</strong> (約 ${jpyRentWan}万円)</span>
@@ -4233,16 +4344,17 @@ function createCard(p, colLang) {
   // Post Attachment (Image or PDF)
   let postAttachHtml = '';
   if (p.attachment) {
-    if (p.attachment.type === 'image') {
+    const attHref = safeFileHref(p.attachment.data || p.attachment.url || '');
+    if (p.attachment.type === 'image' && safeImgSrc(attHref)) {
       postAttachHtml = `
         <div class="comment-attach-box" style="margin-top:6px;">
-          <img src="${p.attachment.data}" class="comment-thumb-img" onclick="openImageLightbox('${p.attachment.data}')" alt="${escapeHtml(p.attachment.name)}" title="點擊放大檢視照片">
+          <img src="${escapeHtml(safeImgSrc(attHref))}" class="comment-thumb-img" onclick="openImageLightbox(${jsArg(safeImgSrc(attHref))})" alt="${escapeHtml(p.attachment.name)}" title="點擊放大檢視照片">
         </div>
       `;
-    } else {
+    } else if (attHref) {
       postAttachHtml = `
         <div style="margin-top:6px;">
-          <a href="${p.attachment.data}" download="${escapeHtml(p.attachment.name)}" class="comment-doc-chip" title="下載 PDF 檔案">
+          <a href="${escapeHtml(attHref)}" download="${escapeHtml(p.attachment.name)}" class="comment-doc-chip" title="下載 PDF 檔案">
             📄 <span>${escapeHtml(p.attachment.name)}</span> (PDF)
           </a>
         </div>
@@ -4259,7 +4371,7 @@ function createCard(p, colLang) {
           <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>日本語</span>
         </div>
-        <div class="jp-trans-body">${linkedStores.length ? stripPropLinks(p.ja) : p.ja}</div>
+        <div class="jp-trans-body">${linkifyUserText(linkedStores.length ? plainBodyWithoutStores(p.ja, linkedStores) : p.ja, 'ja')}</div>
       </div>
     `;
   }
@@ -4269,16 +4381,17 @@ function createCard(p, colLang) {
     const cText = colLang === 'zh' ? c.zh : c.ja;
     let commAttachHtml = '';
     if (c.attachment) {
-      if (c.attachment.type === 'image') {
+      const attHref = safeFileHref(c.attachment.data || c.attachment.url || '');
+      if (c.attachment.type === 'image' && safeImgSrc(attHref)) {
         commAttachHtml = `
           <div class="comment-attach-box">
-            <img src="${c.attachment.data}" class="comment-thumb-img" onclick="openImageLightbox('${c.attachment.data}')" alt="${escapeHtml(c.attachment.name)}" title="點擊放大檢視照片">
+            <img src="${escapeHtml(safeImgSrc(attHref))}" class="comment-thumb-img" onclick="openImageLightbox(${jsArg(safeImgSrc(attHref))})" alt="${escapeHtml(c.attachment.name)}" title="點擊放大檢視照片">
           </div>
         `;
-      } else {
+      } else if (attHref) {
         commAttachHtml = `
           <div style="margin-top:4px;">
-            <a href="${c.attachment.data}" download="${escapeHtml(c.attachment.name)}" class="comment-doc-chip" title="下載 PDF 檔案">
+            <a href="${escapeHtml(attHref)}" download="${escapeHtml(c.attachment.name)}" class="comment-doc-chip" title="下載 PDF 檔案">
               📄 <span>${escapeHtml(c.attachment.name)}</span> (PDF)
             </a>
           </div>
@@ -4289,21 +4402,21 @@ function createCard(p, colLang) {
     return `
       <div class="comment-item">
         <div class="comment-header">
-          <span>${c.author}</span>
-          <span>${fmtDateWd(c.date, colLang)}</span>
+          <span>${escapeHtml(c.author)}</span>
+          <span>${escapeHtml(fmtDateWd(c.date, colLang))}</span>
         </div>
-        <div class="comment-body">${cText}</div>
+        <div class="comment-body">${linkifyUserText(cText, colLang)}</div>
         ${commAttachHtml}
         ${attachmentsHtml(c.attachments)}
         ${embedsHtml(c.zh)}
         ${c.id ? reactionHtml(p.id, c.id, c) : ''}
         <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
-          <button class="btn-mini-trans" type="button" onclick="toggleCommentTranslation(${p.id}, ${cIdx}, '${colLang}', this)">
+          <button class="btn-mini-trans" type="button" onclick="toggleCommentTranslation(${jsArg(p.id)}, ${cIdx}, '${colLang}', this)">
             <svg class="icon icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
             <span>${colLang === 'zh' ? '翻譯' : '翻訳'}</span>
           </button>
         </div>
-        <div id="trans-box-comm-${p.id}-${cIdx}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
+        <div id="trans-box-comm-${escapeHtml(p.id)}-${cIdx}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
       </div>
     `;
   }).join('');
@@ -4311,22 +4424,22 @@ function createCard(p, colLang) {
   card.innerHTML = `
     <div class="feed-card-header">
       <div class="author-info">
-        <div class="author-avatar">${p.author.slice(0, 1)}</div>
+        <div class="author-avatar">${escapeHtml(String(p.author || '').slice(0, 1))}</div>
         <div>
-          <div class="author-name">${p.author}</div>
-          <div class="post-timestamp">${fmtDateWd(p.date, colLang)}</div>
+          <div class="author-name">${escapeHtml(p.author)}</div>
+          <div class="post-timestamp">${escapeHtml(fmtDateWd(p.date, colLang))}</div>
         </div>
       </div>
       <div style="display:flex;gap:6px;align-items:center;">
-        <span class="post-new-pill" data-pid="${p.id}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
-        <span class="post-tag">#${p.tag}</span>
+        <span class="post-new-pill" data-pid="${escapeHtml(p.id)}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
+        <span class="post-tag">#${escapeHtml(p.tag)}</span>
         ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
         <!-- Edit Post Button -->
-        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${p.id})" title="編輯文字">
+        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${jsArg(p.id)})" title="編輯文字">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </button>
         <!-- Delete Post Button with Audit Log -->
-        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${p.id})" title="刪除動態">
+        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${jsArg(p.id)})" title="刪除動態">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
         </button>
       </div>
@@ -4337,12 +4450,12 @@ function createCard(p, colLang) {
     ${attachmentsHtml(p.attachments)}
     ${embedsHtml(p.zh)}
     <div style="margin:4px 0 6px 0;display:${hideBody ? 'none' : 'flex'};align-items:center;gap:6px;">
-      <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${p.id}, '${colLang}', this)">
+      <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${jsArg(p.id)}, '${colLang}', this)">
         <svg class="icon icon-sm" style="width:12px;height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
         <span>${colLang === 'zh' ? '🌐 翻譯' : '🌐 翻訳'}</span>
       </button>
     </div>
-    <div id="trans-box-post-${p.id}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
+    <div id="trans-box-post-${escapeHtml(p.id)}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
 
     ${bilingualBox}
     ${propHtml}
@@ -4350,15 +4463,15 @@ function createCard(p, colLang) {
     ${reactionHtml(p.id, '', p)}
 
     <div class="comments-thread">
-      <button type="button" class="thread-sum${state.openThreads.has(p.id) ? ' open' : ''}" onclick="toggleThread(${p.id})">💬 ${(p.comments || []).length ? tr((p.comments || []).length + ' 則回覆', (p.comments || []).length + '件の返信') + ' ・ ' + escapeHtml((p.comments || [])[(p.comments || []).length - 1].author) + ' ' + fmtDateWd((p.comments || [])[(p.comments || []).length - 1].date, colLang) : tr('回覆', '返信')} <span>${state.openThreads.has(p.id) ? '▴' : '▾'}</span></button>
+      <button type="button" class="thread-sum${state.openThreads.has(p.id) ? ' open' : ''}" onclick="toggleThread(${jsArg(p.id)})">💬 ${(p.comments || []).length ? tr((p.comments || []).length + ' 則回覆', (p.comments || []).length + '件の返信') + ' ・ ' + escapeHtml((p.comments || [])[(p.comments || []).length - 1].author) + ' ' + escapeHtml(fmtDateWd((p.comments || [])[(p.comments || []).length - 1].date, colLang)) : tr('回覆', '返信')} <span>${state.openThreads.has(p.id) ? '▴' : '▾'}</span></button>
       ${state.openThreads.has(p.id) ? `<div class="thread-body">
       ${commentsHtml}
-      <div id="rep-file-preview-${p.id}-${colLang}" style="display:none;margin-bottom:4px;"></div>
+      <div id="rep-file-preview-${escapeHtml(p.id)}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
-        <input type="file" id="rep-file-${p.id}-${colLang}" style="display:none;" multiple accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${p.id}, '${colLang}')">
-        <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${p.id}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎</button>
-        <input type="text" class="comment-reply-input" id="rep-${p.id}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${p.id}, '${colLang}')">
-        <button class="action-btn" onclick="submitReply(${p.id}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
+        <input type="file" id="rep-file-${escapeHtml(p.id)}-${colLang}" style="display:none;" multiple accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${jsArg(p.id)}, '${colLang}')">
+        <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${jsArg(p.id)}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎</button>
+        <input type="text" class="comment-reply-input" id="rep-${escapeHtml(p.id)}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${jsArg(p.id)}, '${colLang}')">
+        <button class="action-btn" onclick="submitReply(${jsArg(p.id)}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
       </div>
       </div>` : ''}
     </div>
@@ -4430,7 +4543,7 @@ function openEditPostModal(postId) {
   const p = state.posts.find(x => x.id === postId);
   if (!p) return;
   state.editingPostId = postId;
-  document.getElementById('edit-post-text').value = p.zh;
+  document.getElementById('edit-post-text').value = storedTextToPlain(p.zh);
   const editHoursSel = document.getElementById('edit-post-hours');
   const hv = String(p.hours || 0.5);
   if (![...editHoursSel.options].some(o => parseFloat(o.value) === parseFloat(hv))) {
@@ -4441,7 +4554,7 @@ function openEditPostModal(postId) {
   // Populate edit-post-tag
   const editTag = document.getElementById('edit-post-tag');
   if (editTag) {
-    editTag.innerHTML = (state.customTags || ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流']).map(t => `<option value="${t}">${t}</option>`).join('');
+    editTag.innerHTML = (state.customTags || ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流']).map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
     editTag.value = p.tag || '進度回報';
   }
   
@@ -4465,7 +4578,7 @@ async function saveEditedPost() {
   }
 
   p.zh = newText;
-  p.ja = await translateToJapaneseAsync(newText);
+  p.ja = await translateToJapaneseAsync(storedTextToPlain(newText));
   p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 0.0;
   p.tag = document.getElementById('edit-post-tag').value;
   p.editedAt = Date.now();
@@ -4744,13 +4857,13 @@ function openStoreDetailModal(storeId) {
   }
 
   const linkEl = document.getElementById('m-store-591-link');
-  if (s.url && s.url.startsWith('http')) {
+  if (s.url && safeHttpUrl(s.url)) {
     linkEl.style.display = 'inline-block';
-    linkEl.href = s.url;
+    linkEl.href = safeHttpUrl(s.url);
     linkEl.textContent = '備用：在房仲平台檢視原始物件網頁';
-  } else if (s.images && s.images[0]) {
+  } else if (s.images && safeImgSrc(s.images[0])) {
     linkEl.style.display = 'inline-block';
-    linkEl.href = s.images[0];
+    linkEl.href = safeImgSrc(s.images[0]);
     linkEl.textContent = '點擊檢視原始資料大圖';
   } else {
     linkEl.style.display = 'none';
@@ -4760,7 +4873,7 @@ function openStoreDetailModal(storeId) {
   const heroImg = document.getElementById('m-store-hero-img');
   const curIdx = Math.max(0, (s.images || []).indexOf(coverOf(s)));
   s.activeImgIdx = curIdx;
-  heroImg.src = s.images && s.images[curIdx] ? s.images[curIdx] : '';
+  heroImg.src = safeImgSrc(s.images && s.images[curIdx] ? s.images[curIdx] : '') || '';
   const counterEl = document.getElementById('m-photo-counter');
   if (counterEl) {
     counterEl.textContent = `${curIdx + 1} / ${(s.images && s.images.length) ? s.images.length : 1}`;
@@ -4784,7 +4897,7 @@ function switchModalHeroImg(storeId, idx) {
   if (!s || !s.images || !s.images[idx]) return;
   s.activeImgIdx = idx;
   const heroImg = document.getElementById('m-store-hero-img');
-  if (heroImg) heroImg.src = s.images[idx];
+  if (heroImg) heroImg.src = safeImgSrc(s.images[idx]) || '';
   document.querySelectorAll('.store-detail-thumb').forEach((el, i) => {
     el.classList.toggle('active', i === idx);
   });
@@ -4936,7 +5049,7 @@ function postStoreEdit(id, fields) {
 }
 function starHtml(s, img, i) {
   const on = coverOf(s) === img;
-  return `<button type="button" class="star-btn${on ? ' on' : ''}" title="${tr('設為主頁顯示的圖片','メイン画像に設定')}" onclick="toggleCoverImage('${s.id}', ${i}, event)">${on ? '★' : '☆'}</button>`;
+  return `<button type="button" class="star-btn${on ? ' on' : ''}" title="${tr('設為主頁顯示的圖片','メイン画像に設定')}" onclick="toggleCoverImage(${jsArg(s.id)}, ${Number(i) || 0}, event)">${on ? '★' : '☆'}</button>`;
 }
 function toggleCoverImage(storeId, idx, ev) {
   if (ev) { ev.stopPropagation(); ev.preventDefault(); }
@@ -4957,9 +5070,10 @@ function toggleCoverImage(storeId, idx, ev) {
 function renderDetailGallery(s, curIdx) {
   const strip = document.getElementById('m-store-gallery-strip');
   if (!strip) return;
-  strip.innerHTML = (s.images || []).map((img, i) => `
-    <div class="thumb-wrap"><img src="${img}" class="store-detail-thumb ${i === curIdx ? 'active' : ''}" onclick="switchModalHeroImg('${s.id}', ${i})" alt="縮圖">${starHtml(s, img, i)}</div>
-  `).join('');
+  strip.innerHTML = (s.images || []).map((img, i) => {
+    const src = safeImgSrc(img);
+    return `<div class="thumb-wrap">${src ? `<img src="${escapeHtml(src)}" class="store-detail-thumb ${i === curIdx ? 'active' : ''}" onclick="switchModalHeroImg(${jsArg(s.id)}, ${i})" alt="縮圖">` : ''}${starHtml(s, img, i)}</div>`;
+  }).join('');
 }
 
 // ---------- 每間店的專屬對話（就是「關聯這間店的動態」，日報與店面兩邊看到同一份）----------
@@ -4983,21 +5097,21 @@ function renderStoreChat(s) {
   document.getElementById('m-chat-title').textContent = tr('討論', 'ディスカッション');
   document.getElementById('m-chat-text').placeholder = tr('輸入訊息', 'メッセージを入力');
   document.getElementById('m-chat-send').textContent = tr('送出', '送信');
-  const stripL = html => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
+  const stripL = html => plainBodyWithoutStores(html, [s]).replace(/\s+/g, ' ').trim();
   // 只有店面連結、沒有任何文字／附件／回覆／表情的動態（單純新增店面）不列入討論
   const posts = postsOfStore(s.id).filter(p => stripL(p.zh) || (p.attachments || []).length || embedsHtml(p.zh) || (p.comments || []).length || Object.keys(reactionsOf(p)).length).sort((a, b) => postStamp(a) - postStamp(b));
   document.getElementById('m-chat-count').textContent = posts.length ? '(' + posts.length + ')' : '';
-  const stripLinks = html => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
+  const stripLinks = html => plainBodyWithoutStores(html, [s]).replace(/\s+/g, ' ').trim();
   list.innerHTML = posts.map(p => {
     const body = ja ? (p.ja || p.zh) : p.zh;
     const text = stripLinks(body);
     const n = (p.comments || []).length;
     return `<div class="chat-item">
       <div class="chat-head"><b>${escapeHtml(p.author)}</b><span>${fmtDateWd(p.date, ja ? 'ja' : 'zh')}</span></div>
-      ${text ? `<div class="chat-body">${text}</div>` : ''}
+      ${text ? `<div class="chat-body">${linkifyUserText(text, ja ? 'ja' : 'zh')}</div>` : ''}
       ${attachmentsHtml(p.attachments)}${embedsHtml(p.zh)}
       ${reactionHtml(p.id, '', p)}
-      <button type="button" class="chat-open" onclick="openPostInFeed(${p.id})">💬 ${n ? tr(n + ' 則回覆', n + '件の返信') : tr('回覆', '返信')} →</button>
+      <button type="button" class="chat-open" onclick="openPostInFeed(${jsArg(p.id)})">💬 ${n ? tr(n + ' 則回覆', n + '件の返信') : tr('回覆', '返信')} →</button>
     </div>`;
   }).join('') || `<div class="chat-empty">${tr('還沒有討論', 'まだありません')}</div>`;
 }
@@ -5030,7 +5144,7 @@ async function sendStoreChat() {
     const timeStr = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     state.posts.unshift({
       id: Date.now(), author: state.currentUser, date: timeStr, hours: 0, tag: '門市選址',
-      zh: escapeHtml(zh), ja: escapeHtml(ja2 || zh),
+      zh: zh, ja: ja2 || zh,
       propId: id, propIds: [id], attachment: null, attachments: atts, comments: []
     });
     inp.value = ''; state.storeChatFiles = []; renderStoreChatFiles();
@@ -5090,8 +5204,8 @@ function renderStores() {
       <!-- Compact Top Row (橫向不折行、字樣完整防擠壓) -->
       <div class="store-compact-row">
         <!-- Thumbnail with photo count pill -->
-        <div class="store-compact-thumb-wrap" onclick="if (isMobileView()) return; event.stopPropagation(); openStoreDetailModal('${s.id}')" title="${tr('點擊檢視大圖與輪播','タップして写真を表示')}">
-          ${curImg ? `<img src="${curImg}" class="store-compact-thumb" alt="${storeTitleText(s)}">` : '<div class="store-compact-thumb"></div>'}
+        <div class="store-compact-thumb-wrap" onclick="if (isMobileView()) return; event.stopPropagation(); openStoreDetailModal(${jsArg(s.id)})" title="${tr('點擊檢視大圖與輪播','タップして写真を表示')}">
+          ${safeImgSrc(curImg) ? `<img src="${escapeHtml(safeImgSrc(curImg))}" class="store-compact-thumb" alt="${escapeHtml(storeTitleText(s))}">` : '<div class="store-compact-thumb"></div>'}
           ${imgCount > 1 ? `<span class="store-photo-count-pill">📷 ${imgCount}</span>` : ''}
         </div>
 
@@ -5099,14 +5213,14 @@ function renderStores() {
         <div class="store-compact-info">
           <div class="store-compact-title-row">
             <label class="store-compare-chk-pill" onclick="event.stopPropagation()" title="${tr('勾選加入多物件分析比較','比較対象に追加')}">
-              <input type="checkbox" onchange="event.stopPropagation(); toggleCompareStore('${s.id}')" ${isChecked ? 'checked' : ''}>
+              <input type="checkbox" onchange="event.stopPropagation(); toggleCompareStore(${jsArg(s.id)})" ${isChecked ? 'checked' : ''}>
               <span>${tr('比較','比較')}</span>
             </label>
-            <span class="store-tag ${s.status}" style="cursor:pointer;" onclick="event.stopPropagation(); openStatusEditorModal('${s.id}')" title="${tr('點擊修改狀態標籤','タップしてステータスを変更')}">${storeStatusText(s)} ✎</span>
-            <div class="store-compact-title" title="${storeTitleText(s)}">${storeTitleText(s)}</div>
-            ${postsOfStore(s.id).length ? `<span class="chat-badge" onclick="event.stopPropagation(); openStoreDetailModal('${s.id}')" title="${tr('討論','ディスカッション')}">💬 ${postsOfStore(s.id).length}</span>` : ''}
+            <span class="store-tag ${safeClass(s.status)}" style="cursor:pointer;" onclick="event.stopPropagation(); openStatusEditorModal(${jsArg(s.id)})" title="${tr('點擊修改狀態標籤','タップしてステータスを変更')}">${escapeHtml(storeStatusText(s))} ✎</span>
+            <div class="store-compact-title" title="${escapeHtml(storeTitleText(s))}">${escapeHtml(storeTitleText(s))}</div>
+            ${postsOfStore(s.id).length ? `<span class="chat-badge" onclick="event.stopPropagation(); openStoreDetailModal(${jsArg(s.id)})" title="${tr('討論','ディスカッション')}">💬 ${postsOfStore(s.id).length}</span>` : ''}
           </div>
-          <div class="store-compact-addr">${s.address}</div>
+          <div class="store-compact-addr">${escapeHtml(s.address || '')}</div>
           <div class="store-compact-metrics">
             ${s.unverified ? `<span class="metric-pill pill-warn">⚠ ${tr('數字待確認','数値要確認')}</span>` : ''}
             ${noNum ? '' : `<span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
@@ -5117,19 +5231,20 @@ function renderStores() {
 
         <!-- Compact Action Buttons -->
         <div class="store-compact-actions" onclick="event.stopPropagation()">
-          <button type="button" class="action-btn" id="btn-expand-${s.id}" style="padding:4px 8px;font-size:11px;white-space:nowrap;" onclick="toggleStoreExpand('${s.id}', event)" title="展開或收折詳細資料">展開 ▾</button>
-          <button type="button" class="btn-submit" style="padding:4px 8px;font-size:11px;background:#111;white-space:nowrap;" onclick="openStoreDetailModal('${s.id}')" title="開啟完整浮動視窗">詳細 ↗</button>
+          <button type="button" class="action-btn" id="btn-expand-${escapeHtml(s.id)}" style="padding:4px 8px;font-size:11px;white-space:nowrap;" onclick="toggleStoreExpand(${jsArg(s.id)}, event)" title="展開或收折詳細資料">展開 ▾</button>
+          <button type="button" class="btn-submit" style="padding:4px 8px;font-size:11px;background:#111;white-space:nowrap;" onclick="openStoreDetailModal(${jsArg(s.id)})" title="開啟完整浮動視窗">詳細 ↗</button>
         </div>
       </div>
 
       <!-- Expandable Detailed Section (Inline) -->
-      <div id="store-expand-${s.id}" class="store-expand-body" style="display:none;" onclick="event.stopPropagation()">
+      <div id="store-expand-${escapeHtml(s.id)}" class="store-expand-body" style="display:none;" onclick="event.stopPropagation()">
         <!-- Photo Strip -->
         ${(s.images && s.images.length > 1) ? `
           <div class="store-thumbs-strip" style="margin-bottom:8px;">
-            ${s.images.map((img, i) => `
-              <div class="thumb-wrap"><img src="${img}" class="store-thumb-img ${i === curIdx ? 'active' : ''}" onclick="switchStoreImg('${s.id}', ${i}, event)" alt="縮圖">${starHtml(s, img, i)}</div>
-            `).join('')}
+            ${s.images.map((img, i) => {
+              const src = safeImgSrc(img);
+              return `<div class="thumb-wrap">${src ? `<img src="${escapeHtml(src)}" class="store-thumb-img ${i === curIdx ? 'active' : ''}" onclick="switchStoreImg(${jsArg(s.id)}, ${i}, event)" alt="縮圖">` : ''}${starHtml(s, img, i)}</div>`;
+            }).join('')}
           </div>
         ` : ''}
 
@@ -5138,21 +5253,21 @@ function renderStores() {
           <div>${tr('刊登月租','掲載賃料')}：<span class="metric-pill ${getRentColorClass(s.rent)}">NT$ <strong>${rentWan}${tr('萬','万')}</strong></span></div>
           <div>${tr('使用坪數','使用面積')}：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
           <div>${tr('每坪單價','坪単価')}：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
-          <div>${tr('押金需求','保証金')}：<strong>${depositLabel(s)}</strong></div>
-          <div>${tr('裝潢免租','フリーレント')}：<strong>${jaMonths(s.freeRent || tr('洽詢','要問い合わせ'))}</strong></div>
+          <div>${tr('押金需求','保証金')}：<strong>${escapeHtml(depositLabel(s))}</strong></div>
+          <div>${tr('裝潢免租','フリーレント')}：<strong>${escapeHtml(jaMonths(s.freeRent || tr('洽詢','要問い合わせ')))}</strong></div>
           <div>${tr('營業登記','営業登記')}：<strong>${triBool(s.canRegister, tr('可','可'), tr('不可','不可'))}</strong></div>
           <div>${tr('發票適格','インボイス')}：<strong>${triBool(s.canInvoice, tr('可開立','発行可'), tr('否','不可'))}</strong></div>
         </div>
 
         <div style="font-size:12px;color:var(--fg);margin-top:6px;line-height:1.5;">
-          <div><strong>${tr('商圈優點','立地の強み')}：</strong>${state.langMode === 'ja' ? (s.prosJa || s.pros) : s.pros}</div>
-          <div style="color:var(--danger);margin-top:2px;"><strong>${tr('注意考量','注意点')}：</strong>${state.langMode === 'ja' ? (s.consJa || s.cons) : s.cons}</div>
+          <div><strong>${tr('商圈優點','立地の強み')}：</strong>${escapeHtml(state.langMode === 'ja' ? (s.prosJa || s.pros) : s.pros)}</div>
+          <div style="color:var(--danger);margin-top:2px;"><strong>${tr('注意考量','注意点')}：</strong>${escapeHtml(state.langMode === 'ja' ? (s.consJa || s.cons) : s.cons)}</div>
         </div>
-        <button type="button" class="store-open-detail-btn" onclick="openStoreDetailModal('${s.id}')">${tr('查看完整詳情 ↗','詳細を見る ↗')}</button>
+        <button type="button" class="store-open-detail-btn" onclick="openStoreDetailModal(${jsArg(s.id)})">${tr('查看完整詳情 ↗','詳細を見る ↗')}</button>
 
         <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px;padding-top:6px;border-top:1px dashed #e2e8f0;">
-          <a href="${s.url || '#'}" target="_blank" class="gmap-link-btn" style="text-decoration:none;">🔗 ${tr('原始房仲網頁','元の物件ページ')}</a>
-          <button type="button" class="action-btn" style="color:var(--danger);padding:2px 8px;font-size:11px;" onclick="deleteStore('${s.id}')">${tr('刪除店面','削除')}</button>
+          <a href="${escapeHtml(safeHref(s.url))}" target="_blank" rel="noopener noreferrer" class="gmap-link-btn" style="text-decoration:none;">🔗 ${tr('原始房仲網頁','元の物件ページ')}</a>
+          <button type="button" class="action-btn" style="color:var(--danger);padding:2px 8px;font-size:11px;" onclick="deleteStore(${jsArg(s.id)})">${tr('刪除店面','削除')}</button>
         </div>
       </div>
     `;
@@ -5494,7 +5609,7 @@ function closeAgencyModal() {
   document.getElementById('agency-modal').classList.remove('open');
 }
 
-function confirmSaveAgencySheet() {
+async function confirmSaveAgencySheet() {
   const code = document.getElementById('ag-code').value.trim() || ('M' + Date.now().toString(36).toUpperCase());
   const title = document.getElementById('ag-title').value.trim();
   const address = document.getElementById('ag-address').value.trim();
@@ -5508,6 +5623,18 @@ function confirmSaveAgencySheet() {
   const pros = document.getElementById('ag-pros').value.trim();
   const cons = document.getElementById('ag-cons').value.trim();
 
+  let imgUrl = currentAgencyImgData;
+  if (String(imgUrl).indexOf('data:') === 0) {
+    try {
+      const blob = await (await fetch(imgUrl)).blob();
+      const up = await uploadAttachment(new File([blob], 'agency.jpg', { type: blob.type || 'image/jpeg' }));
+      if (!up.att || !up.att.url) { showToast(tr('照片上傳失敗', '写真のアップロードに失敗しました'), 2200); return; }
+      imgUrl = up.att.url;
+    } catch (e) {
+      showToast(tr('照片上傳失敗', '写真のアップロードに失敗しました'), 2200);
+      return;
+    }
+  }
   const storeId = `AGY-${code}`;
   const storeObj = {
     id: storeId,
@@ -5526,8 +5653,8 @@ function confirmSaveAgencySheet() {
     license: license,
     pros: pros,
     cons: cons,
-    url: currentAgencyImgData.startsWith('data:') ? '#' : currentAgencyImgData,
-    images: [currentAgencyImgData],
+    url: /^https?:/i.test(imgUrl) ? imgUrl : (imgUrl || '#'),
+    images: imgUrl ? [imgUrl] : [],
     activeImgIdx: 0,
     sourceType: 'agency'
   };
@@ -5722,13 +5849,13 @@ function renderCompareTable() {
 
   // Build rows
   let headerHtml = `<tr><th>${lblItem}</th>` + items.map(s => {
-    const titleText = isJa ? (s.titleJa || s.title) : (isBi ? `${s.title}<div style="font-size:11px;color:var(--fg-muted);font-weight:normal;margin-top:2px;">${s.titleJa || ''}</div>` : s.title);
+    const titleText = isJa ? escapeHtml(s.titleJa || s.title) : (isBi ? `${escapeHtml(s.title)}<div style="font-size:11px;color:var(--fg-muted);font-weight:normal;margin-top:2px;">${escapeHtml(s.titleJa || '')}</div>` : escapeHtml(s.title));
     return `<th style="min-width:180px;max-width:240px;">${titleText}</th>`;
   }).join('') + '</tr>';
 
   let photoHtml = `<tr><th>${lblPhoto}</th>` + items.map(s => `
     <td>
-      <img src="${coverOf(s)}" class="compare-photo-thumb" onclick="openStoreDetailModal('${s.id}')" style="cursor:pointer;" alt="${s.title}">
+      <img src="${escapeHtml(safeImgSrc(coverOf(s)))}" class="compare-photo-thumb" onclick="openStoreDetailModal(${jsArg(s.id)})" style="cursor:pointer;" alt="${escapeHtml(s.title)}">
     </td>
   `).join('') + '</tr>';
 
@@ -5783,7 +5910,7 @@ function renderCompareTable() {
   let depositHtml = `<tr><th>${lblDeposit}</th>` + items.map(s => `
     <td>
       <div class="comp-metric-box">
-        <div class="comp-val-main">${depositLabel(s)}</div>
+        <div class="comp-val-main">${escapeHtml(depositLabel(s))}</div>
         ${Number(s.deposit) > 0 ? `<div class="comp-val-sub">（約 ${Math.round(s.deposit * jpyRate / 10000)} 万円）</div>` : ''}
       </div>
     </td>
@@ -5795,8 +5922,8 @@ function renderCompareTable() {
     return `
       <td>
         <div class="comp-metric-box">
-          <div class="comp-val-main">${badge}${s.freeRent || '洽詢'}</div>
-          <div class="comp-val-sub">（${jaText}）</div>
+          <div class="comp-val-main">${badge}${escapeHtml(s.freeRent || '洽詢')}</div>
+          <div class="comp-val-sub">（${escapeHtml(jaText)}）</div>
         </div>
       </td>
     `;
@@ -5813,11 +5940,11 @@ function renderCompareTable() {
   let prosHtml = `<tr><th>${lblPros}</th>` + items.map(s => {
     let content = '';
     if (isJa) {
-      content = s.prosJa || s.pros;
+      content = escapeHtml(s.prosJa || s.pros);
     } else if (isZh) {
-      content = s.pros || '';
+      content = escapeHtml(s.pros || '');
     } else {
-      content = `<div>${s.pros || ''}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${s.prosJa}</div>` : '');
+      content = `<div>${escapeHtml(s.pros || '')}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${escapeHtml(s.prosJa)}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
@@ -5825,18 +5952,18 @@ function renderCompareTable() {
   let consHtml = `<tr><th>${lblCons}</th>` + items.map(s => {
     let content = '';
     if (isJa) {
-      content = `<span style="color:var(--danger);">${s.consJa || s.cons}</span>`;
+      content = `<span style="color:var(--danger);">${escapeHtml(s.consJa || s.cons)}</span>`;
     } else if (isZh) {
-      content = `<span style="color:var(--danger);">${s.cons || ''}</span>`;
+      content = `<span style="color:var(--danger);">${escapeHtml(s.cons || '')}</span>`;
     } else {
-      content = `<div style="color:var(--danger);">${s.cons || ''}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${s.consJa}</div>` : '');
+      content = `<div style="color:var(--danger);">${escapeHtml(s.cons || '')}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${escapeHtml(s.consJa)}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
 
   let actionHtml = `<tr><th>${lblDetail}</th>` + items.map(s => `
     <td>
-      <button class="action-btn" onclick="openStoreDetailModal('${s.id}')">${isJa ? '詳細を見る' : '開啟照片與規格'}</button>
+      <button class="action-btn" onclick="openStoreDetailModal(${jsArg(s.id)})">${isJa ? '詳細を見る' : '開啟照片與規格'}</button>
     </td>
   `).join('') + '</tr>';
 
@@ -6065,10 +6192,10 @@ function initStoreMap() {
 
     marker.bindPopup(`
       <div style="font-size:12px;font-family:sans-serif;line-height:1.5;">
-        <strong>${storeTitleText(s)}</strong><br>
+        <strong>${escapeHtml(storeTitleText(s))}</strong><br>
         ${hasNums(s) ? `${tr('月租','賃料')}：NT$ ${fmtWan(s.rent)}${tr('萬','万')}（${fmtPing(s.area)}坪）<br>` : ''}
-        ${tr('免租期','フリーレント')}：${jaMonths(s.freeRent)}<br>
-        <button style="margin-top:4px;padding:3px 8px;cursor:pointer;background:#111;color:#fff;border:none;border-radius:4px;" onclick="openStoreDetailModal('${s.id}')">${tr('檢視浮動詳情 ↗','詳細を見る ↗')}</button>
+        ${tr('免租期','フリーレント')}：${escapeHtml(jaMonths(s.freeRent))}<br>
+        <button style="margin-top:4px;padding:3px 8px;cursor:pointer;background:#111;color:#fff;border:none;border-radius:4px;" onclick="openStoreDetailModal(${jsArg(s.id)})">${tr('檢視浮動詳情 ↗','詳細を見る ↗')}</button>
       </div>
     `);
     storeMarkers[s.id] = marker;
@@ -6099,6 +6226,28 @@ const isMobileView = () => window.innerWidth <= 900;
 // 由網頁解析結果建立店面：只收真的讀到的欄位，其餘一律留空（不補預設值、不編數字、不放假照片）
 function makeStoreFromSource(o) {
   const src = o.src || {};
+  if (o.platform === 'general' || src.unsupported) {
+    return {
+      id: o.id,
+      title: '',
+      address: '',
+      status: 'agency',
+      statusLabel: '數字待確認',
+      lat: null,
+      lng: null,
+      rent: 0,
+      area: 0,
+      deposit: 0,
+      freeRent: '',
+      pros: '',
+      cons: '',
+      url: safeHttpUrl(o.url || src.url || ''),
+      images: [],
+      activeImgIdx: 0,
+      sourceType: 'general',
+      unverified: true
+    };
+  }
   const pos = v => { const n = Number(v); return n > 0 ? n : 0; };
   const bool = v => (v === true || v === false) ? v : undefined;
   const rent = pos(src.rent), area = pos(src.area);
@@ -6119,7 +6268,7 @@ function makeStoreFromSource(o) {
     pros: src.pros || '',
     cons: src.cons || '',
     url: o.url,
-    images: (src.images || []).filter(u => u && !/unsplash\.com/i.test(u)),
+    images: (src.images || []).filter(u => u && !/unsplash\.com/i.test(u) && String(u).indexOf('data:') !== 0),
     activeImgIdx: 0,
     sourceType: o.platform
   };
@@ -6143,6 +6292,12 @@ async function geocodeStoreIfNeeded(s) {
 
 function flagUnverified(obj, verified) {
   if (verified || !obj) return obj;
+  if (obj.sourceType === 'general' || obj.unverified && obj.sourceType === 'general') {
+    obj.unverified = true;
+    obj.status = 'agency';
+    obj.statusLabel = '數字待確認';
+    return obj;
+  }
   obj.unverified = true;
   obj.status = 'agency';
   obj.statusLabel = '數字待確認';
@@ -6177,7 +6332,7 @@ function updateTagDropdowns() {
   const postTag = document.getElementById('post-tag');
   const editTag = document.getElementById('edit-post-tag');
 
-  const optionsHtml = state.customTags.map(t => `<option value="${t}">#${t}</option>`).join('') +
+  const optionsHtml = state.customTags.map(t => `<option value="${escapeHtml(t)}">#${escapeHtml(t)}</option>`).join('') +
     '<option value="__ADD_NEW__">＋ 管理/新增條件標籤...</option>';
 
   if (postTag) {
@@ -6235,7 +6390,7 @@ function renderTagManagerChips() {
   box.innerHTML = state.customTags.map(tag => `
     <span class="tag-manager-chip">
       <span>#${escapeHtml(tag)}</span>
-      <span class="tag-manager-chip-remove" onclick="removeCustomTag('${escapeHtml(tag)}')" title="移除此標籤">×</span>
+      <span class="tag-manager-chip-remove" onclick="removeCustomTag(${jsArg(tag)})" title="移除此標籤">×</span>
     </span>
   `).join('');
 }
@@ -6472,12 +6627,12 @@ function renderMemberList() {
     row.className = 'member-item-row';
     row.innerHTML = `
       <div class="member-info">
-        <div style="font-weight:700;">${m.name} <span style="font-size:11px;font-weight:normal;color:var(--fg-muted);">(${m.role === 'jp' ? '日本端' : '台灣端'})</span></div>
-        <div class="member-link-preview">${fullUrl}</div>
+        <div style="font-weight:700;">${escapeHtml(m.name)} <span style="font-size:11px;font-weight:normal;color:var(--fg-muted);">(${m.role === 'jp' ? '日本端' : '台灣端'})</span></div>
+        <div class="member-link-preview">${escapeHtml(fullUrl)}</div>
       </div>
       <div style="display:flex;gap:6px;">
-        <button class="action-btn" onclick="copyToClipboard('${fullUrl}', this)">複製連結</button>
-        ${state.members.length > 1 ? `<button class="action-btn" style="color:var(--danger);" onclick="deleteMember('${m.token}')">刪除</button>` : ''}
+        <button class="action-btn" onclick="copyToClipboard(${jsArg(fullUrl)}, this)">複製連結</button>
+        ${state.members.length > 1 ? `<button class="action-btn" style="color:var(--danger);" onclick="deleteMember(${jsArg(m.token)})">刪除</button>` : ''}
       </div>
     `;
     container.appendChild(row);
@@ -6577,9 +6732,9 @@ function renderAuditLogs() {
     box.innerHTML = `<div style="text-align:right;margin-bottom:8px;"><button type="button" class="action-btn" onclick="hideAllAuditLogs(this)">全部清空</button></div>` + rows.map(({ l, i }) => `
       <div class="delete-log-item" style="background:#fff;border:1px solid var(--border);border-radius:6px;padding:8px 10px;margin-bottom:8px;font-size:12px;position:relative;">
         <button type="button" class="board-icon-btn danger" style="position:absolute;top:6px;right:6px;" onclick="hideAuditLog(${i})" title="刪除這筆紀錄">×</button>
-        <div style="font-weight:700;padding-right:24px;">[${l.type}] ${l.title || ''} <span style="font-size:11px;color:var(--fg-muted);">(${l.id})</span></div>
-        <div style="color:var(--danger);margin:3px 0;">刪除原因：${l.reason || '無填寫'}</div>
-        <div style="font-size:11px;color:var(--fg-muted);">執行人：${l.deletedBy} ｜ 時間：${l.deletedAt}</div>
+        <div style="font-weight:700;padding-right:24px;">[${escapeHtml(l.type)}] ${escapeHtml(l.title || '')} <span style="font-size:11px;color:var(--fg-muted);">(${escapeHtml(l.id)})</span></div>
+        <div style="color:var(--danger);margin:3px 0;">刪除原因：${escapeHtml(l.reason || '無填寫')}</div>
+        <div style="font-size:11px;color:var(--fg-muted);">執行人：${escapeHtml(l.deletedBy)} ｜ 時間：${escapeHtml(l.deletedAt)}</div>
       </div>
     `).join('');
   }
@@ -6695,7 +6850,7 @@ function renderBoard() {
       const storeName = storeObj ? storeObj.title : (t.storeTitle || '關聯店面');
       linkedStoreHtml = `
         <div>
-          <div class="board-linked-store" onclick="openStoreDetailModal('${escapeHtml(t.storeId)}')" title="點擊檢視店面完整資訊">
+          <div class="board-linked-store" onclick="openStoreDetailModal(${jsArg(t.storeId)})" title="點擊檢視店面完整資訊">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             <span>📍 關聯店面：${escapeHtml(storeName)} (點擊查看)</span>
           </div>
@@ -6713,7 +6868,7 @@ function renderBoard() {
           </div>
           <div style="display:flex;align-items:center;gap:6px;">
             <span class="board-comment-date">${escapeHtml(fmtDateWd(c.date || '', state.langMode === 'ja' ? 'ja' : 'zh'))}</span>
-            <button type="button" class="board-icon-btn danger" style="padding:1px 4px;font-size:11px;" onclick="deleteBoardComment('${t.id}', '${c.id}')" title="刪除留言">×</button>
+            <button type="button" class="board-icon-btn danger" style="padding:1px 4px;font-size:11px;" onclick="deleteBoardComment(${jsArg(t.id)}, ${jsArg(c.id)})" title="刪除留言">×</button>
           </div>
         </div>
         <div class="board-comment-text-zh">${escapeHtml(c.textZh || c.text || '')}</div>
@@ -6722,20 +6877,20 @@ function renderBoard() {
     `).join('');
 
     return `
-      <div class="board-card" id="bcard-${t.id}">
+      <div class="board-card" id="bcard-${escapeHtml(t.id)}">
         <div class="board-card-header">
           <div class="board-card-badges">
             <span class="board-cat-badge">${escapeHtml(t.category || tr('專案審議','プロジェクト審議'))}</span>
-            <span class="board-status-badge ${statusClass}" onclick="cycleTopicStatus('${t.id}', event)" title="${tr('點擊直接切換狀態（審議中 ⇄ 待確認 ⇄ 已定案）','タップでステータス切替（審議中 ⇄ 要確認 ⇄ 決定済）')}">
+            <span class="board-status-badge ${safeClass(statusClass)}" onclick="cycleTopicStatus(${jsArg(t.id)}, event)" title="${tr('點擊直接切換狀態（審議中 ⇄ 待確認 ⇄ 已定案）','タップでステータス切替（審議中 ⇄ 要確認 ⇄ 決定済）')}">
               ${statusText} ▾
             </span>
           </div>
           <div class="board-card-actions">
             ${boardIsNew(t) ? '<span class="board-new-pill">NEW</span>' : ''}
-            <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal('${t.id}')" title="${tr('編輯議題','議題を編集')}">
+            <button type="button" class="board-icon-btn" onclick="openEditBoardTopicModal(${jsArg(t.id)})" title="${tr('編輯議題','議題を編集')}">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </button>
-            <button type="button" class="board-icon-btn danger" onclick="confirmDeleteBoardTopic('${t.id}')" title="${tr('刪除議題','議題を削除')}">
+            <button type="button" class="board-icon-btn danger" onclick="confirmDeleteBoardTopic(${jsArg(t.id)})" title="${tr('刪除議題','議題を削除')}">
               <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
             </button>
           </div>
@@ -6768,14 +6923,14 @@ function renderBoard() {
             <span>${tr('雙向審議交流串','日台ディスカッション')} (${comments.length})</span>
           </div>
 
-          <div id="board-comments-list-${t.id}">
+          <div id="board-comments-list-${escapeHtml(t.id)}">
             ${commentsHtml}
           </div>
 
           <!-- Add Comment Input Box -->
           <div class="board-reply-row">
-            <input type="text" id="board-reply-input-${t.id}" class="board-reply-input" placeholder="${isJa ? '意見・決定事項を入力...' : '輸入您的意見、反饋或定案決策...'}" onkeydown="if(event.key==='Enter')submitBoardReply('${t.id}')">
-            <button type="button" class="board-reply-btn" id="board-reply-btn-${t.id}" onclick="submitBoardReply('${t.id}')">
+            <input type="text" id="board-reply-input-${escapeHtml(t.id)}" class="board-reply-input" placeholder="${isJa ? '意見・決定事項を入力...' : '輸入您的意見、反饋或定案決策...'}" onkeydown="if(event.key==='Enter')submitBoardReply(${jsArg(t.id)})">
+            <button type="button" class="board-reply-btn" id="board-reply-btn-${escapeHtml(t.id)}" onclick="submitBoardReply(${jsArg(t.id)})">
               ${isJa ? '返信' : '發表回饋'}
             </button>
           </div>

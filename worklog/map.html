@@ -286,7 +286,13 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
   }
   $('l-zh').onclick = function () { setLang('zh'); }; $('l-ja').onclick = function () { setLang('ja'); };
   $('lb').onclick = function () { $('lb').classList.remove('on'); };
-  fetch('api_stores.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { stores = d.stores || []; return loadAuth(); }).then(function () { setLang(lang); }).catch(function () { setLang(lang); });
+  function dropData(s) {
+    s.images = (s.images || []).filter(function (u) { return typeof u === 'string' && u.indexOf('data:') !== 0 && !/^javascript:/i.test(u); });
+    if (typeof s.coverImg === 'string' && (s.coverImg.indexOf('data:') === 0 || /^javascript:/i.test(s.coverImg))) delete s.coverImg;
+    if (typeof s.url === 'string' && /^javascript:/i.test(s.url)) delete s.url;
+    return s;
+  }
+  fetch('api_stores.php', { cache: 'no-store' }).then(function (r) { return r.json(); }).then(function (d) { stores = (d.stores || []).map(dropData); return loadAuth(); }).then(function () { setLang(lang); }).catch(function () { setLang(lang); });
 })();
 </script>
 </body>

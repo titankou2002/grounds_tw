@@ -55,6 +55,9 @@
 worklog/.wl_secret
 worklog/.wl_pw
 
+# 線上工作日誌資料只活在伺服器（api_sync.php 會寫）。不要進 git，部署也不准覆蓋。
+worklog/grounds_data.json
+worklog/grounds_data.json.tmp.*
 worklog/store_overrides.json
 worklog/uploads/
 worklog/files/
