@@ -2,6 +2,46 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Access-Control-Allow-Origin: *');
 
+// 比較表是已經組好的中日兩份表格，不能拿去翻譯（表格會被拆掉）。
+function wl_is_compare_markup($text) {
+    return is_string($text) && stripos($text, 'post-cmp') !== false && stripos($text, '<table') !== false;
+}
+
+// 翻譯請求裡的 data: 整段拿掉，避免把 base64 照片送到外部翻譯。
+function wl_strip_data_payloads($text) {
+    if (!is_string($text) || stripos($text, 'data:') === false) return (string)$text;
+    $out = '';
+    $i = 0;
+    $len = strlen($text);
+    while (($p = stripos($text, 'data:', $i)) !== false) {
+        $out .= substr($text, $i, $p - $i);
+        $end = $p;
+        while ($end < $len) {
+            $c = $text[$end];
+            if ($c === '"' || $c === "'" || $c === '<' || $c === '>' || $c === ' ' || $c === "\n" || $c === "\r" || $c === "\t" || $c === ')') break;
+            $end++;
+        }
+        if ($end <= $p) $end = min($len, $p + 5);
+        $chunk = substr($text, $p, $end - $p);
+        if (!preg_match('#^data:[a-z0-9.+-]+[/;,]#i', $chunk)) $out .= $chunk;
+        $i = $end;
+    }
+    $out .= substr($text, $i);
+    return $out;
+}
+
+// 回傳要送去翻譯的文字。比較表不送；data: 會先被拿掉。
+function wl_prepare_translation($raw) {
+    $raw = trim((string)$raw);
+    if ($raw === '') return array('empty' => true, 'text' => '');
+    if (wl_is_compare_markup($raw)) return array('skip' => true, 'text' => '');
+    $text = trim(wl_strip_data_payloads($raw));
+    if ($text === '') return array('empty' => true, 'text' => '');
+    return array('text' => $text);
+}
+
+if (PHP_SAPI === 'cli' && !empty($GLOBALS['WL_TRANSLATE_AS_LIB'])) return;
+
 // 譯文不該含「思考／分析／說明」：長度離譜或含這類標記就視為壞輸出（不採用）
 function wl_bad_translation($src, $out) {
     if (preg_match('/THOUGHTS?\s*:|分解と翻訳|原文\s*[：:]|翻訳\s*[：:]|Translation\s*:|思考過程|Here is|Here\'s/iu', $out)) return true;
@@ -10,7 +50,12 @@ function wl_bad_translation($src, $out) {
     return false;
 }
 
-$text = isset($_REQUEST['text']) ? trim($_REQUEST['text']) : '';
+$prepared = wl_prepare_translation(isset($_REQUEST['text']) ? $_REQUEST['text'] : '');
+if (!empty($prepared['skip'])) {
+    echo json_encode(['success' => false, 'error' => 'structured', 'translation' => ''], JSON_UNESCAPED_UNICODE);
+    exit;
+}
+$text = isset($prepared['text']) ? $prepared['text'] : '';
 if (!$text) {
     echo json_encode(['success' => false, 'error' => 'Empty text'], JSON_UNESCAPED_UNICODE);
     exit;
