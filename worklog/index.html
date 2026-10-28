@@ -1895,7 +1895,7 @@
     .post-new-pill[hidden] { display:none; }
     #preview-banner { display:none; position:fixed; left:8px; right:8px; bottom:calc(var(--nav-h, 0px) + var(--safe-bottom, 0px) + 8px); z-index:1600; align-items:center; justify-content:space-between; gap:10px; background:#b45309; color:#fff; padding:9px 12px; border-radius:12px; font-size:12.5px; font-weight:700; box-shadow:0 4px 16px rgba(0,0,0,.3); }
     #preview-banner button { flex:0 0 auto; background:#fff; color:#b45309; border:0; border-radius:14px; padding:5px 12px; font-size:12.5px; font-weight:800; cursor:pointer; }
-    body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
+    body.previewing .store-chat-input, body.previewing .composer-card, body.previewing .comment-reply-row, body.previewing .board-reply-row, body.previewing #btn-new-topic-label { display:none !important; }
     .store-compact-metrics { flex-wrap: wrap; white-space: normal; overflow: visible; row-gap: 4px; }
     .modal-x-btn { display: none; }
     #feed-left-user-label, #lbl-store-pros-sub, #cmp-legend-note { display: none !important; }
@@ -1944,6 +1944,33 @@
     .embed-meta a { color: #2563eb; text-decoration: none; }
     .embed-frame { margin-top: 8px; max-width: 420px; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
     .embed-frame iframe { width: 100%; height: 100%; border: 0; }
+    /* 表情回應、串狀回覆 */
+    .react-row { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin: 8px 0 2px; }
+    .react-pill { border: 1px solid var(--border); background: #f8fafc; border-radius: 14px; padding: 3px 9px; font-size: 13px; cursor: pointer; display: inline-flex; gap: 4px; align-items: center; }
+    .react-pill.mine { background: #dbeafe; border-color: #93c5fd; }
+    .react-pill b { font-size: 12px; font-weight: 700; }
+    .react-add { position: relative; display: inline-block; }
+    .react-plus { border: 1px solid var(--border); background: #fff; border-radius: 14px; padding: 3px 9px; font-size: 13px; cursor: pointer; color: var(--fg-muted); }
+    .react-picker { display: none; position: absolute; left: 0; bottom: 34px; z-index: 50; background: #fff; border: 1px solid var(--border); border-radius: 12px; padding: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.18); white-space: nowrap; }
+    .react-add.open .react-picker { display: flex; gap: 2px; }
+    .react-picker button { border: 0; background: transparent; font-size: 20px; padding: 4px 6px; border-radius: 8px; cursor: pointer; }
+    .react-picker button:hover { background: #f1f5f9; }
+    .thread-sum { width: 100%; text-align: left; border: 0; border-top: 1px solid var(--border); background: transparent; padding: 9px 2px 4px; font-size: 13px; font-weight: 700; color: #2563eb; cursor: pointer; display: flex; gap: 6px; align-items: center; }
+    .thread-sum span { margin-left: auto; color: var(--fg-muted); }
+    .thread-body { padding-top: 4px; }
+    /* 每間店的專屬對話 */
+    .store-chat { border-top: 1px solid #f1f1f4; margin-top: 14px; padding-top: 12px; }
+    .store-chat-title { font-weight: 800; font-size: 14px; margin-bottom: 8px; }
+    #m-chat-list { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+    .chat-item { border: 1px solid var(--border); border-radius: 10px; padding: 8px 10px; background: #fff; }
+    .chat-head { display: flex; gap: 8px; align-items: baseline; font-size: 12px; color: var(--fg-muted); }
+    .chat-head b { color: var(--fg); font-size: 13px; }
+    .chat-body { font-size: 13.5px; line-height: 1.55; white-space: pre-wrap; word-break: break-word; margin-top: 3px; }
+    .chat-open { border: 0; background: transparent; color: #2563eb; font-weight: 700; font-size: 12.5px; padding: 4px 0 0; cursor: pointer; }
+    .chat-empty { color: var(--fg-muted); font-size: 13px; padding: 6px 0; }
+    .store-chat-input { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
+    .store-chat-input input[type=text] { flex: 1; min-width: 0; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
+    .chat-badge { font-size: 11.5px; font-weight: 700; color: #2563eb; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 1px 7px; cursor: pointer; white-space: nowrap; }
   </style>
 </head>
 <body>
@@ -2219,6 +2246,18 @@
         </div>
         <div id="m-store-cons-zh" style="color:var(--danger);margin-top:2px;"></div>
         <div id="m-store-cons-ja" style="margin-top:4px;padding:6px 10px;background:#fdf2f2;border-left:3px solid #d32f2f;border-radius:4px;font-size:12px;color:#c62828;line-height:1.5;"></div>
+      </div>
+    </div>
+
+    <div class="store-chat" id="m-store-chat">
+      <div class="store-chat-title">💬 <span id="m-chat-title">討論</span> <span id="m-chat-count"></span></div>
+      <div id="m-chat-list"></div>
+      <div id="m-chat-files" style="display:none;margin:6px 0;"></div>
+      <div class="store-chat-input">
+        <input type="file" id="chat-file-input" multiple hidden accept="image/*,.pdf" onchange="handleStoreChatFiles(event)">
+        <button type="button" class="action-btn" onclick="document.getElementById('chat-file-input').click()" title="夾帶圖片／PDF">📎</button>
+        <input type="text" id="m-chat-text" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();sendStoreChat();}">
+        <button type="button" class="btn-submit" onclick="sendStoreChat()" id="m-chat-send">送出</button>
       </div>
     </div>
 
@@ -3085,117 +3124,157 @@ function saveAppState(pushToCloud = true) {
 }
 
 // --- Real-time Cloud Synchronization (Mobile <-> Desktop) ---
+// ---------- 與雲端合併（回覆、表情、貼文、店面、議題都取聯集，不互相覆蓋）----------
+function crc32hex(str) {
+  const b = new TextEncoder().encode(str);
+  let c, crc = 0xFFFFFFFF;
+  for (let i = 0; i < b.length; i++) {
+    c = (crc ^ b[i]) & 0xFF;
+    for (let k = 0; k < 8; k++) c = c & 1 ? (c >>> 1) ^ 0xEDB88320 : c >>> 1;
+    crc = (crc >>> 8) ^ c;
+  }
+  return ((crc ^ 0xFFFFFFFF) >>> 0).toString(16);
+}
+function ensureCommentIds(list) {
+  (list || []).forEach(c => { if (c && !c.id) c.id = 'lg' + crc32hex([c.author, c.date, c.zh, c.ja].join('|')); });
+}
+function wlKeyComment(c) { return c.id ? 'i:' + c.id : 'l:' + [c.author, c.date, c.zh, c.ja].join('|'); }
+function mergeCommentsInto(local, cloud) {
+  const m = new Map(); let changed = false;
+  (local || []).forEach(c => m.set(wlKeyComment(c), c));
+  (cloud || []).forEach(c => {
+    const k = wlKeyComment(c), cur = m.get(k);
+    if (!cur) { m.set(k, c); changed = true; return; }
+    const mr = mergeReactionsInto(cur.reactions, c.reactions);   // 回覆上的表情也要合併
+    if (mr.changed) { cur.reactions = mr.list; changed = true; }
+  });
+  return { list: [...m.values()].sort((a, b) => (a.ts || 0) - (b.ts || 0)), changed };
+}
+function mergeReactionsInto(local, cloud) {
+  const m = new Map(); let changed = false;
+  (local || []).forEach(r => m.set(r.u + '|' + r.e, r));
+  (cloud || []).forEach(r => { const k = r.u + '|' + r.e, cur = m.get(k); if (!cur || (r.ts || 0) > (cur.ts || 0)) { m.set(k, r); changed = true; } });
+  return { list: [...m.values()], changed };
+}
+
+// 回傳 { updated, stores }：有沒有任何變動、店面有沒有變動
+function mergeFromCloud(data) {
+  const res = { updated: false, stores: false };
+  if (!data) return res;
+  (data.posts || []).forEach(p => ensureCommentIds(p.comments));
+  state.posts.forEach(p => ensureCommentIds(p.comments));
+  mergeSeenFromCloud(data.seen);
+
+  // 刪除紀錄：取聯集
+  if (Array.isArray(data.deletedLogs) && data.deletedLogs.length > 0) {
+    const localDelSet = new Set((state.deletedLogs || []).map(l => `${l.type}_${l.id}`));
+    data.deletedLogs.forEach(dl => {
+      const k = `${dl.type}_${dl.id}`;
+      if (!localDelSet.has(k)) { state.deletedLogs.unshift(dl); localDelSet.add(k); }
+      else if (dl.hidden) { const lo = state.deletedLogs.find(x => `${x.type}_${x.id}` === k); if (lo && !lo.hidden) lo.hidden = true; }
+    });
+  }
+  const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
+  const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
+  const deletedBoardIds = new Set((state.deletedLogs || []).filter(l => l.type === '決策議題').map(l => l.id));
+
+  // 貼文：新貼文加入；已有的貼文合併回覆與表情；較新的編輯覆蓋文字
+  (Array.isArray(data.posts) ? data.posts : []).forEach(sp => {
+    if (deletedPostIds.has(sp.id) || sp.id === 201 || sp.id === 202 || sp.id === 203) return;
+    const lp = state.posts.find(x => x.id === sp.id);
+    if (!lp) { state.posts.push(sp); res.updated = true; return; }
+    const mc = mergeCommentsInto(lp.comments, sp.comments);
+    if (mc.changed) { lp.comments = mc.list; res.updated = true; }
+    const mr = mergeReactionsInto(lp.reactions, sp.reactions);
+    if (mr.changed) { lp.reactions = mr.list; res.updated = true; }
+    if ((Number(sp.editedAt) || 0) > (Number(lp.editedAt) || 0)) {
+      ['zh', 'ja', 'hours', 'tag', 'editedAt'].forEach(k => { lp[k] = sp[k]; });
+      res.updated = true;
+    }
+  });
+
+  // 店面
+  (Array.isArray(data.stores) ? data.stores : []).forEach(ss => {
+    if (deletedStoreIds.has(ss.id)) return;
+    const ls = state.stores.find(x => x.id === ss.id);
+    if (!ls) { state.stores.push(ss); res.updated = res.stores = true; return; }
+    if ((Number(ss.editedAt) || 0) > (Number(ls.editedAt) || 0)) {
+      Object.keys(ss).forEach(k => { if (k !== 'activeImgIdx') ls[k] = ss[k]; });
+      res.updated = res.stores = true;
+    }
+  });
+
+  // 議題：留言取聯集（刪除過的不復活），狀態以雲端為準
+  (Array.isArray(data.boardTopics) ? data.boardTopics : []).forEach(bt => {
+    if (deletedBoardIds.has(bt.id) || LEGACY_BOARD_IDS.has(bt.id)) return;
+    const lt = state.boardTopics.find(t => t.id === bt.id);
+    if (!lt) { state.boardTopics.push(bt); res.updated = true; return; }
+    const dead = new Set([...(lt.delC || []), ...(bt.delC || [])]);
+    if (dead.size && (dead.size !== (lt.delC || []).length)) { lt.delC = [...dead]; res.updated = true; }
+    const before = (lt.comments || []).length;
+    const mc = mergeCommentsInto((lt.comments || []).filter(c => !dead.has(c.id)), (bt.comments || []).filter(c => !dead.has(c.id)));
+    if (mc.changed || mc.list.length !== before) { lt.comments = mc.list; res.updated = true; }
+    if (bt.status && bt.status !== lt.status) { lt.status = bt.status; res.updated = true; }
+  });
+
+  // 刪除過的一律清掉
+  const n0 = state.posts.length + state.stores.length + state.boardTopics.length;
+  state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
+  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+  state.boardTopics = state.boardTopics.filter(t => !deletedBoardIds.has(t.id));
+  if (state.posts.length + state.stores.length + state.boardTopics.length !== n0) res.updated = true;
+  if (sanitizeTranslations()) { res.updated = true; res.stores = true; res.push = true; }
+  return res;
+}
+
+function renderAllViews(storesChanged) {
+  sortPostsByStamp();
+  renderFeeds();
+  renderStores();
+  renderBoard();
+  if (storesChanged && typeof storeMap !== 'undefined' && storeMap) initStoreMap();
+}
+// 使用者正在輸入或開著視窗時，不重畫畫面（會把打到一半的字洗掉）
+function busyEditing() {
+  const a = document.activeElement;
+  if (a && /^(TEXTAREA|INPUT)$/.test(a.tagName) && a.type !== 'checkbox' && a.type !== 'file' && String(a.value || '').length) return true;
+  if (document.querySelector('.modal-overlay.open')) return true;
+  return state.composerFiles.some(f => f.status === 'uploading');
+}
+function applyCloudResult(res) {
+  if (!res.updated) return;
+  saveAppState(!!res.push);
+  if (busyEditing()) { state.pendingRender = true; return; }
+  state.pendingRender = false;
+  renderAllViews(res.stores);
+}
+
 async function syncCloudData() {
   try {
     const resp = await fetch('api_sync.php');
     if (resp.ok) {
       const data = await resp.json();
       if (data) {
-        mergeSeenFromCloud(data.seen);
-
-        // 1. Sync deleted logs first
-        if (Array.isArray(data.deletedLogs) && data.deletedLogs.length > 0) {
-          const localDelSet = new Set((state.deletedLogs || []).map(l => `${l.type}_${l.id}`));
-          data.deletedLogs.forEach(dl => {
-            const k = `${dl.type}_${dl.id}`;
-            if (!localDelSet.has(k)) {
-              state.deletedLogs.unshift(dl);
-              localDelSet.add(k);
-            } else if (dl.hidden) {
-              const lo = state.deletedLogs.find(x => `${x.type}_${x.id}` === k);
-              if (lo) lo.hidden = true;
-            }
-          });
-        }
-
-        const deletedPostIds = new Set((state.deletedLogs || []).filter(l => l.type === '工作動態').map(l => l.id));
-        const deletedStoreIds = new Set((state.deletedLogs || []).filter(l => l.type === '店面物件').map(l => l.id));
-
-        let updated = false;
-
-        // 2. Merge cloud posts if not deleted
-        if (Array.isArray(data.posts) && data.posts.length > 0) {
-          const localPostIds = new Set(state.posts.map(p => p.id));
-          data.posts.forEach(sp => {
-            if (!localPostIds.has(sp.id) && !deletedPostIds.has(sp.id) && sp.id !== 201 && sp.id !== 202 && sp.id !== 203) {
-              state.posts.push(sp);
-              localPostIds.add(sp.id);
-              updated = true;
-            } else if (localPostIds.has(sp.id) && (Number(sp.editedAt) || 0) > 0) {
-              const lp = state.posts.find(x => x.id === sp.id);
-              if (lp && (Number(sp.editedAt) || 0) > (Number(lp.editedAt) || 0)) {
-                ['zh', 'ja', 'hours', 'tag', 'editedAt'].forEach(k => { lp[k] = sp[k]; });
-                updated = true;
-              }
-            }
-          });
-        }
-
-        // 3. Merge cloud stores if not deleted
-        if (Array.isArray(data.stores) && data.stores.length > 0) {
-          const localStoreIds = new Set(state.stores.map(s => s.id));
-          data.stores.forEach(ss => {
-            if (!localStoreIds.has(ss.id) && !deletedStoreIds.has(ss.id)) {
-              state.stores.push(ss);
-              localStoreIds.add(ss.id);
-              updated = true;
-            } else if (localStoreIds.has(ss.id) && (Number(ss.editedAt) || 0) > 0) {
-              const ls = state.stores.find(x => x.id === ss.id);
-              if (ls && (Number(ss.editedAt) || 0) > (Number(ls.editedAt) || 0)) {
-                Object.keys(ss).forEach(k => { if (k !== 'activeImgIdx') ls[k] = ss[k]; });
-                updated = true;
-              }
-            }
-          });
-        }
-
-        const deletedBoardIds = new Set((state.deletedLogs || []).filter(l => l.type === '決策議題').map(l => l.id));
-
-        // 4. Merge board topics from cloud if not deleted
-        if (Array.isArray(data.boardTopics) && data.boardTopics.length > 0) {
-          const localBoardIds = new Set(state.boardTopics.map(b => b.id));
-          data.boardTopics.forEach(bt => {
-            if (!localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id) && !LEGACY_BOARD_IDS.has(bt.id)) {
-              state.boardTopics.push(bt);
-              localBoardIds.add(bt.id);
-              updated = true;
-            } else if (localBoardIds.has(bt.id) && !deletedBoardIds.has(bt.id)) {
-              const localT = state.boardTopics.find(t => t.id === bt.id);
-              if (localT && Array.isArray(bt.comments) && bt.comments.length > (localT.comments || []).length) {
-                localT.comments = bt.comments;
-                updated = true;
-              }
-              if (localT && bt.status && bt.status !== localT.status) {
-                localT.status = bt.status;
-                updated = true;
-              }
-            }
-          });
-        }
-
-        // 5. Ensure any deleted items are strictly purged
-        const prePostLen = state.posts.length;
-        const preStoreLen = state.stores.length;
-        const preBoardLen = state.boardTopics.length;
-        state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
-        state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
-        state.boardTopics = state.boardTopics.filter(t => !deletedBoardIds.has(t.id));
-        if (state.posts.length !== prePostLen || state.stores.length !== preStoreLen || state.boardTopics.length !== preBoardLen) {
-          updated = true;
-        }
-
-        if (updated || state.posts.length > 0) {
-          sortPostsByStamp();
-          saveAppState(false);
-          renderFeeds();
-          renderStores();
-          renderBoard();
+        const res = mergeFromCloud(data);
+        if (res.updated || state.posts.length > 0) {
+          saveAppState(!!res.push);
+          renderAllViews(res.stores);
         }
       }
     }
   } catch(e) {
     console.warn('Cloud sync offline or skipped:', e);
   }
+}
+
+// 定時同步：別人的新回覆、表情、貼文會自動出現
+async function pollCloud() {
+  if (document.hidden) return;
+  try {
+    const r = await fetch('api_sync.php', { cache: 'no-store' });
+    if (r.ok) applyCloudResult(mergeFromCloud(await r.json()));
+    if (state.pendingRender && !busyEditing()) { state.pendingRender = false; renderAllViews(true); }
+  } catch (e) {}
 }
 
 function pushStateToCloud() {
@@ -3211,7 +3290,8 @@ function pushStateToCloud() {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: payload
-    }).catch(e => console.warn('Cloud sync push failed:', e));
+    }).then(r => r.json()).then(d => { if (d && d.merged) applyCloudResult(mergeFromCloud(d.merged)); })
+      .catch(e => console.warn('Cloud sync push failed:', e));
   } catch(e) {}
 }
 
@@ -3415,14 +3495,38 @@ function applyLanguageLayout() {
 window.addEventListener('resize', applyLanguageLayout);
 
 // --- Real Translation Engine (Bidirectional zh-TW <-> ja via translate.php) ---
+// 譯文不該含「思考／分析／說明」。這類壞輸出一律不收（存進資料會一直顯示）
+function isBadTranslation(src, out) {
+  src = String(src || ''); out = String(out || '');
+  if (!out) return false;
+  if (/THOUGHTS?\s*:|分解と翻訳|原文\s*[：:]|翻訳\s*[：:]|Translation\s*:|思考過程|Here is|Here's/i.test(out)) return true;
+  if (out.length > src.length * 6 + 80) return true;
+  if ((out.match(/\n/g) || []).length > (src.match(/\n/g) || []).length + 3) return true;
+  return false;
+}
+// 已經存進資料的壞譯文：清掉（店面的日文會在日文介面自動重翻；貼文／回覆的日文欄清空）
+function sanitizeTranslations() {
+  let changed = false;
+  state.stores.forEach(s => {
+    [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zk, jk]) => {
+      if (s[jk] && isBadTranslation(s[zk], s[jk])) { delete s[jk]; changed = true; if (typeof _storeJaTried !== 'undefined') _storeJaTried.delete(s.id); }
+    });
+  });
+  state.posts.forEach(p => {
+    if (p.ja && isBadTranslation(p.zh, p.ja)) { p.ja = ''; changed = true; }
+    (p.comments || []).forEach(c => { if (c.ja && isBadTranslation(c.zh, c.ja)) { c.ja = ''; changed = true; } });
+  });
+  return changed;
+}
+
 // 翻譯前先把網址換成代號、翻譯後原樣還原：翻譯絕不可以改動網址（連影片代碼都會被改錯）
 async function translateTextAsync(text, pair) {
   const src = String(text || '');
   const urls = [];
   const masked = src.replace(/https?:\/\/[^\s<>"'）)」]+/g, u => { urls.push(u); return `[[U${urls.length - 1}]]`; });
-  if (!urls.length) return _translateTextRaw(text, pair);
+  if (!urls.length) { const o = await _translateTextRaw(text, pair); return isBadTranslation(src, o) ? '' : o; }
   let out = await _translateTextRaw(masked, pair);
-  if (!out) return out;
+  if (!out || isBadTranslation(masked, out)) return '';
   urls.forEach((u, i) => {
     const re = new RegExp(`[\\[［【]{1,2}\\s*U\\s*${i}\\s*[\\]］】]{1,2}`, 'g');
     if (re.test(out)) out = out.replace(re, u); else out = out + ' ' + u;   // 代號被吃掉就把網址補在句尾，不丟失
@@ -3992,6 +4096,47 @@ function renderFeeds() {
   fillEmbedTitles();
 }
 
+// ---- 表情回應（👍 ✅ 👀 …）：每個人對每個表情各一筆，可取消 ----
+const REACTION_SET = ['👍', '✅', '👀', '🙏', '❤️', '😊', '❓'];
+function reactionsOf(obj) {
+  const m = {};
+  ((obj && obj.reactions) || []).forEach(r => { if (r.on) (m[r.e] = m[r.e] || []).push(r.u); });
+  return m;
+}
+function reactionHtml(postId, commentId, obj) {
+  const m = reactionsOf(obj), me = state.currentUser;
+  const pills = Object.keys(m).map(e => `<button type="button" class="react-pill${m[e].includes(me) ? ' mine' : ''}" title="${escapeHtml(m[e].join('、'))}" onclick="toggleReaction(${postId},'${commentId || ''}','${e}',event)">${e} <b>${m[e].length}</b></button>`).join('');
+  const picker = REACTION_SET.map(e => `<button type="button" onclick="toggleReaction(${postId},'${commentId || ''}','${e}',event)">${e}</button>`).join('');
+  return `<div class="react-row">${pills}<span class="react-add"><button type="button" class="react-plus" onclick="toggleReactPicker(this,event)" title="${tr('表情回應','リアクション')}">☺＋</button><span class="react-picker">${picker}</span></span></div>`;
+}
+function toggleReactPicker(btn, ev) {
+  ev.stopPropagation();
+  document.querySelectorAll('.react-add.open').forEach(x => { if (x !== btn.parentNode) x.classList.remove('open'); });
+  btn.parentNode.classList.toggle('open');
+}
+document.addEventListener('click', () => document.querySelectorAll('.react-add.open').forEach(x => x.classList.remove('open')));
+function toggleReaction(postId, commentId, emoji, ev) {
+  if (ev) ev.stopPropagation();
+  if (state.previewing) return;
+  const p = state.posts.find(x => x.id === postId);
+  if (!p) return;
+  const target = commentId ? (p.comments || []).find(c => c.id === commentId) : p;
+  if (!target) return;
+  target.reactions = target.reactions || [];
+  const me = state.currentUser, r = target.reactions.find(x => x.u === me && x.e === emoji);
+  if (r) { r.on = !r.on; r.ts = Date.now(); } else target.reactions.push({ u: me, e: emoji, on: true, ts: Date.now() });
+  saveAppState(true);
+  renderFeeds();
+}
+// ---- 串狀回覆：預設收合，只顯示「N 則回覆・最後回覆者」----
+state.openThreads = new Set();
+function toggleThread(postId) {
+  if (state.openThreads.has(postId)) state.openThreads.delete(postId); else state.openThreads.add(postId);
+  const y = window.scrollY;
+  renderFeeds();
+  window.scrollTo(0, y);
+}
+
 function attachmentsHtml(list) {
   list = list || [];
   if (!list.length) return '';
@@ -4151,6 +4296,7 @@ function createCard(p, colLang) {
         ${commAttachHtml}
         ${attachmentsHtml(c.attachments)}
         ${embedsHtml(c.zh)}
+        ${c.id ? reactionHtml(p.id, c.id, c) : ''}
         <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
           <button class="btn-mini-trans" type="button" onclick="toggleCommentTranslation(${p.id}, ${cIdx}, '${colLang}', this)">
             <svg class="icon icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -4174,7 +4320,7 @@ function createCard(p, colLang) {
       <div style="display:flex;gap:6px;align-items:center;">
         <span class="post-new-pill" data-pid="${p.id}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
         <span class="post-tag">#${p.tag}</span>
-        <span class="hours-tag">${fmtHours(p.hours, colLang)}</span>
+        ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
         <!-- Edit Post Button -->
         <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${p.id})" title="編輯文字">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
@@ -4201,7 +4347,11 @@ function createCard(p, colLang) {
     ${bilingualBox}
     ${propHtml}
 
+    ${reactionHtml(p.id, '', p)}
+
     <div class="comments-thread">
+      <button type="button" class="thread-sum${state.openThreads.has(p.id) ? ' open' : ''}" onclick="toggleThread(${p.id})">💬 ${(p.comments || []).length ? tr((p.comments || []).length + ' 則回覆', (p.comments || []).length + '件の返信') + ' ・ ' + escapeHtml((p.comments || [])[(p.comments || []).length - 1].author) + ' ' + fmtDateWd((p.comments || [])[(p.comments || []).length - 1].date, colLang) : tr('回覆', '返信')} <span>${state.openThreads.has(p.id) ? '▴' : '▾'}</span></button>
+      ${state.openThreads.has(p.id) ? `<div class="thread-body">
       ${commentsHtml}
       <div id="rep-file-preview-${p.id}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
@@ -4210,6 +4360,7 @@ function createCard(p, colLang) {
         <input type="text" class="comment-reply-input" id="rep-${p.id}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${p.id}, '${colLang}')">
         <button class="action-btn" onclick="submitReply(${p.id}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
       </div>
+      </div>` : ''}
     </div>
   `;
   return card;
@@ -4250,6 +4401,8 @@ async function submitReply(postId, colLang) {
     }
 
     target.comments.push({
+      id: 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+      ts: Date.now(),
       author: state.currentUser,
       date: timeStr,
       zh: zhText,
@@ -4258,6 +4411,7 @@ async function submitReply(postId, colLang) {
     });
 
     delete state.replyFiles[key];
+    state.openThreads.add(postId);
     renderReplyFilePreview(postId, colLang);
 
     saveAppState();
@@ -4615,6 +4769,7 @@ function openStoreDetailModal(storeId) {
   // Gallery Strip（每張縮圖有星號：指定主頁顯示的圖片）
   renderDetailGallery(s, curIdx);
 
+  renderStoreChat(s);
   updateModalCompareButton();
 
   // If user role is jp, default modal language to ja
@@ -4680,6 +4835,13 @@ let storeMarkers = {};
 // 日文介面：店面的「優點／注意考量」若沒有日文版，自動翻譯一次並存起來（每筆只嘗試一次）
 const _storeJaTried = new Set();
 let _storeJaBusy = false;
+// 最多同時 n 項，其餘排隊
+async function runPool(tasks, n) {
+  let i = 0;
+  await Promise.all(Array.from({ length: Math.min(n, tasks.length) }, async () => {
+    while (i < tasks.length) { const t = tasks[i++]; try { await t(); } catch (e) {} }
+  }));
+}
 async function ensureStoreJa() {
   if (state.langMode !== 'ja' || _storeJaBusy) return;
   const need = (zh, ja) => zh && (!ja || ja === zh);
@@ -4687,23 +4849,18 @@ async function ensureStoreJa() {
   if (!todo.length) return;
   _storeJaBusy = true;
   let changed = false;
-  for (const s of todo) {
+  const tasks = [];
+  todo.forEach(s => {
     _storeJaTried.add(s.id);
-    try {
-      if (need(s.title, s.titleJa)) {
-        const t = await translateTextAsync(String(s.title).slice(0, 300), 'zh-TW|ja');
-        if (t && t !== s.title) { s.titleJa = t; changed = true; }
-      }
-      if (need(s.pros, s.prosJa)) {
-        const t = await translateTextAsync(String(s.pros).slice(0, 450), 'zh-TW|ja');
-        if (t && t !== s.pros) { s.prosJa = t; changed = true; }
-      }
-      if (need(s.cons, s.consJa)) {
-        const t = await translateTextAsync(String(s.cons).slice(0, 450), 'zh-TW|ja');
-        if (t && t !== s.cons) { s.consJa = t; changed = true; }
-      }
-    } catch (e) {}
-  }
+    [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
+      if (!need(s[zhK], s[jaK])) return;
+      tasks.push(async () => {
+        const t = await translateTextAsync(String(s[zhK]).slice(0, 450), 'zh-TW|ja');
+        if (t && t !== s[zhK]) { s[jaK] = t; changed = true; }
+      });
+    });
+  });
+  await runPool(tasks, 4);
   _storeJaBusy = false;
   if (changed) { saveAppState(true); renderStores(); }
 }
@@ -4805,6 +4962,86 @@ function renderDetailGallery(s, curIdx) {
   `).join('');
 }
 
+// ---------- 每間店的專屬對話（就是「關聯這間店的動態」，日報與店面兩邊看到同一份）----------
+state.storeChatFiles = [];
+function postsOfStore(id) {
+  return state.posts.filter(p => (p.propIds || []).indexOf(id) >= 0 || p.propId === id);
+}
+function renderStoreChatFiles() {
+  const box = document.getElementById('m-chat-files');
+  if (!box) return;
+  if (!state.storeChatFiles.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
+  box.style.display = 'block';
+  box.innerHTML = fileChipsHtml(state.storeChatFiles, 'removeStoreChatFile');
+}
+function removeStoreChatFile(id) { state.storeChatFiles = state.storeChatFiles.filter(f => f.id !== id); renderStoreChatFiles(); }
+function handleStoreChatFiles(ev) { addFilesTo(state.storeChatFiles, ev.target.files, renderStoreChatFiles); ev.target.value = ''; }
+function renderStoreChat(s) {
+  const list = document.getElementById('m-chat-list');
+  if (!list || !s) return;
+  const ja = state.langMode === 'ja';
+  document.getElementById('m-chat-title').textContent = tr('討論', 'ディスカッション');
+  document.getElementById('m-chat-text').placeholder = tr('輸入訊息', 'メッセージを入力');
+  document.getElementById('m-chat-send').textContent = tr('送出', '送信');
+  const stripL = html => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
+  // 只有店面連結、沒有任何文字／附件／回覆／表情的動態（單純新增店面）不列入討論
+  const posts = postsOfStore(s.id).filter(p => stripL(p.zh) || (p.attachments || []).length || embedsHtml(p.zh) || (p.comments || []).length || Object.keys(reactionsOf(p)).length).sort((a, b) => postStamp(a) - postStamp(b));
+  document.getElementById('m-chat-count').textContent = posts.length ? '(' + posts.length + ')' : '';
+  const stripLinks = html => String(html || '').replace(/<a[^>]*post-property-link[^>]*>[\s\S]*?<\/a>/g, '').replace(/\s+/g, ' ').trim();
+  list.innerHTML = posts.map(p => {
+    const body = ja ? (p.ja || p.zh) : p.zh;
+    const text = stripLinks(body);
+    const n = (p.comments || []).length;
+    return `<div class="chat-item">
+      <div class="chat-head"><b>${escapeHtml(p.author)}</b><span>${fmtDateWd(p.date, ja ? 'ja' : 'zh')}</span></div>
+      ${text ? `<div class="chat-body">${text}</div>` : ''}
+      ${attachmentsHtml(p.attachments)}${embedsHtml(p.zh)}
+      ${reactionHtml(p.id, '', p)}
+      <button type="button" class="chat-open" onclick="openPostInFeed(${p.id})">💬 ${n ? tr(n + ' 則回覆', n + '件の返信') : tr('回覆', '返信')} →</button>
+    </div>`;
+  }).join('') || `<div class="chat-empty">${tr('還沒有討論', 'まだありません')}</div>`;
+}
+function openPostInFeed(postId) {
+  closeStoreDetailModal();
+  state.openThreads.add(postId);
+  switchNavTab('feed');
+  setTimeout(() => {
+    const el = document.querySelector(`.thread-sum[onclick="toggleThread(${postId})"]`);
+    if (el) el.closest('.feed-card').scrollIntoView({ block: 'center' });
+  }, 80);
+}
+async function sendStoreChat() {
+  if (state.previewing) return;
+  const id = state.activeDetailStoreId;
+  const inp = document.getElementById('m-chat-text');
+  if (!id || !inp) return;
+  if (state.storeChatFiles.some(f => f.status === 'uploading')) { showToast(tr('檔案上傳中，請稍候', 'アップロード中です'), 1800); return; }
+  const raw = inp.value.trim();
+  const atts = state.storeChatFiles.filter(f => f.status === 'done').map(f => ({ type: f.type, name: f.name, url: f.url, size: f.size, w: f.w, h: f.h }));
+  if (!raw && !atts.length) return;
+  inp.disabled = true;
+  try {
+    let zh = '', ja2 = '';
+    if (raw) {
+      if (/[\u3040-\u30ff]/.test(raw)) { ja2 = raw; zh = await translateToChineseAsync(raw); }
+      else { zh = raw; ja2 = await translateToJapaneseAsync(raw); }
+    }
+    const now = new Date();
+    const timeStr = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+    state.posts.unshift({
+      id: Date.now(), author: state.currentUser, date: timeStr, hours: 0, tag: '門市選址',
+      zh: escapeHtml(zh), ja: escapeHtml(ja2 || zh),
+      propId: id, propIds: [id], attachment: null, attachments: atts, comments: []
+    });
+    inp.value = ''; state.storeChatFiles = []; renderStoreChatFiles();
+    saveAppState(true);
+    const s = state.stores.find(x => x.id === id);
+    renderStoreChat(s); renderFeeds(); renderStores();
+    const l = document.getElementById('m-chat-list'); if (l) l.scrollTop = l.scrollHeight;
+  } finally { inp.disabled = false; inp.focus(); }
+}
+
+
 function renderStores() {
   const box = document.getElementById('store-list-box');
   if (!box) return;
@@ -4867,6 +5104,7 @@ function renderStores() {
             </label>
             <span class="store-tag ${s.status}" style="cursor:pointer;" onclick="event.stopPropagation(); openStatusEditorModal('${s.id}')" title="${tr('點擊修改狀態標籤','タップしてステータスを変更')}">${storeStatusText(s)} ✎</span>
             <div class="store-compact-title" title="${storeTitleText(s)}">${storeTitleText(s)}</div>
+            ${postsOfStore(s.id).length ? `<span class="chat-badge" onclick="event.stopPropagation(); openStoreDetailModal('${s.id}')" title="${tr('討論','ディスカッション')}">💬 ${postsOfStore(s.id).length}</span>` : ''}
           </div>
           <div class="store-compact-addr">${s.address}</div>
           <div class="store-compact-metrics">
@@ -6112,14 +6350,8 @@ async function markFeedSeen() {
   saveAppState(true);
   refreshNewPills();
 }
-async function pullSeenOnly() {
-  if (document.hidden) return;
-  try {
-    const r = await fetch('api_sync.php');
-    if (r.ok) { const d = await r.json(); if (d) { mergeSeenFromCloud(d.seen); refreshNewPills(); } }
-  } catch (e) {}
-}
-setInterval(pullSeenOnly, 30000);
+async function pullSeenOnly() { return pollCloud(); }
+setInterval(pollCloud, 20000);
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { pullSeenOnly(); scheduleFeedSeen(); } });
 
 // --- 身分預覽：Lynn 以日本端身分檢視畫面（不標記已讀、不能發文）---
@@ -6607,6 +6839,7 @@ function deleteBoardComment(topicId, commentId) {
   const topic = (state.boardTopics || []).find(t => t.id === topicId);
   if (!topic || !Array.isArray(topic.comments)) return;
   topic.comments = topic.comments.filter(c => c.id !== commentId);
+  topic.delC = Array.from(new Set([...(topic.delC || []), commentId]));
   saveAppState();
   renderBoard();
 }

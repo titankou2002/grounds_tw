@@ -170,14 +170,26 @@ function wlTranslate_(b) {
     payload: JSON.stringify({
       system_instruction: { parts: [{ text: system }] },
       contents: [{ role: 'user', parts: [{ text: text }] }],
-      generationConfig: { temperature: 0.1, maxOutputTokens: 2048 }
+      // 翻譯不需要「思考」：關掉思考模式，避免思考過程混進譯文
+      generationConfig: { temperature: 0.1, maxOutputTokens: 2048, thinkingConfig: { thinkingBudget: 0 } }
     })
   });
   if (res.getResponseCode() !== 200) return { ok: false, error: 'gemini ' + res.getResponseCode() };
   var g = JSON.parse(res.getContentText());
   var out = (g.candidates && g.candidates[0] && g.candidates[0].content.parts || [])
+    .filter(function (x) { return !x.thought; })          // 思考內容一律丟掉
     .map(function (x) { return x.text || ''; }).join('').trim();
-  return out ? { ok: true, translation: out } : { ok: false, error: 'empty result' };
+  if (!out) return { ok: false, error: 'empty result' };
+  if (wlLooksBad_(text, out)) return { ok: false, error: 'bad output' };   // 看起來不是譯文就不要回傳
+  return { ok: true, translation: out };
+}
+
+// 譯文不該出現「思考／分析／說明」。長度離譜或含這類標記就視為壞輸出
+function wlLooksBad_(src, out) {
+  if (/THOUGHTS?\s*:|分解と翻訳|原文\s*[：:]|翻訳\s*[：:]|Translation\s*:|^\s*\*\*|思考過程|Here is|Here's/i.test(out)) return true;
+  if (out.length > src.length * 6 + 80) return true;
+  if ((out.match(/\n/g) || []).length > (src.match(/\n/g) || []).length + 3) return true;
+  return false;
 }
 
 function handle(p, method) {
