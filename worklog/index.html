@@ -1921,6 +1921,7 @@
     .kpi-badge:last-child { }
     @media (max-width: 900px) { .kpi-badge-group { grid-template-columns: 1fr 1fr; } .kpi-badge-group .kpi-badge:last-child { grid-column: 1 / -1; } }
     /* 日報內的比較表 */
+    .post-cmp { white-space: normal; }
     .post-cmp-wrap { overflow-x: auto; margin-top: 6px; -webkit-overflow-scrolling: touch; }
     .post-cmp-table { border-collapse: collapse; font-size: 12px; min-width: 100%; }
     .post-cmp-table th, .post-cmp-table td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; min-width: 120px; line-height: 1.5; }
@@ -2284,6 +2285,7 @@
 
     <div style="margin-bottom:12px;">
       <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">工作成果內容：</label>
+      <p id="edit-post-compare-note" style="display:none;font-size:12px;color:#9a3412;margin:0 0 8px;line-height:1.5;">這則是比較表。表格不能在這裡改，只能改工時和標籤。</p>
       <textarea id="edit-post-text" class="composer-textarea" style="min-height:120px;"></textarea>
     </div>
 
@@ -3192,6 +3194,44 @@ function takeMigratedImages(localStore, cloudStore) {
   }
   return true;
 }
+// 伺服器把動態裡的 data: 換成 uploads/ 之後，本機字串只差在那段網址時才跟過去。
+// 文字真的有改過就不覆蓋，避免把比較新的內容換回舊的。
+function adoptMigratedField(local, cloud) {
+  if (typeof local !== 'string' || local.toLowerCase().indexOf('data:') < 0) return local;
+  if (typeof cloud !== 'string' || cloud.toLowerCase().indexOf('data:') >= 0) return local;
+  const norm = s => String(s)
+    .replace(/data:image\/[a-z0-9.+-]+;base64,[a-z0-9+/=\r\n]+/gi, '')
+    .replace(/uploads\/[a-f0-9]{64}\.(?:jpe?g|png|gif|webp)/gi, '');
+  return norm(local) === norm(cloud) ? cloud : local;
+}
+function adoptMigratedPost(lp, sp) {
+  if (!lp || !sp) return false;
+  let changed = false;
+  const take = (obj, key, src) => {
+    if (!obj || !src || !(key in obj)) return;
+    const n = adoptMigratedField(obj[key], src[key]);
+    if (n !== obj[key]) { obj[key] = n; changed = true; }
+  };
+  take(lp, 'zh', sp);
+  take(lp, 'ja', sp);
+  if (lp.attachment && sp.attachment) {
+    take(lp.attachment, 'data', sp.attachment);
+    take(lp.attachment, 'url', sp.attachment);
+  }
+  (lp.attachments || []).forEach((a, i) => { const b = (sp.attachments || [])[i]; if (b) take(a, 'url', b); });
+  (lp.comments || []).forEach(lc => {
+    const sc = (sp.comments || []).find(c => c && lc && lc.id && c.id === lc.id);
+    if (!sc) return;
+    take(lc, 'zh', sc);
+    take(lc, 'ja', sc);
+    if (lc.attachment && sc.attachment) {
+      take(lc.attachment, 'data', sc.attachment);
+      take(lc.attachment, 'url', sc.attachment);
+    }
+    (lc.attachments || []).forEach((a, i) => { const b = (sc.attachments || [])[i]; if (b) take(a, 'url', b); });
+  });
+  return changed;
+}
 // 回傳 { updated, stores }：有沒有任何變動、店面有沒有變動
 function mergeFromCloud(data) {
   const res = { updated: false, stores: false };
@@ -3218,6 +3258,7 @@ function mergeFromCloud(data) {
     if (deletedPostIds.has(sp.id) || sp.id === 201 || sp.id === 202 || sp.id === 203) return;
     const lp = state.posts.find(x => x.id === sp.id);
     if (!lp) { state.posts.push(sp); res.updated = true; return; }
+    if (adoptMigratedPost(lp, sp)) res.updated = true;
     const mc = mergeCommentsInto(lp.comments, sp.comments);
     if (mc.changed) { lp.comments = mc.list; res.updated = true; }
     const mr = mergeReactionsInto(lp.reactions, sp.reactions);
@@ -3532,8 +3573,15 @@ window.addEventListener('resize', applyLanguageLayout);
 
 // --- Real Translation Engine (Bidirectional zh-TW <-> ja via translate.php) ---
 // 譯文不該含「思考／分析／說明」。這類壞輸出一律不收（存進資料會一直顯示）
+function isComparePostText(text) {
+  const s = String(text || '');
+  return s.indexOf('post-cmp') >= 0 && /<table\b/i.test(s);
+}
+function stripDataPayloads(s) {
+  return String(s || '').replace(/data:[a-z0-9.+-]+[^\s"'<>)]*/gi, '');
+}
 function isBadTranslation(src, out) {
-  src = String(src || ''); out = String(out || '');
+  src = stripDataPayloads(String(src || '')); out = stripDataPayloads(String(out || ''));
   if (!out) return false;
   if (/THOUGHTS?\s*:|分解と翻訳|原文\s*[：:]|翻訳\s*[：:]|Translation\s*:|思考過程|Here is|Here's/i.test(out)) return true;
   if (out.length > src.length * 6 + 80) return true;
@@ -3549,8 +3597,9 @@ function sanitizeTranslations() {
     });
   });
   state.posts.forEach(p => {
-    if (p.ja && isBadTranslation(p.zh, p.ja)) { p.ja = ''; changed = true; }
-    (p.comments || []).forEach(c => { if (c.ja && isBadTranslation(c.zh, c.ja)) { c.ja = ''; changed = true; } });
+    // 比較表的日文是另一份表格，不是翻譯垃圾，不能清掉
+    if (p.ja && !isComparePostText(p.zh) && !isComparePostText(p.ja) && isBadTranslation(p.zh, p.ja)) { p.ja = ''; changed = true; }
+    (p.comments || []).forEach(c => { if (c.ja && !isComparePostText(c.zh) && !isComparePostText(c.ja) && isBadTranslation(c.zh, c.ja)) { c.ja = ''; changed = true; } });
   });
   return changed;
 }
@@ -3558,9 +3607,12 @@ function sanitizeTranslations() {
 // 翻譯前先把網址換成代號、翻譯後原樣還原：翻譯絕不可以改動網址（連影片代碼都會被改錯）
 async function translateTextAsync(text, pair) {
   const src = String(text || '');
+  // 比較表已經有中日兩份，送去翻譯只會把表格和 base64 弄壞
+  if (isComparePostText(src)) return '';
+  const plain = stripDataPayloads(src);
   const urls = [];
-  const masked = src.replace(/https?:\/\/[^\s<>"'）)」]+/g, u => { urls.push(u); return `[[U${urls.length - 1}]]`; });
-  if (!urls.length) { const o = await _translateTextRaw(text, pair); return isBadTranslation(src, o) ? '' : o; }
+  const masked = plain.replace(/https?:\/\/[^\s<>"'）)」]+/g, u => { urls.push(u); return `[[U${urls.length - 1}]]`; });
+  if (!urls.length) { const o = await _translateTextRaw(plain, pair); return isBadTranslation(plain, o) ? '' : o; }
   let out = await _translateTextRaw(masked, pair);
   if (!out || isBadTranslation(masked, out)) return '';
   urls.forEach((u, i) => {
@@ -3630,6 +3682,15 @@ async function togglePostTranslation(postId, colLang, btnElement) {
     return;
   }
 
+  // 比較表不送翻譯：另一欄已經是對應語言的表格
+  if (isComparePostText(post.zh) || isComparePostText(post.ja)) {
+    const other = colLang === 'zh' ? post.ja : post.zh;
+    const label = colLang === 'zh' ? '🌐 日本語訳（比較表）：' : '🌐 中文（比較表）：';
+    box.innerHTML = `<div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">${label}</div><div>${renderPostBody(other, colLang === 'zh' ? 'ja' : 'zh')}</div>`;
+    box.style.display = 'block';
+    return;
+  }
+
   const origBtnText = btnElement.innerHTML;
   btnElement.innerHTML = `<span>翻譯中...</span>`;
 
@@ -3641,7 +3702,7 @@ async function togglePostTranslation(postId, colLang, btnElement) {
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳（翻訳）：</div>
-        <div>${linkifyUserText(post.ja, 'ja')}</div>
+        <div>${renderPostBody(post.ja, 'ja')}</div>
       `;
     } else {
       if (!post.zh || post.zh === post.ja) {
@@ -3650,7 +3711,7 @@ async function togglePostTranslation(postId, colLang, btnElement) {
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
-        <div>${linkifyUserText(post.zh, 'zh')}</div>
+        <div>${renderPostBody(post.zh, 'zh')}</div>
       `;
     }
     box.style.display = 'block';
@@ -3674,6 +3735,14 @@ async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
     return;
   }
 
+  if (isComparePostText(c.zh) || isComparePostText(c.ja)) {
+    const other = colLang === 'zh' ? c.ja : c.zh;
+    const label = colLang === 'zh' ? '🌐 日本語訳（比較表）：' : '🌐 中文（比較表）：';
+    box.innerHTML = `<div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">${label}</div><div>${renderPostBody(other, colLang === 'zh' ? 'ja' : 'zh')}</div>`;
+    box.style.display = 'block';
+    return;
+  }
+
   const origBtnText = btnElement.innerHTML;
   btnElement.innerHTML = `<span>翻譯中...</span>`;
 
@@ -3685,7 +3754,7 @@ async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 日本語訳：</div>
-        <div>${linkifyUserText(c.ja, 'ja')}</div>
+        <div>${renderPostBody(c.ja, 'ja')}</div>
       `;
     } else {
       if (!c.zh || c.zh === c.ja) {
@@ -3694,7 +3763,7 @@ async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
       }
       box.innerHTML = `
         <div style="font-size:10.5px;color:#2563eb;font-weight:700;margin-bottom:2px;">🌐 中文翻譯：</div>
-        <div>${linkifyUserText(c.zh, 'zh')}</div>
+        <div>${renderPostBody(c.zh, 'zh')}</div>
       `;
     }
     box.style.display = 'block';
@@ -3996,6 +4065,87 @@ function linkifyUserText(text, lang) {
   }
   out += escapeHtml(plain.slice(last));
   return out;
+}
+
+// 比較表內文：只重畫固定的表格結構。格子只留文字；圖片網址只留 http(s) 或 uploads/、files/。
+// data: 不畫進畫面（伺服器會轉成檔案）。事件、style、script 都不收。
+function cmpCellText(cell) {
+  const clone = cell.cloneNode(true);
+  clone.querySelectorAll('script,style,img').forEach(n => n.remove());
+  clone.querySelectorAll('br').forEach(n => n.replaceWith('\n'));
+  return (clone.textContent || '').replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+function escapeMultiline(s) {
+  return escapeHtml(s).replace(/\n/g, '<br>');
+}
+function renderCompareTableHtml(html) {
+  let raw = String(html || '');
+  if (raw.indexOf('post-cmp') < 0 || !/<table\b/i.test(raw)) return '';
+  // 先拿掉 data:，避免超大字串進 DOM，也避免把它畫成圖片
+  raw = raw.replace(/data:image\/[a-z0-9.+-]+;base64,[a-z0-9+/=\r\n]+/gi, '');
+  let doc;
+  try { doc = new DOMParser().parseFromString(raw, 'text/html'); } catch (e) { return ''; }
+  const root = doc.querySelector('.post-cmp');
+  const table = doc.querySelector('table.post-cmp-table') || (root && root.querySelector('table'));
+  if (!table) return '';
+  let title = '', extra = '';
+  if (root) {
+    root.childNodes.forEach(n => {
+      if (n.nodeType === 3) extra += n.textContent;
+      else if (n.nodeType === 1 && n.tagName === 'B') {
+        if (!title) title = n.textContent || '';
+        else extra += n.textContent || '';
+      }
+    });
+  }
+  title = title.replace(/\s+/g, ' ').trim();
+  extra = extra.replace(/\s+/g, ' ').trim();
+  const rows = [];
+  const walkRows = parent => {
+    parent.childNodes.forEach(n => {
+      if (n.nodeType !== 1) return;
+      if (n.tagName === 'TR') rows.push(n);
+      else if (n.tagName === 'THEAD' || n.tagName === 'TBODY' || n.tagName === 'TFOOT') walkRows(n);
+    });
+  };
+  walkRows(table);
+  if (!rows.length) return '';
+  const body = rows.map(tr => {
+    const cells = [];
+    tr.childNodes.forEach(n => {
+      if (n.nodeType !== 1 || (n.tagName !== 'TH' && n.tagName !== 'TD')) return;
+      let src = '';
+      n.querySelectorAll('img').forEach(img => {
+        if (src) return;
+        const ok = safeAssetUrl(img.getAttribute('src') || '');
+        if (ok) src = ok;
+      });
+      const text = cmpCellText(n);
+      let inner = '';
+      if (src) inner += '<img src="' + escapeHtml(src) + '" alt="" loading="lazy">';
+      if (text) inner += (inner ? ' ' : '') + escapeMultiline(text);
+      if (!inner) inner = '—';
+      const tag = n.tagName === 'TH' ? 'th' : 'td';
+      cells.push('<' + tag + '>' + inner + '</' + tag + '>');
+    });
+    return cells.length ? '<tr>' + cells.join('') + '</tr>' : '';
+  }).join('');
+  if (!body) return '';
+  let aside = '';
+  Array.from(doc.body.childNodes).forEach(n => {
+    if (n === root || n === table) return;
+    if (root && ((n.contains && n.contains(root)) || (root.contains && root.contains(n)))) return;
+    if (table && n.contains && n.contains(table)) return;
+    const t = (n.textContent || '').replace(/\s+/g, ' ').trim();
+    if (t) aside += escapeHtml(t) + ' ';
+  });
+  const head = (title ? '<b>' + escapeHtml(title) + '</b>' : '') + (extra ? escapeHtml(extra) : '');
+  return aside + '<div class="post-cmp">' + head + '<div class="post-cmp-wrap"><table class="post-cmp-table">' + body + '</table></div></div>';
+}
+function renderPostBody(text, lang) {
+  const cmp = renderCompareTableHtml(text);
+  if (cmp) return cmp;
+  return linkifyUserText(text, lang);
 }
 
 // --- Feed Posting & Multi-Link Real Estate Recognition ---
@@ -4322,10 +4472,11 @@ function createCard(p, colLang) {
   // Multi-link & single-link real estate candidate cards
   const propIdList = (p.propIds && p.propIds.length) ? p.propIds : (p.propId ? [p.propId] : []);
   const linkedStores = propIdList.map(id => state.stores.find(s => s.id === id)).filter(Boolean);
-  // 已有店面卡片時，內文裡的物件網址不再重複顯示；剩下的文字若是空的就整塊隱藏
-  const bodyPlain = linkedStores.length ? plainBodyWithoutStores(text, linkedStores) : storedTextToPlain(text);
-  const bodyHtml = linkifyUserText(bodyPlain, colLang);
-  const hideBody = linkedStores.length > 0 && !String(bodyPlain || '').replace(/\s+/g, '').trim();
+  // 比較表照表格重畫。一般文字先跳脫，房仲網址再換成店名連結。
+  const compareHtml = renderCompareTableHtml(text);
+  const bodyPlain = compareHtml ? text : (linkedStores.length ? plainBodyWithoutStores(text, linkedStores) : storedTextToPlain(text));
+  const bodyHtml = compareHtml || linkifyUserText(bodyPlain, colLang);
+  const hideBody = !compareHtml && linkedStores.length > 0 && !String(bodyPlain || '').replace(/\s+/g, '').trim();
 
   let propHtml = '';
   if (linkedStores.length > 0) {
@@ -4390,7 +4541,7 @@ function createCard(p, colLang) {
           <svg class="icon icon-sm" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
           <span>日本語</span>
         </div>
-        <div class="jp-trans-body">${linkifyUserText(linkedStores.length ? plainBodyWithoutStores(p.ja, linkedStores) : p.ja, 'ja')}</div>
+        <div class="jp-trans-body">${renderPostBody(linkedStores.length && !isComparePostText(p.ja) ? plainBodyWithoutStores(p.ja, linkedStores) : p.ja, 'ja')}</div>
       </div>
     `;
   }
@@ -4424,7 +4575,7 @@ function createCard(p, colLang) {
           <span>${escapeHtml(c.author)}</span>
           <span>${escapeHtml(fmtDateWd(c.date, colLang))}</span>
         </div>
-        <div class="comment-body">${linkifyUserText(cText, colLang)}</div>
+        <div class="comment-body">${renderPostBody(cText, colLang)}</div>
         ${commAttachHtml}
         ${attachmentsHtml(c.attachments)}
         ${embedsHtml(c.zh)}
@@ -4558,11 +4709,22 @@ async function submitReply(postId, colLang) {
 }
 
 // --- Edit Post Functions (編輯文字功能) ---
+function setCompareEditLock(on) {
+  const ta = document.getElementById('edit-post-text');
+  const note = document.getElementById('edit-post-compare-note');
+  if (ta) {
+    ta.readOnly = !!on;
+    ta.placeholder = on ? '比較表的內容不能在這裡改' : '';
+  }
+  if (note) note.style.display = on ? 'block' : 'none';
+}
 function openEditPostModal(postId) {
   const p = state.posts.find(x => x.id === postId);
   if (!p) return;
   state.editingPostId = postId;
-  document.getElementById('edit-post-text').value = storedTextToPlain(p.zh);
+  const locked = isComparePostText(p.zh) || isComparePostText(p.ja);
+  setCompareEditLock(locked);
+  document.getElementById('edit-post-text').value = locked ? '' : storedTextToPlain(p.zh);
   const editHoursSel = document.getElementById('edit-post-hours');
   const hv = String(p.hours || 0.5);
   if (![...editHoursSel.options].some(o => parseFloat(o.value) === parseFloat(hv))) {
@@ -4583,6 +4745,7 @@ function openEditPostModal(postId) {
 function closeEditPostModal() {
   document.getElementById('edit-post-modal').classList.remove('open');
   state.editingPostId = null;
+  setCompareEditLock(false);
 }
 
 async function saveEditedPost() {
@@ -4590,14 +4753,16 @@ async function saveEditedPost() {
   const p = state.posts.find(x => x.id === state.editingPostId);
   if (!p) return;
 
-  const newText = document.getElementById('edit-post-text').value.trim();
-  if (!newText) {
-    showToast(state.langMode === 'ja' ? '内容を入力' : '請輸入內容', 1500);
-    return;
+  const locked = isComparePostText(p.zh) || isComparePostText(p.ja);
+  if (!locked) {
+    const newText = document.getElementById('edit-post-text').value.trim();
+    if (!newText) {
+      showToast(state.langMode === 'ja' ? '内容を入力' : '請輸入內容', 1500);
+      return;
+    }
+    p.zh = newText;
+    p.ja = await translateToJapaneseAsync(storedTextToPlain(newText));
   }
-
-  p.zh = newText;
-  p.ja = await translateToJapaneseAsync(storedTextToPlain(newText));
   p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 0.0;
   p.tag = document.getElementById('edit-post-tag').value;
   p.editedAt = Date.now();
@@ -5123,11 +5288,12 @@ function renderStoreChat(s) {
   const stripLinks = html => plainBodyWithoutStores(html, [s]).replace(/\s+/g, ' ').trim();
   list.innerHTML = posts.map(p => {
     const body = ja ? (p.ja || p.zh) : p.zh;
-    const text = stripLinks(body);
+    const cmp = renderCompareTableHtml(body);
+    const text = cmp ? '' : stripLinks(body);
     const n = (p.comments || []).length;
     return `<div class="chat-item">
       <div class="chat-head"><b>${escapeHtml(p.author)}</b><span>${fmtDateWd(p.date, ja ? 'ja' : 'zh')}</span></div>
-      ${text ? `<div class="chat-body">${linkifyUserText(text, ja ? 'ja' : 'zh')}</div>` : ''}
+      ${cmp ? `<div class="chat-body">${cmp}</div>` : (text ? `<div class="chat-body">${linkifyUserText(text, ja ? 'ja' : 'zh')}</div>` : '')}
       ${attachmentsHtml(p.attachments)}${embedsHtml(p.zh)}
       ${reactionHtml(p.id, '', p)}
       <button type="button" class="chat-open" onclick="openPostInFeed(${jsArg(p.id)})">💬 ${n ? tr(n + ' 則回覆', n + '件の返信') : tr('回覆', '返信')} →</button>
@@ -6196,8 +6362,45 @@ async function saveCompareEdits() {
   showToast(tr('已儲存', '保存しました'), 1500);
 }
 
+// 比較表照片只存網址。data: 先上傳成檔案，失敗就留空，不要把 base64 寫進動態。
+async function uploadDataImage(dataUrl) {
+  try {
+    const blob = await (await fetch(dataUrl)).blob();
+    if (!blob || !blob.size) return '';
+    const type = blob.type || '';
+    const ext = /png/i.test(type) ? 'png' : /gif/i.test(type) ? 'gif' : /webp/i.test(type) ? 'webp' : 'jpg';
+    const fd = new FormData();
+    fd.append('file', blob, 'photo.' + ext);
+    fd.append('name', 'photo.' + ext);
+    const r = await fetch('api_upload.php', { method: 'POST', body: fd });
+    const d = await r.json();
+    if (d && d.success && safeAssetUrl(d.url)) return d.url;
+  } catch (e) {}
+  return '';
+}
+function rememberUploadedCover(store, dataUrl, url) {
+  if (!store || !url || !dataUrl) return;
+  if (Array.isArray(store.images)) store.images = store.images.map(u => u === dataUrl ? url : u);
+  if (store.coverImg === dataUrl) store.coverImg = url;
+}
+async function resolveCompareCovers(items) {
+  const map = {};
+  for (const s of items) {
+    const raw = String(coverOf(s) || '').trim();
+    if (!raw) { map[s.id] = ''; continue; }
+    if (/^data:image\//i.test(raw)) {
+      const url = await uploadDataImage(raw);
+      if (url) rememberUploadedCover(s, raw, url);
+      map[s.id] = url || '';
+    } else {
+      map[s.id] = safeAssetUrl(raw);
+    }
+  }
+  return map;
+}
+
 // 比較表 → 日報動態（當下內容的快照，中日兩個版本）
-function buildCompareReportHtml(items, lang) {
+function buildCompareReportHtml(items, lang, covers) {
   const ja = lang === 'ja';
   const L = ja
     ? { title: '店舗比較表', item: '項目', rent: '賃料', area: '面積', unit: '坪単価', dep: '保証金', free: 'フリーレント', reg: '営業登記', inv: 'インボイス', pros: '強み', cons: '注意点', wan: '万', yes: '可', no: '不可' }
@@ -6214,7 +6417,7 @@ function buildCompareReportHtml(items, lang) {
   const dateStr = fmtDateWd(`${d.getFullYear()}/${d.getMonth() + 1}/${d.getDate()}`, ja ? 'ja' : 'zh');
   return `<div class="post-cmp"><b>${L.title}</b>（${dateStr}）<div class="post-cmp-wrap"><table class="post-cmp-table">` +
     `<tr><th>${L.item}</th>` + items.map(s => `<th>${t(s)}</th>`).join('') + '</tr>' +
-    row(ja ? '写真' : '照片', s => coverOf(s) ? `<img src="${esc_(coverOf(s))}" alt="">` : '—') +
+    row(ja ? '写真' : '照片', s => (covers && covers[s.id]) ? `<img src="${escapeHtml(covers[s.id])}" alt="">` : '—') +
     row(L.rent, s => hasNums(s) ? `NT$ ${fmtWan(s.rent)}${L.wan}（約${jpy(s.rent)}万円）` : '—') +
     row(L.area, s => hasNums(s) ? `${fmtPing(s.area)} 坪（${Math.round(s.area * 3.3058)}㎡）` : '—') +
     row(L.unit, s => hasNums(s) ? `NT$ ${unitOf(s).toLocaleString()}/坪` : '—') +
@@ -6246,6 +6449,7 @@ async function createCompareReportPost() {
     });
     const changed = (await Promise.all(jobs)).some(Boolean);   // 同時翻譯，不要一個一個等
     if (changed) saveAppState(true);
+    const covers = await resolveCompareCovers(items);
     const now = new Date();
     const timeStr = `${now.getFullYear()}/${(now.getMonth() + 1).toString().padStart(2, '0')}/${now.getDate().toString().padStart(2, '0')} ${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
     state.posts.unshift({
@@ -6254,8 +6458,8 @@ async function createCompareReportPost() {
       date: timeStr,
       hours: 0.5,
       tag: '門市選址',
-      zh: buildCompareReportHtml(items, 'zh'),
-      ja: buildCompareReportHtml(items, 'ja'),
+      zh: buildCompareReportHtml(items, 'zh', covers),
+      ja: buildCompareReportHtml(items, 'ja', covers),
       propId: null,
       propIds: [],
       attachment: null,
@@ -6265,7 +6469,8 @@ async function createCompareReportPost() {
     closeCompareModal();
     switchNavTab('feed');
     renderFeeds();
-    showToast(tr('已建立到日報', '日報に作成しました'), 1800);
+    const missed = items.some(s => !covers[s.id] && /^data:image\//i.test(String(coverOf(s) || '')));
+    showToast(missed ? tr('已建立到日報，有照片沒上傳成功', '日報に作成しました。写真の一部を保存できませんでした') : tr('已建立到日報', '日報に作成しました'), 1800);
   } finally {
     if (btn) { btn.disabled = false; btn.textContent = oldLabel; }
   }

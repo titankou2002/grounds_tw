@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (is_array($d)) $old = $d;
     }
     $merged = wl_merge_state($old, $json);
-    wl_scrub_data_array($merged);   // data: 圖片轉成 uploads/ 檔，不再寫進 json
+    wl_scrub_data_array($merged);   // 店面與動態內文的 data: 圖片轉成 uploads/ 檔，不再寫進 json
     $merged['updatedAt'] = time();
 
     // Atomic write to prevent file corruption

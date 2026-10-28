@@ -1,7 +1,8 @@
 <?php
-// 店面照片只能是 http(s) 或 uploads/、files/ 裡的檔案。
-// data:image/...;base64 會在讀寫時轉成 uploads/ 檔（同一張圖永遠同一個檔名，可重跑）。
-// 轉檔失敗（磁碟寫不入）就保留原本字串，不把照片弄丟；不是圖片的 data: 則丟掉。
+// 店面照片、以及動態內文裡的 data:image/...;base64，
+// 會在讀寫時轉成 uploads/ 檔（同一張圖永遠同一個檔名，可重跑）。
+// 轉檔失敗（磁碟寫不入）就保留原本字串，不把照片弄丟。
+// 不是圖片的 data: 店面欄位會丟掉；貼在內文裡、轉不了的則原樣留著。
 
 function wl_atomic_write($path, $contents) {
     $tmp = $path . '.tmp.' . bin2hex(random_bytes(4));
@@ -94,11 +95,64 @@ function wl_scrub_store_images(&$store) {
     return $changed;
 }
 
-function wl_scrub_data_array(&$data) {
-    if (!is_array($data) || !isset($data['stores']) || !is_array($data['stores'])) return false;
+// 內文、回覆、附件網址裡的 data:image 換成 uploads/ 路徑。
+// 寫不進去就留著原本的字，下次再試。不是圖片的 data: 不刪，避免把人打的字弄掉。
+function wl_replace_embedded_data_images(&$text) {
+    if (!is_string($text) || stripos($text, 'data:image/') === false) return false;
     $changed = false;
-    foreach ($data['stores'] as $i => $s) {
-        if (is_array($s) && wl_scrub_store_images($data['stores'][$i])) $changed = true;
+    $out = '';
+    $i = 0;
+    $len = strlen($text);
+    while (($p = stripos($text, 'data:image/', $i)) !== false) {
+        $out .= substr($text, $i, $p - $i);
+        $end = $p;
+        while ($end < $len) {
+            $c = $text[$end];
+            if ($c === '"' || $c === "'" || $c === '<' || $c === '>' || $c === ' ' || $c === "\n" || $c === "\r" || $c === "\t" || $c === ')') break;
+            $end++;
+        }
+        if ($end <= $p) $end = min($len, $p + 11);
+        $url = substr($text, $p, $end - $p);
+        $saved = wl_data_image_to_file($url);
+        if (is_string($saved) && $saved !== '') {
+            $out .= $saved;
+            $changed = true;
+        } elseif ($saved === null && strlen($url) > 500) {
+            // 很長、又不是真的圖片：拿掉，避免每次讀檔都再解一次。短的內文不動。
+            $changed = true;
+        } else {
+            $out .= $url;
+        }
+        $i = $end;
+    }
+    if (!$changed) return false;
+    $out .= substr($text, $i);
+    $text = $out;
+    return true;
+}
+
+function wl_scrub_embedded_images(&$node) {
+    if (is_string($node)) return wl_replace_embedded_data_images($node);
+    if (!is_array($node)) return false;
+    $changed = false;
+    foreach ($node as &$child) {
+        if (wl_scrub_embedded_images($child)) $changed = true;
+    }
+    unset($child);
+    return $changed;
+}
+
+function wl_scrub_data_array(&$data) {
+    if (!is_array($data)) return false;
+    $changed = false;
+    if (isset($data['stores']) && is_array($data['stores'])) {
+        foreach ($data['stores'] as $i => $s) {
+            if (is_array($s) && wl_scrub_store_images($data['stores'][$i])) $changed = true;
+        }
+    }
+    // 動態與審議裡的 data: 照片（比較表內文、舊附件）同一把流程處理
+    foreach (array('posts', 'boardTopics') as $key) {
+        if (isset($data[$key]) && is_array($data[$key]) && wl_scrub_embedded_images($data[$key])) $changed = true;
     }
     return $changed;
 }
