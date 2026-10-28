@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>grounds Taiwan 展店決策平台</title>
-  <!-- wl-cache:20261028-ja-retranslate -->
+  <!-- wl-cache:20261028-mobile-cmp -->
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
@@ -1799,6 +1799,224 @@
       background: #333333;
     }
 
+
+    /* Compare modal toolbar (desktop keeps wrapping flex) */
+    .cmp-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 10px;
+      position: relative;
+      z-index: 5;
+      background: #fff;
+    }
+    .cmp-toolbar-left, .cmp-toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .cmp-toolbar-title { font-size: 16px; font-weight: 800; margin: 0; }
+    .cmp-lang-switch {
+      display: flex;
+      background: #f1f1f4;
+      border-radius: 20px;
+      padding: 2px;
+      border: 1px solid var(--border);
+    }
+    .cmp-legend { font-size: 11.5px; color: var(--fg-muted); }
+    .cmp-lang-short, .cmp-btn-short { display: none; }
+    .cmp-table-scroll { overflow: auto; -webkit-overflow-scrolling: touch; }
+    .compare-modal-box { display: flex; flex-direction: column; }
+
+    /* iOS：modal 開啟時，頁面 sticky 頂欄／底欄不可攔截點擊（會蓋在彈窗控制列上） */
+    body.modal-open {
+      overflow: hidden !important;
+      overscroll-behavior: none;
+    }
+    body.modal-open header.site-header,
+    body.modal-open .nav-tabs,
+    body.modal-open #preview-banner {
+      pointer-events: none !important;
+      z-index: 0 !important;
+    }
+    .modal-overlay {
+      z-index: 5000 !important;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    .modal-overlay.open {
+      pointer-events: auto;
+      touch-action: auto;
+    }
+    .modal-content-box {
+      position: relative;
+      z-index: 1;
+      pointer-events: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    @media (max-width: 700px) {
+      .modal-overlay {
+        padding: env(safe-area-inset-top, 0px) 0 calc(env(safe-area-inset-bottom, 0px)) 0 !important;
+        align-items: stretch !important;
+        justify-content: stretch !important;
+      }
+      .modal-content-box {
+        width: 100% !important;
+        max-width: none !important;
+        max-height: none !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+        padding: 10px 10px calc(12px + env(safe-area-inset-bottom, 0px)) !important;
+        zoom: 1 !important; /* zoom 在 iOS 會搞亂 fixed／點擊層 */
+        overflow: hidden !important;
+        display: flex;
+        flex-direction: column;
+      }
+      /* 比較表：全螢幕 + 工具列可點 + 表格雙向捲動 */
+      #compare-modal .compare-modal-box {
+        padding-top: 8px !important;
+      }
+      #compare-modal .cmp-toolbar {
+        flex-shrink: 0;
+        position: sticky;
+        top: 0;
+        z-index: 20;
+        margin: 0 0 8px;
+        padding: 8px 0 10px;
+        gap: 6px;
+        border-bottom: 1px solid var(--border);
+        background: #fff;
+        box-shadow: 0 1px 0 rgba(0,0,0,.04);
+      }
+      #compare-modal .cmp-toolbar-title {
+        font-size: 14px;
+        width: 100%;
+        order: -1;
+      }
+      #compare-modal .cmp-toolbar-left,
+      #compare-modal .cmp-toolbar-right {
+        width: 100%;
+        gap: 6px;
+      }
+      #compare-modal .cmp-legend { display: none !important; }
+      #compare-modal .cmp-lang-full,
+      #compare-modal .cmp-btn-full { display: none !important; }
+      #compare-modal .cmp-lang-short,
+      #compare-modal .cmp-btn-short { display: inline !important; }
+      #compare-modal .modal-lang-pill,
+      #compare-modal .cmp-toolbar .action-btn,
+      #compare-modal .cmp-toolbar .btn-submit {
+        font-size: 12px !important;
+        padding: 7px 10px !important;
+        min-height: 34px;
+        -webkit-tap-highlight-color: transparent;
+        position: relative;
+        z-index: 21;
+      }
+      #compare-modal .cmp-table-scroll {
+        flex: 1 1 auto;
+        min-height: 0;
+        overflow: auto;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        background: #fff;
+      }
+      #compare-modal .compare-table {
+        width: max-content;
+        min-width: 100%;
+        margin-top: 0;
+        border-collapse: separate;
+        border-spacing: 0;
+      }
+      #compare-modal .compare-table th,
+      #compare-modal .compare-table td {
+        padding: 7px 6px !important;
+        font-size: 11.5px !important;
+        line-height: 1.35;
+        vertical-align: top;
+        border: 1px solid var(--border);
+        background: #fff;
+      }
+      /* 左欄固定：窄、小字、雙語直向堆疊 */
+      #compare-modal .compare-table th:first-child,
+      #compare-modal .compare-table td:first-child {
+        position: sticky;
+        left: 0;
+        z-index: 3;
+        width: 88px !important;
+        min-width: 88px !important;
+        max-width: 92px !important;
+        background: #f7f7f9 !important;
+        font-size: 10.5px !important;
+        font-weight: 700;
+        line-height: 1.25;
+        word-break: break-word;
+        box-shadow: 2px 0 4px rgba(0,0,0,.06);
+      }
+      /* 表頭列固定 */
+      #compare-modal .compare-table tr:first-child th {
+        position: sticky;
+        top: 0;
+        z-index: 4;
+        background: #fafafa !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,.06);
+      }
+      #compare-modal .compare-table tr:first-child th:first-child {
+        z-index: 5;
+        left: 0;
+        background: #f1f1f4 !important;
+      }
+      /* 兩欄店面約可並排於 390px：88 + 150 + 150 ≈ 388 */
+      #compare-modal .compare-table tr:first-child th:not(:first-child),
+      #compare-modal .compare-table td:not(:first-child) {
+        min-width: 148px !important;
+        max-width: 168px;
+        width: 148px;
+      }
+      #compare-modal .compare-photo-thumb {
+        width: 100%;
+        max-width: 140px;
+        height: 78px;
+        border-radius: 6px;
+      }
+      #compare-modal .comp-val-main { font-size: 12px; }
+      #compare-modal .comp-val-sub { font-size: 10px; }
+      #compare-modal .metric-pill { font-size: 11px; padding: 1px 6px; }
+      #compare-modal .rank-badge-corner { font-size: 9px; padding: 1px 5px; }
+      #compare-modal .an-text { font-size: 11px; line-height: 1.45; }
+      #compare-modal .an-h { font-size: 11px; margin: 6px 0 2px; }
+      #compare-modal .cmp-lbl { display: flex; flex-direction: column; gap: 1px; }
+      #compare-modal .cmp-lbl-zh { font-weight: 800; }
+      #compare-modal .cmp-lbl-ja { font-weight: 600; color: #666; font-size: 9.5px; }
+
+      /* 其它彈窗：頂部安全區，避免被瀏海／頁面頂欄擋住 */
+      #store-detail-modal.modal-overlay,
+      #edit-store-modal.modal-overlay,
+      #edit-post-modal.modal-overlay,
+      #agency-modal.modal-overlay,
+      #settings-modal.modal-overlay,
+      #board-topic-modal.modal-overlay,
+      #tag-manager-modal.modal-overlay,
+      #status-editor-modal.modal-overlay,
+      #delete-confirm-modal.modal-overlay {
+        padding-top: env(safe-area-inset-top, 0px) !important;
+      }
+      #store-detail-modal .modal-content-box,
+      #edit-store-modal .modal-content-box {
+        max-height: none !important;
+        height: 100% !important;
+        border-radius: 0 !important;
+      }
+    }
+
     /* ===== 手機版：選單固定在底部（比照每周匯報）、避開動態島與底部安全區、字級放大 ===== */
     :root { --ui-zoom: 1; }
     @media (max-width: 900px) {
@@ -2494,32 +2712,31 @@
 
 <!-- Comparison Matrix Modal -->
 <div class="modal-overlay" id="compare-modal">
-  <div class="modal-content-box" style="width:min(98vw, 1300px);max-width:1300px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:12px;margin-bottom:12px;flex-wrap:wrap;gap:10px;">
-      <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
-        <h3 style="font-size:16px;font-weight:800;" id="cmp-modal-title">店面條件分析比較表</h3>
-        <!-- Comparison Modal Language Switcher -->
-        <div style="display:flex;background:#f1f1f4;border-radius:20px;padding:2px;border:1px solid var(--border);">
-          <button class="modal-lang-pill cmp-lang-pill active" id="cmp-lang-bilingual" onclick="setCompareModalLang('bilingual')">中日雙語對照</button>
-          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-ja" onclick="setCompareModalLang('ja')">日本語</button>
-          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-zh" onclick="setCompareModalLang('zh')">純中文</button>
+  <div class="modal-content-box compare-modal-box" style="width:min(98vw, 1300px);max-width:1300px;">
+    <div class="cmp-toolbar">
+      <div class="cmp-toolbar-left">
+        <h3 class="cmp-toolbar-title" id="cmp-modal-title">店面條件分析比較表</h3>
+        <div class="cmp-lang-switch" role="group" aria-label="語言">
+          <button class="modal-lang-pill cmp-lang-pill active" id="cmp-lang-bilingual" onclick="setCompareModalLang('bilingual')"><span class="cmp-lang-full">中日雙語對照</span><span class="cmp-lang-short">雙語</span></button>
+          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-ja" onclick="setCompareModalLang('ja')"><span class="cmp-lang-full">日本語</span><span class="cmp-lang-short">日</span></button>
+          <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-zh" onclick="setCompareModalLang('zh')"><span class="cmp-lang-full">純中文</span><span class="cmp-lang-short">中</span></button>
         </div>
-        <button class="action-btn" id="btn-cmp-ai-trans" onclick="translateAllCompareItemsAsync()" title="一鍵翻譯／重翻過期的優點與考量（含條列全文）" style="font-size:11px;padding:3px 8px;">
-          🌐 AI 即時翻譯
+        <button class="action-btn" id="btn-cmp-ai-trans" onclick="translateAllCompareItemsAsync()" title="一鍵翻譯／重翻過期的優點與考量（含條列全文）">
+          <span class="cmp-btn-full">🌐 AI 即時翻譯</span><span class="cmp-btn-short">🌐 翻譯</span>
         </button>
       </div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <span style="font-size:11.5px;color:var(--fg-muted);" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
-        <button class="action-btn" id="btn-cmp-share" onclick="shareCompareLink()">分享連結</button>
+      <div class="cmp-toolbar-right">
+        <span class="cmp-legend" id="cmp-legend-note">標示說明：<span class="rank-badge rank-gold">No.1</span> 第一順位 ｜ <span class="rank-badge rank-red">No.2</span> 第二順位</span>
+        <button class="action-btn" id="btn-cmp-share" onclick="shareCompareLink()"><span class="cmp-btn-full">分享連結</span><span class="cmp-btn-short">分享</span></button>
         <button class="action-btn" id="btn-cmp-pdf" onclick="printComparePdf()">PDF</button>
-        <button class="action-btn" id="btn-cmp-report" onclick="createCompareReportPost()">建立到日報</button>
+        <button class="action-btn" id="btn-cmp-report" onclick="createCompareReportPost()"><span class="cmp-btn-full">建立到日報</span><span class="cmp-btn-short">日報</span></button>
         <button class="action-btn" id="btn-cmp-edit" onclick="toggleCompareEdit()">編輯</button>
         <button class="btn-submit" id="btn-cmp-save" onclick="saveCompareEdits()" style="display:none;">儲存</button>
         <button class="action-btn" id="btn-cmp-cancel" onclick="cancelCompareEdit()" style="display:none;">取消</button>
         <button class="action-btn" onclick="closeCompareModal()">關閉</button>
       </div>
     </div>
-    <div id="compare-table-content" style="overflow-x:auto;"></div>
+    <div id="compare-table-content" class="cmp-table-scroll"></div>
   </div>
 </div>
 
@@ -6297,22 +6514,27 @@ function renderCompareTable() {
   const freeRentRanks = getRankMap(items, s => parseFreeRentMonths(s.freeRent), false);
 
   // Row header labels
-  const lblItem = isJa ? '比較項目' : (isBi ? '比較項目 / 比較項目' : '比較項目');
-  const lblPhoto = isJa ? '店舗写真' : (isBi ? '店面照片 / 店舗写真' : '店面照片');
-  const lblRent = isJa ? '掲載月額賃料' : (isBi ? '刊登月租 / 掲載賃料' : '刊登月租');
-  const lblArea = isJa ? '使用面積（坪・㎡）' : (isBi ? '使用面積 (坪・㎡)' : '使用面積 (坪・㎡)');
-  const lblUnit = isJa ? '面積単価（坪・㎡）' : (isBi ? '每坪與每㎡租金' : '每坪租金單價');
-  const lblFree = isJa ? 'フリーレント（内装工事）' : (isBi ? '裝潢免租期 / フリーレント' : '裝潢免租期');
-  const lblReg = isJa ? '会社設立・営業登記' : (isBi ? '營業登記許可' : '營業登記許可');
-  const lblInvoice = isJa ? 'インボイス・税籍適格' : (isBi ? '稅籍開立發票' : '稅籍開立發票');
-  const lblPros = isJa ? '立地の強み・人流分析' : (isBi ? '商圈優點與人流分析' : '商圈優點與人流分析');
-  const lblCons = isJa ? '留意点・潜在リスク' : (isBi ? '特別考量與潛在風險' : '特別考量與潛在風險');
-  const lblDetail = isJa ? '詳細スペック・写真' : (isBi ? '完整照片與規格' : '浮動視窗詳情');
+  const cmpLbl = (zh, ja) => {
+    if (isJa) return escapeHtml(ja);
+    if (isZh) return escapeHtml(zh);
+    return `<span class="cmp-lbl"><span class="cmp-lbl-zh">${escapeHtml(zh)}</span><span class="cmp-lbl-ja">${escapeHtml(ja)}</span></span>`;
+  };
+  const lblItem = cmpLbl('比較項目', '比較項目');
+  const lblPhoto = cmpLbl('店面照片', '店舗写真');
+  const lblRent = cmpLbl('刊登月租', '掲載賃料');
+  const lblArea = cmpLbl('使用面積', '使用面積');
+  const lblUnit = cmpLbl('每坪單價', '面積単価');
+  const lblFree = cmpLbl('裝潢免租', 'フリーレント');
+  const lblReg = cmpLbl('營業登記', '営業登記');
+  const lblInvoice = cmpLbl('發票', 'インボイス');
+  const lblPros = cmpLbl('商圈優點', '立地の強み');
+  const lblCons = cmpLbl('特別考量', '留意点');
+  const lblDetail = cmpLbl('詳情', '詳細');
 
   // Build rows
   let headerHtml = `<tr><th>${lblItem}</th>` + items.map(s => {
     const titleText = isJa ? escapeHtml(s.titleJa || s.title) : (isBi ? `${escapeHtml(s.title)}<div style="font-size:11px;color:var(--fg-muted);font-weight:normal;margin-top:2px;">${escapeHtml(s.titleJa || '')}</div>` : escapeHtml(s.title));
-    return `<th style="min-width:180px;max-width:240px;">${titleText}</th>`;
+    return `<th class="cmp-store-head">${titleText}</th>`;
   }).join('') + '</tr>';
 
   let photoHtml = `<tr><th>${lblPhoto}</th>` + items.map(s => `
@@ -6368,7 +6590,7 @@ function renderCompareTable() {
     `;
   }).join('') + '</tr>';
 
-  const lblDeposit = isJa ? '敷金（保証金）' : '押金';
+  const lblDeposit = cmpLbl('押金', '敷金');
   let depositHtml = `<tr><th>${lblDeposit}</th>` + items.map(s => `
     <td>
       <div class="comp-metric-box">
@@ -7856,6 +8078,20 @@ document.addEventListener('keydown', (e) => {
   e.preventDefault();
   dismissModalOverlay(ov);
 });
+
+// 任一彈窗開啟時標記 body，避免 iOS sticky 頂欄／底欄攔截點擊
+(function watchModalOpen() {
+  const sync = () => {
+    const open = !!document.querySelector('.modal-overlay.open');
+    document.body.classList.toggle('modal-open', open);
+    document.documentElement.classList.toggle('modal-open', open);
+  };
+  const mo = new MutationObserver(sync);
+  document.querySelectorAll('.modal-overlay').forEach(el => {
+    mo.observe(el, { attributes: true, attributeFilter: ['class'] });
+  });
+  sync();
+})();
 
 // Bootstrap
 loadAppState();

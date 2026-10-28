@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <title>grounds Taiwan 店面比較表</title>
-<!-- wl-cache:20261028-ja-retranslate -->
+<!-- wl-cache:20261028-mobile-cmp -->
 <link rel="icon" href="favicon.png">
 <style>
 :root{--fg:#111;--muted:#555;--line:#e2e2e8;--bg:#f7f7f9;--danger:#b91c1c}
@@ -55,9 +55,29 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
   .compare-photo-thumb{height:72px;max-width:140px;-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .metric-pill,.rank-badge-corner,.p-ok,.p-mid,.p-rent,.metric-area{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
-@media(max-width:720px){
-  .compare-table th{width:76px;font-size:11.5px;padding:8px 6px;position:sticky;left:0;z-index:2;background:#fafafa}
-  .compare-table td{min-width:140px}
+@media(max-width:700px){
+  header{padding:calc(8px + env(safe-area-inset-top)) 10px 8px;gap:6px}
+  .ttl{font-size:14px;min-width:0;flex:1 1 100%}
+  .actions{width:100%;gap:6px}
+  .lang button{padding:7px 9px;font-size:12px}
+  .btn{padding:7px 10px;font-size:12px;min-height:34px}
+  .wrap{padding:8px 8px calc(16px + env(safe-area-inset-bottom));overflow:auto;-webkit-overflow-scrolling:touch}
+  .compare-table{width:max-content;min-width:100%;border-collapse:separate;border-spacing:0;margin:0}
+  .compare-table th,.compare-table td{padding:7px 6px;font-size:11.5px;line-height:1.35;background:#fff}
+  .compare-table th:first-child,.compare-table td:first-child{
+    position:sticky;left:0;z-index:3;width:88px;min-width:88px;max-width:92px;
+    background:#f7f7f9;font-size:10.5px;font-weight:700;line-height:1.25;
+    box-shadow:2px 0 4px rgba(0,0,0,.06);word-break:break-word
+  }
+  .compare-table tr:first-child th{position:sticky;top:0;z-index:4;background:#fafafa;box-shadow:0 2px 4px rgba(0,0,0,.06)}
+  .compare-table tr:first-child th:first-child{z-index:5;background:#f1f1f4}
+  .compare-table tr:first-child th:not(:first-child),
+  .compare-table td:not(:first-child){min-width:148px;max-width:168px;width:148px}
+  .compare-photo-thumb{max-width:140px;height:78px}
+  .comp-val-main{font-size:12px}.comp-val-sub{font-size:10px}
+  .an-text{font-size:11px;line-height:1.45}
+  .cmp-lbl{display:flex;flex-direction:column;gap:1px}
+  .cmp-lbl-zh{font-weight:800}.cmp-lbl-ja{font-weight:600;color:#666;font-size:9.5px}
 }
 </style>
 </head>
@@ -211,22 +231,26 @@ header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid 
     var unitR = ranks(items, function (s) { return hasNums(s) ? s.rent / s.area : NaN; }, true);
     var freeR = ranks(items, function (s) { return parseFree(s.freeRent); }, false);
 
-    function L(zh, ja, bi) { return isJa ? ja : (isBi ? (bi || zh) : zh); }
-    var lblItem = L('比較項目', '比較項目', '比較項目 / 比較項目');
-    var lblPhoto = L('店面照片', '店舗写真', '店面照片 / 店舗写真');
-    var lblRent = L('刊登月租', '掲載月額賃料', '刊登月租 / 掲載賃料');
-    var lblArea = L('使用面積 (坪・㎡)', '使用面積（坪・㎡）');
-    var lblUnit = L('每坪租金單價', '面積単価（坪・㎡）', '每坪與每㎡租金');
-    var lblDep = isJa ? '敷金（保証金）' : '押金';
-    var lblFree = L('裝潢免租期', 'フリーレント（内装工事）', '裝潢免租期 / フリーレント');
-    var lblReg = L('營業登記許可', '会社設立・営業登記', '營業登記許可');
-    var lblInv = L('稅籍開立發票', 'インボイス・税籍適格', '稅籍開立發票');
-    var lblPros = L('商圈優點與人流分析', '立地の強み・人流分析');
-    var lblCons = L('特別考量與潛在風險', '留意点・潜在リスク');
+    function cmpLbl(zh, ja) {
+      if (isJa) return esc(ja);
+      if (isZh) return esc(zh);
+      return '<span class="cmp-lbl"><span class="cmp-lbl-zh">' + esc(zh) + '</span><span class="cmp-lbl-ja">' + esc(ja) + '</span></span>';
+    }
+    var lblItem = cmpLbl('比較項目', '比較項目');
+    var lblPhoto = cmpLbl('店面照片', '店舗写真');
+    var lblRent = cmpLbl('刊登月租', '掲載賃料');
+    var lblArea = cmpLbl('使用面積', '使用面積');
+    var lblUnit = cmpLbl('每坪單價', '面積単価');
+    var lblDep = cmpLbl('押金', '敷金');
+    var lblFree = cmpLbl('裝潢免租', 'フリーレント');
+    var lblReg = cmpLbl('營業登記', '営業登記');
+    var lblInv = cmpLbl('發票', 'インボイス');
+    var lblPros = cmpLbl('商圈優點', '立地の強み');
+    var lblCons = cmpLbl('特別考量', '留意点');
 
     var header = '<tr><th>' + lblItem + '</th>' + items.map(function (s) {
       var t = isJa ? esc(s.titleJa || s.title) : (isBi ? esc(s.title) + (s.titleJa ? '<div style="font-size:11px;color:var(--muted);font-weight:normal;margin-top:2px;">' + esc(s.titleJa) + '</div>' : '') : esc(s.title));
-      return '<th style="min-width:180px;max-width:240px;">' + t + '</th>';
+      return '<th class="cmp-store-head">' + t + '</th>';
     }).join('') + '</tr>';
 
     var photo = '<tr><th>' + lblPhoto + '</th>' + items.map(function (s) {
