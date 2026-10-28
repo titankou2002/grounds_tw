@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>grounds Taiwan MAP</title>
+<!-- wl-cache:20261028-analysis -->
 <link rel="icon" href="favicon.png">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
@@ -56,6 +57,10 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
 .btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
 .btn.pri{background:#111;color:#fff;border-color:#111}
 .note{background:#fffbeb;border:1px solid #fde68a;border-radius:8px;padding:7px 9px;margin-bottom:6px;white-space:pre-wrap;word-break:break-word}
+.an-text{font-size:12.5px;line-height:1.55;word-break:break-word;display:inline-block;width:100%}
+.an-h{font-weight:800;margin:6px 0 2px;line-height:1.4}.an-h:first-child{margin-top:0}
+.an-li{display:flex;gap:6px;align-items:flex-start;margin:2px 0;line-height:1.5}
+.an-b{flex:0 0 auto;font-weight:700}.an-li-t{flex:1;min-width:0}.an-p{margin:2px 0}.an-sp{height:6px}
 .note small{display:block;color:var(--muted);margin-top:3px}.note small a{color:#b91c1c;cursor:pointer;margin-left:8px}
 .edit textarea,.edit input[type=text],.edit input[type=number],.edit select{width:100%;font:inherit;font-size:16px;padding:7px 9px;border:1px solid #d1d5db;border-radius:8px;background:#fff}
 .edit label{display:block;font-size:12px;color:var(--muted);margin:6px 0 2px}
@@ -100,6 +105,41 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
   var canEdit = false, notes = {}, editing = {}, stores = [], sort = 'default', map, markers = {}, mobile = function () { return innerWidth <= 900; };
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); };
+  var normalizeAnalysisBreaks = function (text) {
+    var s = String(text == null ? '' : text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+    if (!s.trim()) return '';
+    s = s.replace(/([^\n])(【)/g, '$1\n$2');
+    s = s.replace(/([^\n])([•※◆●])/g, '$1\n$2');
+    s = s.replace(/([^\n])\s+([*•●・※\-–—])\s+/g, '$1\n$2 ');
+    s = s.replace(/([^\n])\s+(\d{1,2}[\.．、）)])\s+(?=\S)/g, '$1\n$2 ');
+    if (s.indexOf('\n') < 0) {
+      s = s.replace(/\s*(【)/g, '\n$1').replace(/^\n/, '');
+      s = s.replace(/\s+([*•●・※\-–—])\s+/g, '\n$1 ');
+    }
+    return s.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+  };
+  var formatAnalysisBulletLine = function (trimmed) {
+    var m = trimmed.match(/^([*•●・※\-–—])\s+(.*)$/) || trimmed.match(/^(\d{1,2}[\.．、）)])\s+(.*)$/);
+    if (m) return '<div class="an-li"><span class="an-b">' + esc(m[1]) + '</span><span class="an-li-t">' + esc(m[2]) + '</span></div>';
+    return '<div class="an-p">' + esc(trimmed) + '</div>';
+  };
+  var formatAnalysisHtml = function (text) {
+    var raw = normalizeAnalysisBreaks(text);
+    if (!raw) return '';
+    var parts = [];
+    raw.split('\n').forEach(function (line) {
+      var trimmed = String(line || '').trim();
+      if (!trimmed) { parts.push('<div class="an-sp"></div>'); return; }
+      var hm = trimmed.match(/^【([^】]*)】\s*(.*)$/);
+      if (hm) {
+        parts.push('<div class="an-h">【' + esc(hm[1]) + '】</div>');
+        if (String(hm[2] || '').trim()) parts.push(formatAnalysisBulletLine(String(hm[2]).trim()));
+        return;
+      }
+      parts.push(formatAnalysisBulletLine(trimmed));
+    });
+    return '<div class="an-text">' + parts.join('') + '</div>';
+  };
   var T = function () { return L10N[lang]; };
   var title = function (s) { return lang === 'ja' ? (s.titleJa || s.title) : s.title; };
   var tx = function (zh, ja) { return lang === 'ja' ? (ja && ja !== zh ? ja : zh) : zh; };
@@ -255,8 +295,8 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
         (imgs.length > 1 || (canEdit && imgs.length) ? '<div class="strip">' + imgs.map(function (u) { return '<div class="ph"><img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">' + (canEdit ? '<b data-act="pdel" data-u="' + esc(u) + '">×</b><i data-act="cover" data-u="' + esc(u) + '" class="star' + (u === cover ? ' on' : '') + '">' + (u === cover ? '★' : '☆') + '</i><span class="mv"><button type="button" data-act="pleft" data-u="' + esc(u) + '" title="' + esc(t.left) + '">‹</button><button type="button" data-act="pright" data-u="' + esc(u) + '" title="' + esc(t.right) + '">›</button></span>' : '') + '</div>'; }).join('') + '</div>' : '') +
         '<div class="grid">' + (nn ? '<div>' + t.rentL + '：<b>NT$ ' + rw + t.wan + '</b><br>' + jw(s.rent) + '/月</div><div>' + t.areaL + '：<b>' + ar + ' 坪</b><br>' + Math.round(ar * 3.3058) + '㎡</div><div>' + t.unitL + '：<b>NT$ ' + un.toLocaleString() + '</b><br>' + jy(un) + '</div>' : '') +
         '<div>' + t.depL + '：<b>' + esc(depLabel(s)) + '</b>' + (Number(s.deposit) > 0 ? '<br>' + jw(s.deposit) : '') + '</div><div>' + t.freeL + '：<b>' + esc(months(s.freeRent || '洽詢')) + '</b></div><div>' + t.regL + '：<b>' + tri(s.canRegister, t.yes, t.no) + '</b></div><div>' + t.invL + '：<b>' + tri(s.canInvoice, t.yes, t.no) + '</b></div></div>' +
-        (s.pros ? '<div><b>' + t.pros + '：</b>' + esc(tx(s.pros, s.prosJa)) + '</div>' : '') +
-        (s.cons ? '<div class="neg"><b>' + t.cons + '：</b>' + esc(tx(s.cons, s.consJa)) + '</div>' : '') +
+        (s.pros ? '<div><b>' + t.pros + '：</b>' + formatAnalysisHtml(tx(s.pros, s.prosJa)) + '</div>' : '') +
+        (s.cons ? '<div class="neg"><b>' + t.cons + '：</b>' + formatAnalysisHtml(tx(s.cons, s.consJa)) + '</div>' : '') +
         (/^https?:/i.test(s.url || '') ? '<a class="src" href="' + esc(s.url) + '" target="_blank" rel="noopener">🔗 ' + t.src + '</a>' : '') +
         (canEdit ? editBlock(s) : '') + '</div></div>';
     }).join('');

@@ -7,6 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>grounds Taiwan 展店決策平台</title>
+  <!-- wl-cache:20261028-analysis -->
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
@@ -1922,6 +1923,18 @@
     @media (max-width: 900px) { .kpi-badge-group { grid-template-columns: 1fr 1fr; } .kpi-badge-group .kpi-badge:last-child { grid-column: 1 / -1; } }
     /* 日報內的比較表 */
     .post-cmp { white-space: normal; }
+    .an-text { font-size: 12.5px; line-height: 1.55; word-break: break-word; }
+    .an-h { font-weight: 800; margin: 8px 0 3px; line-height: 1.4; }
+    .an-h:first-child { margin-top: 0; }
+    .an-li { display: flex; gap: 6px; align-items: flex-start; margin: 2px 0 2px 1px; line-height: 1.5; }
+    .an-b { flex: 0 0 auto; font-weight: 700; min-width: 0.9em; }
+    .an-li-t { flex: 1; min-width: 0; }
+    .an-p { margin: 2px 0; line-height: 1.5; }
+    .an-sp { height: 7px; }
+    .compare-table .an-text, .post-cmp-table .an-text { font-size: 12px; line-height: 1.55; }
+    #m-store-pros-zh .an-text, #m-store-cons-zh .an-text { font-size: 13px; line-height: 1.6; }
+    #m-store-pros-ja .an-text, #m-store-cons-ja .an-text { font-size: 12px; line-height: 1.55; }
+
     .post-cmp-wrap { overflow-x: auto; margin-top: 6px; -webkit-overflow-scrolling: touch; }
     .post-cmp-table { border-collapse: collapse; font-size: 12px; min-width: 100%; }
     .post-cmp-table th, .post-cmp-table td { border: 1px solid var(--border); padding: 6px 8px; text-align: left; vertical-align: top; min-width: 120px; line-height: 1.5; }
@@ -4080,6 +4093,86 @@ function cmpCellText(cell) {
 function escapeMultiline(s) {
   return escapeHtml(s).replace(/\n/g, '<br>');
 }
+// 商圈優點／風險：保留換行與條列。舊資料若被壓成一行，依 • * - 【 ※ 等標記拆回。
+function normalizeAnalysisBreaks(text) {
+  let s = String(text == null ? '' : text).replace(/\r\n/g, '\n').replace(/\r/g, '\n');
+  if (!s.trim()) return '';
+  s = s.replace(/([^\n])(【)/g, '$1\n$2');
+  s = s.replace(/([^\n])([•※◆●])/g, '$1\n$2');
+  // 同行多個 "* 項目" / "・項目" / "- 項目"
+  s = s.replace(/([^\n])\s+([*•●・※\-–—])\s+/g, '$1\n$2 ');
+  s = s.replace(/([^\n])\s+(\d{1,2}[\.．、）)])\s+(?=\S)/g, '$1\n$2 ');
+  // 完全沒換行時，再依標記硬拆
+  if (s.indexOf('\n') < 0) {
+    s = s.replace(/\s*(【)/g, '\n$1').replace(/^\n/, '');
+    s = s.replace(/\s+([*•●・※\-–—])\s+/g, '\n$1 ');
+  }
+  return s.replace(/[ \t]+\n/g, '\n').replace(/\n{3,}/g, '\n\n').trim();
+}
+function formatAnalysisBulletLine(trimmed) {
+  let m = trimmed.match(/^([*•●・※\-–—])\s+(.*)$/);
+  if (!m) m = trimmed.match(/^(\d{1,2}[\.．、）)])\s+(.*)$/);
+  if (m) {
+    return '<div class="an-li"><span class="an-b">' + escapeHtml(m[1]) + '</span><span class="an-li-t">' + escapeHtml(m[2]) + '</span></div>';
+  }
+  return '<div class="an-p">' + escapeHtml(trimmed) + '</div>';
+}
+function formatAnalysisHtml(text) {
+  const raw = normalizeAnalysisBreaks(text);
+  if (!raw) return '';
+  const parts = [];
+  raw.split('\n').forEach(line => {
+    const trimmed = String(line || '').trim();
+    if (!trimmed) { parts.push('<div class="an-sp"></div>'); return; }
+    const hm = trimmed.match(/^【([^】]*)】\s*(.*)$/);
+    if (hm) {
+      parts.push('<div class="an-h">【' + escapeHtml(hm[1]) + '】</div>');
+      if (String(hm[2] || '').trim()) parts.push(formatAnalysisBulletLine(String(hm[2]).trim()));
+      return;
+    }
+    parts.push(formatAnalysisBulletLine(trimmed));
+  });
+  return '<div class="an-text">' + parts.join('') + '</div>';
+}
+function preserveAnalysisStructure(src, translated) {
+  const t = String(translated == null ? '' : translated);
+  if (!t.trim()) return '';
+  const srcN = normalizeAnalysisBreaks(src);
+  const srcBreaks = (srcN.match(/\n/g) || []).length;
+  const outBreaks = (t.match(/\n/g) || []).length;
+  if (srcBreaks >= 1 && outBreaks < Math.max(1, Math.floor(srcBreaks / 2))) {
+    return normalizeAnalysisBreaks(t);
+  }
+  return normalizeAnalysisBreaks(t);
+}
+async function translateAnalysisAsync(text, pair) {
+  const src = String(text || '');
+  const normalized = normalizeAnalysisBreaks(src);
+  const lines = normalized.split('\n');
+  const meaningful = lines.filter(l => l.trim());
+  // 多行條列：逐行翻，避免翻譯 API 把換行吃掉
+  if (meaningful.length >= 2 && normalized.length <= 1400) {
+    const out = [];
+    for (const line of lines) {
+      const trimmed = line.trim();
+      if (!trimmed) { out.push(''); continue; }
+      let prefix = '', rest = trimmed;
+      let m = trimmed.match(/^([*•●・※\-–—])\s+(.*)$/) || trimmed.match(/^(\d{1,2}[\.．、）)])\s+(.*)$/);
+      if (m) { prefix = m[1] + ' '; rest = m[2]; }
+      else {
+        const hm = trimmed.match(/^(【[^】]*】)\s*(.*)$/);
+        if (hm) { prefix = hm[1] + (hm[2] ? ' ' : ''); rest = hm[2] || ''; }
+      }
+      if (!rest) { out.push(prefix.trim()); continue; }
+      const tr = await translateTextAsync(rest, pair || 'zh-TW|ja');
+      out.push(prefix + (tr || rest));
+    }
+    return out.join('\n');
+  }
+  const tr = await translateTextAsync(src, pair || 'zh-TW|ja');
+  return preserveAnalysisStructure(src, tr || '');
+}
+
 function renderCompareTableHtml(html) {
   let raw = String(html || '');
   if (raw.indexOf('post-cmp') < 0 || !/<table\b/i.test(raw)) return '';
@@ -4125,7 +4218,7 @@ function renderCompareTableHtml(html) {
       const text = cmpCellText(n);
       let inner = '';
       if (src) inner += '<img src="' + escapeHtml(src) + '" alt="" loading="lazy">';
-      if (text) inner += (inner ? ' ' : '') + escapeMultiline(text);
+      if (text) inner += (inner ? ' ' : '') + formatAnalysisHtml(text);
       if (!inner) inner = '—';
       const tag = n.tagName === 'TH' ? 'th' : 'td';
       cells.push('<' + tag + '>' + inner + '</' + tag + '>');
@@ -5020,25 +5113,29 @@ function openStoreDetailModal(storeId) {
   document.getElementById('m-store-caninvoice').textContent = triBool(s.canInvoice, '可以開立發票', '否');
   document.getElementById('m-store-caninvoice-ja').textContent = s.canInvoice === true ? '（インボイス適格）' : (s.canInvoice === false ? '（非適格）' : '');
 
-  // Pros & Cons with Japanese
-  document.getElementById('m-store-pros-zh').textContent = s.pros || '';
+  // Pros & Cons with Japanese（保留條列換行）
+  document.getElementById('m-store-pros-zh').innerHTML = formatAnalysisHtml(s.pros || '') || '—';
   const prosJaEl = document.getElementById('m-store-pros-ja');
-  prosJaEl.textContent = s.prosJa || '翻訳取得中...';
+  prosJaEl.innerHTML = s.prosJa ? formatAnalysisHtml(s.prosJa) : escapeHtml('翻訳取得中...');
 
-  document.getElementById('m-store-cons-zh').textContent = s.cons || '';
+  document.getElementById('m-store-cons-zh').innerHTML = formatAnalysisHtml(s.cons || '') || '—';
   const consJaEl = document.getElementById('m-store-cons-ja');
-  consJaEl.textContent = s.consJa || '翻訳取得中...';
+  consJaEl.innerHTML = s.consJa ? formatAnalysisHtml(s.consJa) : escapeHtml('翻訳取得中...');
 
   if (!s.prosJa && s.pros) {
-    translateToJapaneseAsync(s.pros).then(res => {
+    translateAnalysisAsync(s.pros, 'zh-TW|ja').then(res => {
+      if (!res) return;
       s.prosJa = res;
-      prosJaEl.textContent = res;
+      prosJaEl.innerHTML = formatAnalysisHtml(res);
+      saveAppState(true);
     });
   }
   if (!s.consJa && s.cons) {
-    translateToJapaneseAsync(s.cons).then(res => {
+    translateAnalysisAsync(s.cons, 'zh-TW|ja').then(res => {
+      if (!res) return;
       s.consJa = res;
-      consJaEl.textContent = res;
+      consJaEl.innerHTML = formatAnalysisHtml(res);
+      saveAppState(true);
     });
   }
 
@@ -5154,8 +5251,14 @@ async function ensureStoreJa() {
     [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
       if (!need(s[zhK], s[jaK])) return;
       tasks.push(async () => {
-        const t = await translateTextAsync(String(s[zhK]).slice(0, 450), 'zh-TW|ja');
-        if (t && t !== s[zhK]) { s[jaK] = t; changed = true; }
+        const src = String(s[zhK]);
+        const t = (zhK === 'pros' || zhK === 'cons')
+          ? await translateAnalysisAsync(src.slice(0, 1400), 'zh-TW|ja')
+          : await translateTextAsync(src.slice(0, 450), 'zh-TW|ja');
+        if (t && t !== s[zhK]) {
+          s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(src, t) : t;
+          changed = true;
+        }
       });
     });
   });
@@ -5447,8 +5550,8 @@ function renderStores() {
         </div>
 
         <div style="font-size:12px;color:var(--fg);margin-top:6px;line-height:1.5;">
-          <div><strong>${tr('商圈優點','立地の強み')}：</strong>${escapeHtml(state.langMode === 'ja' ? (s.prosJa || s.pros) : s.pros)}</div>
-          <div style="color:var(--danger);margin-top:2px;"><strong>${tr('注意考量','注意点')}：</strong>${escapeHtml(state.langMode === 'ja' ? (s.consJa || s.cons) : s.cons)}</div>
+          <div><strong>${tr('商圈優點','立地の強み')}：</strong>${formatAnalysisHtml(state.langMode === 'ja' ? (s.prosJa || s.pros) : s.pros)}</div>
+          <div style="color:var(--danger);margin-top:2px;"><strong>${tr('注意考量','注意点')}：</strong>${formatAnalysisHtml(state.langMode === 'ja' ? (s.consJa || s.cons) : s.cons)}</div>
         </div>
         <button type="button" class="store-open-detail-btn" onclick="openStoreDetailModal(${jsArg(s.id)})">${tr('查看完整詳情 ↗','詳細を見る ↗')}</button>
 
@@ -6247,11 +6350,11 @@ function renderCompareTable() {
   let prosHtml = `<tr><th>${lblPros}</th>` + items.map(s => {
     let content = '';
     if (isJa) {
-      content = escapeHtml(s.prosJa || s.pros);
+      content = formatAnalysisHtml(s.prosJa || s.pros) || '—';
     } else if (isZh) {
-      content = escapeHtml(s.pros || '');
+      content = formatAnalysisHtml(s.pros || '') || '—';
     } else {
-      content = `<div>${escapeHtml(s.pros || '')}</div>` + (s.prosJa ? `<div style="font-size:11px;color:#2563eb;margin-top:5px;border-top:1px dashed #e2e8f0;padding-top:4px;line-height:1.4;">${escapeHtml(s.prosJa)}</div>` : '');
+      content = `<div>${formatAnalysisHtml(s.pros || '') || '—'}</div>` + (s.prosJa ? `<div style="font-size:11.5px;color:#2563eb;margin-top:6px;border-top:1px dashed #e2e8f0;padding-top:5px;">${formatAnalysisHtml(s.prosJa)}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
@@ -6259,11 +6362,11 @@ function renderCompareTable() {
   let consHtml = `<tr><th>${lblCons}</th>` + items.map(s => {
     let content = '';
     if (isJa) {
-      content = `<span style="color:var(--danger);">${escapeHtml(s.consJa || s.cons)}</span>`;
+      content = `<div style="color:var(--danger);">${formatAnalysisHtml(s.consJa || s.cons) || '—'}</div>`;
     } else if (isZh) {
-      content = `<span style="color:var(--danger);">${escapeHtml(s.cons || '')}</span>`;
+      content = `<div style="color:var(--danger);">${formatAnalysisHtml(s.cons || '') || '—'}</div>`;
     } else {
-      content = `<div style="color:var(--danger);">${escapeHtml(s.cons || '')}</div>` + (s.consJa ? `<div style="font-size:11px;color:#dc2626;margin-top:5px;border-top:1px dashed #fee2e2;padding-top:4px;line-height:1.4;">${escapeHtml(s.consJa)}</div>` : '');
+      content = `<div style="color:var(--danger);">${formatAnalysisHtml(s.cons || '') || '—'}</div>` + (s.consJa ? `<div style="font-size:11.5px;color:#dc2626;margin-top:6px;border-top:1px dashed #fee2e2;padding-top:5px;">${formatAnalysisHtml(s.consJa)}</div>` : '');
     }
     return `<td>${content}</td>`;
   }).join('') + '</tr>';
@@ -6429,8 +6532,8 @@ function buildCompareReportHtml(items, lang, covers) {
     row(L.free, s => esc_(ja ? jaMonths(s.freeRent || '洽詢') : (s.freeRent || '洽詢'))) +
     row(L.reg, s => triBool(s.canRegister, L.yes, L.no)) +
     row(L.inv, s => triBool(s.canInvoice, L.yes, L.no)) +
-    row(L.pros, s => esc_(ja ? (s.prosJa || s.pros || '') : (s.pros || ''))) +
-    row(L.cons, s => esc_(ja ? (s.consJa || s.cons || '') : (s.cons || ''))) +
+    row(L.pros, s => formatAnalysisHtml(ja ? (s.prosJa || s.pros || '') : (s.pros || '')) || '—') +
+    row(L.cons, s => formatAnalysisHtml(ja ? (s.consJa || s.cons || '') : (s.cons || '')) || '—') +
     '</table></div></div>';
 }
 
@@ -6540,7 +6643,16 @@ async function createCompareReportPost() {
       [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
         const zh = String(s[zhK] || '').trim();
         if (zh && (!s[jaK] || s[jaK] === zh)) {
-          jobs.push(Promise.race([translateTextAsync(zh.slice(0, 450), 'zh-TW|ja'), new Promise(r => setTimeout(() => r(''), 30000))]).then(j => { if (j && j !== zh) { s[jaK] = j; return true; } return false; }).catch(() => false));
+          const run = (zhK === 'pros' || zhK === 'cons')
+            ? translateAnalysisAsync(zh.slice(0, 1400), 'zh-TW|ja')
+            : translateTextAsync(zh.slice(0, 450), 'zh-TW|ja');
+          jobs.push(Promise.race([run, new Promise(r => setTimeout(() => r(''), 45000))]).then(j => {
+            if (j && j !== zh) {
+              s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(zh, j) : j;
+              return true;
+            }
+            return false;
+          }).catch(() => false));
         }
       });
     });
@@ -6585,10 +6697,10 @@ async function translateAllCompareItemsAsync() {
       s.titleJa = await translateToJapaneseAsync(s.title);
     }
     if (!s.prosJa && s.pros) {
-      s.prosJa = await translateToJapaneseAsync(s.pros);
+      s.prosJa = await translateAnalysisAsync(s.pros, 'zh-TW|ja');
     }
     if (!s.consJa && s.cons) {
-      s.consJa = await translateToJapaneseAsync(s.cons);
+      s.consJa = await translateAnalysisAsync(s.cons, 'zh-TW|ja');
     }
   }
   saveAppState();
