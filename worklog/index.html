@@ -2699,274 +2699,8 @@
 
 <script>
 // --- Real Multi-Platform Parsed Database (Rakuya, 591, Yungching, Sinyi) ---
-const KNOWN_STORES_DB = {
-  // 樂屋網 (Rakuya) - 條通商圈店面（安家京漾・住商不動產）
-  '034d4c34943093e': {
-    platform: 'rakuya',
-    platformName: '樂屋網 (住商不動產)',
-    title: '條通商圈店面（安家京漾）',
-    titleJa: '条通商圏・1+2階路面店（安家京漾・住商不動産）',
-    address: '台北市中山區南京東路一段（林森北路條通商圈）',
-    rent: 100000,
-    area: 40.48,
-    deposit: 300000,
-    freeRent: '1 個月',
-    realCost: 112110,
-    floor: '1~2 / 9 樓',
-    lat: 25.0526,
-    lng: 121.5262,
-    images: [
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_1_b.jpeg',
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_2_b.jpeg',
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_3_b.jpeg'
-    ],
-    pros: '位於南京東路一段條通精華商圈（林森北路生活圈），周邊日式餐飲與時尚酒吧林立，1+2樓使用面積達40.48坪，商務客群與夜間消費力強。',
-    prosJa: '南京東路一段の条通商圏（林森北路エリア）に位置。日系飲食店やトレンドバーが集積し、1+2階で40.48坪を確保。夜間およびビジネス客の消費力大。',
-    cons: '條通巷弄車道較窄，主要依賴捷運中山站人流與夜間步行客群，白天非尖峰時段需精準社群曝光。',
-    consJa: '路地の人流は夜間に集中しやすいため、日中の集客にはSNSやブランドプロモーションが必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent'
-  },
-  'rakuya-034d4c34943093e': {
-    platform: 'rakuya',
-    platformName: '樂屋網 (住商不動產)',
-    title: '條通商圈店面（安家京漾）',
-    titleJa: '条通商圏・1+2階路面店（安家京漾・住商不動産）',
-    address: '台北市中山區南京東路一段（林森北路條通商圈）',
-    rent: 100000,
-    area: 40.48,
-    deposit: 300000,
-    freeRent: '1 個月',
-    realCost: 112110,
-    floor: '1~2 / 9 樓',
-    lat: 25.0526,
-    lng: 121.5262,
-    images: [
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_1_b.jpeg',
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_2_b.jpeg',
-      'https://static.rakuya.com.tw/r1/n093/1e/fd/34943093_3_b.jpeg'
-    ],
-    pros: '位於南京東路一段條通精華商圈（林森北路生活圈），周邊日式餐飲與時尚酒吧林立，1+2樓使用面積達40.48坪，商務客群與夜間消費力強。',
-    prosJa: '南京東路一段の条通商圏（林森北路エリア）に位置。日系飲食店やトレンドバーが集積し、1+2階で40.48坪を確保。夜間およびビジネス客の消費力大。',
-    cons: '條通巷弄車道較窄，主要依賴捷運中山站人流與夜間步行客群，白天非尖峰時段需精準社群曝光。',
-    consJa: '路地の人流は夜間に集中しやすいため、日中の集客にはSNSやブランドプロモーションが必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://community.rakuya.com.tw/509/rent/034d4c34943093e?from=list_keyword&func=list_rent'
-  },
-  // 永慶房屋 (Yungching) - 南西商圈三角窗店面
-  'yc-C202688': {
-    platform: 'yungching',
-    platformName: '永慶房屋',
-    title: '南西中山站三角窗高面寬店面',
-    titleJa: '南西中山駅・角地ワイドスパン路面店（永慶房屋）',
-    address: '台北市中山區中山北路一段（近中山捷運站）',
-    rent: 220000,
-    area: 42.5,
-    deposit: 440000,
-    freeRent: '1.5 個月',
-    realCost: 246642,
-    floor: '1 樓',
-    lat: 25.0518,
-    lng: 121.5215,
-    images: [
-      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
-      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80'
-    ],
-    pros: '南西商圈與中山北路核心交會，角店廣告效益顯著，人流密集度高。',
-    prosJa: '南西商圏と中山北路の交差点至近。角地で抜群の看板効果、高密度の歩行者動線。',
-    cons: '租金單價偏高，周邊競爭品牌密度高。',
-    consJa: '坪単価が高めで、周辺の競合アパレル・雑貨店との差別化が必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://rent.yungching.com.tw/case/C202688'
-  },
-  'C202688': {
-    platform: 'yungching',
-    platformName: '永慶房屋',
-    title: '南西中山站三角窗高面寬店面',
-    titleJa: '南西中山駅・角地ワイドスパン路面店（永慶房屋）',
-    address: '台北市中山區中山北路一段（近中山捷運站）',
-    rent: 220000,
-    area: 42.5,
-    deposit: 440000,
-    freeRent: '1.5 個月',
-    realCost: 246642,
-    floor: '1 樓',
-    lat: 25.0518,
-    lng: 121.5215,
-    images: [
-      'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
-      'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80'
-    ],
-    pros: '南西商圈與中山北路核心交會，角店廣告效益顯著，人流密集度高。',
-    prosJa: '南西商圏と中山北路の交差点至近。角地で抜群の看板効果、高密度の歩行者動線。',
-    cons: '租金單價偏高，周邊競爭品牌密度高。',
-    consJa: '坪単価が高めで、周辺の競合アパレル・雑貨店との差別化が必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://rent.yungching.com.tw/case/C202688'
-  },
-  // 信義房屋 (Sinyi) - 赤峰街文青人流特色店面
-  'sy-99412H': {
-    platform: 'sinyi',
-    platformName: '信義房屋',
-    title: '赤峰街文青人流特色店面',
-    titleJa: '赤峰街カルチャーエリア・デザイナーズ路面店（信義房屋）',
-    address: '台北市大同區赤峰街（近雙連捷運站）',
-    rent: 128000,
-    area: 28.6,
-    deposit: 256000,
-    freeRent: '1 個月',
-    realCost: 143501,
-    floor: '1 樓',
-    lat: 25.0545,
-    lng: 121.5198,
-    images: [
-      'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&q=80',
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80'
-    ],
-    pros: '赤峰街文青潮流核心聚落，目標客群與 grounds 年輕時尚定位高度契合。',
-    prosJa: '赤峰街のクリエイティブ・トレンド発信地に位置。groundsのターゲット層と親和性極めて高し。',
-    cons: '面寬約 4 米，室內坪數 28.6 坪，需兼顧鞋款陳列與試穿動線。',
-    consJa: '間口約4m、実質28.6坪のため、シューズ展示と試着スペースの回遊設計に工夫が必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://rent.sinyi.com.tw/rentItem/99412H'
-  },
-  '99412H': {
-    platform: 'sinyi',
-    platformName: '信義房屋',
-    title: '赤峰街文青人流特色店面',
-    titleJa: '赤峰街カルチャーエリア・デザイナーズ路面店（信義房屋）',
-    address: '台北市大同區赤峰街（近雙連捷運站）',
-    rent: 128000,
-    area: 28.6,
-    deposit: 256000,
-    freeRent: '1 個月',
-    realCost: 143501,
-    floor: '1 樓',
-    lat: 25.0545,
-    lng: 121.5198,
-    images: [
-      'https://images.unsplash.com/photo-1513151233558-d860c5398176?w=800&q=80',
-      'https://images.unsplash.com/photo-1524758631624-e2822e304c36?w=800&q=80'
-    ],
-    pros: '赤峰街文青潮流核心聚落，目標客群與 grounds 年輕時尚定位高度契合。',
-    prosJa: '赤峰街のクリエイティブ・トレンド発信地に位置。groundsのターゲット層と親和性極めて高し。',
-    cons: '面寬約 4 米，室內坪數 28.6 坪，需兼顧鞋款陳列與試穿動線。',
-    consJa: '間口約4m、実質28.6坪のため、シューズ展示と試着スペースの回遊設計に工夫が必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://rent.sinyi.com.tw/rentItem/99412H'
-  },
-  // 591 房屋交易
-  '21939969': {
-    platform: '591',
-    platformName: '591 房屋交易',
-    title: '中山站商圈金店面',
-    titleJa: '中山駅商圏・旗艦路面店（MRT中山駅 徒歩3分）',
-    address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
-    rent: 285000,
-    area: 56,
-    deposit: 855000,
-    freeRent: '1.5 個月',
-    realCost: 319514,
-    lat: 25.0535,
-    lng: 121.5218,
-    images: [
-      'https://img1.591.com.tw/house/2026/08/24/178755226762434403.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/08/24/178755227136601404.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/08/24/178755227430594305.jpg!1000x.water2.jpg'
-    ],
-    pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
-    prosJa: 'MRT中山駅徒歩206m、56坪の大型路面店。南西商圏中心の路面に位置し、高感度ブランドやトレンドショップが集積。',
-    cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
-    consJa: '月額賃料28.5万元（約137万円）は旗艦級予算のため、1号店の売上計画と採算性を総合評価する必要あり。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://business.591.com.tw/rent/21939969'
-  },
-  '22015090': {
-    platform: '591',
-    platformName: '591 房屋交易',
-    title: 'MRT中山國小 龍江商圈 一個月免租期',
-    titleJa: 'MRT中山国小・龍江商圏（フリーレント1ヶ月）',
-    address: '台北市中山區龍江路377巷',
-    rent: 45999,
-    area: 35,
-    deposit: 92000,
-    freeRent: '1 個月',
-    realCost: 51564,
-    lat: 25.0628,
-    lng: 121.5412,
-    images: [
-      'https://img2.591.com.tw/house/2026/10/15/179203421404381607.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/10/15/179203421515614508.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/10/15/179203421395244009.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/10/15/179203421510057800.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/10/15/179203421550285601.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/10/15/179203421399201808.jpg!1000x.water2.jpg'
-    ],
-    pros: '總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。',
-    prosJa: '総賃料の負担が非常に軽く（4.6万元/月・約22万円）、35坪と広々。角地で独立した採光があり内装期間1ヶ月免除。',
-    cons: '位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。',
-    consJa: '龍江商圏の路地に位置し平日は周辺住民の生活圏中心。SNSでの的確なファン誘導が必要。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://business.591.com.tw/rent/22015090'
-  },
-  '20654976': {
-    platform: '591',
-    platformName: '591 房屋交易',
-    title: 'MRT行天宮站 含稅・店面有獨立廁所',
-    titleJa: 'MRT行天宮駅・専用トイレ付路面店（税サ込）',
-    address: '台北市中山區吉林路（近行天宮捷運站 2 號出口）',
-    rent: 120000,
-    area: 25.5,
-    deposit: 300000,
-    freeRent: '1 個月',
-    realCost: 134532,
-    lat: 25.0598,
-    lng: 121.5302,
-    images: [
-      'https://img2.591.com.tw/house/2026/02/06/177037031442729303.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/02/06/177037031453341906.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/02/06/177037031457161105.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/02/06/177037031457680307.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/02/06/177037031452313804.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/02/06/177037031484440409.jpg!1000x.water2.jpg'
-    ],
-    pros: '行天宮捷運站步行2分鐘，周邊商務白領人潮多，含稅且附獨立專用衛生間，門面俐落。',
-    prosJa: '行天宮駅徒歩2分。吉林路のビジネス客・OL人流が豊富。税金込で専用トイレあり、天井高3.6m。',
-    cons: '25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。',
-    consJa: '25.5坪とややコンパクトなため、靴箱ストックとバックヤードの立体効率配置が必須。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://business.591.com.tw/rent/20654976'
-  },
-  '21265868': {
-    platform: '591',
-    platformName: '591 房屋交易',
-    title: '民權西路站可餐飲廣告效益佳大面寬金店面',
-    titleJa: '民権西路駅・大間口ロードサイド店舗',
-    address: '台北市中山區撫順街（近民權西路雙捷運站）',
-    rent: 180000,
-    area: 60.71,
-    deposit: 360000,
-    freeRent: '1.5 個月',
-    realCost: 201798,
-    lat: 25.0643544,
-    lng: 121.521515,
-    images: [
-      'https://img2.591.com.tw/house/2026/01/06/176768970144847001.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/01/07/176777449649381708.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/01/06/176768970124590304.jpg!1000x.water2.jpg',
-      'https://img1.591.com.tw/house/2026/01/06/176768970110939406.jpg!1000x.water2.jpg',
-      'https://img2.591.com.tw/house/2026/01/06/176768970128324700.jpg!1000x.water2.jpg'
-    ],
-    pros: '8米超大面寬、廣告曝光極強，室內實達60.7坪，適合旗艦體驗門市。',
-    prosJa: '8mのワイドスパンで看板露出効果大。民権西路の2路線乗換駅至近。室内実面積60.7坪の広さを確保。',
-    cons: '撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。',
-    consJa: '撫順街は休日の人流が南西商圏に比べ落ち着くため、平日の通勤客依存度が高い。',
-    canRegister: true, canInvoice: true, fireSafety: true,
-    url: 'https://business.591.com.tw/rent/21265868'
-  }
-};
-
-// Aliases for backwards compatibility
+// 店面資料只來自雲端（grounds_data.json）與 store_fixes.json 的核對修正，不再內建舊資料表
+const KNOWN_STORES_DB = {};
 const KNOWN_591_DB = KNOWN_STORES_DB;
 
 // --- Core State ---
@@ -3079,109 +2813,7 @@ let state = {
       comments: []
     }
   ],
-  stores: [
-    {
-      id: 'AGY-A2610063',
-      title: '魔術真髮錦州店（東家國際地產 #A2610063）',
-      address: '台北市中山區錦州街 23 巷 7 號、9 號',
-      status: 'candidate',
-      statusLabel: '房仲資料',
-      lat: 25.0592,
-      lng: 121.5275,
-      rent: 250000,
-      area: 72.8,
-      deposit: 750000,
-      freeRent: '另議 (爭取1.5個月)',
-      realCost: 280275,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '面寬達 12.4 米極氣派，挑高 4.6 米空間感絕佳，合規 B2 一般零售業執照，1+2 樓實用達 72.8 坪。',
-      cons: '錦州街 23 巷偏生活與餐飲圈，路寬 6 米，需評估國際潮流客群導流深度。',
-      url: 'agency_A2610063.jpg',
-      images: ['agency_A2610063.jpg'],
-      activeImgIdx: 0,
-      sourceType: 'agency'
-    },
-    {
-      id: '591-21939969',
-      title: '中山站商圈金店面',
-      address: '台北市中山區中山北路二段26巷（捷運中山站 206 公尺）',
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0535,
-      lng: 121.5218,
-      rent: 285000,
-      area: 56,
-      deposit: 855000,
-      freeRent: '1.5 個月',
-      realCost: 319514,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '捷運中山站步行206公尺，56坪超大營業面積，南西核心巷弄，國際潮流與精品品牌林立。',
-      cons: '月租金28.5萬屬一線旗艦級預算，需綜合評估台灣首店營業額與毛利模型。',
-      url: 'https://business.591.com.tw/rent/21939969',
-      images: KNKNOWN_IMAGE('21939969'),
-      activeImgIdx: 0
-    },
-    {
-      id: '591-21265868',
-      title: '民權西路站可餐飲廣告效益佳大面寬金店面',
-      address: '台北市中山區撫順街（近民權西路雙捷運站）',
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0643544,
-      lng: 121.521515,
-      rent: 180000,
-      area: 60.71,
-      deposit: 360000,
-      freeRent: '1.5 個月',
-      realCost: 201798,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '大面寬8米廣告曝光極強、民權西路雙捷運交會樞紐，室內實達60.7坪大空間。',
-      cons: '撫順街假日時段人流較南西商圈少，平日主要依賴上班通勤人潮。',
-      url: 'https://business.591.com.tw/rent/21265868',
-      images: KNKNOWN_IMAGE('21265868'),
-      activeImgIdx: 0
-    },
-    {
-      id: '591-20654976',
-      title: 'MRT行天宮站 含稅・店面有獨立廁所',
-      address: '台北市中山區吉林路（近行天宮捷運站 2 號出口）',
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0598,
-      lng: 121.5302,
-      rent: 120000,
-      area: 25.5,
-      deposit: 300000,
-      freeRent: '1 個月',
-      realCost: 134532,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '行天宮捷運站步行2分鐘，吉林路商務白領人流多，含稅附獨立專用衛生間，挑高3.6米。',
-      cons: '25.5坪空間偏精巧，鞋盒庫存與後場備品需做高效率規劃。',
-      url: 'https://business.591.com.tw/rent/20654976',
-      images: KNKNOWN_IMAGE('20654976'),
-      activeImgIdx: 0
-    },
-    {
-      id: '591-22015090',
-      title: 'MRT中山國小 龍江商圈 一個月免租期',
-      address: '台北市中山區龍江路377巷',
-      status: 'candidate',
-      statusLabel: '重點候選',
-      lat: 25.0628,
-      lng: 121.5412,
-      rent: 45999,
-      area: 35,
-      deposit: 92000,
-      freeRent: '1 個月',
-      realCost: 51564,
-      canRegister: true, canInvoice: true, fireSafety: true,
-      pros: '總租金負擔極輕（4.6萬/月），35坪寬敞，格局方正具備獨立對外大採光，裝潢免租期1個月。',
-      cons: '位於龍江商圈巷內，平日以周邊住戶生活圈為主，需配合社群精準導流。',
-      url: 'https://business.591.com.tw/rent/22015090',
-      images: KNKNOWN_IMAGE('22015090'),
-      activeImgIdx: 0
-    }
-  ],
+  stores: [],
   deletedLogs: []
 };
 
@@ -3344,29 +2976,6 @@ function loadAppState() {
     ].filter(p => !deletedPostIds.has(p.id));
   }
   state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
-
-  // Ensure known items have authentic photos and metrics updated
-  state.stores.forEach(s => {
-    const rawId = s.id.replace(/^[a-z]+-/, '');
-    const dbItem = KNOWN_STORES_DB[s.id] || KNOWN_STORES_DB[rawId];
-    if (dbItem) {
-      s.images = dbItem.images;
-      s.title = dbItem.title;
-      s.titleJa = dbItem.titleJa || dbItem.title;
-      s.address = dbItem.address;
-      s.rent = dbItem.rent;
-      s.area = dbItem.area;
-      s.realCost = dbItem.realCost;
-      if (dbItem.deposit) s.deposit = dbItem.deposit;
-      if (dbItem.freeRent) s.freeRent = dbItem.freeRent;
-      if (dbItem.floor) s.floor = dbItem.floor;
-      s.pros = dbItem.pros;
-      s.prosJa = dbItem.prosJa || dbItem.pros;
-      s.cons = dbItem.cons;
-      s.consJa = dbItem.consJa || dbItem.cons;
-      if (dbItem.url && (!s.url || !s.url.startsWith('agency_'))) s.url = dbItem.url;
-    }
-  });
 
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token') || params.get('auth');
@@ -4160,67 +3769,10 @@ async function submitFeedPost() {
             console.warn('Backend scrape failed, using platform fallback:', e);
           }
 
-          if (fetched) {
-            storeObj = {
-              id: finalPropId,
-              title: fetched.title,
-              titleJa: fetched.titleJa || fetched.title,
-              address: fetched.address || '台北市中山區精華商圈',
-              status: 'candidate',
-              statusLabel: fetched.statusLabel || (platform === '591' ? '重點候選' : '房仲推薦'),
-              lat: Number(fetched.lat) || (25.0535 + (Math.random() - 0.5) * 0.005),
-              lng: Number(fetched.lng) || (121.5218 + (Math.random() - 0.5) * 0.005),
-              rent: Number(fetched.rent) || 120000,
-              area: Number(fetched.area) || 35.0,
-              deposit: Number(fetched.deposit) || ((Number(fetched.rent) || 120000) * 2),
-              freeRent: fetched.freeRent || '1 個月',
-              realCost: Number(fetched.realCost) || Math.round((Number(fetched.rent) || 120000) * 1.1211),
-              floor: fetched.floor || '1 樓',
-              canRegister: fetched.canRegister !== false,
-              canInvoice: fetched.canInvoice !== false,
-              fireSafety: fetched.fireSafety !== false,
-              pros: fetched.pros,
-              prosJa: fetched.prosJa || fetched.pros,
-              cons: fetched.cons,
-              consJa: fetched.consJa || fetched.cons,
-              url: matchedUrl,
-              images: (fetched.images && fetched.images.length) ? fetched.images : [
-                'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'
-              ],
-              activeImgIdx: 0,
-              sourceType: platform
-            };
-          } else {
-            storeObj = {
-              id: finalPropId,
-              title: `${name}#${rawId || '新刊登'} 中山精華商圈店面`,
-              titleJa: `${nameJa}#${rawId || '新規'} 中山区商業店舗`,
-              address: '台北市中山區精華商圈',
-              status: 'candidate',
-              statusLabel: platform === '591' ? '重點候選' : '房仲推薦',
-              lat: 25.0535 + (Math.random() - 0.5) * 0.005,
-              lng: 121.5218 + (Math.random() - 0.5) * 0.005,
-              rent: 120000,
-              area: 35,
-              deposit: 240000,
-              freeRent: '1 個月',
-              realCost: 134532,
-              floor: '1 樓',
-              canRegister: true, canInvoice: true, fireSafety: true,
-              pros: `${name} 快速導入物件。`,
-              prosJa: `${nameJa} 迅速インポート物件。`,
-              cons: '待現場實勘人流與現況。',
-              consJa: '現地での人流および現況視察が必要。',
-              url: matchedUrl,
-              images: [
-                'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'
-              ],
-              activeImgIdx: 0,
-              sourceType: platform
-            };
-          }
-          flagUnverified(storeObj, isRealScrape(fetched));
+          storeObj = makeStoreFromSource({ id: finalPropId, platform, name, rawId, url: matchedUrl, src: fetched });
+          flagUnverified(storeObj, false);
           state.stores.unshift(storeObj);
+          geocodeStoreIfNeeded(storeObj);
         }
 
         urlReplacements.push({
@@ -4388,7 +3940,7 @@ function createCard(p, colLang) {
   if (linkedStores.length > 0) {
     propHtml = linkedStores.map(prop => {
       const mainImg = prop.images && prop.images.length ? prop.images[0] : '';
-      const unitPrice = Math.round(prop.rent / prop.area);
+      const unitPrice = unitOf(prop);
       const m2Area = Math.round(prop.area * 3.3058);
       const jpyRentWan = Math.round(prop.rent * 4.8 / 10000);
       const jpyRealWan = Math.round(prop.realCost * 4.8 / 10000);
@@ -4404,8 +3956,8 @@ function createCard(p, colLang) {
               <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${dispTitle}">${dispTitle}</div>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
-              <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${Math.round(prop.rent/10000)}萬</strong> (約 ${jpyRentWan}万円)</span>
-              <span class="metric-pill metric-area"><strong>${Math.round(prop.area)} 坪</strong> (${m2Area}㎡)</span>
+              <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${fmtWan(prop.rent)}萬</strong> (約 ${jpyRentWan}万円)</span>
+              <span class="metric-pill metric-area"><strong>${fmtPing(prop.area)} 坪</strong> (${m2Area}㎡)</span>
               <span class="metric-pill metric-real">${isJaCol ? '実質月次' : '實月成本'}: <strong>NT$ ${Math.round(prop.realCost).toLocaleString()}</strong></span>
             </div>
             <div style="font-size:11px;color:var(--fg);display:flex;align-items:center;gap:4px;">
@@ -4842,11 +4394,11 @@ function openStoreDetailModal(storeId) {
   state.activeDetailStoreId = storeId;
 
   // Pure Integers (Math.round) - NO DECIMALS
-  const unitPrice = Math.round(s.rent / s.area);
+  const unitPrice = unitOf(s);
   const jpyRate = 4.8;
-  const rentWan = Math.round(s.rent / 10000);
+  const rentWan = fmtWan(s.rent);
   const rentJpyWan = Math.round(s.rent * jpyRate / 10000);
-  const areaPing = Math.round(s.area);
+  const areaPing = fmtPing(s.area);
   const areaSqm = Math.round(s.area * 3.3058);
   const unitJpy = Math.round(unitPrice * jpyRate).toLocaleString();
   const realCost = Math.round(s.realCost);
@@ -4876,29 +4428,31 @@ function openStoreDetailModal(storeId) {
     gmapLinkEl.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent((s.address || s.title) + ' 台北市')}`;
   }
 
-  document.getElementById('m-store-rent').textContent = `NT$ ${rentWan} 萬`;
-  document.getElementById('m-store-rent-ja').textContent = `（約 ${rentJpyWan} 万円/月）`;
+  const nn = hasNums(s);
+  document.getElementById('m-store-rent').textContent = nn ? `NT$ ${rentWan} 萬` : '—';
+  document.getElementById('m-store-rent-ja').textContent = nn ? `（約 ${rentJpyWan} 万円/月）` : '';
 
-  document.getElementById('m-store-area').textContent = `${areaPing} 坪`;
-  document.getElementById('m-store-area-ja').textContent = `（約 ${areaSqm} ㎡）`;
+  document.getElementById('m-store-area').textContent = nn ? `${areaPing} 坪` : '—';
+  document.getElementById('m-store-area-ja').textContent = nn ? `（約 ${areaSqm} ㎡）` : '';
 
-  document.getElementById('m-store-unitprice').textContent = `NT$ ${unitPrice.toLocaleString()} /坪`;
-  document.getElementById('m-store-unitprice-ja').textContent = `（約 ${unitJpy} 円/坪）`;
+  document.getElementById('m-store-unitprice').textContent = nn ? `NT$ ${unitPrice.toLocaleString()} /坪` : '—';
+  document.getElementById('m-store-unitprice-ja').textContent = nn ? `（約 ${unitJpy} 円/坪）` : '';
 
-  document.getElementById('m-store-realcost').textContent = `NT$ ${realCost.toLocaleString()}`;
-  document.getElementById('m-store-realcost-ja').textContent = `（約 ${realCostJpyWan} 万円/月）`;
+  document.getElementById('m-store-realcost').textContent = Number(s.realCost) > 0 ? `NT$ ${realCost.toLocaleString()}` : '—';
+  document.getElementById('m-store-realcost-ja').textContent = Number(s.realCost) > 0 ? `（約 ${realCostJpyWan} 万円/月）` : '';
 
-  document.getElementById('m-store-deposit').textContent = `NT$ ${depositWan} 萬`;
-  document.getElementById('m-store-deposit-ja').textContent = `（敷金 約 ${depositJpyWan} 万円）`;
+  const depNum = Number(s.deposit) > 0;
+  document.getElementById('m-store-deposit').textContent = depositLabel(s);
+  document.getElementById('m-store-deposit-ja').textContent = depNum ? `（敷金 約 ${depositJpyWan} 万円）` : '';
 
-  document.getElementById('m-store-freerent').textContent = s.freeRent || '1 個月';
-  document.getElementById('m-store-freerent-ja').textContent = `（フリーレント ${s.freeRent || '1ヶ月'}）`;
+  document.getElementById('m-store-freerent').textContent = s.freeRent || '洽詢';
+  document.getElementById('m-store-freerent-ja').textContent = `（フリーレント：${jaMonths(s.freeRent || '洽詢')}）`;
 
-  document.getElementById('m-store-canreg').textContent = s.canRegister ? '符合（可辦理營業登記）' : '不可';
-  document.getElementById('m-store-canreg-ja').textContent = s.canRegister ? '（会社設立登記可）' : '（登記不可）';
+  document.getElementById('m-store-canreg').textContent = triBool(s.canRegister, '符合（可辦理營業登記）', '不可');
+  document.getElementById('m-store-canreg-ja').textContent = triBool(s.canRegister, '（会社設立登記可）', '（登記不可）') === '—' ? '' : triBool(s.canRegister, '（会社設立登記可）', '（登記不可）');
 
-  document.getElementById('m-store-caninvoice').textContent = s.canInvoice ? '可以開立發票' : '否';
-  document.getElementById('m-store-caninvoice-ja').textContent = s.canInvoice ? '（インボイス適格）' : '（非適格）';
+  document.getElementById('m-store-caninvoice').textContent = triBool(s.canInvoice, '可以開立發票', '否');
+  document.getElementById('m-store-caninvoice-ja').textContent = s.canInvoice === true ? '（インボイス適格）' : (s.canInvoice === false ? '（非適格）' : '');
 
   // Pros & Cons with Japanese
   document.getElementById('m-store-pros-zh').textContent = s.pros || '';
@@ -5049,10 +4603,10 @@ state.storeSort = 'default';
 try { state.storeSort = localStorage.getItem(STORE_SORT_KEY) || 'default'; } catch (e) {}
 function sortedStores() {
   const arr = state.stores.slice();
-  const unit = s => (Number(s.rent) || 0) / (Number(s.area) || 1);
+  const unit = s => hasNums(s) ? s.rent / s.area : Infinity;
   if (state.storeSort === 'area') arr.sort((a, b) => (Number(b.area) || 0) - (Number(a.area) || 0));         // 大到小
-  else if (state.storeSort === 'rent') arr.sort((a, b) => (Number(a.rent) || 0) - (Number(b.rent) || 0));    // 低到高
-  else if (state.storeSort === 'unit') arr.sort((a, b) => unit(a) - unit(b));                                 // 低到高
+  else if (state.storeSort === 'rent') arr.sort((a, b) => (Number(a.rent) || Infinity) - (Number(b.rent) || Infinity));    // 低到高（沒金額的排最後）
+  else if (state.storeSort === 'unit') arr.sort((a, b) => (unit(a) === unit(b) ? 0 : (unit(a) < unit(b) ? -1 : 1)));       // 低到高
   return arr;
 }
 function updateSortChips() {
@@ -5142,12 +4696,13 @@ function renderStores() {
       openStoreDetailModal(s.id);
     };
 
-    const unitPrice = Math.round(s.rent / s.area);
+    const unitPrice = unitOf(s);
+    const noNum = !hasNums(s);
     const curIdx = s.activeImgIdx || 0;
     const curImg = s.images && s.images.length ? s.images[curIdx] : '';
     const imgCount = s.images ? s.images.length : 0;
-    const rentWan = Math.round(s.rent / 10000);
-    const areaPing = Math.round(s.area);
+    const rentWan = fmtWan(s.rent);
+    const areaPing = fmtPing(s.area);
     const realCost = Math.round(s.realCost);
 
     card.innerHTML = `
@@ -5155,7 +4710,7 @@ function renderStores() {
       <div class="store-compact-row">
         <!-- Thumbnail with photo count pill -->
         <div class="store-compact-thumb-wrap" onclick="if (isMobileView()) return; event.stopPropagation(); openStoreDetailModal('${s.id}')" title="${tr('點擊檢視大圖與輪播','タップして写真を表示')}">
-          <img src="${curImg || 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'}" class="store-compact-thumb" alt="${storeTitleText(s)}">
+          ${curImg ? `<img src="${curImg}" class="store-compact-thumb" alt="${storeTitleText(s)}">` : '<div class="store-compact-thumb"></div>'}
           ${imgCount > 1 ? `<span class="store-photo-count-pill">📷 ${imgCount}</span>` : ''}
         </div>
 
@@ -5172,10 +4727,10 @@ function renderStores() {
           <div class="store-compact-addr">${s.address}</div>
           <div class="store-compact-metrics">
             ${s.unverified ? `<span class="metric-pill pill-warn">⚠ ${tr('數字待確認','数値要確認')}</span>` : ''}
-            <span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
+            ${noNum ? '' : `<span class="metric-pill ${getRentColorClass(s.rent)}">${tr('月租','賃料')} <strong>NT$ ${rentWan}${tr('萬','万')}</strong></span>
             <span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing * 3.3058)}㎡)</span>
             <span class="metric-pill metric-unit">${tr('單價','坪単価')} <strong>${unitPrice.toLocaleString()}/坪</strong></span>
-            <span class="metric-pill metric-real">${tr('實月','実質月額')} <strong>NT$ ${realCost.toLocaleString()}</strong></span>
+            <span class="metric-pill metric-real">${tr('實月','実質月額')} <strong>NT$ ${realCost.toLocaleString()}</strong></span>`}
           </div>
         </div>
 
@@ -5198,15 +4753,15 @@ function renderStores() {
         ` : ''}
 
         <!-- Specs Grid -->
-        <div class="store-specs-grid">
+        <div class="store-specs-grid"${noNum ? ' style="display:none"' : ''}>
           <div>${tr('刊登月租','掲載賃料')}：<span class="metric-pill ${getRentColorClass(s.rent)}">NT$ <strong>${rentWan}${tr('萬','万')}</strong></span></div>
           <div>${tr('使用坪數','使用面積')}：<span class="metric-pill metric-area"><strong>${areaPing} 坪</strong> (${Math.round(areaPing*3.3058)}㎡)</span></div>
           <div>${tr('每坪單價','坪単価')}：<span class="metric-pill metric-unit">NT$ <strong>${unitPrice.toLocaleString()}</strong>/坪</span></div>
           <div>${tr('真實月成本','実質月額コスト')}：<span class="metric-pill metric-real">NT$ <strong>${realCost.toLocaleString()}</strong></span></div>
-          <div>${tr('押金需求','保証金')}：<strong>NT$ ${Math.round((s.deposit||s.rent*2)/10000)}${tr('萬','万')}</strong></div>
-          <div>${tr('裝潢免租','フリーレント')}：<strong>${jaMonths(s.freeRent || tr('1 個月','1ヶ月'))}</strong></div>
-          <div>${tr('營業登記','営業登記')}：<strong>${s.canRegister ? tr('符合','可') : tr('不可','不可')}</strong></div>
-          <div>${tr('發票適格','インボイス')}：<strong>${s.canInvoice ? tr('可開立','発行可') : tr('否','不可')}</strong></div>
+          <div>${tr('押金需求','保証金')}：<strong>${depositLabel(s)}</strong></div>
+          <div>${tr('裝潢免租','フリーレント')}：<strong>${jaMonths(s.freeRent || tr('洽詢','要問い合わせ'))}</strong></div>
+          <div>${tr('營業登記','営業登記')}：<strong>${triBool(s.canRegister, tr('可','可'), tr('不可','不可'))}</strong></div>
+          <div>${tr('發票適格','インボイス')}：<strong>${triBool(s.canInvoice, tr('可開立','発行可'), tr('否','不可'))}</strong></div>
         </div>
 
         <div style="font-size:12px;color:var(--fg);margin-top:6px;line-height:1.5;">
@@ -5299,6 +4854,7 @@ function saveEditedStore() {
   const a = parseFloat(document.getElementById('es-area').value) || s.area;
   const t = document.getElementById('es-title').value.trim() || s.title;
   const addr = document.getElementById('es-address').value.trim() || s.address;
+  const addrChanged = addr !== s.address;
   const fr = document.getElementById('es-freerent').value.trim() || s.freeRent;
   const dep = parseInt(document.getElementById('es-deposit').value) || s.deposit;
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
@@ -5316,6 +4872,8 @@ function saveEditedStore() {
   if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
   s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
   s.editedAt = Date.now();
+  if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }   // 地址改了，推估座標作廢
+  geocodeStoreIfNeeded(s);
 
   saveAppState();
   closeEditStoreModal();
@@ -5494,71 +5052,17 @@ async function parseAndAddStoreDirect() {
       }
     }
 
-    // 3. Fallback object if backend is offline or protected by anti-bot
-    if (!storeData) {
-      storeData = {
-        title: `${name}#${rawId || '新刊登'} 中山精華商圈店面`,
-        titleJa: `${nameJa}#${rawId || '新規'} 中山商圏路面店`,
-        address: '台北市中山區精華商圈',
-        rent: 120000,
-        area: 35.0,
-        deposit: 240000,
-        freeRent: '1 個月',
-        realCost: 134532,
-        floor: '1 樓',
-        lat: 25.054 + (Math.random() - 0.5) * 0.01,
-        lng: 121.522 + (Math.random() - 0.5) * 0.01,
-        images: [
-          'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
-          'https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800&q=80'
-        ],
-        pros: `由 ${name} 快速導入，鄰近捷運站與成熟商圈。`,
-        prosJa: `${nameJa} より迅速インポート。駅至近の好立地。`,
-        cons: '已自動納入店面評估，可點擊「編輯店面」微調實測租金與坪數條件。',
-        consJa: '比較リストに追加済。店舗詳細モーダルより賃料・面積の微調整が可能です。',
-        canRegister: true,
-        canInvoice: true,
-        fireSafety: true
-      };
-    }
+    // 3. 讀不到網頁時：不編任何資料，只建立「待確認」空白店面
+    const storeObj = makeStoreFromSource({ id: finalId, platform, name, rawId, url: targetUrl || rawUrl, src: storeData });
 
-    const storeObj = {
-      id: finalId,
-      title: storeData.title,
-      titleJa: storeData.titleJa || storeData.title,
-      address: storeData.address || '台北市中山區精華商圈',
-      status: 'candidate',
-      statusLabel: storeData.statusLabel || (platform === '591' ? '重點候選' : '房仲推薦'),
-      lat: Number(storeData.lat) || (25.054 + (Math.random() - 0.5) * 0.01),
-      lng: Number(storeData.lng) || (121.522 + (Math.random() - 0.5) * 0.01),
-      rent: Number(storeData.rent) || 120000,
-      area: Number(storeData.area) || 35.0,
-      deposit: Number(storeData.deposit) || ((Number(storeData.rent) || 120000) * 2),
-      freeRent: storeData.freeRent || '1 個月',
-      realCost: Number(storeData.realCost) || Math.round((Number(storeData.rent) || 120000) * 1.1211),
-      floor: storeData.floor || '1 樓',
-      canRegister: storeData.canRegister !== false,
-      canInvoice: storeData.canInvoice !== false,
-      fireSafety: storeData.fireSafety !== false,
-      pros: storeData.pros || '交通便利，商圈客流穩定。',
-      prosJa: storeData.prosJa || storeData.pros || '交通アクセス良好、安定した商圏人流。',
-      cons: storeData.cons || '需配合品牌調性與動線規劃。',
-      consJa: storeData.consJa || storeData.cons || 'ブランドの世界観に合わせた空間演出が必要。',
-      url: targetUrl || rawUrl,
-      images: (storeData.images && storeData.images.length) ? storeData.images : [
-        'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80'
-      ],
-      activeImgIdx: 0,
-      sourceType: platform
-    };
-
-    flagUnverified(storeObj, storeVerified);
+    flagUnverified(storeObj, false);
     const existingIdx = state.stores.findIndex(s => s.id === finalId);
     if (existingIdx >= 0) {
       state.stores[existingIdx] = storeObj;
     } else {
       state.stores.unshift(storeObj);
     }
+    geocodeStoreIfNeeded(storeObj);
 
     saveAppState();
     urlIn.value = '';
@@ -5649,13 +5153,14 @@ function updateAgRealCost() {
 }
 
 function confirmSaveAgencySheet() {
-  const code = document.getElementById('ag-code').value.trim() || 'A2610063';
-  const title = document.getElementById('ag-title').value.trim() || '房仲精選店面';
-  const address = document.getElementById('ag-address').value.trim() || '台北市中山區';
-  const rent = parseInt(document.getElementById('ag-rent').value) || 250000;
-  const area = parseFloat(document.getElementById('ag-area').value) || 50;
-  const deposit = parseInt(document.getElementById('ag-deposit').value) || (rent * 3);
-  const freeRent = document.getElementById('ag-freerent').value.trim() || '1.5 個月';
+  const code = document.getElementById('ag-code').value.trim() || ('M' + Date.now().toString(36).toUpperCase());
+  const title = document.getElementById('ag-title').value.trim();
+  const address = document.getElementById('ag-address').value.trim();
+  const rent = parseInt(document.getElementById('ag-rent').value) || 0;
+  const area = parseFloat(document.getElementById('ag-area').value) || 0;
+  const deposit = parseInt(document.getElementById('ag-deposit').value) || 0;
+  const freeRent = document.getElementById('ag-freerent').value.trim() || '洽詢';
+  if (!title || !address || !(rent > 0) || !(area > 0)) { showToast(tr('請填名稱、地址、月租、坪數', '名称・住所・賃料・坪数を入力'), 2200); return; }
   const specs = document.getElementById('ag-specs').value.trim();
   const license = document.getElementById('ag-license').value.trim();
   const pros = document.getElementById('ag-pros').value.trim();
@@ -5669,16 +5174,14 @@ function confirmSaveAgencySheet() {
     address: address,
     status: 'candidate',
     statusLabel: '房仲推薦',
-    lat: 25.0592 + (Math.random() - 0.5) * 0.005,
-    lng: 121.5275 + (Math.random() - 0.5) * 0.005,
+    lat: null,
+    lng: null,
     rent: rent,
     area: area,
     deposit: deposit,
+    depositText: deposit > 0 ? undefined : '未填',
     freeRent: freeRent,
     realCost: realCost,
-    canRegister: true,
-    canInvoice: true,
-    fireSafety: true,
     specs: specs,
     license: license,
     pros: pros,
@@ -5695,6 +5198,7 @@ function confirmSaveAgencySheet() {
   } else {
     state.stores.unshift(storeObj);
   }
+  geocodeStoreIfNeeded(storeObj);
 
   // Check if post to feed
   const postFeedCheck = document.getElementById('ag-post-to-feed');
@@ -5890,7 +5394,7 @@ function renderCompareTable() {
 
   let rentHtml = `<tr><th>${lblRent}</th>` + items.map(s => {
     const badge = renderRankBadge(rentRanks[s.id]);
-    const wanTwd = Math.round(s.rent / 10000);
+    const wanTwd = fmtWan(s.rent);
     const wanJpy = Math.round(s.rent * jpyRate / 10000);
     const rentColorCls = getRentColorClass(s.rent);
     return `
@@ -5907,7 +5411,7 @@ function renderCompareTable() {
   let areaHtml = `<tr><th>${lblArea}</th>` + items.map(s => {
     const badge = renderRankBadge(areaRanks[s.id]);
     const m2 = Math.round(s.area * 3.3058);
-    const ping = Math.round(s.area);
+    const ping = fmtPing(s.area);
     return `
       <td>
         <div class="comp-metric-box">
@@ -6046,6 +5550,7 @@ function initStoreMap() {
   storeMarkers = {};
 
   state.stores.forEach(s => {
+    if (!(Number(s.lat) && Number(s.lng))) return;   // 沒有座標的店不放圖釘
     const marker = L.marker([s.lat, s.lng]).addTo(storeMap);
 
     // Single click: scroll left list into view and highlight card
@@ -6062,7 +5567,7 @@ function initStoreMap() {
     marker.bindPopup(`
       <div style="font-size:12px;font-family:sans-serif;line-height:1.5;">
         <strong>${storeTitleText(s)}</strong><br>
-        ${tr('月租','賃料')}：NT$ ${Math.round(s.rent/10000)}${tr('萬','万')}（${Math.round(s.area)}坪）<br>
+        ${hasNums(s) ? `${tr('月租','賃料')}：NT$ ${fmtWan(s.rent)}${tr('萬','万')}（${fmtPing(s.area)}坪）<br>` : ''}
         ${tr('免租期','フリーレント')}：${jaMonths(s.freeRent)}<br>
         <button style="margin-top:4px;padding:3px 8px;cursor:pointer;background:#111;color:#fff;border:none;border-radius:4px;" onclick="openStoreDetailModal('${s.id}')">${tr('檢視浮動詳情 ↗','詳細を見る ↗')}</button>
       </div>
@@ -6072,21 +5577,79 @@ function initStoreMap() {
 }
 
 // --- 日文介面用的字串／資料轉換 ---
+function fmtWan(ntd) { const w = (Number(ntd) || 0) / 10000; return String(Math.round(w * 100) / 100); }
+function fmtPing(a) { return String(Math.round((Number(a) || 0) * 100) / 100); }
+const DEP_JA = { '面議': '要相談', '二個月': '2ヶ月分', '三個月': '3ヶ月分', '四個月': '4ヶ月分', '無法核對': '確認不可' };
+function depositLabel(s) {
+  const n = Number(s.deposit) > 0;
+  const txt = s.depositText ? (state.langMode === 'ja' ? (DEP_JA[s.depositText] || s.depositText) : s.depositText) : '';
+  if (n) return `NT$ ${Math.round(s.deposit / 10000)}${state.langMode === 'ja' ? '万' : '萬'}` + (txt ? `（${txt}）` : '');
+  return txt || (state.langMode === 'ja' ? '未確認' : '未確認');
+}
+const hasNums = s => Number(s.rent) > 0 && Number(s.area) > 0;
+const unitOf = s => hasNums(s) ? Math.round(s.rent / s.area) : 0;
+function triBool(v, yes, no) { return v === true ? yes : (v === false ? no : '—'); }
 function tr(zh, ja) { return state.langMode === 'ja' ? ja : zh; }
-const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外', '數字待確認': '数値要確認' };
+const STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外', '數字待確認': '数値要確認', '已下架': '掲載終了' };
 function storeStatusText(s) { const l = s.statusLabel || ''; return state.langMode === 'ja' ? (STATUS_JA[l] || l) : l; }
 function storeTitleText(s) { return state.langMode === 'ja' ? (s.titleJa || s.title) : s.title; }
-function jaMonths(v) { return state.langMode === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : v; }
+function jaMonths(v) { return state.langMode === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/裝修期另議/g, '改装期間は要相談').replace(/洽詢/g, '要問い合わせ').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : v; }
 const isMobileView = () => window.innerWidth <= 900;
 
 // 無法讀到真實數字（例如被網站擋掉）時，店面標成「數字待確認」，不假裝是真資料
+// 由網頁解析結果建立店面：只收真的讀到的欄位，其餘一律留空（不補預設值、不編數字、不放假照片）
+function makeStoreFromSource(o) {
+  const src = o.src || {};
+  const pos = v => { const n = Number(v); return n > 0 ? n : 0; };
+  const bool = v => (v === true || v === false) ? v : undefined;
+  const rent = pos(src.rent), area = pos(src.area);
+  const obj = {
+    id: o.id,
+    title: src.title || `${o.name}#${o.rawId || ''}（待確認）`,
+    address: src.address || '',
+    status: 'agency',
+    statusLabel: '數字待確認',
+    lat: pos(src.lat) || null,
+    lng: pos(src.lng) || null,
+    rent, area,
+    deposit: pos(src.deposit),
+    realCost: pos(src.realCost) || (rent ? Math.round(rent * 1.1211) : 0),
+    freeRent: src.freeRent || '洽詢',
+    floor: src.floor || '',
+    canRegister: bool(src.canRegister),
+    canInvoice: bool(src.canInvoice),
+    pros: src.pros || '',
+    cons: src.cons || '',
+    url: o.url,
+    images: (src.images || []).filter(u => u && !/unsplash\.com/i.test(u)),
+    activeImgIdx: 0,
+    sourceType: o.platform
+  };
+  if (src.titleJa) obj.titleJa = src.titleJa;
+  return obj;
+}
+
+// 地址 → 座標（OpenStreetMap Nominatim）。查不到就維持沒有圖釘，不亂放位置
+async function geocodeStoreIfNeeded(s) {
+  try {
+    if (!s || (Number(s.lat) && Number(s.lng)) || !String(s.address || '').trim()) return;
+    const r = await fetch('https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=tw&q=' + encodeURIComponent(s.address), { headers: { 'Accept-Language': 'zh-TW' } });
+    const d = r.ok ? await r.json() : [];
+    if (d && d[0] && Number(d[0].lat) && Number(d[0].lon)) {
+      s.lat = Number(d[0].lat); s.lng = Number(d[0].lon); s.geoApprox = true;
+      saveAppState(true);
+      if (typeof storeMap !== 'undefined' && storeMap) initStoreMap();
+    }
+  } catch (e) {}
+}
+
 function flagUnverified(obj, verified) {
   if (verified || !obj) return obj;
   obj.unverified = true;
   obj.status = 'agency';
   obj.statusLabel = '數字待確認';
-  obj.cons = '⚠ 金額、坪數為暫代值，尚未核對原網頁。' + (obj.cons ? ' ' + obj.cons : '');
-  obj.consJa = '⚠ 賃料・面積は仮の値です。元ページで要確認。' + (obj.consJa ? ' ' + obj.consJa : '');
+  obj.cons = '⚠ 尚未核對原網頁，數字可能不完整或有誤；請核對後按「編輯店面」填入並存檔。' + (obj.cons ? ' ' + obj.cons : '');
+  delete obj.consJa;
   return obj;
 }
 const isRealScrape = j => !!(j && j.success && !j.fallback && !j.unverified && Number(j.rent) && Number(j.area));
@@ -6099,7 +5662,7 @@ function gotoStoreOnMap(storeId) {
 
 function focusStoreMap(storeId) {
   const s = state.stores.find(x => x.id === storeId);
-  if (!s || !storeMap) return;
+  if (!s || !storeMap || !(Number(s.lat) && Number(s.lng))) return;
   storeMap.setView([s.lat, s.lng], 16);
   if (storeMarkers[storeId]) storeMarkers[storeId].openPopup();
 }
@@ -6956,7 +6519,7 @@ async function applyStoreFixes() {
       const s = state.stores.find(x => x.id === id), f = fixes[id];
       if (!s || (Number(s.fixV) || 0) >= (Number(f.fixV) || 0)) return;
       Object.keys(f).forEach(k => { if (f[k] === null) delete s[k]; else s[k] = f[k]; });
-      s.unverified = false;
+      s.unverified = f.unverified === true;
       s.editedAt = Date.now();
       changed = true;
     });

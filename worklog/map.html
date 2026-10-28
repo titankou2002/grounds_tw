@@ -84,13 +84,13 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     zh: { rent: '月租', unit: '單價', real: '實月', wan: '萬', rentL: '刊登月租', areaL: '使用坪數', unitL: '每坪單價', realL: '真實月成本', depL: '押金', freeL: '裝潢免租', regL: '營業登記', invL: '發票', pros: '優點', cons: '注意', yes: '可', no: '不可', src: '原始頁面',
       sorts: [['default', '預設'], ['area', '面積'], ['rent', '月租'], ['unit', '坪單價']], none: '尚無店面',
       lockIn: '🔑 編輯', lockOn: '✏️ 編輯中', pw: '請輸入密碼', pwBad: '密碼錯誤', addPh: '＋ 照片', photos: '照片', notes: '備註', noteAdd: '新增備註', notePh: '例如：跟房仲聊完要注意的地方…', del: '刪除', editBtn: '✏️ 修改資料', save: '儲存', cancel: '取消', saved: '已儲存', fail: '失敗，請再試一次', delPh: '刪除這張照片？', delNote: '刪除這則備註？',
-      f: { title: '名稱', address: '地址', rent: '月租 (NT$)', area: '坪數', deposit: '押金 (NT$)', realCost: '真實月成本 (NT$)', freeRent: '裝潢免租', statusLabel: '狀態', pros: '優點', cons: '注意', url: '原始頁面連結', canRegister: '可營業登記', canInvoice: '可開發票' } },
+      f: { title: '名稱', address: '地址', rent: '月租 (NT$)', area: '坪數', deposit: '押金 (NT$)', depositText: '押金備註（面議／二個月…）', realCost: '真實月成本 (NT$)', freeRent: '裝潢免租', statusLabel: '狀態', pros: '優點', cons: '注意', url: '原始頁面連結', canRegister: '可營業登記', canInvoice: '可開發票' } },
     ja: { rent: '賃料', unit: '坪単価', real: '実質月額', wan: '万', rentL: '掲載賃料', areaL: '使用面積', unitL: '坪単価', realL: '実質月額', depL: '保証金', freeL: 'フリーレント', regL: '営業登記', invL: 'インボイス', pros: '強み', cons: '注意', yes: '可', no: '不可', src: '元ページ',
       sorts: [['default', '標準'], ['area', '面積'], ['rent', '賃料'], ['unit', '坪単価']], none: '店舗がありません',
       lockIn: '🔑 編集', lockOn: '✏️ 編集中', pw: 'パスワード', pwBad: 'パスワードが違います', addPh: '＋ 写真', photos: '写真', notes: 'メモ', noteAdd: 'メモを追加', notePh: '例：仲介との話で注意する点…', del: '削除', editBtn: '✏️ 情報を編集', save: '保存', cancel: 'キャンセル', saved: '保存しました', fail: '失敗しました', delPh: 'この写真を削除しますか？', delNote: 'このメモを削除しますか？',
-      f: { title: '名称', address: '住所', rent: '賃料 (NT$)', area: '坪数', deposit: '保証金 (NT$)', realCost: '実質月額 (NT$)', freeRent: 'フリーレント', statusLabel: 'ステータス', pros: '強み', cons: '注意', url: '元ページURL', canRegister: '営業登記可', canInvoice: 'インボイス可' } }
+      f: { title: '名称', address: '住所', rent: '賃料 (NT$)', area: '坪数', deposit: '保証金 (NT$)', depositText: '保証金メモ', realCost: '実質月額 (NT$)', freeRent: 'フリーレント', statusLabel: 'ステータス', pros: '強み', cons: '注意', url: '元ページURL', canRegister: '営業登記可', canInvoice: 'インボイス可' } }
   };
-  var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '數字待確認': '数値要確認', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外' };
+  var STATUS_JA = { '重點候選': '重点候補', '房仲推薦': '仲介おすすめ', '數字待確認': '数値要確認', '房仲資料': '仲介資料', '店面物件': '店舗物件', '已約看屋': '内見予約済', '已付訂金': '手付金支払済', '不考慮': '対象外', '實勘完成': '現地確認済', '租金議價中': '賃料交渉中', '已排除': '除外', '已下架': '掲載終了' };
   var q = new URLSearchParams(location.search);
   var lang = (q.get('lang') === 'ja' || (!q.get('lang') && /^ja/i.test(navigator.language || '') && false)) ? 'ja' : 'zh';
   try { var sl = localStorage.getItem('gtw_map_lang'); if (!q.get('lang') && sl) lang = sl; } catch (e) {}
@@ -101,7 +101,14 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
   var title = function (s) { return lang === 'ja' ? (s.titleJa || s.title) : s.title; };
   var tx = function (zh, ja) { return lang === 'ja' ? (ja && ja !== zh ? ja : zh) : zh; };
   var status = function (s) { var l = s.statusLabel || ''; return lang === 'ja' ? (STATUS_JA[l] || l) : l; };
-  var months = function (v) { return lang === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : (v || ''); };
+  var months = function (v) { return lang === 'ja' ? String(v || '').replace(/個月/g, 'ヶ月').replace(/裝修期另議/g, '改装期間は要相談').replace(/洽詢/g, '要問い合わせ').replace(/另議/g, '要相談').replace(/爭取/g, '交渉目標') : (v || ''); };
+  var DEP_JA = { '面議': '要相談', '二個月': '2ヶ月分', '三個月': '3ヶ月分', '四個月': '4ヶ月分', '無法核對': '確認不可' };
+  var depLabel = function (s) {
+    var n = Number(s.deposit) > 0, txt = s.depositText ? (lang === 'ja' ? (DEP_JA[s.depositText] || s.depositText) : s.depositText) : '';
+    if (n) return 'NT$ ' + Math.round(s.deposit / 10000) + T().wan + (txt ? '（' + txt + '）' : '');
+    return txt || '未確認';
+  };
+  var tri = function (v, y, n) { return v === true ? y : (v === false ? n : '—'); };
   var JPY = 4.8;
   var jw = function (ntd) { return '約' + Math.round(ntd * JPY / 10000).toLocaleString() + '万円'; };
   var jy = function (ntd) { return '約' + Math.round(ntd * JPY).toLocaleString() + '円'; };
@@ -133,7 +140,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     var opts = Object.keys(STATUS_JA).map(function (k) { return '<option value="' + esc(k) + '"' + (k === s.statusLabel ? ' selected' : '') + '>' + esc(lang === 'ja' ? STATUS_JA[k] : k) + '</option>'; }).join('');
     return '<div class="ef">' + inp('title') + inp('address') +
       '<div class="two">' + inp('rent', 'number') + inp('area', 'number') + inp('deposit', 'number') + inp('realCost', 'number') + '</div>' +
-      inp('freeRent') + '<div><label>' + f.statusLabel + '</label><select data-k="statusLabel">' + opts + '</select></div>' +
+      inp('freeRent') + inp('depositText') + '<div><label>' + f.statusLabel + '</label><select data-k="statusLabel">' + opts + '</select></div>' +
       '<label>' + f.pros + '</label><textarea rows="3" data-k="pros">' + v('pros') + '</textarea>' +
       '<label>' + f.cons + '</label><textarea rows="3" data-k="cons">' + v('cons') + '</textarea>' + inp('url') +
       '<label class="ck"><input type="checkbox" data-k="canRegister"' + (s.canRegister ? ' checked' : '') + '> ' + f.canRegister + '</label>' +
@@ -156,7 +163,12 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     else if (act === 'cancel') { delete editing[id]; rerender(id); }
     else if (act === 'save') {
       var fields = {};
-      Array.prototype.forEach.call(box.querySelectorAll('[data-k]'), function (i) { fields[i.dataset.k] = i.type === 'checkbox' ? i.checked : i.value; });
+      Array.prototype.forEach.call(box.querySelectorAll('[data-k]'), function (i) {
+        var k = i.dataset.k, cur = i.type === 'checkbox' ? i.checked : i.value;
+        var orig = i.type === 'checkbox' ? (s[k] === true) : String(s[k] == null ? '' : s[k]);
+        if (cur !== orig) fields[k] = cur;   // 沒改的欄位不送，避免把未確認的資料寫成「否」或 0
+      });
+      if (!Object.keys(fields).length) { delete editing[id]; rerender(id); return; }
       api({ action: 'edit', id: id, fields: fields }).then(function () {
         Object.keys(fields).forEach(function (k) { var v = fields[k]; s[k] = (['rent', 'area', 'deposit', 'realCost'].indexOf(k) >= 0) ? Number(v) : v; });
         delete s.titleJa; delete s.prosJa; delete s.consJa; s.unverified = false; delete editing[id]; rerender(id); toast(t.saved);
@@ -213,17 +225,17 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     var t = T(), list = $('list');
     if (!stores.length) { list.innerHTML = '<div class="empty">' + t.none + '</div>'; return; }
     list.innerHTML = sorted().map(function (s) {
-      var rw = Math.round(s.rent / 10000), ar = Math.round(s.area), un = Math.round(s.rent / s.area), rc = Math.round(s.realCost || 0), dep = Math.round((s.deposit || s.rent * 2) / 10000);
+      var nn = s.rent > 0 && s.area > 0, rw = Math.round(s.rent / 100) / 100, ar = Math.round(s.area * 100) / 100, un = nn ? Math.round(s.rent / s.area) : 0, rc = Math.round(s.realCost || 0);
       var imgs = s.images || [], img = imgs[0] || '';
       return '<div class="card" id="c-' + esc(s.id) + '" data-id="' + esc(s.id) + '"><div class="row">' +
         (img ? '<img class="thumb" src="' + esc(img) + '" alt="">' : '<div class="thumb"></div>') +
         '<div class="info"><span class="tag">' + esc(status(s)) + '</span><div class="title">' + esc(title(s)) + '</div><div class="addr">' + esc(s.address) + '</div>' +
-        '<div class="pills">' + (s.unverified ? '<span class="pill p-warn">⚠ ' + (lang === 'ja' ? '数値要確認' : '數字待確認') + '</span>' : '') + '<span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '（' + jw(s.rent) + '）</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
-        '<span class="pill p-unit">' + t.unit + ' ' + un.toLocaleString() + '/坪（' + jy(un) + '）</span><span class="pill p-real">' + t.real + ' NT$ ' + rc.toLocaleString() + '（' + jw(rc) + '）</span></div></div></div>' +
+        '<div class="pills">' + (s.unverified ? '<span class="pill p-warn">⚠ ' + (lang === 'ja' ? '数値要確認' : '數字待確認') + '</span>' : '') + (nn ? '<span class="pill p-rent ' + rentCls(s.rent) + '">' + t.rent + ' NT$ ' + rw + t.wan + '（' + jw(s.rent) + '）</span><span class="pill p-area">' + ar + ' 坪 (' + Math.round(ar * 3.3058) + '㎡)</span>' +
+        '<span class="pill p-unit">' + t.unit + ' ' + un.toLocaleString() + '/坪（' + jy(un) + '）</span><span class="pill p-real">' + t.real + ' NT$ ' + rc.toLocaleString() + '（' + jw(rc) + '）</span>' : '') + '</div></div></div>' +
         '<div class="more">' +
         (imgs.length > 1 || (canEdit && imgs.length) ? '<div class="strip">' + imgs.map(function (u) { return '<div class="ph"><img src="' + esc(u) + '" data-big="' + esc(u) + '" alt="">' + (canEdit ? '<b data-act="pdel" data-u="' + esc(u) + '">×</b>' : '') + '</div>'; }).join('') + '</div>' : '') +
-        '<div class="grid"><div>' + t.rentL + '：<b>NT$ ' + rw + t.wan + '</b><br>' + jw(s.rent) + '/月</div><div>' + t.areaL + '：<b>' + ar + ' 坪</b><br>' + Math.round(ar * 3.3058) + '㎡</div><div>' + t.unitL + '：<b>NT$ ' + un.toLocaleString() + '</b><br>' + jy(un) + '</div><div>' + t.realL + '：<b>NT$ ' + rc.toLocaleString() + '</b><br>' + jw(rc) + '/月</div>' +
-        '<div>' + t.depL + '：<b>NT$ ' + dep + t.wan + '</b><br>' + jw((s.deposit || s.rent * 2)) + '</div><div>' + t.freeL + '：<b>' + esc(months(s.freeRent)) + '</b></div><div>' + t.regL + '：<b>' + (s.canRegister ? t.yes : t.no) + '</b></div><div>' + t.invL + '：<b>' + (s.canInvoice ? t.yes : t.no) + '</b></div></div>' +
+        '<div class="grid">' + (nn ? '<div>' + t.rentL + '：<b>NT$ ' + rw + t.wan + '</b><br>' + jw(s.rent) + '/月</div><div>' + t.areaL + '：<b>' + ar + ' 坪</b><br>' + Math.round(ar * 3.3058) + '㎡</div><div>' + t.unitL + '：<b>NT$ ' + un.toLocaleString() + '</b><br>' + jy(un) + '</div><div>' + t.realL + '：<b>NT$ ' + rc.toLocaleString() + '</b><br>' + jw(rc) + '/月</div>' : '') +
+        '<div>' + t.depL + '：<b>' + esc(depLabel(s)) + '</b>' + (Number(s.deposit) > 0 ? '<br>' + jw(s.deposit) : '') + '</div><div>' + t.freeL + '：<b>' + esc(months(s.freeRent || '洽詢')) + '</b></div><div>' + t.regL + '：<b>' + tri(s.canRegister, t.yes, t.no) + '</b></div><div>' + t.invL + '：<b>' + tri(s.canInvoice, t.yes, t.no) + '</b></div></div>' +
         (s.pros ? '<div><b>' + t.pros + '：</b>' + esc(tx(s.pros, s.prosJa)) + '</div>' : '') +
         (s.cons ? '<div class="neg"><b>' + t.cons + '：</b>' + esc(tx(s.cons, s.consJa)) + '</div>' : '') +
         (/^https?:/i.test(s.url || '') ? '<a class="src" href="' + esc(s.url) + '" target="_blank" rel="noopener">🔗 ' + t.src + '</a>' : '') +
@@ -254,7 +266,7 @@ header{position:sticky;top:0;z-index:1000;background:#fff;border-bottom:1px soli
     stores.forEach(function (s) {
       if (typeof s.lat !== 'number' || typeof s.lng !== 'number') return;
       var m = L.marker([s.lat, s.lng]).addTo(map);
-      m.bindPopup('<b>' + esc(title(s)) + '</b><br>' + t.rent + ' NT$ ' + Math.round(s.rent / 10000) + t.wan + '（' + jw(s.rent) + '）<br>' + Math.round(s.area) + '坪');
+      m.bindPopup('<b>' + esc(title(s)) + '</b><br>' + t.rent + ' NT$ ' + (Math.round(s.rent / 100) / 100) + t.wan + '（' + jw(s.rent) + '）<br>' + (Math.round(s.area * 100) / 100) + '坪');
       m.on('click', function () { if (!mobile()) { var c = $('c-' + s.id); if (c) { c.scrollIntoView({ behavior: 'smooth', block: 'center' }); } } });
       markers[s.id] = m; pts.push([s.lat, s.lng]);
     });
