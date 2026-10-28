@@ -26,7 +26,7 @@ foreach (($data['stores'] ?? []) as $s) { if (($s['id'] ?? '') === $id) { $exist
 if (!$exists) out(['success' => false, 'error' => 'unknown store'], 404);
 
 $num = ['rent', 'area', 'deposit', 'realCost'];
-$str = ['title' => 200, 'address' => 200, 'freeRent' => 80, 'depositText' => 40, 'pros' => 5000, 'cons' => 5000, 'statusLabel' => 30, 'url' => 500];
+$str = ['title' => 200, 'address' => 200, 'freeRent' => 80, 'depositText' => 40, 'pros' => 5000, 'cons' => 5000, 'titleJa' => 200, 'prosJa' => 5000, 'consJa' => 5000, 'statusLabel' => 30, 'url' => 500];
 $bool = ['canRegister', 'canInvoice'];
 // 中文欄位改了就清掉舊的日文翻譯，避免日文版還顯示舊內容
 $clearJa = ['title' => 'titleJa', 'pros' => 'prosJa', 'cons' => 'consJa'];

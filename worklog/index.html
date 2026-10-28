@@ -7,7 +7,7 @@
   <meta http-equiv="Pragma" content="no-cache">
   <meta http-equiv="Expires" content="0">
   <title>grounds Taiwan 展店決策平台</title>
-  <!-- wl-cache:20261028-analysis -->
+  <!-- wl-cache:20261028-ja-retranslate -->
   <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="192x192" href="favicon-192.png">
@@ -2504,7 +2504,7 @@
           <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-ja" onclick="setCompareModalLang('ja')">日本語</button>
           <button class="modal-lang-pill cmp-lang-pill" id="cmp-lang-zh" onclick="setCompareModalLang('zh')">純中文</button>
         </div>
-        <button class="action-btn" id="btn-cmp-ai-trans" onclick="translateAllCompareItemsAsync()" title="一鍵線上即時翻譯未轉日文之優點與考量" style="font-size:11px;padding:3px 8px;">
+        <button class="action-btn" id="btn-cmp-ai-trans" onclick="translateAllCompareItemsAsync()" title="一鍵翻譯／重翻過期的優點與考量（含條列全文）" style="font-size:11px;padding:3px 8px;">
           🌐 AI 即時翻譯
         </button>
       </div>
@@ -2798,7 +2798,7 @@
 </div>
 
 <!-- Image Lightbox Modal for Photo Attachments -->
-<div class="modal-overlay" id="image-lightbox-modal" onclick="closeImageLightbox()">
+<div class="modal-overlay" id="image-lightbox-modal">
   <div style="position:relative;max-width:92vw;max-height:92vh;display:flex;align-items:center;justify-content:center;" onclick="event.stopPropagation()">
     <img id="lightbox-img" src="" style="max-width:90vw;max-height:85vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 30px rgba(0,0,0,0.5);">
     <button class="action-btn" style="position:absolute;top:-36px;right:0;background:#fff;padding:4px 10px;font-weight:700;" onclick="closeImageLightbox()">✕ 關閉</button>
@@ -4137,39 +4137,81 @@ function formatAnalysisHtml(text) {
 function preserveAnalysisStructure(src, translated) {
   const t = String(translated == null ? '' : translated);
   if (!t.trim()) return '';
-  const srcN = normalizeAnalysisBreaks(src);
-  const srcBreaks = (srcN.match(/\n/g) || []).length;
-  const outBreaks = (t.match(/\n/g) || []).length;
-  if (srcBreaks >= 1 && outBreaks < Math.max(1, Math.floor(srcBreaks / 2))) {
-    return normalizeAnalysisBreaks(t);
-  }
   return normalizeAnalysisBreaks(t);
+}
+// 日文是否過期：沒有譯文、幾乎等長中文、【標題】／條列數明顯少於中文、或長度短很多
+function analysisJaIsStale(zh, ja) {
+  const z0 = String(zh || '').trim();
+  const j0 = String(ja || '').trim();
+  if (!z0) return false;
+  if (!j0 || j0 === z0) return true;
+  const z = normalizeAnalysisBreaks(z0);
+  const j = normalizeAnalysisBreaks(j0);
+  const zhH = (z.match(/【[^】]*】/g) || []).length;
+  const jaH = (j.match(/【[^】]*】/g) || []).length;
+  if (zhH > 0 && jaH < zhH) return true;
+  const zhB = (z.match(/(^|\n)\s*[*•●・※\-–—]/g) || []).length;
+  const jaB = (j.match(/(^|\n)\s*[*•●・※\-–—]/g) || []).length;
+  if (zhB >= 3 && jaB < Math.ceil(zhB * 0.5)) return true;
+  if (z.length > 100 && j.length < Math.floor(z.length * 0.4)) return true;
+  return false;
+}
+async function translateAnalysisLine(trimmed, pair) {
+  if (!trimmed) return '';
+  let m = trimmed.match(/^([*•●・※\-–—])\s+(.*)$/) || trimmed.match(/^(\d{1,2}[\.．、）)])\s+(.*)$/);
+  if (m) {
+    const rest = m[2] || '';
+    if (!rest) return m[1];
+    const tr = await translateTextAsync(rest, pair);
+    return m[1] + ' ' + (tr || rest);
+  }
+  const hm = trimmed.match(/^【([^】]*)】\s*(.*)$/);
+  if (hm) {
+    const inner = hm[1] || '';
+    const rest = (hm[2] || '').trim();
+    let head = '【' + inner + '】';
+    if (inner) {
+      const hi = await translateTextAsync(inner, pair);
+      if (hi) head = '【' + hi + '】';
+    }
+    if (!rest) return head;
+    const tr = await translateTextAsync(rest, pair);
+    return head + (tr ? (' ' + tr) : (' ' + rest));
+  }
+  const tr = await translateTextAsync(trimmed, pair);
+  return tr || trimmed;
 }
 async function translateAnalysisAsync(text, pair) {
   const src = String(text || '');
+  if (!src.trim()) return '';
+  const dir = pair || 'zh-TW|ja';
   const normalized = normalizeAnalysisBreaks(src);
   const lines = normalized.split('\n');
   const meaningful = lines.filter(l => l.trim());
-  // 多行條列：逐行翻，避免翻譯 API 把換行吃掉
-  if (meaningful.length >= 2 && normalized.length <= 1400) {
-    const out = [];
-    for (const line of lines) {
-      const trimmed = line.trim();
-      if (!trimmed) { out.push(''); continue; }
-      let prefix = '', rest = trimmed;
-      let m = trimmed.match(/^([*•●・※\-–—])\s+(.*)$/) || trimmed.match(/^(\d{1,2}[\.．、）)])\s+(.*)$/);
-      if (m) { prefix = m[1] + ' '; rest = m[2]; }
-      else {
-        const hm = trimmed.match(/^(【[^】]*】)\s*(.*)$/);
-        if (hm) { prefix = hm[1] + (hm[2] ? ' ' : ''); rest = hm[2] || ''; }
+  // 多行一律逐行翻（含超過 1400 字），避免整段被截斷或換行被吃掉
+  if (meaningful.length >= 2) {
+    const out = new Array(lines.length);
+    let cursor = 0;
+    const concurrency = 3;
+    const errs = { n: 0 };
+    async function worker() {
+      while (cursor < lines.length) {
+        const i = cursor++;
+        const trimmed = String(lines[i] || '').trim();
+        if (!trimmed) { out[i] = ''; continue; }
+        try {
+          out[i] = await translateAnalysisLine(trimmed, dir);
+        } catch (e) {
+          errs.n++;
+          out[i] = trimmed;
+        }
       }
-      if (!rest) { out.push(prefix.trim()); continue; }
-      const tr = await translateTextAsync(rest, pair || 'zh-TW|ja');
-      out.push(prefix + (tr || rest));
     }
-    return out.join('\n');
+    await Promise.all(Array.from({ length: Math.min(concurrency, meaningful.length) }, () => worker()));
+    const joined = out.join('\n');
+    return preserveAnalysisStructure(src, joined);
   }
-  const tr = await translateTextAsync(src, pair || 'zh-TW|ja');
+  const tr = await translateTextAsync(src, dir);
   return preserveAnalysisStructure(src, tr || '');
 }
 
@@ -5122,17 +5164,19 @@ function openStoreDetailModal(storeId) {
   const consJaEl = document.getElementById('m-store-cons-ja');
   consJaEl.innerHTML = s.consJa ? formatAnalysisHtml(s.consJa) : escapeHtml('翻訳取得中...');
 
-  if (!s.prosJa && s.pros) {
+  if (s.pros && analysisJaIsStale(s.pros, s.prosJa)) {
+    prosJaEl.innerHTML = escapeHtml(tr('翻譯中…', '翻訳中…'));
     translateAnalysisAsync(s.pros, 'zh-TW|ja').then(res => {
-      if (!res) return;
+      if (!res) { prosJaEl.innerHTML = s.prosJa ? formatAnalysisHtml(s.prosJa) : escapeHtml(tr('翻譯失敗', '翻訳失敗')); return; }
       s.prosJa = res;
       prosJaEl.innerHTML = formatAnalysisHtml(res);
       saveAppState(true);
     });
   }
-  if (!s.consJa && s.cons) {
+  if (s.cons && analysisJaIsStale(s.cons, s.consJa)) {
+    consJaEl.innerHTML = escapeHtml(tr('翻譯中…', '翻訳中…'));
     translateAnalysisAsync(s.cons, 'zh-TW|ja').then(res => {
-      if (!res) return;
+      if (!res) { consJaEl.innerHTML = s.consJa ? formatAnalysisHtml(s.consJa) : escapeHtml(tr('翻譯失敗', '翻訳失敗')); return; }
       s.consJa = res;
       consJaEl.innerHTML = formatAnalysisHtml(res);
       saveAppState(true);
@@ -5241,7 +5285,7 @@ async function runPool(tasks, n) {
 async function ensureStoreJa() {
   if (state.langMode !== 'ja' || _storeJaBusy) return;
   const need = (zh, ja) => zh && (!ja || ja === zh);
-  const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.title, s.titleJa) || need(s.pros, s.prosJa) || need(s.cons, s.consJa)));
+  const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.title, s.titleJa) || analysisJaIsStale(s.pros, s.prosJa) || analysisJaIsStale(s.cons, s.consJa)));
   if (!todo.length) return;
   _storeJaBusy = true;
   let changed = false;
@@ -5249,11 +5293,13 @@ async function ensureStoreJa() {
   todo.forEach(s => {
     _storeJaTried.add(s.id);
     [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
-      if (!need(s[zhK], s[jaK])) return;
+      const src = String(s[zhK] || '');
+      if (!src.trim()) return;
+      const stale = (zhK === 'pros' || zhK === 'cons') ? analysisJaIsStale(src, s[jaK]) : need(s[zhK], s[jaK]);
+      if (!stale) return;
       tasks.push(async () => {
-        const src = String(s[zhK]);
         const t = (zhK === 'pros' || zhK === 'cons')
-          ? await translateAnalysisAsync(src.slice(0, 1400), 'zh-TW|ja')
+          ? await translateAnalysisAsync(src, 'zh-TW|ja')
           : await translateTextAsync(src.slice(0, 450), 'zh-TW|ja');
         if (t && t !== s[zhK]) {
           s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(src, t) : t;
@@ -6199,6 +6245,12 @@ function openCompareModal() {
 }
 
 function closeCompareModal() {
+  if (state.compareEditing) {
+    const ok = window.confirm(tr('編輯尚未儲存，確定放棄並關閉？', '編集が未保存です。破棄して閉じますか？'));
+    if (!ok) return;
+    state.compareEditing = false;
+    updateCompareEditButtons();
+  }
   const modal = document.getElementById('compare-modal');
   if (modal) modal.classList.remove('open');
 }
@@ -6642,18 +6694,19 @@ async function createCompareReportPost() {
     items.forEach(s => {
       [['title', 'titleJa'], ['pros', 'prosJa'], ['cons', 'consJa']].forEach(([zhK, jaK]) => {
         const zh = String(s[zhK] || '').trim();
-        if (zh && (!s[jaK] || s[jaK] === zh)) {
-          const run = (zhK === 'pros' || zhK === 'cons')
-            ? translateAnalysisAsync(zh.slice(0, 1400), 'zh-TW|ja')
-            : translateTextAsync(zh.slice(0, 450), 'zh-TW|ja');
-          jobs.push(Promise.race([run, new Promise(r => setTimeout(() => r(''), 45000))]).then(j => {
-            if (j && j !== zh) {
-              s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(zh, j) : j;
-              return true;
-            }
-            return false;
-          }).catch(() => false));
-        }
+        if (!zh) return;
+        const stale = (zhK === 'pros' || zhK === 'cons') ? analysisJaIsStale(zh, s[jaK]) : (!s[jaK] || s[jaK] === zh);
+        if (!stale) return;
+        const run = (zhK === 'pros' || zhK === 'cons')
+          ? translateAnalysisAsync(zh, 'zh-TW|ja')
+          : translateTextAsync(zh.slice(0, 450), 'zh-TW|ja');
+        jobs.push(Promise.race([run, new Promise(r => setTimeout(() => r(''), 60000))]).then(j => {
+          if (j && j !== zh) {
+            s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(zh, j) : j;
+            return true;
+          }
+          return false;
+        }).catch(() => false));
       });
     });
     const changed = (await Promise.all(jobs)).some(Boolean);   // 同時翻譯，不要一個一個等
@@ -6687,29 +6740,75 @@ async function createCompareReportPost() {
 
 async function translateAllCompareItemsAsync() {
   const btn = document.getElementById('btn-cmp-ai-trans');
-  if (btn) {
-    btn.disabled = true;
-    btn.innerText = '翻譯處理中...';
-  }
   const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
-  for (let s of items) {
-    if (!s.titleJa && s.title) {
-      s.titleJa = await translateToJapaneseAsync(s.title);
-    }
-    if (!s.prosJa && s.pros) {
-      s.prosJa = await translateAnalysisAsync(s.pros, 'zh-TW|ja');
-    }
-    if (!s.consJa && s.cons) {
-      s.consJa = await translateAnalysisAsync(s.cons, 'zh-TW|ja');
-    }
+  if (!items.length) {
+    showToast(tr('請先勾選店面', '店舗を選択してください'), 1800);
+    return;
   }
-  saveAppState();
+  if (btn) { btn.disabled = true; btn.innerText = tr('翻譯處理中…', '翻訳中…'); }
+  let done = 0, failed = 0, skipped = 0, totalJobs = 0;
+  const jobs = [];
+  items.forEach(s => {
+    if (s.title && (!s.titleJa || s.titleJa === s.title || analysisJaIsStale(s.title, s.titleJa))) {
+      totalJobs++;
+      jobs.push(async () => {
+        try {
+          const r = await translateToJapaneseAsync(s.title);
+          if (r && r !== s.title) { s.titleJa = r; done++; }
+          else failed++;
+        } catch (e) { failed++; }
+      });
+    } else if (s.title && s.titleJa) skipped++;
+    // 按鈕＝強制重翻優點／風險（解決舊日文過短被當成「已有翻譯」而跳過）
+    if (s.pros) {
+      totalJobs++;
+      jobs.push(async () => {
+        try {
+          if (btn) btn.innerText = tr(`翻譯優點中…(${done + failed + 1}/${totalJobs})`, `強み翻訳中…(${done + failed + 1}/${totalJobs})`);
+          const r = await translateAnalysisAsync(s.pros, 'zh-TW|ja');
+          if (r && r.trim() && r !== s.pros) { s.prosJa = r; done++; }
+          else if (r && r.trim()) { s.prosJa = r; done++; }
+          else failed++;
+        } catch (e) { failed++; }
+      });
+    }
+    if (s.cons) {
+      totalJobs++;
+      jobs.push(async () => {
+        try {
+          if (btn) btn.innerText = tr(`翻譯注意中…(${done + failed + 1}/${totalJobs})`, `注意点翻訳中…(${done + failed + 1}/${totalJobs})`);
+          const r = await translateAnalysisAsync(s.cons, 'zh-TW|ja');
+          if (r && r.trim()) { s.consJa = r; done++; }
+          else failed++;
+        } catch (e) { failed++; }
+      });
+    }
+  });
+  if (!jobs.length) {
+    if (btn) { btn.disabled = false; btn.innerText = '🌐 AI 即時翻譯'; }
+    showToast(tr('日文已是最新，無需重翻', '日本語は最新です'), 2000);
+    return;
+  }
+  // 一次跑一個店面的任務組，避免打爆翻譯 API；任務本身內部已有併發
+  for (let i = 0; i < jobs.length; i++) {
+    if (btn) btn.innerText = tr(`翻譯中… ${i + 1}/${jobs.length}`, `翻訳中… ${i + 1}/${jobs.length}`);
+    await jobs[i]();
+    renderCompareTable(); // 邊翻邊更新畫面
+  }
+  saveAppState(true);
+  // 同步日文到伺服器覆蓋層（與 MAP／其他裝置一致）
+  items.forEach(s => {
+    const fields = {};
+    if (s.titleJa) fields.titleJa = s.titleJa;
+    if (s.prosJa) fields.prosJa = s.prosJa;
+    if (s.consJa) fields.consJa = s.consJa;
+    if (Object.keys(fields).length) postStoreEdit(s.id, fields);
+  });
   renderCompareTable();
-  if (btn) {
-    btn.disabled = false;
-    btn.innerText = '🌐 AI 即時翻譯';
-  }
-  showToast('已更新', 1500);
+  if (btn) { btn.disabled = false; btn.innerText = '🌐 AI 即時翻譯'; }
+  if (failed && !done) showToast(tr('翻譯失敗，請稍後再試', '翻訳に失敗しました'), 2500);
+  else if (failed) showToast(tr(`已更新 ${done} 項（${failed} 項失敗）`, `${done}件更新（${failed}件失敗）`), 2500);
+  else showToast(tr(`已更新日文 ${done} 項`, `日本語を${done}件更新しました`), 2000);
 }
 
 // Map Initialization
@@ -7681,11 +7780,81 @@ function confirmDeleteBoardTopic(topicId) {
   openDeleteConfirmModal('board', topic.id, topic.titleZh);
 }
 
-// Universal Click-Outside-To-Close for all floating modals
-document.addEventListener('click', (e) => {
-  if (e.target.classList.contains('modal-overlay') && e.target.classList.contains('open')) {
-    e.target.classList.remove('open');
+// 背景關閉：必須「按下」與「放開／click」都在同一層 overlay 上。
+// 避免在 textarea 內拉選文字、滑鼠在框外放開時被誤判成點背景而關掉。
+let _modalPtrDownTarget = null;
+document.addEventListener('pointerdown', (e) => { _modalPtrDownTarget = e.target; }, true);
+document.addEventListener('mousedown', (e) => { if (_modalPtrDownTarget == null) _modalPtrDownTarget = e.target; }, true);
+
+function modalHasUnsavedEdits(overlay) {
+  if (!overlay || !overlay.id) return false;
+  const id = overlay.id;
+  if (id === 'compare-modal') return !!state.compareEditing;
+  if (id === 'edit-store-modal' || id === 'edit-post-modal' || id === 'agency-modal' ||
+      id === 'board-topic-modal' || id === 'settings-modal' || id === 'status-editor-modal') {
+    return true; // 開啟中的編輯／表單：背景或 Esc 不逕自丟棄
   }
+  return false;
+}
+
+function dismissModalOverlay(overlay) {
+  if (!overlay || !overlay.classList.contains('open')) return;
+  const id = overlay.id || '';
+  if (id === 'delete-confirm-modal') return; // 必須按按鈕
+  if (id === 'compare-modal' && state.compareEditing) {
+    // 比較表編輯中：背景點擊直接忽略；Esc／明確關閉才詢問
+    return;
+  }
+  if (modalHasUnsavedEdits(overlay)) {
+    const ok = window.confirm(tr('內容尚未儲存，確定要關閉？', '内容が未保存です。閉じますか？'));
+    if (!ok) return;
+    if (id === 'compare-modal') state.compareEditing = false;
+  }
+  if (id === 'edit-store-modal') { closeEditStoreModal(); return; }
+  if (id === 'edit-post-modal') { closeEditPostModal(); return; }
+  if (id === 'store-detail-modal') { closeStoreDetailModal(); return; }
+  if (id === 'status-editor-modal') { closeStatusEditorModal(); return; }
+  if (id === 'agency-modal') { closeAgencyModal(); return; }
+  if (id === 'settings-modal') { closeSettingsModal(); return; }
+  if (id === 'board-topic-modal') { closeBoardTopicModal(); return; }
+  if (id === 'tag-manager-modal') { closeTagManagerModal(); return; }
+  if (id === 'image-lightbox-modal') { closeImageLightbox(); return; }
+  if (id === 'compare-modal') { closeCompareModal(); return; }
+  overlay.classList.remove('open');
+}
+
+function topOpenModalOverlay() {
+  const opens = Array.from(document.querySelectorAll('.modal-overlay.open'));
+  return opens.length ? opens[opens.length - 1] : null;
+}
+
+document.addEventListener('click', (e) => {
+  const ov = e.target;
+  if (!(ov && ov.classList && ov.classList.contains('modal-overlay') && ov.classList.contains('open'))) return;
+  if (_modalPtrDownTarget !== ov) return; // 在內容區按下、在背景放開 → 不關
+  try {
+    const sel = window.getSelection && window.getSelection();
+    if (sel && !sel.isCollapsed && String(sel).length > 0) return; // 正在選取文字
+  } catch (err) {}
+  dismissModalOverlay(ov);
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key !== 'Escape') return;
+  const ov = topOpenModalOverlay();
+  if (!ov) return;
+  // 比較表編輯中按 Esc：詢問後取消編輯或關閉
+  if (ov.id === 'compare-modal' && state.compareEditing) {
+    e.preventDefault();
+    const ok = window.confirm(tr('編輯尚未儲存，確定放棄並關閉？', '編集が未保存です。破棄して閉じますか？'));
+    if (!ok) return;
+    state.compareEditing = false;
+    closeCompareModal();
+    return;
+  }
+  if (ov.id === 'delete-confirm-modal') return;
+  e.preventDefault();
+  dismissModalOverlay(ov);
 });
 
 // Bootstrap
