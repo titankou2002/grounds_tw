@@ -1920,6 +1920,30 @@
     .post-cmp-table th:first-child { min-width: 64px; background: #fafafa; white-space: nowrap; position: sticky; left: 0; }
     .post-cmp-table th { background: #fafafa; }
     .post-cmp-table img { width: 110px; height: 76px; object-fit: cover; border-radius: 6px; display: block; }
+    /* 附件、內嵌影片（像 Slack） */
+    .att-wrap { margin-top: 8px; display: flex; flex-direction: column; gap: 6px; }
+    .att-grid { display: grid; gap: 4px; max-width: 420px; }
+    .att-grid.att-n1 { grid-template-columns: 1fr; }
+    .att-grid.att-n2, .att-grid.att-n3, .att-grid.att-n4 { grid-template-columns: 1fr 1fr; }
+    .att-grid img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; cursor: zoom-in; background: #eee; display: block; }
+    .att-grid.att-n1 img { aspect-ratio: auto; max-height: 360px; object-fit: contain; background: transparent; }
+    .att-pdf { display: flex; align-items: center; gap: 10px; max-width: 420px; padding: 8px 10px; border: 1px solid var(--border); border-radius: 10px; background: #fff; text-decoration: none; color: inherit; }
+    .att-pdf-ico { background: #dc2626; color: #fff; font-weight: 800; font-size: 11px; padding: 6px 7px; border-radius: 6px; }
+    .att-pdf-name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; font-size: 13px; }
+    .att-pdf small { color: var(--fg-muted); }
+    .file-chip.uploading { opacity: .6; }
+    .composer-card.drag-over { outline: 2px dashed #2563eb; outline-offset: -4px; background: #eff6ff; }
+    .embed-card { margin-top: 8px; max-width: 420px; border: 1px solid var(--border); border-radius: 12px; overflow: hidden; background: #fff; }
+    .embed-thumb { position: relative; aspect-ratio: 16 / 9; background: #111; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .embed-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .embed-play { position: absolute; width: 54px; height: 38px; border-radius: 10px; background: rgba(220,38,38,.92); color: #fff; font-size: 18px; display: flex; align-items: center; justify-content: center; }
+    .embed-thumb.drive { background: #1f2937; }
+    .embed-label { position: absolute; bottom: 8px; left: 10px; color: #fff; font-size: 12px; font-weight: 700; }
+    .embed-meta { display: flex; align-items: center; gap: 8px; padding: 8px 10px; font-size: 12.5px; font-weight: 700; }
+    .embed-title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .embed-meta a { color: #2563eb; text-decoration: none; }
+    .embed-frame { margin-top: 8px; max-width: 420px; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+    .embed-frame iframe { width: 100%; height: 100%; border: 0; }
   </style>
 </head>
 <body>
@@ -1986,7 +2010,7 @@
             <div id="post-file-chip-box" style="display:none;margin-bottom:8px;"></div>
 
             <div class="composer-meta-row cmp-one-row">
-              <input type="file" id="post-file-input" style="display:none;" accept="image/*,.pdf" onchange="handlePostFileSelected(event)">
+              <input type="file" id="post-file-input" style="display:none;" multiple accept="image/*,.pdf" onchange="handlePostFileSelected(event)">
               <button class="cmp-icon-btn" type="button" onclick="triggerPostFileUpload()" title="夾帶照片或文件" aria-label="夾帶">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
               </button>
@@ -3391,7 +3415,21 @@ function applyLanguageLayout() {
 window.addEventListener('resize', applyLanguageLayout);
 
 // --- Real Translation Engine (Bidirectional zh-TW <-> ja via translate.php) ---
+// 翻譯前先把網址換成代號、翻譯後原樣還原：翻譯絕不可以改動網址（連影片代碼都會被改錯）
 async function translateTextAsync(text, pair) {
+  const src = String(text || '');
+  const urls = [];
+  const masked = src.replace(/https?:\/\/[^\s<>"'）)」]+/g, u => { urls.push(u); return `[[U${urls.length - 1}]]`; });
+  if (!urls.length) return _translateTextRaw(text, pair);
+  let out = await _translateTextRaw(masked, pair);
+  if (!out) return out;
+  urls.forEach((u, i) => {
+    const re = new RegExp(`[\\[［【]{1,2}\\s*U\\s*${i}\\s*[\\]］】]{1,2}`, 'g');
+    if (re.test(out)) out = out.replace(re, u); else out = out + ' ' + u;   // 代號被吃掉就把網址補在句尾，不丟失
+  });
+  return out;
+}
+async function _translateTextRaw(text, pair) {
   if (!text || !text.trim()) return '';
   const trimmed = text.trim();
 
@@ -3528,8 +3566,8 @@ async function toggleCommentTranslation(postId, cIdx, colLang, btnElement) {
 }
 
 // --- Attachment State & Helpers (Composer & Reply Boxes) ---
-state.composerAttachment = null;
-state.replyAttachments = {};
+state.composerFiles = [];      // 動態發布框的附件（上傳到主機後只存檔案網址）
+state.replyFiles = {};         // 各則回覆框的附件，key = `${postId}-${colLang}`
 
 function triggerPostFileUpload() {
   const inp = document.getElementById('post-file-input');
@@ -3579,94 +3617,117 @@ function compressImageFile(file, maxWidth = 1200, maxHeight = 1200, quality = 0.
   });
 }
 
-function handlePostFileSelected(event) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  const isImg = file.type.startsWith('image/');
-  compressImageFile(file).then(dataUrl => {
-    state.composerAttachment = {
-      type: isImg ? 'image' : 'pdf',
-      name: file.name,
-      data: dataUrl
-    };
-    renderPostFileChip();
-  });
+// ---- 附件：圖片、PDF 上傳到主機；影片請貼 YouTube／Google Drive 連結 ----
+let _attSeq = 0;
+function fmtSize(n) { n = Number(n) || 0; return n >= 1048576 ? (n / 1048576).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1024)) + ' KB'; }
+async function uploadAttachment(file) {
+  const isPdf = /pdf/i.test(file.type) || /\.pdf$/i.test(file.name);
+  const isImg = (file.type || '').startsWith('image/');
+  if (!isPdf && !isImg) return { error: /^video\//.test(file.type) ? 'video' : 'bad_type' };
+  let blob = file, name = file.name || (isPdf ? 'file.pdf' : 'image.jpg');
+  if (isImg && file.type !== 'image/gif') {   // 照片先縮到長邊 1600px，省空間也比較快
+    try {
+      const d = await compressImageFile(file, 1600, 1600, 0.82);
+      blob = await (await fetch(d)).blob();
+      name = name.replace(/\.[^.]+$/, '') + '.jpg';
+    } catch (e) { blob = file; }
+  }
+  const fd = new FormData();
+  fd.append('file', blob, name);
+  fd.append('name', name);
+  try {
+    const r = await fetch('api_upload.php', { method: 'POST', body: fd });
+    const d = await r.json();
+    if (d && d.success) return { att: { type: d.type, name: d.name, url: d.url, size: d.size, w: d.w, h: d.h } };
+    return { error: (d && d.error) || 'fail', limit: d && d.limit };
+  } catch (e) { return { error: 'network' }; }
+}
+function uploadErrorText(r) {
+  if (r.error === 'video') return tr('影片請貼 YouTube 連結', '動画はYouTubeのリンクを貼ってください');
+  if (r.error === 'bad_type') return tr('只能上傳圖片或 PDF', '画像またはPDFのみ');
+  if (r.error === 'too_large') return tr('檔案太大' + (r.limit ? '（上限 ' + r.limit + '）' : ''), 'ファイルが大きすぎます' + (r.limit ? '（上限 ' + r.limit + '）' : ''));
+  return tr('上傳失敗，請再試一次', 'アップロードに失敗しました');
+}
+// list: 陣列；render: 重畫函式
+async function addFilesTo(list, files, render) {
+  for (const file of Array.from(files || [])) {
+    const entry = { id: ++_attSeq, name: file.name, type: /pdf/i.test(file.type) || /\.pdf$/i.test(file.name) ? 'pdf' : 'image', status: 'uploading' };
+    list.push(entry);
+    render();
+    const r = await uploadAttachment(file);
+    if (r.att) { Object.assign(entry, r.att, { status: 'done' }); }
+    else { list.splice(list.indexOf(entry), 1); showToast(uploadErrorText(r), 2800); }
+    render();
+  }
+}
+function fileChipsHtml(list, removeFn) {
+  return list.map(f => `<span class="file-chip${f.status === 'uploading' ? ' uploading' : ''}">
+      <span>${f.status === 'uploading' ? '⏳' : (f.type === 'image' ? '🖼️' : '📄')}</span>
+      <span style="font-weight:700;">${escapeHtml(f.name)}</span>
+      <span class="file-chip-remove" onclick="${removeFn}(${f.id})" title="移除">×</span>
+    </span>`).join(' ');
 }
 
+function handlePostFileSelected(event) {
+  addFilesTo(state.composerFiles, event.target.files, renderPostFileChip);
+}
 function renderPostFileChip() {
   const box = document.getElementById('post-file-chip-box');
   if (!box) return;
-  if (!state.composerAttachment) {
-    box.style.display = 'none';
-    box.innerHTML = '';
-    return;
-  }
-  const att = state.composerAttachment;
+  if (!state.composerFiles.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
   box.style.display = 'block';
-  box.innerHTML = `
-    <span class="file-chip">
-      <span>${att.type === 'image' ? '🖼️' : '📄'}</span>
-      <span style="font-weight:700;">${escapeHtml(att.name)}</span>
-      <span class="file-chip-remove" onclick="removeComposerAttachment()" title="移除檔案">×</span>
-    </span>
-  `;
+  box.innerHTML = fileChipsHtml(state.composerFiles, 'removeComposerFile');
 }
-
-function removeComposerAttachment() {
-  state.composerAttachment = null;
+function removeComposerFile(id) {
+  state.composerFiles = state.composerFiles.filter(f => f.id !== id);
   renderPostFileChip();
 }
+function removeComposerAttachment() { state.composerFiles = []; renderPostFileChip(); }
 
 function triggerReplyFileUpload(postId, colLang) {
   const inp = document.getElementById(`rep-file-${postId}-${colLang}`);
-  if (inp) {
-    inp.value = '';
-    inp.click();
-  }
+  if (inp) { inp.value = ''; inp.click(); }
 }
-
 function handleReplyFileSelected(event, postId, colLang) {
-  const file = event.target.files && event.target.files[0];
-  if (!file) return;
-
-  const isImg = file.type.startsWith('image/');
   const key = `${postId}-${colLang}`;
-  compressImageFile(file).then(dataUrl => {
-    state.replyAttachments[key] = {
-      type: isImg ? 'image' : 'pdf',
-      name: file.name,
-      data: dataUrl
-    };
-    renderReplyFilePreview(postId, colLang);
-  });
+  state.replyFiles[key] = state.replyFiles[key] || [];
+  addFilesTo(state.replyFiles[key], event.target.files, () => renderReplyFilePreview(postId, colLang));
 }
-
 function renderReplyFilePreview(postId, colLang) {
   const key = `${postId}-${colLang}`;
   const box = document.getElementById(`rep-file-preview-${key}`);
   if (!box) return;
-  const att = state.replyAttachments[key];
-  if (!att) {
-    box.style.display = 'none';
-    box.innerHTML = '';
-    return;
-  }
+  const list = state.replyFiles[key] || [];
+  if (!list.length) { box.style.display = 'none'; box.innerHTML = ''; return; }
   box.style.display = 'block';
-  box.innerHTML = `
-    <span class="file-chip">
-      <span>${att.type === 'image' ? '🖼️' : '📄'}</span>
-      <span style="font-weight:700;">${escapeHtml(att.name)}</span>
-      <span class="file-chip-remove" onclick="removeReplyAttachment(${postId}, '${colLang}')" title="移除檔案">×</span>
-    </span>
-  `;
+  box.innerHTML = fileChipsHtml(list, `removeReplyFile.bind(null,${postId},'${colLang}')`).replace(/onclick="removeReplyFile\.bind\(null,(\d+),'(\w+)'\)\((\d+)\)"/g, "onclick=\"removeReplyFile($1,'$2',$3)\"");
 }
-
-function removeReplyAttachment(postId, colLang) {
+function removeReplyFile(postId, colLang, id) {
   const key = `${postId}-${colLang}`;
-  delete state.replyAttachments[key];
+  state.replyFiles[key] = (state.replyFiles[key] || []).filter(f => f.id !== id);
   renderReplyFilePreview(postId, colLang);
 }
+
+// 拖曳檔案到發布框、貼上截圖
+document.addEventListener('dragover', e => { if (e.target.closest && e.target.closest('.composer-card') && e.dataTransfer && Array.from(e.dataTransfer.types || []).includes('Files')) { e.preventDefault(); e.target.closest('.composer-card').classList.add('drag-over'); } });
+document.addEventListener('dragleave', e => { const c = e.target.closest && e.target.closest('.composer-card'); if (c && !c.contains(e.relatedTarget)) c.classList.remove('drag-over'); });
+document.addEventListener('drop', e => {
+  const c = e.target.closest && e.target.closest('.composer-card');
+  if (!c || !e.dataTransfer || !e.dataTransfer.files.length) return;
+  e.preventDefault(); c.classList.remove('drag-over');
+  addFilesTo(state.composerFiles, e.dataTransfer.files, renderPostFileChip);
+});
+document.addEventListener('paste', e => {
+  const files = e.clipboardData && e.clipboardData.files;
+  if (!files || !files.length) return;
+  const t = e.target;
+  if (t && t.id === 'post-text-zh') { e.preventDefault(); addFilesTo(state.composerFiles, files, renderPostFileChip); }
+  else if (t && /^rep-\d+-(zh|ja)$/.test(t.id || '')) {
+    const m = /^rep-(\d+)-(zh|ja)$/.exec(t.id); const key = `${m[1]}-${m[2]}`;
+    e.preventDefault(); state.replyFiles[key] = state.replyFiles[key] || [];
+    addFilesTo(state.replyFiles[key], files, () => renderReplyFilePreview(+m[1], m[2]));
+  }
+});
 
 function openImageLightbox(src) {
   const modal = document.getElementById('image-lightbox-modal');
@@ -3695,7 +3756,9 @@ async function submitFeedPost() {
   const submitBtn = document.getElementById('btn-submit-post');
 
   let textZh = textEl.value.trim();
-  if (!textZh && !state.composerAttachment) return;
+  if (state.composerFiles.some(f => f.status === 'uploading')) { showToast(tr('檔案上傳中，請稍候', 'アップロード中です'), 1800); return; }
+  const doneFiles = state.composerFiles.filter(f => f.status === 'done').map(f => ({ type: f.type, name: f.name, url: f.url, size: f.size, w: f.w, h: f.h }));
+  if (!textZh && !doneFiles.length) return;
 
   const hours = parseFloat(hoursEl.value) || 0.0;
   const tag = (tagEl.value === '__ADD_NEW__' || !tagEl.value) ? '進度回報' : tagEl.value;
@@ -3817,7 +3880,8 @@ async function submitFeedPost() {
       ja: replacedJa,
       propId: linkedPropIds[0] || null,
       propIds: linkedPropIds,
-      attachment: state.composerAttachment || null,
+      attachment: null,
+      attachments: doneFiles,
       comments: []
     };
 
@@ -3917,12 +3981,57 @@ function renderFeeds() {
   if (state.currentUser !== 'Lynn') {
     renderDailyLogs(zhBox, 'zh');
     renderDailyLogs(jaBox, 'ja');
+    fillEmbedTitles();
     return;
   }
 
   state.posts.forEach(p => {
     zhBox.appendChild(createCard(p, 'zh'));
     jaBox.appendChild(createCard(p, 'ja'));
+  });
+  fillEmbedTitles();
+}
+
+function attachmentsHtml(list) {
+  list = list || [];
+  if (!list.length) return '';
+  const imgs = list.filter(a => a.type === 'image'), pdfs = list.filter(a => a.type === 'pdf');
+  return '<div class="att-wrap">' +
+    (imgs.length ? `<div class="att-grid att-n${Math.min(imgs.length, 4)}">${imgs.map(a => `<img src="${escapeHtml(a.url)}" onclick="openImageLightbox('${escapeHtml(a.url)}')" loading="lazy" alt="${escapeHtml(a.name)}">`).join('')}</div>` : '') +
+    pdfs.map(a => `<a class="att-pdf" href="${escapeHtml(a.url)}" target="_blank" rel="noopener"><span class="att-pdf-ico">PDF</span><span class="att-pdf-name">${escapeHtml(a.name)}</span><small>${fmtSize(a.size)}</small></a>`).join('') +
+    '</div>';
+}
+// 文字裡的 YouTube／Google Drive 連結 → 內嵌卡片（縮圖用 YouTube 官方縮圖網址；標題只取自 YouTube 本身，取不到就不顯示）
+function embedsHtml(text) {
+  const t = String(text || '').replace(/&amp;/g, '&');
+  const out = [], seen = new Set();
+  let m;
+  const yt = /(?:youtu\.be\/|youtube\.com\/(?:watch\?(?:[^"'\s<]*&)?v=|shorts\/|live\/|embed\/))([\w-]{11})/gi;
+  while ((m = yt.exec(t))) {
+    if (seen.has(m[1])) continue; seen.add(m[1]);
+    out.push(`<div class="embed-card"><div class="embed-thumb" onclick="playEmbed(this,'yt','${m[1]}')"><img src="https://i.ytimg.com/vi/${m[1]}/hqdefault.jpg" loading="lazy" alt=""><span class="embed-play">▶</span></div><div class="embed-meta"><span class="embed-title" data-yt-title="${m[1]}">YouTube</span><a href="https://youtu.be/${m[1]}" target="_blank" rel="noopener">↗</a></div></div>`);
+  }
+  const dr = /drive\.google\.com\/file\/d\/([\w-]{10,})/gi;
+  while ((m = dr.exec(t))) {
+    if (seen.has(m[1])) continue; seen.add(m[1]);
+    out.push(`<div class="embed-card"><div class="embed-thumb drive" onclick="playEmbed(this,'drive','${m[1]}')"><span class="embed-play">▶</span><span class="embed-label">Google Drive</span></div><div class="embed-meta"><span>Google Drive</span><a href="https://drive.google.com/file/d/${m[1]}/view" target="_blank" rel="noopener">↗</a></div></div>`);
+  }
+  return out.join('');
+}
+function playEmbed(el, kind, id) {
+  const src = kind === 'yt' ? `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&rel=0` : `https://drive.google.com/file/d/${id}/preview`;
+  el.outerHTML = `<div class="embed-frame"><iframe src="${src}" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen loading="lazy"></iframe></div>`;
+}
+const _ytTitles = {};
+function fillEmbedTitles() {
+  document.querySelectorAll('[data-yt-title]').forEach(el => {
+    const id = el.dataset.ytTitle;
+    if (_ytTitles[id] !== undefined) { if (_ytTitles[id]) el.textContent = _ytTitles[id]; return; }
+    _ytTitles[id] = '';
+    fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent('https://www.youtube.com/watch?v=' + id)}&format=json`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.title) { _ytTitles[id] = d.title; document.querySelectorAll(`[data-yt-title="${id}"]`).forEach(x => { x.textContent = d.title; }); } })
+      .catch(() => {});
   });
 }
 
@@ -4040,6 +4149,8 @@ function createCard(p, colLang) {
         </div>
         <div class="comment-body">${cText}</div>
         ${commAttachHtml}
+        ${attachmentsHtml(c.attachments)}
+        ${embedsHtml(c.zh)}
         <div style="margin-top:4px;display:flex;align-items:center;gap:6px;">
           <button class="btn-mini-trans" type="button" onclick="toggleCommentTranslation(${p.id}, ${cIdx}, '${colLang}', this)">
             <svg class="icon icon-sm" style="width:11px;height:11px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -4077,6 +4188,8 @@ function createCard(p, colLang) {
 
     ${hideBody ? '' : `<div class="post-body-text">${bodyHtml}</div>`}
     ${postAttachHtml}
+    ${attachmentsHtml(p.attachments)}
+    ${embedsHtml(p.zh)}
     <div style="margin:4px 0 6px 0;display:${hideBody ? 'none' : 'flex'};align-items:center;gap:6px;">
       <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${p.id}, '${colLang}', this)">
         <svg class="icon icon-sm" style="width:12px;height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
@@ -4092,7 +4205,7 @@ function createCard(p, colLang) {
       ${commentsHtml}
       <div id="rep-file-preview-${p.id}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
-        <input type="file" id="rep-file-${p.id}-${colLang}" style="display:none;" accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${p.id}, '${colLang}')">
+        <input type="file" id="rep-file-${p.id}-${colLang}" style="display:none;" multiple accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${p.id}, '${colLang}')">
         <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${p.id}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎</button>
         <input type="text" class="comment-reply-input" id="rep-${p.id}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${p.id}, '${colLang}')">
         <button class="action-btn" onclick="submitReply(${p.id}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
@@ -4107,9 +4220,10 @@ async function submitReply(postId, colLang) {
   if (!inp) return;
   const val = inp.value.trim();
   const key = `${postId}-${colLang}`;
-  const att = state.replyAttachments[key] || null;
+  if ((state.replyFiles[key] || []).some(f => f.status === 'uploading')) { showToast(tr('檔案上傳中，請稍候', 'アップロード中です'), 1800); return; }
+  const atts = (state.replyFiles[key] || []).filter(f => f.status === 'done').map(f => ({ type: f.type, name: f.name, url: f.url, size: f.size, w: f.w, h: f.h }));
 
-  if (!val && !att) return;
+  if (!val && !atts.length) return;
 
   const target = state.posts.find(p => p.id === postId);
   if (!target) return;
@@ -4121,8 +4235,8 @@ async function submitReply(postId, colLang) {
   inp.disabled = true;
 
   try {
-    let zhText = val || (att ? (att.type === 'image' ? '【夾帶圖片】' : '【夾帶文件】') : '');
-    let jaText = val || (att ? (att.type === 'image' ? '【画像添付】' : '【資料添付】') : '');
+    let zhText = val || '';
+    let jaText = val || '';
 
     if (val) {
       const hasKana = /[\u3040-\u30ff]/.test(val);
@@ -4140,10 +4254,10 @@ async function submitReply(postId, colLang) {
       date: timeStr,
       zh: zhText,
       ja: jaText,
-      attachment: att
+      attachments: atts
     });
 
-    delete state.replyAttachments[key];
+    delete state.replyFiles[key];
     renderReplyFilePreview(postId, colLang);
 
     saveAppState();

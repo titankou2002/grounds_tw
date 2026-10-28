@@ -14,7 +14,7 @@ $token = hash_hmac('sha256', 'worklog-ok', $secret);
 $https = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
 
 // 請求的檔案（相對 worklog/）
-$base = rtrim(dirname($_SERVER['SCRIPT_NAME']), '/');
+$base = (substr($_SERVER['SCRIPT_NAME'], -8) === 'gate.php') ? rtrim(dirname($_SERVER['SCRIPT_NAME']), '/') : '';
 $path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $rel = ltrim(substr($path, strlen($base)), '/');
 $rel = rawurldecode($rel);
@@ -82,8 +82,9 @@ if (substr($file, -4) === '.php') {
     include $file;
     exit;
 }
-$types = ['html'=>'text/html; charset=utf-8','json'=>'application/json; charset=utf-8','png'=>'image/png','jpg'=>'image/jpeg','jpeg'=>'image/jpeg','webp'=>'image/webp','md'=>'text/markdown; charset=utf-8','js'=>'application/javascript','css'=>'text/css','svg'=>'image/svg+xml'];
+$types = ['html'=>'text/html; charset=utf-8','json'=>'application/json; charset=utf-8','png'=>'image/png','gif'=>'image/gif','pdf'=>'application/pdf','jpg'=>'image/jpeg','jpeg'=>'image/jpeg','webp'=>'image/webp','md'=>'text/markdown; charset=utf-8','js'=>'application/javascript','css'=>'text/css','svg'=>'image/svg+xml'];
 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 header('Content-Type: ' . ($types[$ext] ?? 'application/octet-stream'));
+header('X-Content-Type-Options: nosniff');
 if ($ext === 'html' || $ext === 'json') header('Cache-Control: no-cache, no-store, must-revalidate');
 readfile($file);
