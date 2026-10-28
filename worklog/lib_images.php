@@ -116,6 +116,22 @@ function wl_scrub_override_record(&$o) {
             else unset($o['fields'][$k]);
         }
     }
+    if (isset($o['imgOrder']) && is_array($o['imgOrder'])) {
+        $ord = array();
+        $ordChanged = false;
+        foreach ($o['imgOrder'] as $u) {
+            if (!is_string($u)) continue;
+            if (stripos($u, 'data:') === 0) {
+                $saved = wl_data_image_to_file($u);
+                $ordChanged = true;
+                if (is_string($saved) && $saved !== '') $ord[] = $saved;
+            } else $ord[] = $u;
+        }
+        if ($ordChanged) {
+            $o['imgOrder'] = array_values(array_unique($ord));
+            $changed = true;
+        }
+    }
     if (isset($o['imgAdd']) && is_array($o['imgAdd'])) {
         $add = array();
         $imgChanged = false;

@@ -1911,6 +1911,13 @@
     .thumb-wrap { position: relative; display: inline-block; flex: 0 0 auto; }
     .star-btn { position: absolute; top: 3px; right: 3px; width: 26px; height: 26px; border-radius: 50%; border: 0; background: rgba(0,0,0,.55); color: #fff; font-size: 15px; line-height: 26px; padding: 0; text-align: center; cursor: pointer; }
     .star-btn.on { background: #f59e0b; color: #fff; }
+    .es-photos { display: flex; gap: 8px; overflow-x: auto; padding: 2px 0 6px; min-height: 36px; }
+    .es-ph { position: relative; flex: 0 0 auto; width: 96px; }
+    .es-ph img { width: 96px; height: 72px; object-fit: cover; border-radius: 6px; background: #eee; display: block; }
+    .es-ph .es-tools { display: flex; gap: 3px; margin-top: 4px; }
+    .es-ph .es-tools button { flex: 1; border: 1px solid var(--border); background: #fff; border-radius: 5px; font-size: 13px; line-height: 1.5; cursor: pointer; padding: 0; }
+    .es-ph .es-tools button:disabled { opacity: .35; cursor: default; }
+    .es-ph .star-btn { top: 4px; right: 4px; }
     .kpi-badge:last-child { }
     @media (max-width: 900px) { .kpi-badge-group { grid-template-columns: 1fr 1fr; } .kpi-badge-group .kpi-badge:last-child { grid-column: 1 / -1; } }
     /* 日報內的比較表 */
@@ -2352,6 +2359,18 @@
     <div style="margin-bottom:16px;">
       <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:var(--danger);">注意：</label>
       <textarea id="es-cons" class="composer-textarea" style="min-height:60px;"></textarea>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+        <label style="font-size:12px;font-weight:700;" id="es-photo-label">照片</label>
+        <label class="action-btn" style="cursor:pointer;margin:0;">
+          <span id="es-photo-add-lbl">＋ 加入照片</span>
+          <input type="file" id="es-photo-input" accept="image/*" multiple hidden onchange="esAddPhotos(this)">
+        </label>
+      </div>
+      <div id="es-photo-list" class="es-photos"></div>
+      <div id="es-photo-hint" style="font-size:11px;color:var(--fg-muted);line-height:1.45;"></div>
     </div>
 
     <div style="display:flex;justify-content:flex-end;gap:8px;">
@@ -5330,15 +5349,112 @@ function openEditStoreModal() {
   document.getElementById('es-deposit').value = s.deposit || '';
   document.getElementById('es-pros').value = s.pros || '';
   document.getElementById('es-cons').value = s.cons || '';
-
+  const addLbl = document.getElementById('es-photo-add-lbl');
+  const hint = document.getElementById('es-photo-hint');
+  const photoLbl = document.getElementById('es-photo-label');
+  if (photoLbl) photoLbl.textContent = tr('照片', '写真');
+  if (addLbl) addLbl.textContent = tr('＋ 加入照片', '＋ 写真を追加');
+  if (hint) hint.textContent = tr('★ 是列表與地圖用的主圖。左右可調整順序，× 刪除。手機可拍照或從相簿選多張。', '★ が一覧と地図のメイン画像。左右で順番、× で削除。カメラまたはアルバムから複数選べます。');
+  const saveBtn = document.querySelector('#edit-store-modal .btn-submit');
+  if (saveBtn) saveBtn.textContent = tr('儲存店面數據', '店舗データを保存');
+  esLoadPhotos(s);
   document.getElementById('edit-store-modal').classList.add('open');
 }
 
 function closeEditStoreModal() {
+  esRevokePreviews();
+  state.editPhotos = [];
+  state.editCoverId = '';
   document.getElementById('edit-store-modal').classList.remove('open');
 }
 
-function saveEditedStore() {
+let _esSeq = 0;
+function esRevokePreviews() {
+  (state.editPhotos || []).forEach(p => { if (p.preview) URL.revokeObjectURL(p.preview); });
+}
+function esLoadPhotos(s) {
+  esRevokePreviews();
+  state.editPhotos = (s.images || []).filter(u => typeof u === 'string' && u.indexOf('data:') !== 0 && safeImgSrc(u)).map(u => ({ id: 'k' + (++_esSeq), url: u }));
+  const cover = state.editPhotos.find(p => p.url === s.coverImg);
+  state.editCoverId = cover ? cover.id : (state.editPhotos[0] ? state.editPhotos[0].id : '');
+  renderEditStorePhotos();
+}
+function renderEditStorePhotos() {
+  const box = document.getElementById('es-photo-list');
+  if (!box) return;
+  const list = state.editPhotos || [];
+  if (!list.length) {
+    box.innerHTML = `<div style="font-size:12px;color:var(--fg-muted);padding:8px 0;">${tr('還沒有照片', '写真はまだありません')}</div>`;
+    return;
+  }
+  box.innerHTML = list.map((p, i) => {
+    const src = p.preview || safeImgSrc(p.url) || '';
+    const on = state.editCoverId === p.id;
+    return `<div class="es-ph">
+      ${src ? `<img src="${escapeHtml(src)}" alt="">` : '<div style="width:96px;height:72px;background:#eee;border-radius:6px;"></div>'}
+      <button type="button" class="star-btn${on ? ' on' : ''}" title="${tr('設為主圖', 'メイン画像')}" onclick="esSetCover(${jsArg(p.id)})">${on ? '★' : '☆'}</button>
+      <div class="es-tools">
+        <button type="button" onclick="esMovePhoto(${jsArg(p.id)},-1)" ${i === 0 ? 'disabled' : ''} title="${tr('往前', '前へ')}">‹</button>
+        <button type="button" onclick="esMovePhoto(${jsArg(p.id)},1)" ${i === list.length - 1 ? 'disabled' : ''} title="${tr('往後', '次へ')}">›</button>
+        <button type="button" onclick="esRemovePhoto(${jsArg(p.id)})" title="${tr('刪除', '削除')}">×</button>
+      </div>
+    </div>`;
+  }).join('');
+}
+function esPhotoById(id) { return (state.editPhotos || []).find(p => p.id === id); }
+function esSetCover(id) {
+  if (!esPhotoById(id)) return;
+  state.editCoverId = id;
+  renderEditStorePhotos();
+}
+function esRemovePhoto(id) {
+  const p = esPhotoById(id);
+  if (p && p.preview) URL.revokeObjectURL(p.preview);
+  state.editPhotos = (state.editPhotos || []).filter(x => x.id !== id);
+  if (state.editCoverId === id) state.editCoverId = state.editPhotos[0] ? state.editPhotos[0].id : '';
+  renderEditStorePhotos();
+}
+function esMovePhoto(id, dir) {
+  const list = state.editPhotos || [];
+  const i = list.findIndex(p => p.id === id);
+  const j = i + dir;
+  if (i < 0 || j < 0 || j >= list.length) return;
+  const tmp = list[i]; list[i] = list[j]; list[j] = tmp;
+  renderEditStorePhotos();
+}
+async function esAddPhotos(input) {
+  const files = Array.from(input.files || []);
+  input.value = '';
+  for (const file of files) {
+    if (!file.type || file.type.indexOf('image/') !== 0) {
+      showToast(tr('只能加入圖片', '画像のみ追加できます'), 1800);
+      continue;
+    }
+    try {
+      const dataUrl = await compressImageFile(file, 1600, 1600, 0.82);
+      const blob = await (await fetch(dataUrl)).blob();
+      if (!blob || !blob.size) throw new Error('empty');
+      const item = { id: 'n' + (++_esSeq), url: '', blob, preview: URL.createObjectURL(blob) };
+      state.editPhotos.push(item);
+      if (!state.editCoverId) state.editCoverId = item.id;
+    } catch (e) {
+      showToast(tr('這張照片無法讀取', 'この写真は読み込めません'), 2000);
+    }
+  }
+  renderEditStorePhotos();
+}
+async function esUploadStorePhoto(storeId, blob) {
+  const fd = new FormData();
+  fd.append('action', 'img_add');
+  fd.append('id', storeId);
+  fd.append('photo', blob, 'photo.jpg');
+  const r = await fetch('api_edit.php', { method: 'POST', body: fd });
+  const d = await r.json();
+  if (!d || !d.success || !d.url || String(d.url).indexOf('data:') === 0) throw new Error((d && d.error) || 'upload');
+  return d.url;
+}
+
+async function saveEditedStore() {
   if (!state.activeDetailStoreId) return;
   const s = state.stores.find(x => x.id === state.activeDetailStoreId);
   if (!s) return;
@@ -5353,25 +5469,48 @@ function saveEditedStore() {
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
   const cons = document.getElementById('es-cons').value.trim() || s.cons;
 
-  s.rent = r;
-  s.area = a;
-  s.title = t;
-  s.address = addr;
-  s.freeRent = fr;
-  s.deposit = dep;
-  s.pros = pros;
-  s.cons = cons;
-  if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
-  s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
-  s.editedAt = Date.now();
-  postStoreEdit(s.id, { title: s.title, address: s.address, rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '' });
-  if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }   // 地址改了，推估座標作廢
-  geocodeStoreIfNeeded(s);
-
-  saveAppState();
-  closeEditStoreModal();
-  renderStores();
-  openStoreDetailModal(s.id);
+  const saveBtn = document.querySelector('#edit-store-modal .btn-submit');
+  if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = tr('上傳中…', 'アップロード中…'); }
+  try {
+    const urls = [];
+    for (const p of (state.editPhotos || [])) {
+      if (p.url && String(p.url).indexOf('data:') !== 0) { urls.push(p.url); continue; }
+      if (!p.blob) continue;
+      const url = await esUploadStorePhoto(s.id, p.blob);
+      p.url = url;
+      urls.push(url);
+    }
+    s.rent = r;
+    s.area = a;
+    s.title = t;
+    s.address = addr;
+    s.freeRent = fr;
+    s.deposit = dep;
+    s.pros = pros;
+    s.cons = cons;
+    if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
+    s.cons = String(s.cons || '').replace(/^⚠[^。]*。\s*/, '');
+    s.images = urls.filter(u => safeImgSrc(u));
+    const coverItem = (state.editPhotos || []).find(p => p.id === state.editCoverId);
+    const cover = coverItem && s.images.indexOf(coverItem.url) >= 0 ? coverItem.url : (s.images[0] || '');
+    if (cover) s.coverImg = cover; else delete s.coverImg;
+    s.editedAt = Date.now();
+    const orderRes = await fetch('api_edit.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'img_set', id: s.id, images: s.images }) });
+    const orderJson = await orderRes.json();
+    if (!orderJson || !orderJson.success) throw new Error('order');
+    postStoreEdit(s.id, { title: s.title, address: s.address, rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
+    if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }
+    geocodeStoreIfNeeded(s);
+    saveAppState();
+    closeEditStoreModal();
+    renderStores();
+    renderFeeds();
+    openStoreDetailModal(s.id);
+  } catch (e) {
+    showToast(tr('照片上傳失敗，請再試一次', '写真のアップロードに失敗しました'), 2200);
+  } finally {
+    if (saveBtn) { saveBtn.disabled = false; saveBtn.textContent = tr('儲存店面數據', '店舗データを保存'); }
+  }
 }
 
 // --- Universal Multi-Platform Real Estate URL Detection & Parsing ---
