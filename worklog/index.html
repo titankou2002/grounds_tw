@@ -2405,7 +2405,6 @@
             <div class="cmp-extra">
               <input type="date" id="post-day" class="cmp-date" title="發生日（可改成過去的日期）" aria-label="發生日">
               <input type="number" id="post-hours-custom" class="cmp-date" min="1" max="1440" step="5" placeholder="分鐘" style="display:none;width:78px;">
-              <button type="button" class="cmp-mini" onclick="copyLastPost()">複製上一則</button>
               <button type="button" class="cmp-mini" onclick="openReportSummary()">工時總表・匯出</button>
             </div>
           </div>
@@ -7669,20 +7668,6 @@ function readHours(pre) {
     if (el) { el.value = fmtDayStr(new Date()).replace(/\//g, '-'); el.max = el.value; }
   }, 0);
 })();
-function copyLastPost() {
-  const p = state.posts.filter(x => x.author === state.currentUser && !isComparePostText(x.zh))[0];
-  if (!p) { showToast('還沒有可以複製的紀錄', 1800); return; }
-  document.getElementById('post-text-zh').value = storedTextToPlain(p.zh);
-  const tagEl = document.getElementById('post-tag');
-  if (tagEl && [...tagEl.options].some(o => o.value === p.tag)) tagEl.value = p.tag;
-  const sel = document.getElementById('post-hours');
-  const hv = parseFloat(p.hours) || 0.5;
-  const opt = [...sel.options].find(o => parseFloat(o.value) === hv);
-  if (opt) { sel.value = opt.value; hoursSelChange('post'); }
-  else { sel.value = 'custom'; hoursSelChange('post'); document.getElementById('post-hours-custom').value = Math.round(hv * 60); }
-  showToast('已帶入上一則，改日期和時數後發布', 2200);
-}
-
 // --- 工時總表 ---
 const rp = { range: 'week', author: '', view: 'tag', open: null, link: '' };
 function rpDate(s) { const m = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
