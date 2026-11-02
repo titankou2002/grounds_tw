@@ -143,9 +143,9 @@ if ($method === 'POST') {
     $ids = array_values(array_unique(array_filter(array_map(function ($x) {
         return is_string($x) || is_int($x) ? (string)$x : '';
     }, $ids))));
-    if (count($ids) < 2) {
+    if (count($ids) < 1) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'error' => 'need 2+ stores'], JSON_UNESCAPED_UNICODE);
+        echo json_encode(['success' => false, 'error' => 'need 1+ stores'], JSON_UNESCAPED_UNICODE);
         exit;
     }
     if (count($ids) > $MAX_STORES) {
@@ -162,7 +162,7 @@ if ($method === 'POST') {
         if (!isset($map[$id])) continue;
         $stores[] = wl_share_whitelist_store($map[$id], $SHARE_KEYS);
     }
-    if (count($stores) < 2) {
+    if (count($stores) < 1) {
         http_response_code(400);
         echo json_encode(['success' => false, 'error' => 'stores not found'], JSON_UNESCAPED_UNICODE);
         exit;

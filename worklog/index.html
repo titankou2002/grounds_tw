@@ -6837,7 +6837,7 @@ function buildCompareReportHtml(items, lang, covers) {
 
 async function shareCompareLink() {
   const items = state.stores.filter(s => state.selectedStoresForCompare.includes(s.id));
-  if (items.length < 2) { showToast(tr('請先勾選 2 間以上', '2件以上選択してください'), 1800); return; }
+  if (items.length < 1) { showToast(tr('請先勾選店面', '店舗を選択してください'), 1800); return; }
   const btn = document.getElementById('btn-cmp-share');
   const oldLabel = btn ? btn.textContent : '';
   if (btn) { btn.disabled = true; btn.textContent = tr('產生中…', '作成中…'); }
