@@ -4712,6 +4712,7 @@ function renderDailyLogs(box, colLang) {
 
 function renderFeeds() {
   sortPostsByStamp();
+  ensureStoreJa();
   scheduleFeedSeen();
   const zhBox = document.getElementById('feed-zh-box');
   const jaBox = document.getElementById('feed-ja-box');
@@ -5505,7 +5506,7 @@ async function runPool(tasks, n) {
   }));
 }
 async function ensureStoreJa() {
-  if (state.langMode !== 'ja' || _storeJaBusy) return;
+  if (_storeJaBusy) return;
   const need = (zh, ja) => zh && (!ja || ja === zh);
   const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.title, s.titleJa) || analysisJaIsStale(s.pros, s.prosJa) || analysisJaIsStale(s.cons, s.consJa)));
   if (!todo.length) return;
@@ -5532,7 +5533,7 @@ async function ensureStoreJa() {
   });
   await runPool(tasks, 4);
   _storeJaBusy = false;
-  if (changed) { saveAppState(true); renderStores(); }
+  if (changed) { saveAppState(true); renderStores(); renderFeeds(); }
 }
 
 // --- 店面排序（MAP 排序列）---
@@ -7155,7 +7156,7 @@ function makeStoreFromSource(o) {
     activeImgIdx: 0,
     sourceType: o.platform
   };
-  if (src.titleJa) obj.titleJa = src.titleJa;
+  if (src.titleJa && src.titleJa !== obj.title) obj.titleJa = src.titleJa;
   return obj;
 }
 
