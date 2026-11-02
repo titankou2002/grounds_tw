@@ -2279,6 +2279,22 @@
     #img-viewer.open { display:block; }
     #img-viewer img { display:block; max-width:100%; margin:0 auto; padding:64px 0 40px; box-sizing:border-box; }
     #img-viewer .iv-x { position:fixed; top:calc(env(safe-area-inset-top) + 10px); right:12px; width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,.92); color:#111; font-size:20px; font-weight:700; cursor:pointer; z-index:2; }
+    /* 卡片滑動與「⋯」選單 */
+    .sw-wrap { position:relative; border-radius:10px; }
+    .sw-wrap.swiping { overflow:hidden; }
+    .sw-under { position:absolute; top:0; right:0; bottom:0; display:none; }
+    .sw-wrap.swiping .sw-under, .sw-wrap.open .sw-under { display:flex; }
+    .sw-wrap .store-card { touch-action:pan-y; transition:transform .18s ease; position:relative; z-index:1; }
+    .sw-wrap.dragging .store-card { transition:none; }
+    .sw-under button { width:72px; border:none; color:#fff; font-size:13px; font-weight:700; cursor:pointer; }
+    .sw-under .sw-status { background:#2563eb; }
+    .sw-under .sw-del { background:#dc2626; border-radius:0 10px 10px 0; }
+    .sc2-more { width:28px; height:28px; border-radius:8px; border:1px solid var(--border); background:#fff; color:var(--fg-muted); font-size:16px; line-height:1; cursor:pointer; padding:0; display:flex; align-items:center; justify-content:center; }
+    .sc2-more:hover { background:#f1f5f9; color:var(--fg); }
+    .sc-menu { position:fixed; z-index:9999; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 8px 24px rgba(0,0,0,.16); padding:4px; min-width:150px; }
+    .sc-menu button { display:block; width:100%; text-align:left; background:none; border:none; padding:10px 12px; font-size:13.5px; font-weight:600; border-radius:6px; cursor:pointer; color:var(--fg); }
+    .sc-menu button:hover { background:#f1f5f9; }
+    .sc-menu button.danger { color:#dc2626; }
     /* ===== MAP 列表 v2：商圈分組、兩行卡片 ===== */
     .dist-bar { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
     .dist-chip-btn { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:16px; font-size:11.5px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; }
@@ -2321,7 +2337,7 @@
     .sd-pane.active { display:block; }
     .sd-facts { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12.5px; margin-bottom:12px; }
     .sd-facts b { font-weight:700; }
-    @media (max-width: 700px) { .sd-kpi { grid-template-columns:1fr 1fr; } .sc2-cmp span, .sc2-pin { display:none; } .sc2-thumb { width:48px; height:48px; } .sc2-title { flex-wrap:wrap; row-gap:2px; } .sc2-title .t { white-space:normal; } .sc2-sub { white-space:normal; } .sc2-side { opacity:.8; gap:8px; } }
+    @media (max-width: 700px) { .sd-kpi { grid-template-columns:1fr 1fr; } .sc2-cmp, .sc2-pin { display:none; } .sc2-thumb { width:48px; height:48px; } .sc2-title { flex-wrap:wrap; row-gap:2px; } .sc2-title .t { white-space:normal; } .sc2-sub { white-space:normal; } .sc2-side { opacity:.8; gap:8px; } }
   </style>
 </head>
 <body>
@@ -6060,6 +6076,8 @@ function storeCardEl(s) {
   // 點整張卡片 = 開詳細頁。定位地圖用右側的圖釘按鈕。
   card.onclick = (e) => {
     if (e.target.tagName === 'INPUT' || e.target.closest('button') || e.target.closest('label') || e.target.closest('a')) return;
+    if (card._swiped) return;
+    if (card.parentNode && card.parentNode.classList.contains('open')) { closeSwipe(card.parentNode); return; }
     openStoreDetailModal(s.id);
   };
   const noNum = !hasNums(s);
@@ -6093,9 +6111,90 @@ function storeCardEl(s) {
         <button type="button" class="store-edit-btn" onclick="editStoreFromCard(${jsArg(s.id)})" title="${tr('直接編輯', '編集')}" aria-label="${tr('編輯', '編集')}">
           <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
         </button>
+        <button type="button" class="sc2-more" onclick="openCardMenu(${jsArg(s.id)}, this)" title="${tr('更多', 'その他')}" aria-label="${tr('更多', 'その他')}">⋯</button>
       </div>
     </div>`;
-  return card;
+  const wrap = document.createElement('div');
+  wrap.className = 'sw-wrap';
+  wrap.innerHTML = `<div class="sw-under"><button type="button" class="sw-status" onclick="closeSwipe(this.closest('.sw-wrap')); openStatusEditorModal(${jsArg(s.id)})">${tr('狀態', '状態')}</button><button type="button" class="sw-del" onclick="closeSwipe(this.closest('.sw-wrap')); deleteStore(${jsArg(s.id)})">${tr('刪除', '削除')}</button></div>`;
+  wrap.appendChild(card);
+  attachSwipe(wrap, card, s.id);
+  return wrap;
+}
+
+// --- 卡片左滑（狀態／刪除）、右滑（加入比較） ---
+let _swOpen = null;
+function closeSwipe(wrap) {
+  if (!wrap) return;
+  const c = wrap.querySelector('.store-card');
+  if (c) c.style.transform = '';
+  wrap.classList.remove('open', 'swiping', 'dragging');
+  if (_swOpen === wrap) _swOpen = null;
+}
+function attachSwipe(wrap, card, id) {
+  const W = 144;
+  let x0 = 0, y0 = 0, mode = '', dx = 0;
+  card.addEventListener('touchstart', e => {
+    if (e.touches.length !== 1) { mode = 'no'; return; }
+    const t = e.touches[0];
+    x0 = t.clientX; y0 = t.clientY; dx = 0; mode = (x0 < 24) ? 'no' : '';   // 螢幕左緣留給 iOS 返回手勢
+    if (_swOpen && _swOpen !== wrap) closeSwipe(_swOpen);
+  }, { passive: true });
+  card.addEventListener('touchmove', e => {
+    if (mode === 'no' || mode === 'v') return;
+    const t = e.touches[0];
+    const mx = t.clientX - x0, my = t.clientY - y0;
+    if (!mode) {
+      if (Math.abs(my) > 10 && Math.abs(my) > Math.abs(mx)) { mode = 'v'; return; }
+      if (Math.abs(mx) > 10 && Math.abs(mx) > Math.abs(my) * 1.5) { mode = 'h'; wrap.classList.add('swiping', 'dragging'); } else return;
+    }
+    const base = wrap.classList.contains('open') ? -W : 0;
+    dx = Math.max(-W, Math.min(90, base + mx));
+    card.style.transform = `translateX(${dx}px)`;
+  }, { passive: true });
+  const end = () => {
+    if (mode !== 'h') { mode = ''; return; }
+    mode = '';
+    wrap.classList.remove('dragging');
+    card._swiped = true; setTimeout(() => { card._swiped = false; }, 350);
+    if (dx <= -W / 2) {
+      wrap.classList.add('open'); card.style.transform = `translateX(${-W}px)`; _swOpen = wrap;
+    } else if (dx >= 70) {
+      closeSwipe(wrap);
+      toggleCompareStore(id);
+    } else {
+      closeSwipe(wrap);
+    }
+  };
+  card.addEventListener('touchend', end);
+  card.addEventListener('touchcancel', () => { if (mode === 'h') end(); else mode = ''; });
+}
+
+// --- 卡片「⋯」選單：比較／狀態／刪除 ---
+function closeCardMenu() { const m = document.getElementById('sc-menu'); if (m) m.remove(); }
+function openCardMenu(id, btn) {
+  closeCardMenu();
+  const s = state.stores.find(x => x.id === id);
+  if (!s) return;
+  const picked = state.selectedStoresForCompare.includes(id);
+  const m = document.createElement('div');
+  m.id = 'sc-menu'; m.className = 'sc-menu';
+  m.innerHTML = `<button type="button" data-a="cmp">${picked ? tr('取消比較', '比較から外す') : tr('加入比較', '比較に追加')}</button>` +
+    `<button type="button" data-a="status">${tr('修改狀態', 'ステータス変更')}</button>` +
+    `<button type="button" data-a="del" class="danger">${tr('刪除店面', '削除')}</button>`;
+  document.body.appendChild(m);
+  const r = btn.getBoundingClientRect();
+  m.style.top = Math.min(window.innerHeight - m.offsetHeight - 8, r.bottom + 4) + 'px';
+  m.style.left = Math.max(8, Math.min(window.innerWidth - m.offsetWidth - 8, r.right - m.offsetWidth)) + 'px';
+  m.onclick = ev => {
+    const a = ev.target.getAttribute('data-a');
+    if (!a) return;
+    closeCardMenu();
+    if (a === 'cmp') toggleCompareStore(id);
+    else if (a === 'status') openStatusEditorModal(id);
+    else if (a === 'del') deleteStore(id);
+  };
+  setTimeout(() => document.addEventListener('click', closeCardMenu, { once: true }), 0);
 }
 
 function openImageViewer(src) {
