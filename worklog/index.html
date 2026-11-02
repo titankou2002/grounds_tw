@@ -7127,7 +7127,7 @@ function makeStoreFromSource(o) {
   const rent = pos(src.rent), area = pos(src.area);
   const obj = {
     id: o.id,
-    title: src.title || `${o.name}#${o.rawId || ''}（待確認）`,
+    title: src.title || `${o.name}#${o.rawId || ''}（${src.reason ? '讀取失敗：' + src.reason : '待確認'}）`,
     address: src.address || '',
     status: 'agency',
     statusLabel: '數字待確認',
