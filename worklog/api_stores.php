@@ -8,7 +8,7 @@ require_once __DIR__ . '/lib_images.php';
 require_once __DIR__ . '/lib_overrides.php';
 $data = wl_migrate_grounds_file($file);
 wl_migrate_overrides_file();
-$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
+$keys = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','district','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
 $fixFile = __DIR__ . '/store_fixes.json';
 $fixes = file_exists($fixFile) ? (json_decode(file_get_contents($fixFile), true) ?: []) : [];
 $ov = wl_ov_load();
