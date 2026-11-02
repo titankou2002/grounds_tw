@@ -5507,13 +5507,14 @@ async function runPool(tasks, n) {
 }
 // 店名很短時翻譯引擎常原樣回中文；沒有假名就換個問法再試，最多三次
 async function translateStoreTitleJa(zh) {
-  const hasKana = x => /[\u3040-\u30ff]/.test(x || '');
+  // 有假名，或有日文才有的字形（圏舗価区駅広県関），就算翻成日文了
+  const isJa = x => /[\u3040-\u30ff圏舗価区駅広県関]/.test(x || '');
   let out = await translateTextAsync(zh, 'zh-TW|ja');
-  if (hasKana(out)) return out;
-  for (const lead of ['店舗名：', '物件名：']) {
+  if (isJa(out)) return out;
+  for (const lead of ['店面の名前：', '請翻成日文：']) {
     const r = await translateTextAsync(lead + zh, 'zh-TW|ja');
-    const cleaned = String(r || '').replace(/^(店舗名|物件名|店面の名前|店名)\s*[：:]\s*/, '');
-    if (hasKana(cleaned)) return cleaned;
+    const cleaned = String(r || '').replace(/^(店舗名|物件名|店面の名前|店名|日本語)\s*[：:]\s*/, '');
+    if (isJa(cleaned)) return cleaned;
   }
   return out;
 }
