@@ -5770,6 +5770,39 @@ async function translateStoreTitleJa(zh) {
   }
   return out;
 }
+// --- 優缺點分析：優缺點空白的店，請伺服器讀刊登頁全文後由 Claude 寫（需要伺服器上有金鑰） ---
+const _analysisTried = new Set(), _analysisRetry = {};
+let _analysisBusy = false, _analysisNoKey = false;
+async function ensureStoreAnalysis() {
+  if (_analysisBusy || _analysisNoKey || state.previewing || state.currentUserRole !== 'tw') return;
+  const todo = state.stores.filter(s => !_analysisTried.has(s.id) && hasNums(s) && !s.unverified && /^https?:/i.test(s.url || '') && (!String(s.pros || '').trim() || !String(s.cons || '').trim()));
+  if (!todo.length) return;
+  _analysisBusy = true;
+  let changed = false;
+  for (const s of todo) {
+    _analysisTried.add(s.id);
+    showToast(tr('正在分析優缺點：', '長所・短所を分析中：') + storeTitleText(s).slice(0, 14), 2500);
+    try {
+      const r = await fetch('api_analyze.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: s.id }) }).then(x => x.json());
+      if (r && r.success && (r.pros || r.cons)) {
+        if (r.pros && !String(s.pros || '').trim()) { s.pros = r.pros; delete s.prosJa; }
+        if (r.cons && !String(s.cons || '').trim()) { s.cons = r.cons; delete s.consJa; }
+        s.editedAt = Date.now();
+        changed = true;
+      } else if (r && r.error === 'unknown store' && (_analysisRetry[s.id] = (_analysisRetry[s.id] || 0) + 1) <= 3) {
+        _analysisTried.delete(s.id);   // 新店可能還沒同步到伺服器，稍後再試
+        setTimeout(ensureStoreAnalysis, 8000);
+      } else if (r && r.error === 'no_key') {
+        _analysisNoKey = true;
+        showToast(tr('還沒設定 AI 金鑰，沒辦法自動分析', 'AIキー未設定のため自動分析できません'), 3500);
+        break;
+      }
+    } catch (e) {}
+  }
+  _analysisBusy = false;
+  if (changed) { saveAppState(true); renderStores(); showToast(tr('已補上優缺點分析', '長所・短所を追加しました'), 2000); }
+}
+
 async function ensureStoreJa() {
   if (_storeJaBusy) return;
   // 日文欄空白、跟中文一樣、或完全沒有假名（還是中文）都要翻
@@ -6065,6 +6098,7 @@ function renderStores() {
   });
 
   updateCompareButton();
+  ensureStoreAnalysis();
   ensureStoreJa();
 }
 

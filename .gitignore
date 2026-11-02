@@ -66,3 +66,6 @@ worklog/grounds_data.lock
 # 比較表分享快照（伺服器端，不進 git、部署不覆蓋）
 worklog/compare_shares/
 worklog/compare_shares/**
+
+# 伺服器上的 AI 金鑰，絕不進 repo
+worklog/.wl_anthropic_key
