@@ -8,30 +8,46 @@ require_once __DIR__ . '/lib_overrides.php';
 
 function out($a, $code = 200) { http_response_code($code); echo json_encode($a, JSON_UNESCAPED_UNICODE); exit; }
 
+// 金鑰以 sk-ant- 開頭走 Claude，以 AIza 開頭走 Gemini。
 if (!function_exists('wl_call_claude')) {
-    function wl_call_claude($key, $system, $user) {
-        $ch = curl_init('https://api.anthropic.com/v1/messages');
+    function wl_http_json($url, $headers, $payload) {
+        $ch = curl_init($url);
         curl_setopt_array($ch, [
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_TIMEOUT => 75,
-            CURLOPT_HTTPHEADER => ['content-type: application/json', 'anthropic-version: 2023-06-01', 'x-api-key: ' . $key],
-            CURLOPT_POSTFIELDS => json_encode([
-                'model' => 'claude-sonnet-5-5',
-                'max_tokens' => 2000,
-                'system' => $system,
-                'messages' => [['role' => 'user', 'content' => $user]],
-            ], JSON_UNESCAPED_UNICODE),
+            CURLOPT_HTTPHEADER => array_merge(['content-type: application/json'], $headers),
+            CURLOPT_POSTFIELDS => json_encode($payload, JSON_UNESCAPED_UNICODE),
         ]);
         $body = curl_exec($ch);
         $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $err = curl_error($ch);
-        if ($body === false) return [false, 'network ' . $err];
-        $j = json_decode($body, true);
+        if ($body === false) return [null, 0, 'network ' . $err];
+        return [json_decode($body, true), $code, ''];
+    }
+    function wl_call_claude($key, $system, $user) {
+        if (strpos($key, 'sk-ant-') === 0) {
+            [$j, $code, $err] = wl_http_json('https://api.anthropic.com/v1/messages',
+                ['anthropic-version: 2023-06-01', 'x-api-key: ' . $key],
+                ['model' => 'claude-sonnet-5-5', 'max_tokens' => 2000, 'system' => $system, 'messages' => [['role' => 'user', 'content' => $user]]]);
+            if ($err) return [false, $err];
+            if ($code !== 200 || !is_array($j)) return [false, 'api ' . $code . ' ' . mb_substr((string)($j['error']['message'] ?? ''), 0, 120)];
+            $text = '';
+            foreach (($j['content'] ?? []) as $blk) { if (($blk['type'] ?? '') === 'text') $text .= $blk['text']; }
+            return [true, $text];
+        }
+        // Gemini
+        $model = 'gemini-2.5-flash';
+        [$j, $code, $err] = wl_http_json('https://generativelanguage.googleapis.com/v1beta/models/' . $model . ':generateContent',
+            ['x-goog-api-key: ' . $key],
+            ['systemInstruction' => ['parts' => [['text' => $system]]],
+             'contents' => [['role' => 'user', 'parts' => [['text' => $user]]]],
+             'generationConfig' => ['responseMimeType' => 'application/json', 'maxOutputTokens' => 4000, 'temperature' => 0.3, 'thinkingConfig' => ['thinkingBudget' => 0]]]);
+        if ($err) return [false, $err];
         if ($code !== 200 || !is_array($j)) return [false, 'api ' . $code . ' ' . mb_substr((string)($j['error']['message'] ?? ''), 0, 120)];
         $text = '';
-        foreach (($j['content'] ?? []) as $blk) { if (($blk['type'] ?? '') === 'text') $text .= $blk['text']; }
-        return [true, $text];
+        foreach (($j['candidates'][0]['content']['parts'] ?? []) as $pt) { if (isset($pt['text'])) $text .= $pt['text']; }
+        return $text === '' ? [false, 'empty ' . ($j['candidates'][0]['finishReason'] ?? '')] : [true, $text];
     }
 }
 
