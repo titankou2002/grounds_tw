@@ -4,12 +4,20 @@ on:
   push:
     branches: [ main ]
   workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
   ftp-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
+      # AI 金鑰存在 GitHub Secrets（ANTHROPIC_API_KEY），部署時寫成伺服器上的隱藏檔，不進 repo。
+      - name: Write AI key file
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: |
+          if [ -n "$ANTHROPIC_API_KEY" ]; then printf '%s' "$ANTHROPIC_API_KEY" > worklog/.wl_anthropic_key; fi
 
       # AI 金鑰存在 GitHub Secrets（ANTHROPIC_API_KEY），部署時寫成伺服器上的隱藏檔，不進 repo。
       - name: Write AI key file
