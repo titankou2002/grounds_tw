@@ -1,0 +1,261 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開店作戰中心｜grounds Taiwan</title>
+<meta name="description" content="grounds Taiwan 開店作戰中心：每天打開就知道現在到哪、今天幹嘛、誰卡住、等日本什麼。">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0e1116; --bg2:#151a22; --card:#1b222c; --card2:#202a36;
+  --line:#2c3a4d; --txt:#e8eef6; --muted:#8fa0b5;
+  --accent:#7fb3ff; --accent2:#ffd075;
+  --do:#ffd075; --watch:#ff8f8f; --note:#7fe3c8;
+  --ok1:#78d17f; --ok2:#ff9f5c; --ok3:#5cc8ff; --okr:#ff5c5c;
+  --radius:14px;
+}
+*{box-sizing:border-box; margin:0; padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg); color:var(--txt); font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif; line-height:1.75; font-size:15px}
+::selection{background:var(--accent); color:#000}
+a{color:var(--accent); text-decoration:none}
+.app{display:flex; min-height:100vh}
+nav.side{
+  width:280px; flex-shrink:0; background:var(--bg2); border-right:1px solid var(--line);
+  position:sticky; top:0; height:100vh; overflow-y:auto; padding:22px 16px; z-index:20;
+}
+nav.side .brand{font-weight:800; font-size:17px; margin-bottom:2px}
+nav.side .brand span{color:var(--accent2)}
+nav.side .sub{color:var(--muted); font-size:12px; margin-bottom:16px; line-height:1.5}
+.ngroup{margin-bottom:4px}
+.nitem{display:block; padding:8px 12px; border-radius:9px; font-weight:700; font-size:13.5px; color:var(--txt); cursor:pointer; border:1px solid transparent}
+.nitem:hover{background:var(--card); border-color:var(--line)}
+.nchap{margin:2px 0 10px 12px; border-left:1px solid var(--line); padding-left:8px; display:flex; flex-direction:column; gap:3px}
+.nlink{color:var(--muted); font-size:11.5px; padding:2px 6px; border-radius:5px}
+.nlink:hover{color:var(--txt); background:var(--card)}
+main{flex:1; min-width:0; padding:34px 40px 100px; max-width:1080px; margin:0 auto}
+.h1{font-size:28px; font-weight:800; margin-bottom:6px}
+.tagline{color:var(--muted); margin-bottom:4px}
+.doc-back{display:inline-block; margin-top:14px; font-size:13px; color:var(--muted); border:1px solid var(--line); padding:5px 12px; border-radius:20px}
+.lede{background:var(--card2); border-left:4px solid var(--accent2); border-radius:10px; padding:14px 18px; margin:20px 0 26px; font-size:15px; color:var(--txt)}
+.lede b{color:var(--accent2)}
+
+.section{margin-top:8px; padding-top:16px; border-top:1px solid var(--line); scroll-margin-top:12px}
+.section-head{display:flex; align-items:center; gap:12px; border-bottom:2px solid var(--line); padding-bottom:10px; margin-bottom:14px; flex-wrap:wrap}
+.section-head .num{font-size:12px; font-weight:800; letter-spacing:1px; padding:4px 10px; border-radius:7px; color:#0e1116; background:var(--accent2)}
+.section-head h2{font-size:22px}
+blockquote{margin:14px 0; padding:12px 16px; background:var(--card2); border-left:3px solid var(--muted); border-radius:8px; color:var(--muted); font-size:13.5px}
+blockquote p{margin:4px 0}
+h3{font-size:17px; margin:26px 0 10px}
+h4{font-size:14.5px; margin:16px 0 6px; color:var(--accent2)}
+.phase-card{background:linear-gradient(135deg,var(--card2),var(--card)); border:1px solid var(--line); border-radius:var(--radius); padding:16px 20px; display:flex; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom:14px}
+.phase-card .p-label{font-size:12px; color:var(--muted); letter-spacing:1px; font-weight:800}
+.phase-card .p-name{font-size:20px; font-weight:800; color:var(--accent2)}
+.phase-card .p-note{font-size:13px; color:var(--muted)}
+
+table{width:100%; border-collapse:collapse; font-size:13.5px; margin:14px 0 18px}
+th,td{padding:9px 12px; border:1px solid var(--line); text-align:left; vertical-align:top}
+th{background:var(--card2); font-weight:700; white-space:nowrap}
+td.total{background:rgba(255,208,117,.12); font-weight:800}
+.top10{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:12px 0 8px}
+@media(max-width:860px){.top10{grid-template-columns:1fr}}
+.top{background:var(--card); border:1px solid var(--line); border-radius:11px; padding:11px 14px}
+.top .n{font-size:11px; font-weight:800; color:var(--accent2)}
+.top .t{font-weight:600; display:block}
+.top .d{font-size:13px; color:var(--muted)}
+
+.pill{display:inline-flex; align-items:center; gap:6px}
+.pill.ok{color:var(--ok1)} .pill.warn{color:var(--ok2)} .pill.pending{color:var(--ok3)} .pill.risk{color:var(--okr)}
+
+.decide-grid{display:grid; grid-template-columns:1fr 1fr 1fr; gap:14px; margin:14px 0}
+@media(max-width:900px){.decide-grid{grid-template-columns:1fr}}
+.decide{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px}
+.decide.jp{border-top:3px solid var(--accent)}
+.decide.tw{border-top:3px solid var(--ok1)}
+.decide.both{border-top:3px solid var(--accent2)}
+.decide h4{margin:0 0 10px; color:var(--txt); font-size:15px}
+.decide ul{list-style:none}
+.decide li{padding-left:1px; margin-bottom:7px; font-size:13.5px; color:var(--muted)}
+.decide.tw li{color:var(--txt)}
+.decide.both li{color:var(--txt); font-weight:600}
+.decide .who{font-size:10.5px; letter-spacing:1px; font-weight:800; color:var(--muted); padding:3px 9px; border:1px solid var(--line); border-radius:20px; display:inline-block; margin-bottom:10px}
+
+.timeline{position:relative; margin:10px 0 14px; padding-left:0}
+.window{background:var(--card); border:1px solid var(--line); border-left:4px solid var(--accent); border-radius:12px; padding:14px 18px; margin-bottom:14px}
+.window .w-range{font-size:11px; font-weight:800; letter-spacing:1px; color:var(--accent)}
+.window h4{margin:2px 0 8px; font-size:16px; color:var(--txt)}
+.window ul{list-style:none}
+.window li{padding-left:16px; position:relative; margin-bottom:5px; font-size:13.5px; color:var(--muted)}
+.window li:before{content:"▸"; position:absolute; left:0; color:var(--muted)}
+
+.two{display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:14px 0}
+@media(max-width:860px){.two{grid-template-columns:1fr}}
+.mk{background:var(--card); border:1px solid var(--line); border-radius:12px; padding:16px}
+.mk h4{margin:0 0 10px; font-size:15.5px}
+.mk .row{margin-bottom:10px}
+.mk .k{font-size:11px; font-weight:800; letter-spacing:.5px; color:var(--muted); display:block; margin-bottom:2px}
+.mk .v{font-size:13.5px}
+
+.task-card{background:var(--card2); border:1px solid var(--line); border-radius:12px; padding:16px 18px; margin:12px 0; border-left:4px solid var(--ok1)}
+.task-card .tt{font-weight:800; font-size:15.5px; margin-bottom:10px}
+.task-card .tt .tag{font-size:11px; color:var(--ok1); letter-spacing:1px; font-weight:800; border:1px solid var(--line); padding:2px 8px; border-radius:20px; margin-right:8px}
+.task-card ul{list-style:none}
+.task-card .cl{font-size:12.5px; color:var(--muted); font-weight:800; letter-spacing:.5px; margin:8px 0 4px}
+.task-card li.chk{padding-left:24px; position:relative; margin-bottom:4px; font-size:13.5px}
+.task-card li.chk:before{content:"☐"; position:absolute; left:0; color:var(--muted)}
+.meta{display:flex; gap:8px; flex-wrap:wrap; margin-top:10px}
+.meta .m{font-size:12px; padding:3px 10px; border-radius:20px; border:1px solid var(--line); color:var(--muted)}
+.meta .m.jp{color:var(--ok2); border-color:var(--ok2)}
+
+.blk{margin-top:12px; background:var(--card2); border-radius:11px; padding:12px 15px; border-left:3px solid var(--muted)}
+.blk .lbl{font-size:11px; letter-spacing:1px; font-weight:800; margin-bottom:6px}
+.blk.watch{border-left-color:var(--watch)} .blk.watch .lbl{color:var(--watch)}
+.blk.note{border-left-color:var(--note)} .blk.note .lbl{color:var(--note)}
+.blk ul{list-style:none}
+.blk li{padding-left:16px; position:relative; margin-bottom:5px; font-size:13.5px}
+.blk li:before{content:"▸"; position:absolute; left:0}
+
+.manual-block{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:18px 20px; margin-bottom:20px; scroll-margin-top:14px}
+.manual-block .ch-top{display:flex; align-items:baseline; gap:12px; margin-bottom:6px; flex-wrap:wrap}
+.manual-block .cid{font-size:12px; font-weight:800; color:var(--accent2); letter-spacing:1px}
+.manual-block h3{font-size:19px; margin:0}
+.manual-block .why{font-size:14px; color:var(--txt); margin:2px 0 8px}
+.manual-block .who{font-size:13px; color:var(--muted); margin-bottom:4px}
+@media(max-width:700px){nav.side{display:none}}
+</style>
+</head>
+<body>
+<div class="app">
+
+<nav class="side">
+  <div class="brand">開店<span>作戰中心</span></div>
+  <div class="sub">grounds Taiwan · 你每天打開的頁面<br>現在到哪 · 今天幹嘛 · 卡在哪 · 等日本什麼</div>
+  ['<div class="ngroup"><a class="nitem" href="#dashboard">① 儀表板</a></div>', '<div class="ngroup"><a class="nitem" href="#decide">② 誰決定什麼</a></div>', '<div class="ngroup"><a class="nitem" href="#countdown">③ 開店倒數</a></div>', '<div class="ngroup"><a class="nitem" href="#funding">④ 資金需求</a></div>', '<div class="ngroup"><a class="nitem" href="#mustknow">⑤ 負責人必修</a></div>', '<div class="ngroup"><a class="nitem" href="#manual">⑥ 作戰手冊</a></div>']
+  <div class="nchap"><a class="nlink" href="#Ch01">Ch01 專案總覽（為什麼開這家店）</a>
+<a class="nlink" href="#Ch02">Ch02 品牌哲學（素材與話語權）</a>
+<a class="nlink" href="#Ch03">Ch03 商品哲學（賣什麼）</a>
+<a class="nlink" href="#Ch04">Ch04 台灣市場分析（數據定地板）</a>
+<a class="nlink" href="#Ch05">Ch05 門市策略（店型與消防）</a>
+<a class="nlink" href="#Ch06">Ch06 台灣營運架構（誰權責）</a>
+<a class="nlink" href="#Ch07">Ch07 公司成立（日本直接來投資）</a>
+<a class="nlink" href="#Ch08">Ch08 進口與物流</a>
+<a class="nlink" href="#Ch09">Ch09 數位系統（POS／電子發票／金流）</a>
+<a class="nlink" href="#Ch10">Ch10 品牌策略（行銷與開幕）</a>
+<a class="nlink" href="#Ch11">Ch11 教育訓練（教店員賣鞋子）</a>
+<a class="nlink" href="#Ch12">Ch12 財務計畫（日本要投多少）</a>
+<a class="nlink" href="#Ch13">Ch13 風險與因應</a>
+<a class="nlink" href="#Ch14">Ch14 願景</a></div>
+  <a class="doc-back" href="index.html">← 回文件庫</a>
+</nav>
+
+<main>
+<div class="h1">開店作戰中心</div>
+<div class="tagline">日本 100% 投資台灣，開一家公司＋第一家直營店。你是台灣端負責人。</div>
+
+<section class="section" id="dashboard">
+  <div class="section-head"><span class="num">①</span><h2>儀表板：每天打開先看這頁</h2></div>
+  <div class="phase-card"><div><div class="p-label">目前階段</div><div class="p-name">Phase 1 · 籌備期</div><div class="p-note">Phase 1｜日本確認投資 → 第一家店開幕</div></div></div>
+  <div class="lede">不是從零開始：GROUNDS 是日本母公司旗下品牌；2026-07 在台北辦過第一次快閃；grounds 官方台灣電商（tw.grounds-fw.com）已上線。台灣市場已經被驗證過一波，現在是把「驗證」升級成「第一家正式店」。</div>
+  <h3>5 個關鍵問題</h3>
+  <table>
+<tr><th>關鍵問題</th><th>現況</th><th>下一步</th></tr>
+<tr><td>日本是否確定投資台灣？</td><td>🟡 確認中</td><td>週五會議確認意願與規模</td></tr>
+<tr><td>台灣公司型態？</td><td>🟡 建議子公司</td><td>日本拍板（見②誰決定什麼）</td></tr>
+<tr><td>第一家店在哪？</td><td>🟡 選址中</td><td>找 2–3 個候選店址</td></tr>
+<tr><td>商品怎麼從日本進來？</td><td>🟡 待確認</td><td>確認出貨模式（日本倉庫出貨）</td></tr>
+<tr><td>什麼時候開幕？</td><td>🔴 尚未定</td><td>建立開店倒數（見③）</td></tr>
+</table>
+  <h3>現在最重要的 10 件事</h3>
+  <div class="top10"><div class="top"><span class="n">1</span><span class="t">商標</span><span class="d">先送台灣商標（品牌核心 3 件：GROUNDS／LEAP GRAVITY／圖片LOGO），先申請主義，誰先送誰先拿</span></div>
+<div class="top"><span class="n">2</span><span class="t">公司</span><span class="d">日本確認 100% 持股子公司＋資本額，公司沒成立什麼都簽不了</span></div>
+<div class="top"><span class="n">3</span><span class="t">店址</span><span class="d">找 2–3 個候選店址＋租金/人流比較，選址不定裝修預算全懸空</span></div>
+<div class="top"><span class="n">4</span><span class="t">商品</span><span class="d">日本確認第一批引進系列與建議售價，範圍不定進貨卡在起點</span></div>
+<div class="top"><span class="n">5</span><span class="t">進貨</span><span class="d">確認日本出貨方式（日本倉 vs 工廠直送），決定庫存與成本</span></div>
+<div class="top"><span class="n">6</span><span class="t">財務</span><span class="d">把投資表（④）填完，算出總投資，日本才知道要準備多少錢</span></div>
+<div class="top"><span class="n">7</span><span class="t">POS</span><span class="d">找台灣可用、支援電子發票的 POS＋刷卡收單，開通要數週</span></div>
+<div class="top"><span class="n">8</span><span class="t">人員</span><span class="d">決定第一家店需要幾個人、店長人選，跟訓練時程綁定</span></div>
+<div class="top"><span class="n">9</span><span class="t">品牌</span><span class="d">日本提供完整品牌素材＋授權範圍，內容才齊得出</span></div>
+<div class="top"><span class="n">10</span><span class="t">開幕</span><span class="d">照③的倒數回推 T-0，倒數是進度座標不是行事曆</span></div></div>
+  <h3>本週就能做的（台灣端，不等日本）</h3>
+  <ul></ul>
+</section>
+
+<section class="section" id="decide">
+  <div class="section-head"><span class="num">②</span><h2>誰決定什麼</h2></div>
+  <blockquote><p>這頁最重要。日本不是一般代理，是直接來台灣開 100% 公司。沒把「誰拍板」定清楚，公司、預算、商品、定價、店面、行銷會一直來回。</p><p>原則：日本管「品牌與錢的規格」，台灣管「在地執行」。兩邊一起的項目，每週五會議收斂，收斂結果回填本文件。</p></blockquote>
+  <div class="decide-grid"><div class="decide jp"><h4>日本總公司決定</h4><span class="who">日本總公司拍板</span><ul><li>品牌定位與全球品牌規範</li><li>商品線、哪些系列進台灣</li><li>商品價格政策（建議售價）</li><li>品牌素材與授權範圍</li><li>店舖設計標準</li><li>年度預算與授權金額</li><li>出貨模式</li><li>日本教育訓練／認證標準</li></ul></div>
+<div class="decide tw"><h4>台灣負責人決定</h4><span class="who">台灣負責人拍板</span><ul><li>店址與商圈選擇</li><li>房東談判與租約</li><li>裝修廠商</li><li>台灣員工招募與人事</li><li>會計師、律師</li><li>報關行、倉儲</li><li>POS、電子發票、刷卡收單</li><li>台灣社群、KOL、在地行銷</li><li>門市 SOP 執行細節</li><li>第一家店定位（旗艦 or 驗證店）</li><li>投資金額（資本額＋初期營運）</li><li>商品售價與首批進貨量</li><li>店面規模</li><li>開幕日期</li><li>行銷預算＋人事預算</li><li>年度營收目標</li></ul></div>
+<div class="decide both"><h4>必須兩邊一起決定</h4><span class="who">兩邊一起拍板</span><ul></ul></div></div>
+</section>
+
+<section class="section" id="countdown">
+  <div class="section-head"><span class="num">③</span><h2>開店倒數 T-180 → T-0</h2></div>
+  <blockquote><p>沒有固定日期，因為第一格要等日本拍板公司。倒數是「進度座標」：每完成一項就往 T-0 推一格。T-180 假設公司決策已拍板；延誤就延後整條線，不填假日期。</p></blockquote>
+  <div class="timeline"><div class="window"><div class="w-range">T-180 ~ T-120</div><h4>公司與品牌基礎</h4><ul><li>商標：品牌核心 3 件送件（日本決定名義）</li><li>公司：日本拍板子公司＋資本額 → 找會計師設立（行政約 2-3 個月）</li><li>授權：日本授權台灣營運範圍並簽署</li><li>銀行：公司帳戶＋OBU（外幣專用帳戶）評估</li><li>會計：記帳士／會計師簽約</li><li>商品：日本確認引進系列與售價</li><li>定價：台幣定價與日本／台灣電商對齊</li><li>物流：報關行簽約、確認出貨模式</li></ul></div>
+<div class="window"><div class="w-range">T-120 ~ T-90</div><h4>店面決策</h4><ul><li>找店：2-3 候選＋租金/人流/競品比較</li><li>商圈：市場分析數據齊備</li><li>租約：簽約（押金、租期、漲租、裝修期）</li><li>店面設計：日本出設計標準 → 台灣找設計／裝修</li><li>裝修預算：報價 → 日本核可</li><li>消防：確認需求＋排會勘時程</li></ul></div>
+<div class="window"><div class="w-range">T-90 ~ T-60</div><h4>建立營運系統</h4><ul><li>POS：選定＋電子發票串接</li><li>金流：刷卡收單申請（開幕前 1 個月開通）</li><li>庫存：進貨計畫＋安全庫存水位</li><li>倉儲：物流／倉儲簽約</li><li>報關：第一單試走</li><li>首批進貨：下單</li><li>人員招募：店長＋正職／兼職</li></ul></div>
+<div class="window"><div class="w-range">T-60 ~ T-30</div><h4>建立銷售能力</h4><ul><li>教育訓練：教材＋課程（赴日 or 在地）</li><li>商品知識：一卡一鞋款</li><li>試穿 SOP：練到每個店員一致</li><li>話術：教育式試穿話術</li><li>IG／LINE：內容行事曆上線</li><li>KOL：合約簽署</li><li>開幕活動：企劃＋預算</li></ul></div>
+<div class="window"><div class="w-range">T-30 ~ T-0</div><h4>開幕作戰</h4><ul><li>到貨：首批到店＋抽驗</li><li>陳列：店鋪陳列完成</li><li>POS 測試：結帳／退貨／發票實測</li><li>消防：會勘通過</li><li>員工訓練：全員到位＋制服＋通過標準</li><li>試營運：內部＋邀請試穿</li><li>VIP／媒體：開幕日名單</li><li>Opening：開幕活動執行</li></ul></div></div>
+</section>
+
+<section class="section" id="funding">
+  <div class="section-head"><span class="num">④</span><h2>資金需求：日本到底要投多少錢</h2></div>
+  <blockquote><p>現在填「—」表示數字還沒出來。填完才知道日本要準備多少錢。各項細節見對應章節或專題文件。</p><p>結論一句話（等數字齊）：<b>第一家店初期總投資粗估需要 NT$ X–Y 百萬。</b> 數字還沒齊前，「裝修＋押金＋首批進貨＋人事＋行銷」這五塊通常是最大頭，先把這五塊的級距估出來。</p></blockquote>
+  <table>
+<tr><th>項目</th><th>預估</th><th>狀態</th></tr>
+<tr><td>公司設立（含會計師／律師）</td><td>NT$（詢價中）</td><td>台灣在跑</td></tr>
+<tr><td>商標（官費＋代理＋移轉）</td><td>NT$15,600＋代理費</td><td>已確定</td></tr>
+<tr><td>店面押金</td><td>NT$（依租約）</td><td>等店址</td></tr>
+<tr><td>裝修＋設備</td><td>NT$（依定位與坪數）</td><td>等日本</td></tr>
+<tr><td>第一批貨</td><td>NT$（依引進範圍）</td><td>等日本</td></tr>
+<tr><td>物流／報關</td><td>NT$（詢價中）</td><td>台灣在跑</td></tr>
+<tr><td>POS／系統</td><td>NT$（月費×期間）</td><td>台灣在跑</td></tr>
+<tr><td>行銷（開幕＋第一季）</td><td>NT$（待定）</td><td>台灣提案</td></tr>
+<tr><td>人事（開幕前＋首季）</td><td>NT$（待定）</td><td>台灣提案</td></tr>
+<tr><td>備用金（10–15%）</td><td>總額後推</td><td>最後加</td></tr>
+<tr><td class="total"><b>初期總投資</b></td><td class="total"><b>待各項填完</b></td><td class="total">目標：一個數字區間</td></tr>
+</table>
+  
+</section>
+
+<section class="section" id="mustknow">
+  <div class="section-head"><span class="num">⑤</span><h2>台灣負責人必修</h2></div>
+  <blockquote><p>你不是要變成會計師、律師、報關行、消防技師或行銷公司。你只需要知道：<b>這是什麼 → 為什麼重要 → 你要做什麼 → 找誰做 → 驗收什麼。</b></p></blockquote>
+  <div class="two"><div class="mk"><h4>商標</h4><div class="row"><span class="k">為什麼</span><span class="v">台灣採先申請主義，不搶註別人會把品牌名搶走</span></div><div class="row"><span class="k">你要做</span><span class="v">確認申請人名義、決定品牌核心標的送件</span></div><div class="row"><span class="k">找誰</span><span class="v">台灣商標事務所</span></div><div class="row"><span class="k">驗收</span><span class="v">拿到申請案號＋申請日（優先日）</span></div></div>
+<div class="mk"><h4>公司成立</h4><div class="row"><span class="k">為什麼</span><span class="v">沒公司就不能簽約、匯款、報稅</span></div><div class="row"><span class="k">你要做</span><span class="v">確認子公司或分公司、找會計師</span></div><div class="row"><span class="k">找誰</span><span class="v">會計師／律師</span></div><div class="row"><span class="k">驗收</span><span class="v">公司登記完成＋銀行帳戶＋稅籍登記</span></div></div>
+<div class="mk"><h4>消防</h4><div class="row"><span class="k">為什麼</span><span class="v">消防沒過不能營業，開幕日直接跳票</span></div><div class="row"><span class="k">你要做</span><span class="v">確認店面消防需求、排會勘</span></div><div class="row"><span class="k">找誰</span><span class="v">裝修廠商＋消防專業</span></div><div class="row"><span class="k">驗收</span><span class="v">開幕前取得可營業條件（會勘通過）</span></div></div>
+<div class="mk"><h4>進口與報關</h4><div class="row"><span class="k">為什麼</span><span class="v">貨到不了店就空，成本抓不準毛利被吃掉</span></div><div class="row"><span class="k">你要做</span><span class="v">選報關行、確認出貨模式與文件</span></div><div class="row"><span class="k">找誰</span><span class="v">報關行／物流商</span></div><div class="row"><span class="k">驗收</span><span class="v">第一批貨到店且中文標示合規</span></div></div>
+<div class="mk"><h4>POS／電子發票／金流</h4><div class="row"><span class="k">為什麼</span><span class="v">電子發票是台灣法規強制；刷卡收單簽約到開通要數週</span></div><div class="row"><span class="k">你要做</span><span class="v">選 POS、簽刷卡收單、全流程測試</span></div><div class="row"><span class="k">找誰</span><span class="v">系統廠商＋銀行</span></div><div class="row"><span class="k">驗收</span><span class="v">結帳／退貨／開立發票實測全通過</span></div></div>
+<div class="mk"><h4>稅務</h4><div class="row"><span class="k">為什麼</span><span class="v">帳記錯，補稅罰款比省下的成本還多</span></div><div class="row"><span class="k">你要做</span><span class="v">簽記帳士、每月對帳、每二個月申報營業稅</span></div><div class="row"><span class="k">找誰</span><span class="v">記帳士／會計師</span></div><div class="row"><span class="k">驗收</span><span class="v">每期申報如期、帳表一致</span></div></div>
+<div class="mk"><h4>人事與勞基</h4><div class="row"><span class="k">為什麼</span><span class="v">排班工時違法會被罰，人事成本被逼高</span></div><div class="row"><span class="k">你要做</span><span class="v">定職位與薪資、勞健保加保、排班合規</span></div><div class="row"><span class="k">找誰</span><span class="v">人事顧問或記帳士</span></div><div class="row"><span class="k">驗收</span><span class="v">勞動契約＋勞健保＋排班表符合規定</span></div></div>
+<div class="mk"><h4>行銷與社群</h4><div class="row"><span class="k">為什麼</span><span class="v">帳號被盜、廣告踩紅線會傷品牌信譽</span></div><div class="row"><span class="k">你要做</span><span class="v">定帳號權限（雙重驗證）、內容行事曆、KOL 合約</span></div><div class="row"><span class="k">找誰</span><span class="v">行銷夥伴／設計外包</span></div><div class="row"><span class="k">驗收</span><span class="v">開幕前 IG／LINE 內容上線、活動保險已投保</span></div></div></div>
+</section>
+
+<section class="section" id="manual">
+  <div class="section-head"><span class="num">⑥</span><h2>作戰手冊：14 章詳細任務卡</h2></div>
+  <blockquote><p>①~⑤ 是「抬頭看方向」，這層是「低頭做事」。每一章都寫清楚：<b>為什麼重要（不做會怎樣）→ 日本必須決定什麼 → 台灣負責什麼 → 每一項任務的完成條件／負責／需要日本／截止。</b></p><p>專題深度資料見文件庫：知識_商標佈局調查結果、知識_子公司vs分公司、策略_選品店通路、策略_進口路線比較、策略_電商三階段、記錄_快閃活動、檢查_開店前置合規。</p></blockquote>
+  <div class="manual-block" id="Ch01"><div class="ch-top"><span class="cid">Ch01</span><h3>專案總覽（為什麼開這家店）</h3></div><div class="why">不看全貌，各做各的，到開幕才發現缺件</div><div class="meta"><span class="m">負責：台灣負責人主責；日本簽署確認</span><span class="m jp">日本要決定：投資意願與規模、授權台灣的範圍</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>建立開店倒數行事曆</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">建好 T-180 → T-0 表格</li><li class="chk">把②③④⑥各章任務都排進日期</li><li class="chk">每週五檢視日曆，標出進度</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-180</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>讓日本簽署「誰決定什麼」共識（②層）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">日本確認 100% 投資意願</li><li class="chk">權責分工表簽署</li><li class="chk">金額授權（台灣可先花多少）</li></ul></ul><div class="meta"><span class="m jp">需要日本：簽署</span><span class="m">截止：T-170</span></div></div></div>
+<div class="manual-block" id="Ch02"><div class="ch-top"><span class="cid">Ch02</span><h3>品牌哲學（素材與話語權）</h3></div><div class="why">店裡、IG、官網講兩套版本，品牌的「教育式試穿」賣點直接破功</div><div class="meta"><span class="m jp">日本要決定：品牌素材與授權範圍</span><span class="m">台灣負責：翻譯、詞彙表、素材庫建檔</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>翻譯第一批內容＋建共用詞彙表</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">品牌故事、設計理念中文化</li><li class="chk">主力鞋款文案中文化</li><li class="chk">共用詞彙表建檔（大家講同一套話）</li><li class="chk">素材分類歸檔＋授權範圍白紙黑字</li></ul></ul><div class="meta"><span class="m jp">需要日本：原始素材＋授權範圍</span><span class="m">截止：T-150</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>品牌名、Logo 規範照日本原樣，不自行改動；素材規格（原始檔）馬上歸檔。</li></ul></div></div>
+<div class="manual-block" id="Ch03"><div class="ch-top"><span class="cid">Ch03</span><h3>商品哲學（賣什麼）</h3></div><div class="why">範圍不定，進貨、庫存、陳列、教育訓練全部卡在起點</div><div class="meta"><span class="m jp">日本要決定：引進系列、建議售價、首批進貨量</span><span class="m">台灣負責：市場建議清單＋上市後銷售回饋</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>決定首批引進範圍（台灣提建議 → 日本裁示）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">全系列盤點表建好</li><li class="chk">優先引進清單（含推薦理由）</li><li class="chk">日本裁示系列與售價</li></ul></ul><div class="meta"><span class="m jp">需要日本：裁示</span><span class="m">截止：T-150</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>商品知識卡（首批主打系列）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">一卡一鞋款（故事／材質／技術／話術）</li></ul></ul><div class="meta"><span class="m jp">需要日本：產品知識教材</span><span class="m">截止：T-60</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>庫強調貨齊（日本尺碼常缺碼）、台灣高溫潮濕影響材質說明、過季鞋難賣要控制第一批量。</li></ul></div></div>
+<div class="manual-block" id="Ch04"><div class="ch-top"><span class="cid">Ch04</span><h3>台灣市場分析（數據定地板）</h3></div><div class="why">定位講錯 → 首批貨進錯 → 後面整個錯；沒數據的判斷開幕後才知道痛</div><div class="meta"><span class="m">負責：台灣負責人全案</span><span class="m jp">日本要決定：無（本分析供日本與定位參考）</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>完成台灣市場分析</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">目標客群定義（誰會花 NT$5,000 買一雙鞋）</li><li class="chk">商圈四個數字：租金、坪數、人流、競品</li><li class="chk">每個數字都有接近 1-2 年內可查證的來源</li><li class="chk">旗艦店 vs 驗證店建議寫出</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-120</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>人流要分平日／假日／雨天三種；消費力看「會進店那群人」，不看行政區平均。</li></ul></div></div>
+<div class="manual-block" id="Ch05"><div class="ch-top"><span class="cid">Ch05</span><h3>門市策略（店型與消防）</h3></div><div class="why">消防沒過不能營業；選址不定，裝修預算和開幕日期全懸空</div><div class="meta"><span class="m jp">日本要決定：第一家店定位（旗艦 or 驗證）與店面規模（影響坪數與預算級距）</span><span class="m">台灣負責：選址、租約、裝修、消防</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>找 2-3 個候選店址</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">每個店址有租金／坪數／人流／周邊競品四個數字</li><li class="chk">現場走訪＋照片記錄</li><li class="chk">候選比較表（優缺點、預估月銷）</li></ul></ul><div class="meta"><span class="m jp">需要日本：定位（影響坪數與預算級距）</span><span class="m">截止：T-120</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>店面消防與安檢確認</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">消防會勘通過</li><li class="chk">電容量確認（裝修用到）</li><li class="chk">招牌申請確認</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-30 前會勘</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>租約逐條看（押金／漲租／轉租／裝修期）；動線留庫存空間；台灣天氣做防滑防潮。</li></ul></div></div>
+<div class="manual-block" id="Ch06"><div class="ch-top"><span class="cid">Ch06</span><h3>台灣營運架構（誰權責）</h3></div><div class="why">權責不清，一半決定卡在半空沒人拍板</div><div class="meta"><span class="m">負責：日本+台灣共同</span><span class="m jp">日本要決定：權責分工與金額授權上限</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>簽署權責分工＋金額授權</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">左右對照表（誰拍板／誰執行／誰被告知）</li><li class="chk">台灣可自行決定的金額上限（如 NT$50 萬內免日本）＋例外清單</li><li class="chk">日本簽署</li></ul></ul><div class="meta"><span class="m jp">需要日本：簽署</span><span class="m">截止：T-160</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>營運 SOP（開店／閉店／對帳／盤點）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">SOP 文件完成</li><li class="chk">店長交接流程寫好</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-45</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>排班符勞基、現金金流勾稽、公共場所責任險投保。</li></ul></div></div>
+<div class="manual-block" id="Ch07"><div class="ch-top"><span class="cid">Ch07</span><h3>公司成立（日本直接來投資）</h3></div><div class="why">公司沒成立，簽約、進貨、匯錢全部卡住，是整條線的地基</div><div class="meta"><span class="m jp">日本要決定：子公司 or 分公司、資本額、負責人</span><span class="m">台灣負責：設立流程執行</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>取得會計師／律師報價</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">2-3 家報價</li><li class="chk">費用與時程比較表</li></ul></ul><div class="meta"><span class="m jp">需要日本：確認結構後簽約</span><span class="m">截止：T-170</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>讓日本拍板公司結構與資本額</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">子公司 vs 分公司比較已附（可自辦商標／風險隔離／後續展店彈性）</li><li class="chk">日本拍板結構＋資本額</li></ul></ul><div class="meta"><span class="m jp">需要日本：拍板</span><span class="m">截止：T-160</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>執行公司設立</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">公司名稱預查</li><li class="chk">外資送件</li><li class="chk">資本到位</li><li class="chk">公司登記＋銀行帳戶＋稅籍登記</li></ul></ul><div class="meta"><span class="m jp">需要日本：資本匯入</span><span class="m">截止：送件後 2-3 個月</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>商標與公司成立並行（商標先申請主義）；銀行開戶預留時間；外幣資金匯入記得申報。</li></ul></div></div>
+<div class="manual-block" id="Ch08"><div class="ch-top"><span class="cid">Ch08</span><h3>進口與物流</h3></div><div class="why">貨到不了店就空，成本抓不準毛利被吃掉</div><div class="meta"><span class="m jp">日本要決定：出貨模式（日本倉出 vs 工廠直送）</span><span class="m">台灣負責：報關行選定、倉儲、中文標示合規</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>選定台灣報關物流商</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">取得 3 家報價</li><li class="chk">比較海運／空運／報關費／倉儲費</li><li class="chk">確認對方有鞋類進口經驗</li><li class="chk">確認日本出貨文件格式</li><li class="chk">到貨時間試算</li><li class="chk">選定一家簽約</li></ul></ul><div class="meta"><span class="m jp">需要日本：出貨文件樣本</span><span class="m">截止：T-90</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>試算進口成本（關稅／營業稅）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">稅則號列確認</li><li class="chk">首批進口成本試算表（含稅率）</li></ul></ul><div class="meta"><span class="m jp">需要日本：貨價與運費</span><span class="m">截止：T-90</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>第一批進貨下單</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">訂單下單</li><li class="chk">到貨抽驗清單</li><li class="chk">瑕疵退換規則</li></ul></ul><div class="meta"><span class="m jp">需要日本：出貨</span><span class="m">截止：T-45 前到貨</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>前置期（開幕週、旺季要更早下單）；中文標示合規（產地＋尺碼標）；防潮倉儲；過季滯銷處理規則。</li></ul></div></div>
+<div class="manual-block" id="Ch09"><div class="ch-top"><span class="cid">Ch09</span><h3>數位系統（POS／電子發票／金流）</h3></div><div class="why">電子發票是台灣法規強制，系統不支援就不能合法營業；刷卡收單簽約到開通要數週</div><div class="meta"><span class="m jp">日本要決定：是否統一由日本指定系統</span><span class="m">台灣負責：選型與簽約（若由台灣定）</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>選定 POS（含電子發票串接）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">2-3 家試用</li><li class="chk">結帳／退貨／開立發票實測</li><li class="chk">比較表（功能／月費／串接難度）</li></ul></ul><div class="meta"><span class="m jp">需要日本：若統一為日方指定則等指示</span><span class="m">截止：T-60</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>刷卡收單申請</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">簽約</li><li class="chk">開幕前 1 個月開通</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-30</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>斷電備援、每日資料備份、顧客個資保護、系統銜接測試預留 2-3 週。</li></ul></div></div>
+<div class="manual-block" id="Ch10"><div class="ch-top"><span class="cid">Ch10</span><h3>品牌策略（行銷與開幕）</h3></div><div class="why">開幕是第一次大曝光，文案踩紅線、帳號被盜一次就傷品牌</div><div class="meta"><span class="m jp">日本要決定：品牌調性與素材使用範圍</span><span class="m">台灣負責：在地執行與出稿</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>開幕前內容行事曆</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">IG／LINE 更新節奏排好</li><li class="chk">每則內容標出素材來源（日本 or 自製）</li><li class="chk">每則負責任人</li></ul></ul><div class="meta"><span class="m jp">需要日本：素材</span><span class="m">截止：T-42</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>開幕活動企劃</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">形式決定（媒體日／VIP 場／開幕限定）</li><li class="chk">預算三案（省／中／寬）</li><li class="chk">工作分配表</li><li class="chk">活動保險投保</li></ul></ul><div class="meta"><span class="m jp">需要日本：核預算</span><span class="m">截止：T-45</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>廣告法規（原價／特價標示不要踩紅線）、KOL 合約簽白紙黑字、社群帳號開雙重驗證、開幕爆單的備援。</li></ul></div></div>
+<div class="manual-block" id="Ch11"><div class="ch-top"><span class="cid">Ch11</span><h3>教育訓練（教店員賣鞋子）</h3></div><div class="why">店員講錯，品牌最強的「教育式試穿」變成扣分；訓練沒完成不能開幕</div><div class="meta"><span class="m jp">日本要決定：日本認證標準、是否派員、赴日受訓</span><span class="m">台灣負責：在地訓練執行</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>訂課程架構＋教材</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">模組、時數、評核方式表</li><li class="chk">商品知識卡（驗收用）</li><li class="chk">通過標準驗收表</li></ul></ul><div class="meta"><span class="m jp">需要日本：認證標準／教材</span><span class="m">截止：T-60</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>決定是否赴日受訓</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">比較表（費用／時間／成效）</li><li class="chk">日本確認</li></ul></ul><div class="meta"><span class="m jp">需要日本：確認</span><span class="m">截止：T-90</span></div></div><div class="task-card"><div class="tt"><span class="tag">任務</span>開幕前全員訓練</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">試穿 SOP 人人一致</li><li class="chk">全員通過驗收標準</li></ul></ul><div class="meta"><span class="m jp">需要日本：若在地訓練則無</span><span class="m">截止：T-15</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>訓練排班錯開店休日、店長休假的備援人選、術語速查表放櫃台。</li></ul></div></div>
+<div class="manual-block" id="Ch12"><div class="ch-top"><span class="cid">Ch12</span><h3>財務計畫（日本要投多少）</h3></div><div class="why">現金流斷了，店開著也沒用；數字先給日本看，才不會等到開口要錢那天</div><div class="meta"><span class="m">負責：台灣做草案 → 日本核年度預算（超授權金額要日本）</span><span class="m jp">日本要決定：年度預算核准、超授權支出</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>填完投資表（④）與損益三案</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">④投資表各項有數字，或標「等日本」</li><li class="chk">樂觀／中性／保守三案</li><li class="chk">每月賣幾雙才打平算出來</li></ul></ul><div class="meta"><span class="m jp">需要日本：核預算</span><span class="m">截止：T-100（初版給日本）</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>看現金流不看帳面盈餘、備用金抓 10–15%、淡旺季月份、匯率變動、稅務申報時點、庫存成本一起看。</li></ul></div></div>
+<div class="manual-block" id="Ch13"><div class="ch-top"><span class="cid">Ch13</span><h3>風險與因應</h3></div><div class="why">風險表寫完放著等於沒寫；出事才發現前兆早就出現</div><div class="meta"><span class="m">負責：台灣負責人主責</span><span class="m jp">日本要決定：重大風險（如撤資、品牌收線）的回應權限</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>風險表＋前兆訊號</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">六大風險（公司延遲／商品不及／店址跳票／進口卡關／人招不齊／現金流）</li><li class="chk">每個風險都有「看得出來的數字」前兆</li><li class="chk">每月檢視時程排定</li></ul></ul><div class="meta"><span class="m jp">需要日本：無</span><span class="m">截止：T-120</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>庫存與現金流的備援先做；建立決策聯絡網（誰決策／誰執行／多久回覆）。</li></ul></div></div>
+<div class="manual-block" id="Ch14"><div class="ch-top"><span class="cid">Ch14</span><h3>願景</h3></div><div class="why">沒方向，遇到沒答案的事大家各自解讀</div><div class="meta"><span class="m">負責：日本+台灣共同</span><span class="m jp">日本要決定：與台灣一起對齊長期方向</span></div><div class="task-card"><div class="tt"><span class="tag">任務</span>寫出三年願景（方向性敘述）</div><ul><div class="cl">完成條件（勾完才算完成）</div><ul><li class="chk">3-5 句方向（如：在台建立直營店與電商的複合模式）</li><li class="chk">對應第一年要做的事</li><li class="chk">檢討點排定（半年回顧一次）</li></ul></ul><div class="meta"><span class="m jp">需要日本：一起對齊</span><span class="m">截止：T-150</span></div></div><div class="blk watch"><div class="lbl">注意（不做會怎樣）</div><ul><li>翻成店員也聽得懂的一句話：「我們不是在賣鞋，是在幫台灣人找到合腳的那一雙。」</li></ul></div></div>
+</section>
+</main>
+
+</div>
+</body>
+</html>

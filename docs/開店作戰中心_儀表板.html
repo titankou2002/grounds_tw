@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>開店作戰中心 · Live 儀表板｜grounds Taiwan</title>
+<meta name="description" content="grounds Taiwan 開店作戰中心 Live：老闆版第一屏，連 Google Sheet 活資料。">
+<link rel="icon" type="image/png" sizes="32x32" href="../assets/img/favicon-32.png">
+<link rel="apple-touch-icon" href="../assets/img/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0e1116;--bg2:#151a22;--card:#1b222c;--card2:#202a36;--line:#2c3a4d;--txt:#e8eef6;--muted:#8fa0b5;--accent:#7fb3ff;--gold:#ffd075;--ok:#78d17f;--warn:#ff9f5c;--high:#ff5c5c}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,BlinkMacSystemFont,"PingFang TC","Microsoft JhengHei",sans-serif;line-height:1.6;font-size:14.5px}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:1180px;margin:0 auto;padding:26px 28px 90px}
+.head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;flex-wrap:wrap;margin-bottom:8px}
+.h1{font-size:26px;font-weight:800}
+.h1 small{display:block;font-size:12px;color:var(--muted);font-weight:400;letter-spacing:1px}
+.topline{font-size:13px;color:var(--muted);margin-bottom:18px}
+.conn{display:inline-flex;align-items:center;gap:6px;font-size:12px;padding:4px 12px;border:1px solid var(--line);border-radius:20px;color:var(--muted)}
+.conn .dot{width:8px;height:8px;border-radius:50%;background:var(--gold)}
+.conn.on .dot{background:var(--ok)} .conn.err .dot{background:var(--high)}
+.hero{background:linear-gradient(135deg,var(--card2),var(--card));border:1px solid var(--line);border-radius:16px;padding:20px 24px;display:flex;gap:26px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.hero .cell{min-width:150px}
+.hero .lbl{font-size:11px;letter-spacing:1px;color:var(--muted);font-weight:800;margin-bottom:6px}
+.hero .val{font-size:20px;font-weight:800}
+.hero .val small{font-size:12px;font-weight:400;color:var(--muted)}
+.bar{height:12px;background:var(--bg);border:1px solid var(--line);border-radius:20px;overflow:hidden;width:220px}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--ok));border-radius:20px;transition:width .4s}
+.pct{font-size:22px;font-weight:800}
+.gates{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.gate{font-size:11px;padding:4px 10px;border:1px solid var(--line);border-radius:20px;color:var(--muted)}
+.gate.on{background:var(--gold);color:#0e1116;border-color:var(--gold);font-weight:700}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:960px){.grid{grid-template-columns:1fr 1fr}}@media(max-width:640px){.grid{grid-template-columns:1fr}}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
+.card.wide{grid-column:1/-1}
+.card h3{font-size:14px;margin-bottom:10px;display:flex;align-items:center;gap:8px;letter-spacing:.3px}
+.card h3 .tag{font-size:10.5px;font-weight:800;padding:2px 8px;border-radius:14px;background:var(--card2);color:var(--muted);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:12.8px}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{color:var(--muted);font-weight:700;white-space:nowrap;font-size:11px;letter-spacing:.5px}
+td .st{display:inline-block;font-size:11px;padding:1px 7px;border-radius:12px}
+.st.green{background:rgba(120,209,127,.15);color:var(--ok)} .st.yellow{background:rgba(255,208,117,.15);color:var(--gold)} .st.red{background:rgba(255,92,92,.15);color:var(--high)} .st.gray{background:rgba(143,160,181,.15);color:var(--muted)}
+.pbar{height:6px;background:var(--bg);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-width:60px}
+.pbar i{display:block;height:100%;background:var(--ok)}
+.mut{color:var(--muted)}
+.btn{font-size:11.5px;padding:2px 9px;border:1px solid var(--line);border-radius:14px;color:var(--muted);background:none;cursor:pointer;white-space:nowrap}
+.btn:hover{color:var(--txt);border-color:var(--accent)}
+.btn.gold{color:var(--gold);border-color:var(--gold)}
+.btn.small{padding:1px 7px;font-size:10.5px;margin-left:4px}
+.add{display:inline-block;font-size:11.5px;color:var(--gold);padding:3px 10px;border:1px dashed var(--gold);border-radius:14px;cursor:pointer;margin-left:8px;background:none}
+.add:hover{background:rgba(255,208,117,.08)}
+.empty{color:var(--muted);font-size:12.5px;padding:8px 2px}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mb16{margin-bottom:16px}
+.note-line{font-size:12px;color:var(--muted);margin:6px 0 0}
+.big{font-size:16px;font-weight:800}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(5,8,12,.7);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.on{display:flex}
+.mbox{background:var(--card2);border:1px solid var(--line);border-radius:16px;max-width:620px;width:100%;max-height:90vh;overflow:auto;padding:20px 22px}
+.mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.mhead h3{font-size:16px}
+.mhead .x{cursor:pointer;color:var(--muted);font-size:20px}
+.mbox label{display:block;font-size:11.5px;color:var(--muted);letter-spacing:.5px;margin:10px 0 4px;font-weight:700}
+.mbox input,.mbox textarea,.mbox select{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:8px;color:var(--txt);padding:8px 10px;font-size:13.5px;font-family:inherit}
+.mbox textarea{min-height:70px;resize:vertical}
+.mbox .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:14px}
+.pri{background:var(--gold);color:#0e1116;border:none;font-weight:700;padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.pri:disabled{opacity:.5}
+.ghost{background:none;border:1px solid var(--line);color:var(--muted);padding:8px 16px;border-radius:8px;cursor:pointer;font-size:13px}
+.chat{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-top:12px;max-height:220px;overflow:auto;font-size:13px}
+.chat .q{color:var(--gold)} .chat .a{margin-top:6px;white-space:pre-wrap}
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:var(--ok);color:#0e1116;font-weight:700;padding:10px 18px;border-radius:10px;font-size:13px;z-index:60;display:none}
+.foot{margin-top:34px;font-size:12px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px;display:flex;gap:14px;flex-wrap:wrap}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<div class="head">
+  <div class="h1">開店作戰中心 <small>GROUNDS TAIWAN · OPENING CONTROL CENTER · Live</small></div>
+  <div class="row">
+    <span class="conn" id="conn"><span class="dot"></span><span id="connTxt">連線中…</span></span>
+    <button class="btn gold" id="btnReload">↻ 重新整理</button>
+  </div>
+</div>
+<div class="topline">每天打開第一屏：現在到哪 · 今天幹嘛 · 卡在哪 · 等日本什麼（資料存於你的 Google Sheet，所有畫面即時可改）</div>
+
+<div class="hero">
+  <div class="cell"><div class="lbl">OPENING DATE</div><div class="val" id="opening">TBD</div><div class="mut" style="font-size:12px">開幕日（等日本拍板後回填）</div></div>
+  <div class="cell"><div class="lbl">OVERALL PROGRESS</div><div class="row"><span class="pct" id="overall">0%</span><div class="bar"><i id="bar" style="width:0%"></i></div></div><div class="mut" style="font-size:12px">＝台灣各項進行中的平均</div></div>
+  <div class="cell"><div class="lbl">CURRENT PHASE</div><div id="gates" class="gates"></div></div>
+</div>
+
+<div class="grid">
+
+  <div class="card">
+    <h3>🔴 現在最重要 3 件事<span class="tag" id="blkCount">0</span><span class="add" data-act="issue">＋卡點</span></h3>
+    <div id="blk"></div>
+    <div class="note-line">沒有卡點時，這裡顯示「台灣正在做」前三項。</div>
+  </div>
+
+  <div class="card">
+    <h3>🇯🇵 等日本決定 <span class="tag" id="jpCount">0</span><span class="add" data-act="japan">＋請求</span></h3>
+    <div id="jp"></div>
+  </div>
+
+  <div class="card">
+    <h3>🇹🇼 台灣正在做 <span class="add" data-act="progress">＋進度</span></h3>
+    <div id="tw"></div>
+  </div>
+
+  <div class="card">
+    <h3>⚠️ 風險 <span class="tag" id="riskCount">0</span></h3>
+    <div id="risk"></div>
+    <div class="note-line" style="margin-top:8px">預設風險：公司尚未成立 → 租約、銀行、進貨可能連鎖延遲。</div>
+  </div>
+
+  <div class="card">
+    <h3>💰 投資（日本要投多少）<span class="add" data-act="fund">＋項目</span></h3>
+    <div id="fund"></div>
+    <div class="note-line" style="margin-top:8px">粗算＝開店投資（CAPEX＋首批貨＋營運準備）＋6 個月 OPEX。</div>
+  </div>
+
+  <div class="card">
+    <h3>📅 近 7 天 <span class="tag">Deadline 內</span></h3>
+    <div id="nd"></div>
+  </div>
+
+  <div class="card wide">
+    <h3>📝 決策紀錄（跟日本的共同記憶）<span class="tag" id="decCount">0</span><span class="add" data-act="decision">＋決策</span></h3>
+    <div id="dec"></div>
+    <h3 style="margin-top:18px">🔴 卡點清單（全部）<span class="add" data-act="issue">＋卡點</span></h3>
+    <div id="iss"></div>
+    <h3 style="margin-top:18px">🗓️ 會議決議 <span class="add" data-act="meeting">＋會議</span></h3>
+    <div id="meet"></div>
+  </div>
+
+</div>
+
+<div class="foot">
+  <span>📚 <a href="grounds_taiwan_開店作戰中心.html">作戰手冊（14 章詳細任務卡）</a></span>
+  <span>📖 <a href="一頁版.html">一頁版（給決策者）</a></span>
+  <span>❤️ 資料庫：你授權的那張 Google Sheet</span>
+</div>
+
+</div>
+
+<!-- modal -->
+<div class="modal" id="modal">
+  <div class="mbox">
+    <div class="mhead"><h3 id="mTitle"></h3><span class="x" id="mClose">×</span></div>
+    <div id="mBody"></div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CFG = {
+  api: 'https://script.google.com/macros/s/AKfycbyZog9Sw2JpEX0EsEyyunM3oTbvVQBoKiwQnj3B8SNLHRtrjpmFadoli9ioohLIH_a_1A/exec',
+  auth: '' // 如果有在 Apps Script 設定 ACCESS_TOKEN，就把密碼填這裡（或網址加 ?auth=密碼）
+};
+const AUTH = CFG.auth || new URLSearchParams(location.search).get('auth') || '';
+const $ = s => document.querySelector(s);
+const esc = s => String(s==null?'':s).replace(/[&<>]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let DATA = null;
+
+function toast(t){ const el=$('#toast'); el.textContent=t; el.style.display='block'; setTimeout(()=>el.style.display='none',2200); }
+
+async function api(action, p){
+  const base = CFG.api + '?action=' + encodeURIComponent(action) + (AUTH ? '&auth=' + encodeURIComponent(AUTH) : '');
+  if(action==='read'){
+    const r = await fetch(base); return await r.json();
+  }
+  const params = new URLSearchParams(Object.assign({action}, p, AUTH?{auth:AUTH}:{}));
+  const r = await fetch(CFG.api, {method:'POST', body: params});
+  return await r.json();
+}
+
+function setConn(cls, txt){ const c=$('#conn'); c.classList.add(cls); $('#connTxt').textContent=txt; }
+
+function pct(rows){ if(!rows||!rows.length) return 0; const nums=rows.map(r=>Number(r.pct)||0); return Math.round(nums.reduce((a,b)=>a+b,0)/nums.length); }
+
+function renderGates(p){
+  const gates=[['Phase 0','投資決策',0,5],['Phase 1','公司設立',5,35],['Phase 2','店面開發',35,60],['Phase 3','開幕前',60,85],['Phase 4','開幕',85,100]];
+  $('#gates').innerHTML = gates.map(g=>`<span class="gate ${(p>=g[2]&&p<g[3])||(p===100&&g[3]===100)?'on':''}">${g[0]} · ${g[1]}</span>`).join('');
+}
+function gateOn(p, lo, hi){ return p>=lo && p<hi || (hi===100 && p>=lo); }
+
+function render(){
+  const D = DATA || {Note:[],DecisionLog:[],IssueLog:[],JapanWaiting:[],TaiwanProgress:[],Funding:[],Meetings:[]};
+  const p = pct(D.TaiwanProgress);
+  $('#overall').textContent = p + '%';
+  $('#bar').style.width = Math.min(p,100)+'%';
+  renderGates(p);
+  // blockers
+  const issues = D.IssueLog || [];
+  $('#blkCount').textContent = issues.length;
+  const blkList = issues.slice(0,3);
+  $('#blk').innerHTML = blkList.length? blkList.map(r=>`
+    <div class="row mb16" style="align-items:flex-start">
+      <div style="flex:1">
+        <div class="big">${esc(r.problem)}</div>
+        <div class="mut" style="font-size:12px">等 <b>${esc(r.waitingOn||'?')}</b>${r.impact?' · '+esc(r.impact):''}${r.deadline?' · DDL '+esc(r.deadline):''}</div>
+      </div>
+      <div class="btn gold small" data-note="${esc(r.problem)}">＋筆記</div>
+      <div class="btn small" data-chat="${esc(r.problem)}">AI</div>
+    </div>`).join('')
+    : (D.TaiwanProgress||[]).slice(0,3).map(r=>`<div class="row mb16"><div style="flex:1"><b>${esc(r.item)}</b> <div class="mut" style="font-size:12px">台灣進行中 · <span class="st ${Number(r.pct)>=80?'green':'yellow'}">${esc(r.pct||0)}%</span></div></div><div class="btn gold small" data-note="${esc(r.item)}">＋筆記</div></div>`).join('') || '<div class="empty">還沒有卡點或進行中的項目。從「＋卡點」或「＋進度」開始。</div>';
+  // japan waiting
+  const jp = D.JapanWaiting||[];
+  $('#jpCount').textContent = jp.length;
+  const stClass = s => ({'🟡':'yellow','🔴':'red','🟢':'green','確認中':'yellow','等日本':'yellow','已回覆':'green','卡住':'red'}[s]||'gray');
+  $('#jp').innerHTML = jp.length? `<table><tr><th>項目</th><th>狀態</th><th>DDL</th><th></th></tr>`+jp.map(r=>`<tr><td style="width:44%"><b>${esc(r.item)}</b><div class="mut" style="font-size:11px">${esc(r.note||'')}</div></td><td><span class="st ${stClass(r.status)}">${esc(r.status||'等日本')}</span></td><td class="mut">${esc(r.deadline||'—')}</td><td class="row"><div class="btn gold small" data-note="${esc(r.item)}">＋筆記</div><div class="btn small" data-chat="${esc(r.item)}">AI</div></td></tr>`).join('')+'</table>' : '<div class="empty">目前沒有等日本的項目。有新的請用「＋請求」。</div>';
+  // taiwan progress
+  const tw = D.TaiwanProgress||[];
+  $('#tw').innerHTML = tw.length? `<table><tr><th>項目</th><th>進度</th><th>%</th></tr>`+tw.map(r=>`<tr><td><b>${esc(r.item)}</b><div class="mut" style="font-size:11px">${esc(r.note||'')}</div></td><td><div class="pbar"><i style="width:${Math.min(Number(r.pct)||0,100)}%"></i></div></td><td>${Number(r.pct)||0}%</td></tr>`).join('')+'</table>' : '<div class="empty">「＋進度」填入商標／店址／POS 等每一項進度%。</div>';
+  // risk
+  const risks = issues.filter(r=>/high|高|嚴重|delay|延/i.test(r.impact+' '+r.problem)).concat(issues);
+  const seen=new Set(); const rr=[]; for(const r of risks){ if(seen.has(r.problem))continue; seen.add(r.problem); rr.push(r); }
+  const topRisks = rr.slice(-3);
+  $('#riskCount').textContent = issues.length? issues.length : 0;
+  $('#risk').innerHTML = topRisks.length? topRisks.map(r=>`<div class="row" style="margin-bottom:8px"><span style="flex:1">⚠️ ${esc(r.problem)} <span class="mut">（等 ${esc(r.waitingOn||'?')}）</span></span></div>`).join('') : '<div class="empty">（無，全部都是好天氣）</div>';
+  // funding
+  const fund = D.Funding||[];
+  $('#fund').innerHTML = fundRow(fund);
+  // next 7 days
+  const nd = next7(issues, jp, D.Meetings||[]);
+  $('#nd').innerHTML = nd.length? `<table><tr><th>期限</th><th>項目</th></tr>`+nd.map(r=>`<tr><td class="mut">${esc(r.d)}</td><td>${esc(r.w)}</td></tr>`).join('')+'</table>' : '<div class="empty">未來 7 天內沒有到期項目。</div>';
+  // decisions
+  const dec = (D.DecisionLog||[]).slice().reverse();
+  $('#decCount').textContent = dec.length;
+  $('#dec').innerHTML = dec.length? `<table><tr><th>日期</th><th>議題</th><th>決定</th><th>台灣後續</th><th></th></tr>`+dec.map(r=>`<tr><td class="mut">${esc(r.date||'')}</td><td><b>${esc(r.topic)}</b></td><td>${esc(r.decision)}</td><td class="mut">${esc(r.followup||'')}${r.owner?'<br><b>'+esc(r.owner)+'</b>':''}</td><td class="row"><div class="btn gold small" data-note="${esc(r.topic)}">＋筆記</div><div class="btn small" data-chat="${esc(r.topic)}">AI</div></td></tr>`).join('')+'</table>' : '<div class="empty">「＋決策」把跟日本開會拍板的事記下來，避免「上次不是說這個嗎」。</div>';
+  // issues full
+  $('#iss').innerHTML = issues.length? `<table><tr><th>問題</th><th>誰卡住</th><th>等誰</th><th>影響</th><th>DDL</th><th></th></tr>`+issues.map(r=>`<tr><td><b>${esc(r.problem)}</b></td><td class="mut">${esc(r.blockedBy||'—')}</td><td>${esc(r.waitingOn||'?')}</td><td class="mut">${esc(r.impact||'')}</td><td class="mut">${esc(r.deadline||'—')}</td><td class="row"><div class="btn gold small" data-note="${esc(r.problem)}">＋筆記</div><div class="btn small" data-chat="${esc(r.problem)}">AI</div></td></tr>`).join('')+'</table>' : '<div class="empty">沒有卡點。</div>';
+  // meetings
+  const mt = (D.Meetings||[]).slice().reverse();
+  $('#meet').innerHTML = mt.length? `<table><tr><th>日期</th><th>議程</th><th>決議</th><th>後續</th></tr>`+mt.map(r=>`<tr><td class="mut">${esc(r.date||'')}</td><td>${esc(r.agenda||'')}</td><td>${esc(r.decisions||'')}</td><td class="mut">${esc(r.followup||'')}</td></tr>`).join('')+'</table>' : '<div class="empty">「＋會議」在開完跟日本的會後記一行。</div>';
+}
+
+function fundRow(fund){
+  if(!fund||!fund.length) return '<div class="empty">「＋項目」把押金、裝修、首批貨、人事等填進來（金額用 NT$ 數字）。</div>';
+  const total = fund.reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const conf = fund.filter(r=>/確定|已|confirm/i.test(r.status||'')).reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const capex = fund.filter(r=>/CAPEX/i.test(r.type||'')).reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const inv  = fund.filter(r=>/Inventory/i.test(r.type||'')||/第一批/i.test(r.type||'')).reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const opex = fund.filter(r=>/OPEX/i.test(r.type||'')).reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const wc   = fund.filter(r=>/Working/i.test(r.type||'')||/備用/.test(r.type||'')).reduce((a,r)=>a+(Number(r.amount)||0),0);
+  const need = total + opex*6;
+  return `<div class="row mb16" style="justify-content:space-between;flex-wrap:wrap">
+    <div><span class="mut" style="font-size:11px;letter-spacing:1px">總投資需求</span><div class="big">NT$ ${fmt(total)}</div></div>
+    <div><span class="mut" style="font-size:11px;letter-spacing:1px">已確認</span><div>NT$ ${fmt(conf)}</div></div>
+    <div><span class="mut" style="font-size:11px;letter-spacing:1px">尚未確認</span><div>NT$ ${fmt(total-conf)}</div></div>
+    <div><span class="mut" style="font-size:11px;letter-spacing:1px">建議日本準備（含 6 個月營運）</span><div class="big" style="color:var(--gold)">NT$ ${fmt(need)}</div></div>
+  </div>
+  <table><tr><th>類型</th><th>小計</th></tr>
+    <tr><td>CAPEX 一次性</td><td>NT$ ${fmt(capex)}</td></tr>
+    <tr><td>Opening Inventory 首批＋庫存</td><td>NT$ ${fmt(inv)}</td></tr>
+    <tr><td>OPEX 月固定成本</td><td>NT$ ${fmt(opex)} / 月</td></tr>
+    <tr><td>Working Capital 營運準備</td><td>NT$ ${fmt(wc)}</td></tr>
+  </table>`;
+}
+function fmt(n){ return n? n.toLocaleString('zh-TW') : '0'; }
+
+function next7(issues, jp, mt){
+  const today=new Date(); const out=[];
+  const pick=(dd, w)=>{ if(!dd) return; const m=/^(\d{1,2})[/-](\d{1,2})$/.exec(String(dd).trim()); if(!m) return; let d=new Date(today.getFullYear(), +m[1]-1, +m[2]); if(d<today) d=new Date(today.getFullYear()+1,+m[1]-1,+m[2]); const diff=(d-today)/86400000; if(diff>=0 && diff<=7) out.push({d:dd,w}); };
+  issues.forEach(r=>pick(r.deadline,'🔴 '+r.problem));
+  jp.forEach(r=>pick(r.deadline,'🇯🇵 '+r.item));
+  return out;
+}
+
+/* ---------- modal ---------- */
+const modal=$('#modal');
+function openModal(title, body){ $('#mTitle').textContent=title; $('#mBody').innerHTML=body; modal.classList.add('on'); }
+$('#mClose').onclick = ()=>modal.classList.remove('on');
+modal.addEventListener('click', e=>{ if(e.target===modal) modal.classList.remove('on'); });
+
+function fieldForm(schema){
+  return schema.map(f=>`<label>${f.l}</label>${f.t==='area'?`<textarea id="f_${f.k}">${f.v||''}</textarea>`:f.t==='sel'?`<select id="f_${f.k}">${f.o.map(o=>`<option ${o===f.v?'selected':''}>${o}</option>`).join('')}</select>`:`<input id="f_${f.k}" value="${esc(f.v||'')}" placeholder="${esc(f.p||'')}">`}`).join('')+
+   `<div class="actions"><button class="ghost" data-c>取消</button><button class="pri" id="f_submit">儲存</button></div>`;
+}
+function bindSubmit(fields, action){
+  $('#f_submit').onclick = async e=>{
+    e.target.disabled=true;
+    const p={}; fields.forEach(f=>{ const el=$('#f_'+f.k); if(el) p[f.k]=el.value.trim(); });
+    const res = await api('row', Object.assign({tab: action.tab}, action.map? action.map(p): p, {ts:new Date().toLocaleString('zh-TW')}));
+    e.target.disabled=false;
+    if(res.ok){ toast('已存到 Google Sheet ✅'); modal.classList.remove('on'); reload(); }
+    else toast('失敗：'+(res.error||'?'));
+  };
+  $('[data-c]').onclick = ()=>modal.classList.remove('on');
+}
+
+/* forms */
+function formNote(item){
+  openModal('＋筆記', fieldForm([
+    {k:'item',l:'項目（哪一件事）',v:item},
+    {k:'note',l:'筆記內容',t:'area'},
+    {k:'author',l:'誰記的',v:'台灣'}
+  ])); bindSubmit([{k:'item'},{k:'note'},{k:'author'}], {tab:'Note'});
+}
+function formChat(item){
+  openModal('AI 對話：'+item, fieldForm([
+    {k:'q',l:'問什麼',p:'例如：這項目前缺什麼？下一步該做什麼？'},
+  ]).replace('<div class="actions">','<div class="actions"><button class="pri" id="f_submit">送出（免費問 AI）</button>').replace('</div>\r?\n',''));
+  // fieldForm already rendered actions with both buttons; remove the ghost+duplicate kept buttons
+  const body=$('#mBody');
+  const actions=body.querySelector('.actions');
+  actions.innerHTML = '<button class="ghost" data-c>取消</button><button class="pri" id="f_submit">送出</button>';
+  // chat container
+  const chatBox=document.createElement('div'); chatBox.className='chat'; chatBox.id='chatBox';
+  body.insertBefore(chatBox, actions);
+  const ask=async()=>{
+    const q=($('#f_q').value||'').trim(); if(!q) return;
+    const box=$('#chatBox'); box.innerHTML += `<div class="q">🧑 <b>${esc(item)}</b>：${esc(q)}</div>`;
+    $('#f_q').value='';
+    box.innerHTML += '<div class="a">…</div>';
+    const el=box.lastElementChild;
+    const res = await api('chat',{item, q, history:''});
+    if(res.ok){ el.textContent = res.reply; el.classList.add('a2'); }
+    else el.textContent = '⚠️ '+(res.error||'無回應');
+    if(res.ok){
+      const btn=document.createElement('button'); btn.className='btn gold small'; btn.textContent='把 AI 回答存成筆記';
+      btn.style.cssText='display:block;margin-top:8px';
+      btn.onclick=async()=>{ const r=await api('row',{tab:'Note',item,prompt:q,note:res.reply,author:'AI',ts:new Date().toLocaleString('zh-TW')}); toast(r.ok?'已存成筆記 ✅':'儲存失敗'); };
+      box.appendChild(btn);
+    }
+  };
+  $('#f_submit').onclick = ask;
+  $('[data-c]').onclick = ()=>modal.classList.remove('on');
+  $('#f_q').addEventListener('keydown', e=>{ if(e.key==='Enter'){ e.preventDefault(); ask(); } });
+}
+function formDecision(){
+  openModal('＋決策紀錄（跟日本拍板的事）', fieldForm([
+    {k:'date',l:'日期（今）',v:new Date().toLocaleDateString('zh-TW',{month:'2-digit',day:'2-digit',year:'numeric'}).replace(/\//g,'/')},
+    {k:'topic',l:'議題'},
+    {k:'decision',l:'日本決定'},
+    {k:'followup',l:'台灣後續'},
+    {k:'owner',l:'負責人',v:'台灣'}
+  ])); bindSubmit(['date','topic','decision','followup','owner'], {tab:'DecisionLog'});
+}
+function formIssue(){
+  openModal('＋卡點（Blockers）', fieldForm([
+    {k:'problem',l:'問題'},
+    {k:'blockedBy',l:'誰卡住',v:'台灣'},
+    {k:'waitingOn',l:'等誰',p:'日本 or 台灣'},
+    {k:'impact',l:'影響',p:'例如：全案延後'},
+    {k:'deadline',l:'截止（MM/DD）',p:'09/30'}
+  ])); bindSubmit(['problem','blockedBy','waitingOn','impact','deadline'], {tab:'IssueLog'});
+}
+function formJapan(){
+  openModal('＋等日本決定', fieldForm([
+    {k:'item',l:'項目'},
+    {k:'status',l:'狀態',t:'sel',o:['🟡 等日本','🔴 卡住','🟢 已回覆','確認中'],v:'🟡 等日本'},
+    {k:'deadline',l:'Deadline（MM/DD）',p:'09/30'},
+    {k:'note',l:'備註'}
+  ])); bindSubmit(['item','status','deadline','note'], {tab:'JapanWaiting'});
+}
+function formProgress(){
+  openModal('＋台灣進行中／更新進度', fieldForm([
+    {k:'item',l:'項目',p:'例如：商標、店址、POS'},
+    {k:'pct',l:'進度 %（0-100）'},
+    {k:'note',l:'備註'}
+  ])); bindSubmit(['item','pct','note'], {tab:'TaiwanProgress'});
+}
+function formFund(){
+  openModal('＋資金項目', fieldForm([
+    {k:'item',l:'項目',p:'例如：店面押金、第一批貨'},
+    {k:'amount',l:'金額（NT$ 數字）'},
+    {k:'type',l:'類型',t:'sel',o:['CAPEX','Opening Inventory','OPEX','Working Capital'],v:'CAPEX'},
+    {k:'status',l:'狀態',t:'sel',o:['尚未確認','已確定','待日本核'],v:'尚未確認'},
+    {k:'note',l:'備註'}
+  ])); bindSubmit(['item','amount','type','status','note'], {tab:'Funding'});
+}
+function formMeeting(){
+  openModal('＋會議決議', fieldForm([
+    {k:'date',l:'日期（今）',v:new Date().toLocaleDateString('zh-TW')},
+    {k:'agenda',l:'議程'},
+    {k:'decisions',l:'決議'},
+    {k:'followup',l:'後續'}
+  ])); bindSubmit(['date','agenda','decisions','followup'], {tab:'Meetings'});
+}
+
+/* ---------- events ---------- */
+document.addEventListener('click', e=>{
+  const a=e.target.closest('.add'); if(a){ const act=a.dataset.act; ({note:()=>formNote(''),decision:formDecision,issue:formIssue,japan:formJapan,progress:formProgress,fund:formFund,meeting:formMeeting}[act]||(()=>{}))(); return; }
+  const n=e.target.closest('[data-note]'); if(n){ formNote(n.dataset.note); return; }
+  const c=e.target.closest('[data-chat]'); if(c){ formChat(c.dataset.chat); return; }
+});
+
+async function reload(){
+  setConn('','連線中…');
+  try{
+    const r = await api('read');
+    if(r.ok){ DATA=r.data; setConn('on','已連線 · Google Sheet'); }
+    else throw new Error(r.error);
+  }catch(err){
+    setConn('err','連線失敗：'+err.message);
+  }
+  render();
+}
+$('#btnReload').onclick = reload;
+
+reload();
+</script>
+</body>
+</html>
