@@ -1,0 +1,68 @@
+# Business documents should never live in this repo, wherever they land.
+*.xlsx
+.DS_Store
+
+# Raw/stray files that sometimes get dropped into this Drive-synced
+# project folder from outside the site build (source logo downloads,
+# etc.) — the processed versions live under assets/img/.
+/ALBION LOGO.jpeg
+/Brooks-Brothers-Logo.png
+/LEVIS LOGO.webp
+/francfranc-logo-black.webp
+/koziol.svg
+/png-transparent-refin-ceramiche-hd-logo.png
+/LOGO.jpg
+
+# Internal business planning documents (contain contact details, quotes,
+# negotiation notes). The repo is PUBLIC — these must never be committed.
+# The published site is generated from tools/generate.py into
+# index.html / blueprint.html only.
+/notebooks/*
+/grounds_taiwan_行動方案.md
+/一頁版_給決策者.md
+/知識_商標佈局調查結果.md
+/知識_子公司vs分公司.md
+/策略_選品店通路.md
+/策略_進口路線比較.md
+/策略_電商三階段.md
+/記錄_快閃活動.md
+/檢查_開店前置合規.md
+/週五會議_提問清單.md
+/門市地點分析_中山北路二段36巷.md
+/過程框架_決策總表.md
+/過程框架_互動學習.html
+/商標事務所報價_宏景.md
+/商標事務所洽談_QA.md
+/商標申請回覆Sharon.md
+/給宏景的初期資料.md
+/開店作戰中心.md
+
+/台湾法人設立の要点.pptx
+/台湾法人設立の要点.pdf
+/日本企業來台設立公司要點.pptx
+/日本企業來台設立公司要點.pdf
+
+# 藍圖實踐的任務資料是從《開店作戰中心.md》抽出來的（內部規劃內容）。
+# 它放在 Supabase 裡，只有登入的成員看得到；本機這份只拿來「更新任務內容」上傳。
+/data/
+
+# Supabase 的資料表／權限 SQL（含管理員 Email），不放公開 repo。
+/supabase/
+
+# 本機交接文件（含內部設定，不公開）
+/CLAUDE.md
+/目前進度.md
+worklog/.wl_secret
+worklog/.wl_pw
+
+# 線上工作日誌資料只活在伺服器（api_sync.php 會寫）。不要進 git，部署也不准覆蓋。
+worklog/grounds_data.json
+worklog/grounds_data.json.tmp.*
+worklog/store_overrides.json
+worklog/uploads/
+worklog/files/
+worklog/grounds_data.lock
+
+# 比較表分享快照（伺服器端，不進 git、部署不覆蓋）
+worklog/compare_shares/
+worklog/compare_shares/**
