@@ -2274,6 +2274,11 @@
       #edit-store-modal .modal-content-box { width: 100% !important; max-width: 100% !important; }
     }
 
+    /* 圖片檢視：留在 App 內，一定有關閉鈕 */
+    #img-viewer { position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,.94); display:none; overflow:auto; -webkit-overflow-scrolling:touch; }
+    #img-viewer.open { display:block; }
+    #img-viewer img { display:block; max-width:100%; margin:0 auto; padding:64px 0 40px; box-sizing:border-box; }
+    #img-viewer .iv-x { position:fixed; top:calc(env(safe-area-inset-top) + 10px); right:12px; width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,.92); color:#111; font-size:20px; font-weight:700; cursor:pointer; z-index:2; }
     /* ===== MAP 列表 v2：商圈分組、兩行卡片 ===== */
     .dist-bar { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
     .dist-chip-btn { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:16px; font-size:11.5px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; }
@@ -2609,6 +2614,11 @@
   </div>
 </div>
 
+<div id="img-viewer" onclick="closeImageViewer()">
+  <button type="button" class="iv-x" onclick="event.stopPropagation(); closeImageViewer()" aria-label="關閉">✕</button>
+  <img id="img-viewer-img" src="" alt="" onclick="event.stopPropagation()">
+</div>
+
 <!-- 工時總表・匯出週報 -->
 <div class="modal-overlay" id="report-summary-modal">
   <div class="modal-content-box" style="max-width:720px;">
@@ -2785,7 +2795,7 @@
           <span>房仲原始圖表：</span>
         </div>
         <div style="background:#f1f1f4;border-radius:8px;overflow:hidden;border:1px solid var(--border);text-align:center;">
-          <img id="ag-preview-img" src="" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="window.open(this.src, '_blank')" alt="房仲資料圖">
+          <img id="ag-preview-img" src="" style="max-width:100%;max-height:460px;object-fit:contain;cursor:zoom-in;display:block;margin:0 auto;" onclick="openImageViewer(this.src)" alt="房仲資料圖">
         </div>
       </div>
 
@@ -5625,10 +5635,14 @@ function openStoreDetailModal(storeId) {
   if (s.url && safeHttpUrl(s.url)) {
     linkEl.style.display = 'inline-block';
     linkEl.href = safeHttpUrl(s.url);
+    linkEl.target = '_blank';
+    linkEl.onclick = null;
     linkEl.textContent = '備用：在房仲平台檢視原始物件網頁';
   } else if (s.images && safeImgSrc(s.images[0])) {
     linkEl.style.display = 'inline-block';
-    linkEl.href = safeImgSrc(s.images[0]);
+    linkEl.href = '#';
+    linkEl.removeAttribute('target');
+    linkEl.onclick = ev => { ev.preventDefault(); openImageViewer(s.images[0]); };
     linkEl.textContent = '點擊檢視原始資料大圖';
   } else {
     linkEl.style.display = 'none';
@@ -5639,6 +5653,8 @@ function openStoreDetailModal(storeId) {
   const curIdx = Math.max(0, (s.images || []).indexOf(coverOf(s)));
   s.activeImgIdx = curIdx;
   heroImg.src = safeImgSrc(s.images && s.images[curIdx] ? s.images[curIdx] : '') || '';
+  heroImg.style.cursor = 'zoom-in';
+  heroImg.onclick = () => openImageViewer(heroImg.getAttribute('src'));
   const counterEl = document.getElementById('m-photo-counter');
   if (counterEl) {
     counterEl.textContent = `${curIdx + 1} / ${(s.images && s.images.length) ? s.images.length : 1}`;
@@ -6082,6 +6098,14 @@ function storeCardEl(s) {
   return card;
 }
 
+function openImageViewer(src) {
+  const u = safeImgSrc(src) || safeHttpUrl(src);
+  if (!u) return;
+  document.getElementById('img-viewer-img').src = u;
+  document.getElementById('img-viewer').classList.add('open');
+}
+function closeImageViewer() { document.getElementById('img-viewer').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeImageViewer(); });
 function sdTab(name) {
   ['info', 'photos', 'chat'].forEach(k => {
     const t = document.getElementById('sd-tab-' + k), p = document.getElementById('sd-pane-' + k);
