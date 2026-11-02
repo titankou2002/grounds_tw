@@ -6212,9 +6212,13 @@ async function parseAndAddStoreDirect() {
         if (resp.ok) {
           const json = await resp.json();
           if (json.success) { storeData = json; storeVerified = isRealScrape(json); }
+          else storeData = { reason: 'API 回覆：' + (json.error || '失敗') };
+        } else {
+          storeData = { reason: 'API HTTP ' + resp.status };
         }
       } catch(e) {
         console.warn('api_scrape fetch failed, falling back:', e);
+        storeData = { reason: '呼叫 API 失敗：' + (e && e.message || e) };
       }
     }
 
