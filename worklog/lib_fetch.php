@@ -182,6 +182,7 @@ function wl_curl_once($target, $timeoutSec) {
     });
     curl_exec($ch);
     $errno = curl_errno($ch);
+    $errmsg = curl_error($ch);
     $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
     $tooBig = ($errno === CURLE_WRITE_ERROR && strlen($body) > $limit);
@@ -190,7 +191,7 @@ function wl_curl_once($target, $timeoutSec) {
         return array('ok' => false, 'redirect' => $location, 'body' => '', 'code' => $code);
     }
     if ($errno !== 0 || $code < 200 || $code >= 300) {
-        return array('ok' => false, 'redirect' => '', 'body' => '', 'code' => $code);
+        return array('ok' => false, 'redirect' => '', 'body' => '', 'code' => $code, 'curl' => $errno ? ('curl ' . $errno . ': ' . $errmsg) : '');
     }
     return array('ok' => true, 'redirect' => '', 'body' => $body, 'code' => $code);
 }
@@ -218,7 +219,7 @@ function wl_http_get($startUrl) {
             $current = $next;
             continue;
         }
-        if (empty($res['ok'])) return array('ok' => false, 'body' => '', 'code' => (int)$res['code'], 'url' => $target['url'], 'error' => 'fetch');
+        if (empty($res['ok'])) return array('ok' => false, 'body' => '', 'code' => (int)$res['code'], 'url' => $target['url'], 'error' => 'fetch' . (!empty($res['curl']) ? ' ' . $res['curl'] : ''));
         return array('ok' => true, 'body' => $res['body'], 'code' => (int)$res['code'], 'url' => $target['url'], 'error' => '');
     }
     return array('ok' => false, 'body' => '', 'code' => 0, 'url' => '', 'error' => 'redirects');
