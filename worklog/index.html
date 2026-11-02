@@ -5505,6 +5505,18 @@ async function runPool(tasks, n) {
     while (i < tasks.length) { const t = tasks[i++]; try { await t(); } catch (e) {} }
   }));
 }
+// 店名很短時翻譯引擎常原樣回中文；沒有假名就換個問法再試，最多三次
+async function translateStoreTitleJa(zh) {
+  const hasKana = x => /[\u3040-\u30ff]/.test(x || '');
+  let out = await translateTextAsync(zh, 'zh-TW|ja');
+  if (hasKana(out)) return out;
+  for (const lead of ['店舗名：', '物件名：']) {
+    const r = await translateTextAsync(lead + zh, 'zh-TW|ja');
+    const cleaned = String(r || '').replace(/^(店舗名|物件名|店面の名前|店名)\s*[：:]\s*/, '');
+    if (hasKana(cleaned)) return cleaned;
+  }
+  return out;
+}
 async function ensureStoreJa() {
   if (_storeJaBusy) return;
   // 日文欄空白、跟中文一樣、或完全沒有假名（還是中文）都要翻
@@ -5524,7 +5536,7 @@ async function ensureStoreJa() {
       tasks.push(async () => {
         const t = (zhK === 'pros' || zhK === 'cons')
           ? await translateAnalysisAsync(src, 'zh-TW|ja')
-          : await translateTextAsync(src.slice(0, 450), 'zh-TW|ja');
+          : await translateStoreTitleJa(src.slice(0, 450));
         if (t && t !== s[zhK]) {
           s[jaK] = (zhK === 'pros' || zhK === 'cons') ? preserveAnalysisStructure(src, t) : t;
           changed = true;
