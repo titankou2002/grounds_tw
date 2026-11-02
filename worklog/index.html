@@ -4541,6 +4541,11 @@ async function submitFeedPost() {
         }
 
         let storeObj = state.stores.find(s => s.id === finalPropId);
+        // 先前讀不到而留下的空白店面（沒有任何數字）：丟掉重新讀，不要一直沿用空白的
+        if (storeObj && storeObj.unverified && !Number(storeObj.rent) && !Number(storeObj.area)) {
+          state.stores = state.stores.filter(s => s.id !== finalPropId);
+          storeObj = null;
+        }
         let storeData = null;
 
         const lookupKeys = [rawId, finalPropId, propId, `rakuya-${rawId}`, `591-${rawId}`, `yc-${rawId}`, `sy-${rawId}`];
