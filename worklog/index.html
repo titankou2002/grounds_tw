@@ -5507,7 +5507,8 @@ async function runPool(tasks, n) {
 }
 async function ensureStoreJa() {
   if (_storeJaBusy) return;
-  const need = (zh, ja) => zh && (!ja || ja === zh);
+  // 日文欄空白、跟中文一樣、或完全沒有假名（還是中文）都要翻
+  const need = (zh, ja) => zh && (!ja || ja === zh || !/[\u3040-\u30ff]/.test(ja));
   const todo = state.stores.filter(s => !_storeJaTried.has(s.id) && (need(s.title, s.titleJa) || analysisJaIsStale(s.pros, s.prosJa) || analysisJaIsStale(s.cons, s.consJa)));
   if (!todo.length) return;
   _storeJaBusy = true;
