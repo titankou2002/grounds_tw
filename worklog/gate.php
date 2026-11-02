@@ -82,9 +82,34 @@ if (substr($file, -4) === '.php') {
     include $file;
     exit;
 }
-$types = ['html'=>'text/html; charset=utf-8','json'=>'application/json; charset=utf-8','png'=>'image/png','gif'=>'image/gif','pdf'=>'application/pdf','jpg'=>'image/jpeg','jpeg'=>'image/jpeg','webp'=>'image/webp','md'=>'text/markdown; charset=utf-8','js'=>'application/javascript','css'=>'text/css','svg'=>'image/svg+xml'];
+$types = ['html'=>'text/html; charset=utf-8','json'=>'application/json; charset=utf-8','png'=>'image/png','gif'=>'image/gif','pdf'=>'application/pdf','jpg'=>'image/jpeg','jpeg'=>'image/jpeg','webp'=>'image/webp','md'=>'text/markdown; charset=utf-8','js'=>'application/javascript','css'=>'text/css','svg'=>'image/svg+xml','mp4'=>'video/mp4','mov'=>'video/quicktime','webm'=>'video/webm'];
 $ext = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 header('Content-Type: ' . ($types[$ext] ?? 'application/octet-stream'));
 header('X-Content-Type-Options: nosniff');
 if ($ext === 'html' || $ext === 'json') header('Cache-Control: no-cache, no-store, must-revalidate');
+if (in_array($ext, ['mp4', 'mov', 'webm'], true)) {
+    // 影片要支援 Range（Safari／iPhone 沒有 Range 就不能播放或拖曳）
+    $size = filesize($file);
+    $start = 0; $end = $size - 1;
+    header('Accept-Ranges: bytes');
+    if (isset($_SERVER['HTTP_RANGE']) && preg_match('/bytes=(\d*)-(\d*)/', $_SERVER['HTTP_RANGE'], $m)) {
+        if ($m[1] === '' && $m[2] !== '') { $start = max(0, $size - (int)$m[2]); }
+        else { if ($m[1] !== '') $start = (int)$m[1]; if ($m[2] !== '') $end = min($end, (int)$m[2]); }
+        if ($start > $end || $start >= $size) { http_response_code(416); header('Content-Range: bytes */' . $size); exit; }
+        http_response_code(206);
+        header("Content-Range: bytes $start-$end/$size");
+    }
+    header('Content-Length: ' . ($end - $start + 1));
+    $fh = fopen($file, 'rb');
+    fseek($fh, $start);
+    $left = $end - $start + 1;
+    while ($left > 0 && !feof($fh)) {
+        $chunk = fread($fh, min(1048576, $left));
+        if ($chunk === false) break;
+        echo $chunk; $left -= strlen($chunk);
+        flush();
+    }
+    fclose($fh);
+    exit;
+}
 readfile($file);

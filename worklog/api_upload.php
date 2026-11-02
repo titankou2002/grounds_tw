@@ -1,5 +1,5 @@
 <?php
-// 動態／留言的附件上傳（圖片、PDF）。gate.php 已要求登入 cookie，沒登入到不了這裡。
+// 動態／留言／店面的附件上傳（圖片、影片、PDF）。gate.php 已要求登入 cookie，沒登入到不了這裡。
 // 只收真的圖片或 PDF（檢查檔案內容，不看副檔名）；檔名一律隨機，原始檔名只當顯示用文字。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -16,8 +16,15 @@ if ($f['error'] !== UPLOAD_ERR_OK) out(['success' => false, 'error' => 'upload_e
 $MAX_IMG = 10 * 1024 * 1024;
 $MAX_PDF = 20 * 1024 * 1024;
 $type = null; $ext = null; $w = null; $h = null;
-$head = (string)@file_get_contents($f['tmp_name'], false, null, 0, 5);
-if ($head === '%PDF-') {
+$head = (string)@file_get_contents($f['tmp_name'], false, null, 0, 12);
+$MAX_VID = 300 * 1024 * 1024;
+$VID_BRANDS = ['isom','iso2','iso4','iso5','iso6','mp41','mp42','avc1','M4V ','qt  ','MSNV','3gp4','3gp5','3gp6','3g2a'];
+if ((substr($head, 4, 4) === 'ftyp' && in_array(substr($head, 8, 4), $VID_BRANDS, true)) || substr($head, 0, 4) === "\x1A\x45\xDF\xA3") {
+    // 影片：mp4／mov（檔頭 ftyp）或 webm（EBML）。只看檔案內容，不看副檔名。
+    if ($f['size'] > $MAX_VID) out(['success' => false, 'error' => 'too_large', 'limit' => '300MB'], 413);
+    $type = 'video';
+    $ext = substr($head, 0, 4) === "\x1A\x45\xDF\xA3" ? 'webm' : (substr($head, 8, 2) === 'qt' ? 'mov' : 'mp4');
+} elseif (substr($head, 0, 5) === '%PDF-') {
     if ($f['size'] > $MAX_PDF) out(['success' => false, 'error' => 'too_large', 'limit' => '20MB'], 413);
     $type = 'pdf'; $ext = 'pdf';
 } else {

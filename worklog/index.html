@@ -1064,7 +1064,12 @@
       cursor: pointer;
       transition: all 0.15s;
     }
+    .store-card { position: relative; }
     .store-card:hover { border-color: var(--fg); }
+    .store-edit-btn { position:absolute; top:8px; right:8px; z-index:3; width:30px; height:30px; border-radius:8px; border:1px solid var(--border); background:#fff; color:var(--fg-muted); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0; }
+    .store-edit-btn:hover { background:#f1f5f9; color:var(--fg); }
+    .store-edit-btn svg { width:16px; height:16px; }
+    .store-compact-title-row { padding-right:34px; }
     .store-card.selected { border: 2px solid var(--fg); background: #fafafa; }
     .store-card-head {
       display: flex;
@@ -2014,7 +2019,10 @@
         max-height: none !important;
         height: 100% !important;
         border-radius: 0 !important;
+        overflow-y: auto !important;
       }
+      #store-detail-modal .modal-content-box > *,
+      #edit-store-modal .modal-content-box > * { flex-shrink: 0 !important; }
     }
 
     /* ===== 手機版：選單固定在底部（比照每周匯報）、避開動態島與底部安全區、字級放大 ===== */
@@ -2091,12 +2099,13 @@
     .cmp-select.cmp-tag { flex:1 1 0; max-width:130px; text-overflow:ellipsis; }
     .post-tag, .hours-tag { white-space:nowrap; }
     /* ===== Slack 風格訊息列 ===== */
-    .feed-card { display:flex; gap:10px; align-items:flex-start; border:0; border-radius:0; border-bottom:1px solid var(--border); background:transparent; padding:10px 2px; }
+    .feed-card { display:block; border:0; border-radius:0; border-bottom:1px solid var(--border); background:transparent; padding:10px 2px; }
     .feed-card:hover { background:#fafafa; }
     .daily-log .feed-card { padding:10px 12px; }
     .msg-avatar { flex:0 0 34px; width:34px; height:34px; border-radius:8px; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; }
-    .msg-main { flex:1; min-width:0; }
-    .msg-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 8px; line-height:1.3; }
+    .msg-top { display:flex; align-items:center; gap:10px; margin-bottom:4px; }
+    .msg-main { min-width:0; }
+    .msg-head { flex:1; min-width:0; display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 8px; line-height:1.3; }
     .msg-name { font-weight:800; font-size:14px; }
     .msg-time { font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; }
     .msg-head .post-tag, .msg-head .hours-tag, .msg-head .post-new-pill { align-self:center; }
@@ -2110,12 +2119,19 @@
     .feed-card .jp-translation-box { margin:4px 0; padding:4px 10px; }
     .feed-card .jp-trans-head { display:none; }
     .feed-card .jp-trans-body { font-size:13px; color:var(--fg-muted); }
-    .msg-acts { margin-left:auto; display:flex; gap:2px; }
+    .msg-acts { margin-left:auto; display:flex; gap:2px; flex:0 0 auto; }
     .comments-thread { margin-top:0; }
     .day-div { display:flex; align-items:center; gap:10px; margin:16px 0 2px; font-size:12px; font-weight:800; color:var(--fg-muted); white-space:nowrap; }
     .day-div::before, .day-div::after { content:''; flex:1; height:1px; background:var(--border); }
     body.previewing .view-panel { padding-bottom:96px; }
     .cmp-extra .cmp-date { font-size:12px; max-width:140px; }
+    .month-sum { border:1px solid var(--border); border-radius:12px; background:#fff; margin-bottom:16px; padding:10px 12px 6px; }
+    .month-sum-head { display:flex; align-items:center; justify-content:space-between; margin-bottom:6px; }
+    .month-sum-head b { font-size:14px; }
+    .month-sum-head button { border:1px solid var(--border); background:#fff; border-radius:8px; width:34px; height:30px; font-size:18px; line-height:1; cursor:pointer; }
+    .att-video { margin-top:6px; max-width:420px; }
+    .att-video video { width:100%; max-height:300px; border-radius:10px; background:#000; display:block; }
+    .att-video small { color:var(--fg-muted); font-size:11px; }
     .cmp-extra { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; }
     .cmp-date { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 10px; font-size:12px; font-weight:600; background:#fff; }
     .cmp-mini { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 12px; font-size:12px; font-weight:700; background:#fff; cursor:pointer; }
@@ -2251,7 +2267,13 @@
     .store-chat-input { display: flex; gap: 6px; align-items: center; margin-top: 8px; }
     .store-chat-input input[type=text] { flex: 1; min-width: 0; padding: 9px 10px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; }
     .chat-badge { font-size: 11.5px; font-weight: 700; color: #2563eb; background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 1px 7px; cursor: pointer; white-space: nowrap; }
-  </style>
+      /* 手機：彈窗一律滿版（先前字級倍率讓寬度只剩約 87%，右邊露出底下的頁面） */
+    @media (max-width: 700px) {
+      .modal-overlay .modal-content-box,
+      #store-detail-modal .modal-content-box,
+      #edit-store-modal .modal-content-box { width: 100% !important; max-width: 100% !important; }
+    }
+</style>
 </head>
 <body>
 
@@ -2317,7 +2339,7 @@
             <div id="post-file-chip-box" style="display:none;margin-bottom:8px;"></div>
 
             <div class="composer-meta-row cmp-one-row">
-              <input type="file" id="post-file-input" style="display:none;" multiple accept="image/*,.pdf" onchange="handlePostFileSelected(event)">
+              <input type="file" id="post-file-input" style="display:none;" multiple accept="image/*,video/*,.pdf" onchange="handlePostFileSelected(event)">
               <button class="cmp-icon-btn" type="button" onclick="triggerPostFileUpload()" title="夾帶照片或文件" aria-label="夾帶">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
               </button>
@@ -2484,6 +2506,7 @@
 
     <!-- Thumbnails Strip -->
     <div class="store-detail-gallery-row" id="m-store-gallery-strip"></div>
+    <div id="m-store-files" style="margin-bottom:12px;"></div>
 
     <!-- Key Metrics Grid -->
     <div class="kpi-badge-group">
@@ -2540,7 +2563,7 @@
       <div id="m-chat-list"></div>
       <div id="m-chat-files" style="display:none;margin:6px 0;"></div>
       <div class="store-chat-input">
-        <input type="file" id="chat-file-input" multiple hidden accept="image/*,.pdf" onchange="handleStoreChatFiles(event)">
+        <input type="file" id="chat-file-input" multiple hidden accept="image/*,video/*,.pdf" onchange="handleStoreChatFiles(event)">
         <button type="button" class="action-btn" onclick="document.getElementById('chat-file-input').click()" title="夾帶圖片／PDF">📎</button>
         <input type="text" id="m-chat-text" onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();sendStoreChat();}">
         <button type="button" class="btn-submit" onclick="sendStoreChat()" id="m-chat-send">送出</button>
@@ -2686,6 +2709,17 @@
       </div>
       <div id="es-photo-list" class="es-photos"></div>
       <div id="es-photo-hint" style="font-size:11px;color:var(--fg-muted);line-height:1.45;"></div>
+    </div>
+
+    <div style="margin-bottom:16px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:6px;">
+        <label style="font-size:12px;font-weight:700;">影片・PDF</label>
+        <label class="action-btn" style="cursor:pointer;margin:0;">
+          <span>＋ 加入影片／PDF</span>
+          <input type="file" id="es-file-input" accept="video/*,.pdf" multiple hidden onchange="esAddFiles(this)">
+        </label>
+      </div>
+      <div id="es-file-list"></div>
     </div>
 
     <div style="display:flex;justify-content:flex-end;gap:8px;">
@@ -4147,8 +4181,9 @@ function fmtSize(n) { n = Number(n) || 0; return n >= 1048576 ? (n / 1048576).to
 async function uploadAttachment(file) {
   const isPdf = /pdf/i.test(file.type) || /\.pdf$/i.test(file.name);
   const isImg = (file.type || '').startsWith('image/');
-  if (!isPdf && !isImg) return { error: /^video\//.test(file.type) ? 'video' : 'bad_type' };
-  let blob = file, name = file.name || (isPdf ? 'file.pdf' : 'image.jpg');
+  const isVid = /^video\//.test(file.type || '') || /\.(mp4|mov|m4v|webm)$/i.test(file.name || '');
+  if (!isPdf && !isImg && !isVid) return { error: 'bad_type' };
+  let blob = file, name = file.name || (isPdf ? 'file.pdf' : (isVid ? 'video.mp4' : 'image.jpg'));
   if (isImg && file.type !== 'image/gif') {   // 照片先縮到長邊 1600px，省空間也比較快
     try {
       const d = await compressImageFile(file, 1600, 1600, 0.82);
@@ -4167,15 +4202,14 @@ async function uploadAttachment(file) {
   } catch (e) { return { error: 'network' }; }
 }
 function uploadErrorText(r) {
-  if (r.error === 'video') return tr('影片請貼 YouTube 連結', '動画はYouTubeのリンクを貼ってください');
-  if (r.error === 'bad_type') return tr('只能上傳圖片或 PDF', '画像またはPDFのみ');
+  if (r.error === 'bad_type') return tr('只能上傳圖片、影片或 PDF', '画像・動画・PDFのみ');
   if (r.error === 'too_large') return tr('檔案太大' + (r.limit ? '（上限 ' + r.limit + '）' : ''), 'ファイルが大きすぎます' + (r.limit ? '（上限 ' + r.limit + '）' : ''));
   return tr('上傳失敗，請再試一次', 'アップロードに失敗しました');
 }
 // list: 陣列；render: 重畫函式
 async function addFilesTo(list, files, render) {
   for (const file of Array.from(files || [])) {
-    const entry = { id: ++_attSeq, name: file.name, type: /pdf/i.test(file.type) || /\.pdf$/i.test(file.name) ? 'pdf' : 'image', status: 'uploading' };
+    const entry = { id: ++_attSeq, name: file.name, type: /pdf/i.test(file.type) || /\.pdf$/i.test(file.name) ? 'pdf' : (/^video\//.test(file.type || '') || /\.(mp4|mov|m4v|webm)$/i.test(file.name || '') ? 'video' : 'image'), status: 'uploading' };
     list.push(entry);
     render();
     const r = await uploadAttachment(file);
@@ -4186,7 +4220,7 @@ async function addFilesTo(list, files, render) {
 }
 function fileChipsHtml(list, removeFn) {
   return list.map(f => `<span class="file-chip${f.status === 'uploading' ? ' uploading' : ''}">
-      <span>${f.status === 'uploading' ? '⏳' : (f.type === 'image' ? '🖼️' : '📄')}</span>
+      <span>${f.status === 'uploading' ? '⏳' : (f.type === 'image' ? '🖼️' : (f.type === 'video' ? '🎬' : '📄'))}</span>
       <span style="font-weight:700;">${escapeHtml(f.name)}</span>
       <span class="file-chip-remove" onclick="${removeFn}(${f.id})" title="移除">×</span>
     </span>`).join(' ');
@@ -4301,7 +4335,7 @@ function safeAssetUrl(raw) {
   const s = String(raw || '').trim();
   if (!s || /[\u0000-\u001f\s"'<>\\]/.test(s) || s.indexOf('..') >= 0) return '';
   if (/^(javascript|vbscript|data):/i.test(s)) return '';
-  if (/^(uploads|files)\/[\w./-]+\.(jpe?g|png|gif|webp|pdf)$/i.test(s)) return s;
+  if (/^(uploads|files)\/[\w./-]+\.(jpe?g|png|gif|webp|pdf|mp4|mov|webm)$/i.test(s)) return s;
   if (/^[\w.-]+\.(jpe?g|png|gif|webp|pdf)$/i.test(s)) return s;
   return safeHttpUrl(s);
 }
@@ -4797,6 +4831,35 @@ function renderDailyLogs(box, colLang) {
   });
 }
 
+// ===== 日本側頁面最上方：月別作業時間表 =====
+const TAG_JA_LABEL = { '進度回報': '進捗報告', '門市選址': '店舗探し', '公司設立': '会社設立', '商標佈局': '商標', '營運規劃': '運営ルール', '進口物流': '輸入・物流', '日本溝通': '日本との連絡', '其他': 'その他', '房仲推薦': '仲介おすすめ' };
+const sumMonth = { y: new Date().getFullYear(), m: new Date().getMonth() };
+function shiftSumMonth(d) {
+  const x = new Date(sumMonth.y, sumMonth.m + d, 1);
+  sumMonth.y = x.getFullYear(); sumMonth.m = x.getMonth();
+  renderFeeds();
+}
+function monthSummaryEl(lang) {
+  const ja = lang === 'ja';
+  const key = `${sumMonth.y}/${String(sumMonth.m + 1).padStart(2, '0')}`;
+  const posts = state.posts.filter(p => postDayKey(p).slice(0, 7) === key);
+  const by = {};
+  posts.forEach(p => { const k = p.tag || '其他'; const o = by[k] || (by[k] = { h: 0, n: 0, d: new Set() }); o.h += Number(p.hours) || 0; o.n++; o.d.add(postDayKey(p)); });
+  const rows = Object.keys(by).map(k => Object.assign({ tag: k }, by[k])).sort((a, b) => b.h - a.h);
+  const total = rows.reduce((s, o) => s + o.h, 0);
+  const days = new Set(posts.map(postDayKey)).size;
+  const label = ja ? `${sumMonth.y}年${sumMonth.m + 1}月　作業時間` : `${sumMonth.y} 年 ${sumMonth.m + 1} 月　工時總表`;
+  const head = ja ? ['区分', '日数', '件数', '時間', '割合'] : ['類別', '天數', '筆數', '工時', '佔比'];
+  const el = document.createElement('div');
+  el.className = 'month-sum';
+  el.innerHTML = `<div class="month-sum-head"><button type="button" onclick="shiftSumMonth(-1)" aria-label="prev">‹</button><b>${label}</b><button type="button" onclick="shiftSumMonth(1)" aria-label="next">›</button></div>` +
+    (rows.length ? `<table class="rp-table"><tr>${head.map(h => `<th>${h}</th>`).join('')}</tr>` +
+      rows.map(o => { const pc = total ? Math.round(o.h / total * 100) : 0; return `<tr><td>${escapeHtml(ja ? (TAG_JA_LABEL[o.tag] || o.tag) : o.tag)}</td><td>${o.d.size}</td><td>${o.n}</td><td>${rpH(o.h)}</td><td><span class="rp-bar" style="width:${Math.max(2, pc * 0.5)}px"></span> ${pc}%</td></tr>`; }).join('') +
+      `<tr class="rp-total"><td>${ja ? '合計' : '合計'}</td><td>${days}</td><td>${posts.length}</td><td>${rpH(total)}</td><td></td></tr></table>`
+      : `<div style="padding:14px;text-align:center;color:var(--fg-muted);font-size:13px;">${ja ? 'この月の記録はありません' : '這個月沒有紀錄'}</div>`);
+  return el;
+}
+
 function renderFeeds() {
   sortPostsByStamp();
   ensureStoreJa();
@@ -4809,6 +4872,8 @@ function renderFeeds() {
   jaBox.innerHTML = '';
 
   if (state.currentUser !== 'Lynn') {
+    zhBox.appendChild(monthSummaryEl('zh'));
+    jaBox.appendChild(monthSummaryEl('ja'));
     renderDailyLogs(zhBox, 'zh');
     renderDailyLogs(jaBox, 'ja');
     fillEmbedTitles();
@@ -4879,8 +4944,9 @@ function toggleThread(postId) {
 function attachmentsHtml(list) {
   list = list || [];
   if (!list.length) return '';
-  const imgs = list.filter(a => a.type === 'image'), pdfs = list.filter(a => a.type === 'pdf');
+  const imgs = list.filter(a => a.type === 'image'), pdfs = list.filter(a => a.type === 'pdf'), vids = list.filter(a => a.type === 'video');
   return '<div class="att-wrap">' +
+    vids.map(a => { const src = safeFileHref(a.url); return src ? `<div class="att-video"><video src="${escapeHtml(src)}#t=0.1" controls playsinline preload="metadata"></video><small>🎬 ${escapeHtml(a.name)} ${fmtSize(a.size)}</small></div>` : ''; }).join('') +
     (imgs.length ? `<div class="att-grid att-n${Math.min(imgs.length, 4)}">${imgs.map(a => { const src = safeImgSrc(a.url); return src ? `<img src="${escapeHtml(src)}" onclick="openImageLightbox(${jsArg(src)})" loading="lazy" alt="${escapeHtml(a.name)}">` : ''; }).join('')}</div>` : '') +
     pdfs.map(a => { const href = safeFileHref(a.url); return href ? `<a class="att-pdf" href="${escapeHtml(href)}" target="_blank" rel="noopener"><span class="att-pdf-ico">PDF</span><span class="att-pdf-name">${escapeHtml(a.name)}</span><small>${fmtSize(a.size)}</small></a>` : ''; }).join('') +
     '</div>';
@@ -5057,7 +5123,7 @@ function createCard(p, colLang) {
       ${commentsHtml}
       <div id="rep-file-preview-${escapeHtml(p.id)}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
-        <input type="file" id="rep-file-${escapeHtml(p.id)}-${colLang}" style="display:none;" multiple accept="image/*,.pdf" onchange="handleReplyFileSelected(event, ${jsArg(p.id)}, '${colLang}')">
+        <input type="file" id="rep-file-${escapeHtml(p.id)}-${colLang}" style="display:none;" multiple accept="image/*,video/*,.pdf" onchange="handleReplyFileSelected(event, ${jsArg(p.id)}, '${colLang}')">
         <button type="button" class="action-btn" style="padding:4px 8px;line-height:1;" onclick="triggerReplyFileUpload(${jsArg(p.id)}, '${colLang}')" title="${colLang==='zh'?'夾帶檔案(圖片/PDF)':'添付(写真/PDF)'}">📎</button>
         <input type="text" class="comment-reply-input" id="rep-${escapeHtml(p.id)}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${jsArg(p.id)}, '${colLang}')">
         <button class="action-btn" onclick="submitReply(${jsArg(p.id)}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
@@ -5065,8 +5131,8 @@ function createCard(p, colLang) {
       </div>` : '';
 
   card.innerHTML = `
-    <div class="msg-avatar">${escapeHtml(String(p.author || '').slice(0, 1))}</div>
-    <div class="msg-main">
+    <div class="msg-top">
+      <div class="msg-avatar">${escapeHtml(String(p.author || '').slice(0, 1))}</div>
       <div class="msg-head">
         <span class="msg-name">${escapeHtml(p.author)}</span>
         <span class="msg-time">${escapeHtml(((/(\d{1,2}:\d{2})$/.exec(String(p.date || '')) || [])[1]) || fmtDateWd(p.date, colLang))}</span>
@@ -5074,6 +5140,16 @@ function createCard(p, colLang) {
         <span class="post-tag">#${escapeHtml(p.tag)}</span>
         ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
       </div>
+        <span class="msg-acts">
+          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${jsArg(p.id)})" title="編輯">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${jsArg(p.id)})" title="刪除">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </span>
+    </div>
+    <div class="msg-main">
       ${hideBody ? '' : `<div class="post-body-text">${bodyHtml}</div>`}
       ${postAttachHtml}
       ${attachmentsHtml(p.attachments)}
@@ -5086,14 +5162,6 @@ function createCard(p, colLang) {
         <button class="btn-mini-trans" type="button" style="${hideBody ? 'display:none;' : ''}" onclick="togglePostTranslation(${jsArg(p.id)}, '${colLang}', this)">
           <span title="${colLang === 'zh' ? '翻譯' : '翻訳'}">🌐</span>
         </button>
-        <span class="msg-acts">
-          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${jsArg(p.id)})" title="編輯">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-          </button>
-          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${jsArg(p.id)})" title="刪除">
-            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
-        </span>
       </div>
       <div id="trans-box-post-${escapeHtml(p.id)}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
       <div class="comments-thread">${threadBody}</div>
@@ -5532,6 +5600,8 @@ function openStoreDetailModal(storeId) {
 
   // Gallery Strip（每張縮圖有星號：指定主頁顯示的圖片）
   renderDetailGallery(s, curIdx);
+  const filesBox = document.getElementById('m-store-files');
+  if (filesBox) filesBox.innerHTML = attachmentsHtml(s.files);
 
   renderStoreChat(s);
   updateModalCompareButton();
@@ -5875,6 +5945,9 @@ function renderStores() {
     const areaPing = fmtPing(s.area);
 
     card.innerHTML = `
+      <button type="button" class="store-edit-btn" onclick="event.stopPropagation(); editStoreFromCard(${jsArg(s.id)})" title="${tr('直接編輯','編集')}" aria-label="${tr('編輯','編集')}">
+        <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+      </button>
       <!-- Compact Top Row (橫向不折行、字樣完整防擠壓) -->
       <div class="store-compact-row">
         <!-- Thumbnail with photo count pill -->
@@ -5991,6 +6064,12 @@ function deleteStore(storeId) {
 }
 
 // --- Edit Store Modal Logic ---
+function editStoreFromCard(id) {
+  state.activeDetailStoreId = id;
+  state.editFromCard = true;
+  openEditStoreModal();
+}
+
 function openEditStoreModal() {
   if (!state.activeDetailStoreId) return;
   const s = state.stores.find(x => x.id === state.activeDetailStoreId);
@@ -6013,10 +6092,13 @@ function openEditStoreModal() {
   const saveBtn = document.querySelector('#edit-store-modal .btn-submit');
   if (saveBtn) saveBtn.textContent = tr('儲存店面數據', '店舗データを保存');
   esLoadPhotos(s);
+  state.editFiles = (Array.isArray(s.files) ? s.files : []).map(f => Object.assign({ id: ++_attSeq, status: 'done' }, f));
+  renderEditStoreFiles();
   document.getElementById('edit-store-modal').classList.add('open');
 }
 
 function closeEditStoreModal() {
+  if (state.editFromCard) { state.editFromCard = false; if (!document.getElementById('store-detail-modal').classList.contains('open')) state.activeDetailStoreId = null; }
   esRevokePreviews();
   state.editPhotos = [];
   state.editCoverId = '';
@@ -6056,6 +6138,14 @@ function renderEditStorePhotos() {
     </div>`;
   }).join('');
 }
+function renderEditStoreFiles() {
+  const box = document.getElementById('es-file-list');
+  if (!box) return;
+  const list = state.editFiles || [];
+  box.innerHTML = list.length ? fileChipsHtml(list, 'esRemoveFile') : `<div style="font-size:12px;color:var(--fg-muted);">${tr('還沒有影片或 PDF', '動画・PDFはまだありません')}</div>`;
+}
+function esRemoveFile(id) { state.editFiles = (state.editFiles || []).filter(f => f.id !== id); renderEditStoreFiles(); }
+function esAddFiles(input) { state.editFiles = state.editFiles || []; addFilesTo(state.editFiles, input.files, renderEditStoreFiles); input.value = ''; }
 function esPhotoById(id) { return (state.editPhotos || []).find(p => p.id === id); }
 function esSetCover(id) {
   if (!esPhotoById(id)) return;
@@ -6111,6 +6201,7 @@ async function esUploadStorePhoto(storeId, blob) {
 
 async function saveEditedStore() {
   if (!state.activeDetailStoreId) return;
+  const fromCard = !!state.editFromCard;
   const s = state.stores.find(x => x.id === state.activeDetailStoreId);
   if (!s) return;
 
@@ -6124,6 +6215,7 @@ async function saveEditedStore() {
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
   const cons = document.getElementById('es-cons').value.trim() || s.cons;
 
+  if ((state.editFiles || []).some(f => f.status === 'uploading')) { showToast(tr('檔案上傳中，請稍候', 'アップロード中です'), 1800); return; }
   const saveBtn = document.querySelector('#edit-store-modal .btn-submit');
   if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = tr('上傳中…', 'アップロード中…'); }
   try {
@@ -6149,6 +6241,8 @@ async function saveEditedStore() {
     const coverItem = (state.editPhotos || []).find(p => p.id === state.editCoverId);
     const cover = coverItem && s.images.indexOf(coverItem.url) >= 0 ? coverItem.url : (s.images[0] || '');
     if (cover) s.coverImg = cover; else delete s.coverImg;
+    const keptFiles = (state.editFiles || []).filter(f => f.status === 'done' && f.url).map(f => ({ type: f.type, name: f.name, url: f.url, size: f.size }));
+    if (keptFiles.length) s.files = keptFiles; else delete s.files;
     s.editedAt = Date.now();
     const orderRes = await fetch('api_edit.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'img_set', id: s.id, images: s.images }) });
     const orderJson = await orderRes.json();
@@ -6160,7 +6254,8 @@ async function saveEditedStore() {
     closeEditStoreModal();
     renderStores();
     renderFeeds();
-    openStoreDetailModal(s.id);
+    if (!fromCard) openStoreDetailModal(s.id);
+    else showToast(tr('已儲存', '保存しました'), 1500);
   } catch (e) {
     showToast(tr('照片上傳失敗，請再試一次', '写真のアップロードに失敗しました'), 2200);
   } finally {
