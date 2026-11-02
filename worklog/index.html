@@ -2337,7 +2337,7 @@
     .sd-pane.active { display:block; }
     .sd-facts { display:flex; flex-wrap:wrap; gap:6px 18px; font-size:12.5px; margin-bottom:12px; }
     .sd-facts b { font-weight:700; }
-    @media (max-width: 700px) { .sd-kpi { grid-template-columns:1fr 1fr; } .sc2-cmp, .sc2-pin { display:none; } .sc2-thumb { width:48px; height:48px; } .sc2-title { flex-wrap:wrap; row-gap:2px; } .sc2-title .t { white-space:normal; } .sc2-sub { white-space:normal; } .sc2-side { opacity:.8; gap:8px; } }
+    @media (max-width: 700px) { #es-district { font-size:16px !important; } .sd-kpi { grid-template-columns:1fr 1fr; } .sc2-cmp, .sc2-pin { display:none; } .sc2-thumb { width:48px; height:48px; } .sc2-title { flex-wrap:wrap; row-gap:2px; } .sc2-title .t { white-space:normal; } .sc2-sub { white-space:normal; } .sc2-side { opacity:.8; gap:8px; } }
   </style>
 </head>
 <body>
@@ -6212,7 +6212,7 @@ function sdTab(name) {
     if (p) p.classList.toggle('active', k === name);
   });
 }
-function editDistrictFromDetail() { openEditStoreModal(); setTimeout(() => { const el = document.getElementById('es-district'); if (el) { el.focus(); el.select(); } }, 50); }
+function editDistrictFromDetail() { openEditStoreModal(); if (!('ontouchstart' in window)) setTimeout(() => { const el = document.getElementById('es-district'); if (el) { el.focus(); el.select(); } }, 50); }
 function deleteStoreFromDetail() {
   const id = state.activeDetailStoreId;
   if (!id) return;
