@@ -5770,69 +5770,6 @@ async function translateStoreTitleJa(zh) {
   }
   return out;
 }
-// --- 優缺點草稿：只用刊登上有的數字與候選之間的比較，沒有依據的（人流、氣氛）一律不寫 ---
-const ANALYSIS_NOTE = '（依刊登資料自動整理，待實勘補充）';
-function districtOfAddr(a) { const m = /([一-龥]{2}區)/.exec(a || ''); return m ? m[1] : ''; }
-function draftAnalysis(s) {
-  const others = state.stores.filter(x => x.id !== s.id && hasNums(x));
-  const unit = unitOf(s);
-  const wan = n => fmtWan(n);
-  const pros = [], cons = [];
-  pros.push(`月租 ${wan(s.rent)} 萬、${fmtPing(s.area)} 坪，每坪約 ${unit.toLocaleString()} 元。`);
-  if (others.length >= 2) {
-    const lower = others.filter(x => unitOf(x) > unit).length;
-    const rank = others.length - lower + 1;
-    const total = others.length + 1;
-    if (rank <= Math.ceil(total / 3)) pros.push(`每坪單價在 ${total} 間候選中第 ${rank} 低。`);
-    else if (rank > total - Math.ceil(total / 3)) cons.push(`每坪單價在 ${total} 間候選中第 ${total - rank + 1} 高（高於 ${others.filter(x => unitOf(x) < unit).length} 間）。`);
-  }
-  const dep = Number(s.deposit) || 0, rent = Number(s.rent) || 0;
-  const months = rent ? dep / rent : 0;
-  if (dep > 0) pros.push(`押金 ${wan(dep)} 萬${s.depositText ? `（${s.depositText}）` : (months >= 0.5 && months <= 6 ? `，約 ${Math.round(months * 10) / 10} 個月租金` : '')}。`);
-  const fr = String(s.freeRent || '').trim();
-  if (fr && !/洽詢|面議|另議|未確認/.test(fr)) pros.push(`刊登免租期 ${fr}${/可談|爭取/.test(fr) ? '（尚未定案）' : ''}。`);
-  if (s.canRegister === true) pros.push('可辦理營業登記。');
-  if (s.canInvoice === true) pros.push('可開立發票。');
-  const unknown = [];
-  if (!String(s.floor || '').trim()) unknown.push('樓層與面寬');
-  if (s.canRegister === undefined || s.canRegister === null) unknown.push('營業登記');
-  if (s.canInvoice === undefined || s.canInvoice === null) unknown.push('發票適格');
-  if (s.canRegister === false) cons.push('不可營業登記。');
-  if (s.canInvoice === false) cons.push('不能開立發票。');
-  if (unknown.length) cons.push(`${unknown.join('、')}刊登沒有寫，需向仲介確認。`);
-  if (others.length >= 2) {
-    const areas = others.map(x => Number(x.area)).sort((a, b) => a - b);
-    const med = areas[Math.floor(areas.length / 2)];
-    if (Number(s.area) < med * 0.8) cons.push(`${fmtPing(s.area)} 坪，小於多數候選（中位數約 ${fmtPing(med)} 坪）。`);
-  }
-  if (/巷|弄/.test(s.address || '')) cons.push('地址在巷內，店前人流與能見度需現場確認。');
-  const myD = districtOfAddr(s.address);
-  if (myD && others.length >= 2) {
-    const cnt = {};
-    others.forEach(x => { const d = districtOfAddr(x.address); if (d) cnt[d] = (cnt[d] || 0) + 1; });
-    const top = Object.keys(cnt).sort((a, b) => cnt[b] - cnt[a])[0];
-    if (top && top !== myD) cons.push(`位於${myD}，與多數候選所在的${top}不同區。`);
-  }
-  const bullets = a => a.map(t => '• ' + t).join('\n');
-  return { pros: bullets(pros), cons: ANALYSIS_NOTE + '\n' + bullets(cons.length ? cons : ['刊登資料看不出明顯風險，實勘後再補充。']) };
-}
-function ensureStoreAnalysis() {
-  if (state.previewing || state.currentUserRole !== 'tw') return;
-  let changed = false;
-  state.stores.forEach(s => {
-    if (!hasNums(s) || s.unverified) return;
-    const needP = !String(s.pros || '').trim(), needC = !String(s.cons || '').trim();
-    if (!needP && !needC) return;
-    const d = draftAnalysis(s), f = {};
-    if (needP) { s.pros = d.pros; delete s.prosJa; f.pros = s.pros; }
-    if (needC) { s.cons = d.cons; delete s.consJa; f.cons = s.cons; }
-    s.editedAt = Date.now();
-    postStoreEdit(s.id, f);
-    changed = true;
-  });
-  if (changed) saveAppState(true);
-}
-
 async function ensureStoreJa() {
   if (_storeJaBusy) return;
   // 日文欄空白、跟中文一樣、或完全沒有假名（還是中文）都要翻
@@ -6128,7 +6065,6 @@ function renderStores() {
   });
 
   updateCompareButton();
-  ensureStoreAnalysis();
   ensureStoreJa();
 }
 
