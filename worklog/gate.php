@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['wl_pw'])) {
 }
 
 // 不需密碼：獨立 MAP 頁與它的唯讀店面 API、圖片、圖示
-$publicAsset = preg_match('/^(map\.html|share\.html|api_stores\.php|api_share\.php|manifest\.json|favicon[\w-]*\.png|apple-touch-icon\.png|(uploads\/)?[\w.-]+\.(jpe?g|png|gif|webp))$/i', $rel);
+$publicAsset = preg_match('/^(map\.html|share\.html|report\.html|api_stores\.php|api_share\.php|api_report\.php|files\/\d{6}\/[a-f0-9]{20}\.(jpe?g|png|gif|webp)|manifest\.json|favicon[\w-]*\.png|apple-touch-icon\.png|(uploads\/)?[\w.-]+\.(jpe?g|png|gif|webp))$/i', $rel);
 $ok = $publicAsset || isset($_COOKIE['wl_auth']) && hash_equals($token, $_COOKIE['wl_auth']);
 
 if (!$ok) {

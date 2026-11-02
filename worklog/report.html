@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta name="robots" content="noindex">
+<title>grounds Taiwan 作業日誌</title>
+<link rel="icon" href="favicon.png">
+<style>
+:root{--fg:#111;--muted:#555;--line:#e2e2e8;--bg:#f7f7f9}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:-apple-system,"Noto Sans TC","Hiragino Sans",sans-serif;-webkit-text-size-adjust:100%}
+header{position:sticky;top:0;z-index:10;background:#fff;border-bottom:1px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 14px 10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.logo{width:34px;height:34px;border-radius:8px;background:#111;color:#fff;font:bold 21px Georgia,serif;display:flex;align-items:center;justify-content:center;padding-bottom:3px}
+.ttl{font-weight:800;font-size:15px;flex:1;min-width:140px}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lang{display:flex;background:#f1f1f4;border-radius:18px;padding:2px;border:1px solid var(--line)}
+.lang button{border:0;background:transparent;border-radius:16px;padding:6px 10px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer}
+.lang button.on{background:#111;color:#fff}
+.btn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.btn.pri{background:#111;color:#fff;border-color:#111}
+.wrap{max-width:860px;margin:0 auto;padding:16px 14px calc(30px + env(safe-area-inset-bottom))}
+.err,.loading{text-align:center;color:var(--muted);padding:60px 16px;font-size:14px}
+h2{font-size:15px;margin:22px 0 8px;font-weight:800}
+.card{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+table.sum{width:100%;border-collapse:collapse;font-size:13px}
+table.sum th,table.sum td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:right}
+table.sum th:first-child,table.sum td:first-child{text-align:left}
+table.sum th{font-size:11.5px;color:var(--muted);font-weight:700}
+table.sum tr.total td{font-weight:800;border-bottom:0}
+.bar{height:6px;border-radius:3px;background:#111;min-width:2px}
+.barbox{width:90px;display:inline-block;background:#eee;border-radius:3px;vertical-align:middle}
+.day{margin-top:20px}
+.day-h{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid #111;padding-bottom:4px;margin-bottom:8px}
+.day-h b{font-size:15px}.day-h span{font-size:12px;color:var(--muted)}
+.wk{margin:30px 0 0;padding:6px 10px;background:#111;color:#fff;border-radius:6px;font-size:13px;font-weight:800;display:flex;justify-content:space-between}
+.ent{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:8px}
+.ent-h{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin-bottom:6px;font-size:11.5px}
+.tag{background:#eef2ff;color:#3730a3;border-radius:999px;padding:2px 8px;font-weight:700}
+.hrs{background:#f1f1f4;border-radius:999px;padding:2px 8px;font-weight:700}
+.au{color:var(--muted)}
+.ja{font-size:14px;line-height:1.65;white-space:pre-wrap;word-break:break-word}
+.zh{font-size:12.5px;line-height:1.6;color:var(--muted);white-space:pre-wrap;word-break:break-word;margin-top:5px}
+.only .ja,.only .zh{font-size:14px;color:var(--fg);margin-top:0}
+.ent a{color:#1d4ed8;word-break:break-all}
+.imgs{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px;margin-top:8px}
+.imgs img{width:100%;height:110px;object-fit:cover;border-radius:8px;background:#eee;cursor:zoom-in}
+.yt{display:flex;gap:8px;align-items:center;margin-top:8px;text-decoration:none;color:var(--fg);border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fafafa}
+.yt img{width:120px;height:68px;object-fit:cover;display:block}.yt span{font-size:12px;padding:4px 8px}
+.lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50}
+.lb.on{display:flex}.lb img{max-width:96vw;max-height:94vh}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff}
+  header .actions,.no-print{display:none !important}
+  header{position:static;border:0;padding:0 0 8px}
+  .wrap{padding:0;max-width:none}
+  .ent,.card{break-inside:avoid}
+  .imgs img{height:90px}
+  .wk{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">g</div>
+  <div class="ttl" id="title">作業日誌 / 作業ログ</div>
+  <div class="actions">
+    <div class="lang">
+      <button type="button" id="l-bi" class="on" onclick="setLang('bi')">中日雙語</button>
+      <button type="button" id="l-ja" onclick="setLang('ja')">日本語</button>
+      <button type="button" id="l-zh" onclick="setLang('zh')">純中文</button>
+    </div>
+    <button type="button" class="btn pri" onclick="window.print()">PDF</button>
+  </div>
+</header>
+<div class="wrap"><div id="box" class="loading">載入中… / 読み込み中…</div></div>
+<div class="lb" id="lb" onclick="this.classList.remove('on')"><img id="lb-img" alt=""></div>
+<script>
+(function () {
+  var st = { lang: 'bi', data: null };
+  function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+  var TAG_JA = {'進度回報':'進捗報告','門市選址':'店舗探し','公司設立':'会社設立','商標佈局':'商標','營運規劃':'運営ルール','進口物流':'輸入・物流','日本溝通':'日本との連絡','其他':'その他'};
+  function tagText(t, lang){ return lang==='zh' ? t : (TAG_JA[t] ? (lang==='ja'? TAG_JA[t] : t+' / '+TAG_JA[t]) : t); }
+  function hText(h){ h=Math.round(h*100)/100; return h<=1 ? Math.round(h*60)+'分' : h+'h'; }
+  function dateObj(s){var m=/^(\d{4})\/(\d{2})\/(\d{2})$/.exec(s);return m?new Date(+m[1],+m[2]-1,+m[3]):null;}
+  function weekKey(s){var d=dateObj(s);if(!d)return s;d.setDate(d.getDate()-((d.getDay()+6)%7));return d.getFullYear()+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+String(d.getDate()).padStart(2,'0');}
+  function dayLabel(s){var d=dateObj(s);if(!d)return s;var w=d.getDay();var ja='日月火水木金土'[w],zh='日一二三四五六'[w];var b=s.slice(5);
+    return st.lang==='zh'?b+'（週'+zh+'）':st.lang==='ja'?b+'（'+ja+'）':b+'（週'+zh+' / '+ja+'）';}
+  function linkify(t){
+    return esc(t).replace(/https?:\/\/[^\s<]+/g,function(u){var raw=u.replace(/&amp;/g,'&');return '<a href="'+esc(raw)+'" target="_blank" rel="noopener">'+u+'</a>';});
+  }
+  function ytCards(t){
+    var out='',seen={},re=/(?:youtu\.be\/|youtube\.com\/(?:watch\?v=|shorts\/|embed\/))([\w-]{11})/g,m;
+    while((m=re.exec(t))){ if(seen[m[1]])continue; seen[m[1]]=1;
+      out+='<a class="yt" href="https://www.youtube.com/watch?v='+m[1]+'" target="_blank" rel="noopener"><img loading="lazy" src="https://i.ytimg.com/vi/'+m[1]+'/mqdefault.jpg" alt=""><span>▶ YouTube</span></a>'; }
+    return out;
+  }
+  function safeImg(u){ return /^(https?:\/\/|(?:uploads\/|files\/)?[\w./-]+\.(?:jpe?g|png|gif|webp)$)/i.test(u) && u.indexOf('..')<0 && !/^javascript:/i.test(u) ? u : ''; }
+  function summarize(posts){
+    var by={},days={};
+    posts.forEach(function(p){var k=p.tag||'其他';var o=by[k]||(by[k]={tag:k,h:0,n:0,d:{}});o.h+=p.hours;o.n++;o.d[p.day]=1;});
+    var rows=Object.keys(by).map(function(k){var o=by[k];o.days=Object.keys(o.d).length;return o;}).sort(function(a,b){return b.h-a.h;});
+    var tot=rows.reduce(function(s,o){return s+o.h;},0);
+    posts.forEach(function(p){days[p.day]=1;});
+    return {rows:rows,total:tot,days:Object.keys(days).length,n:posts.length};
+  }
+  function render(){
+    var d=st.data; if(!d)return;
+    var lang=st.lang, posts=d.posts.slice().sort(function(a,b){return a.day<b.day?-1:a.day>b.day?1:0;});
+    var range=d.from&&d.to?d.from+' – '+d.to:'';
+    document.getElementById('title').textContent=(lang==='zh'?'grounds Taiwan 工作日誌':lang==='ja'?'grounds Taiwan 作業日誌':'grounds Taiwan 作業日誌 / 工作日誌')+(range?'　'+range:'');
+    var s=summarize(posts);
+    var L=function(zh,ja){return lang==='zh'?zh:lang==='ja'?ja:zh+' / '+ja;};
+    var h='<h2>'+L('工時總表','作業時間の集計')+'</h2><div class="card"><table class="sum"><tr><th>'+L('類別','区分')+'</th><th>'+L('天數','日数')+'</th><th>'+L('筆數','件数')+'</th><th>'+L('工時','時間')+'</th><th>%</th></tr>';
+    s.rows.forEach(function(o){var pc=s.total?Math.round(o.h/s.total*100):0;
+      h+='<tr><td>'+esc(tagText(o.tag,lang))+'</td><td>'+o.days+'</td><td>'+o.n+'</td><td>'+(Math.round(o.h*100)/100)+'h</td><td><span class="barbox"><div class="bar" style="width:'+pc+'%"></div></span> '+pc+'%</td></tr>';});
+    h+='<tr class="total"><td>'+L('合計','合計')+'</td><td>'+s.days+'</td><td>'+s.n+'</td><td>'+(Math.round(s.total*100)/100)+'h</td><td></td></tr></table></div>';
+    h+='<h2>'+L('每日紀錄','日ごとの記録')+'</h2>';
+    var curWk='',curDay='',spanWeeks=Object.keys(posts.reduce(function(a,p){a[weekKey(p.day)]=1;return a;},{})).length>1;
+    var dayHours={};posts.forEach(function(p){dayHours[p.day]=(dayHours[p.day]||0)+p.hours;});
+    var wkHours={};posts.forEach(function(p){var k=weekKey(p.day);wkHours[k]=(wkHours[k]||0)+p.hours;});
+    posts.forEach(function(p){
+      var wk=weekKey(p.day);
+      if(spanWeeks&&wk!==curWk){curWk=wk;h+='<div class="wk"><span>'+L('週','週')+' '+wk.slice(5)+' ～</span><span>'+(Math.round(wkHours[wk]*100)/100)+'h</span></div>';}
+      if(p.day!==curDay){curDay=p.day;h+='<div class="day"><div class="day-h"><b>'+esc(dayLabel(p.day))+'</b><span>'+(Math.round(dayHours[p.day]*100)/100)+'h</span></div></div>';}
+      var only=lang!=='bi'?' only':'';
+      var body='';
+      if(lang==='bi'){ body='<div class="ja">'+linkify(p.ja||p.zh)+'</div>'+(p.ja&&p.zh&&p.ja!==p.zh?'<div class="zh">'+linkify(p.zh)+'</div>':''); }
+      else if(lang==='ja'){ body='<div class="ja">'+linkify(p.ja||p.zh)+'</div>'; }
+      else { body='<div class="zh">'+linkify(p.zh||p.ja)+'</div>'; }
+      var imgs=(p.atts||[]).map(function(a){var u=safeImg(a.url);return u?'<img loading="lazy" src="'+esc(u)+'" alt="'+esc(a.name)+'" onclick="lb(this.src)">':'';}).join('');
+      h+='<div class="ent'+only+'"><div class="ent-h"><span class="tag">'+esc(tagText(p.tag||'其他',lang))+'</span>'+(p.hours>0?'<span class="hrs">'+hText(p.hours)+'</span>':'')+'<span class="au">'+esc(p.author)+'</span></div>'+body+(imgs?'<div class="imgs">'+imgs+'</div>':'')+ytCards((p.zh||'')+' '+(p.ja||''))+'</div>';
+    });
+    document.getElementById('box').className='';
+    document.getElementById('box').innerHTML=h;
+  }
+  window.lb=function(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');};
+  window.setLang=function(l){st.lang=l;['bi','ja','zh'].forEach(function(k){document.getElementById('l-'+k).classList.toggle('on',k===l);});render();};
+  var id=new URLSearchParams(location.search).get('id')||'';
+  fetch('api_report.php?id='+encodeURIComponent(id),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+    if(!d||!d.success){document.getElementById('box').className='err';document.getElementById('box').textContent='找不到這份日誌 / ログが見つかりません';return;}
+    st.data=d;render();
+  }).catch(function(){document.getElementById('box').className='err';document.getElementById('box').textContent='載入失敗 / 読み込みに失敗しました';});
+})();
+</script>
+</body>
+</html>

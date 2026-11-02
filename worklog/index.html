@@ -2090,6 +2090,21 @@
     .cmp-select { height:34px; min-width:0; border:1px solid var(--border); border-radius:17px; padding:0 8px; font-size:12px; font-weight:600; background:#fff; }
     .cmp-select.cmp-tag { flex:1 1 0; max-width:130px; text-overflow:ellipsis; }
     .post-tag, .hours-tag { white-space:nowrap; }
+    .cmp-extra { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; }
+    .cmp-date { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 10px; font-size:12px; font-weight:600; background:#fff; }
+    .cmp-mini { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 12px; font-size:12px; font-weight:700; background:#fff; cursor:pointer; }
+    .cmp-mini:hover { background:#f1f5f9; }
+    .rp-tabs { display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin-bottom:10px; }
+    .rp-table { width:100%; border-collapse:collapse; font-size:13px; }
+    .rp-table th, .rp-table td { padding:7px 8px; border-bottom:1px solid var(--border); text-align:right; white-space:nowrap; }
+    .rp-table th:first-child, .rp-table td:first-child { text-align:left; }
+    .rp-table th { font-size:11.5px; color:var(--fg-muted); font-weight:700; }
+    .rp-table tr.rp-row { cursor:pointer; }
+    .rp-table tr.rp-row:hover { background:#f8fafc; }
+    .rp-table tr.rp-total td { font-weight:800; border-bottom:0; }
+    .rp-bar { display:inline-block; height:6px; border-radius:3px; background:#111; vertical-align:middle; }
+    .rp-detail { text-align:left; font-size:12px; color:var(--fg-muted); line-height:1.6; white-space:normal; }
+    .rp-detail div { padding:2px 0; }
     /* BOARD 狀態色：審議中黃、待確認紅、已定案綠 */
     #bf-discussing { background:#fef3c7; color:#b45309; border-color:#fcd34d; }
     #bf-pending { background:#fee2e2; color:#b91c1c; border-color:#fca5a5; }
@@ -2233,7 +2248,7 @@
           <svg class="icon" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>
           <span class="tab-title">MAP</span>
         </button>
-        <button class="nav-tab-btn" id="btn-tab-board" onclick="switchNavTab('board')">
+        <button class="nav-tab-btn" id="btn-tab-board" onclick="switchNavTab('board')" style="display:none;">
           <svg class="icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path><rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect><line x1="9" y1="12" x2="15" y2="12"></line><line x1="9" y1="16" x2="13" y2="16"></line></svg>
           <span class="tab-title">BOARD</span>
         </button>
@@ -2280,7 +2295,7 @@
               <button class="cmp-icon-btn" type="button" onclick="triggerPostFileUpload()" title="夾帶照片或文件" aria-label="夾帶">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
               </button>
-              <select class="cmp-select" id="post-hours" title="投入工時" aria-label="投入工時"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option></select>
+              <select class="cmp-select" id="post-hours" onchange="hoursSelChange('post')" title="投入工時" aria-label="投入工時"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option><option value="custom">自訂（分鐘）…</option></select>
               <select class="cmp-select cmp-tag" id="post-tag" onchange="handleTagSelectChange(this)" aria-label="分類">
                 <option value="進度回報" selected>#進度回報</option>
                 <option value="門市選址">#門市選址</option>
@@ -2294,6 +2309,12 @@
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 <span id="btn-submit-post-label" class="sr-only">發布</span>
               </button>
+            </div>
+            <div class="cmp-extra">
+              <input type="date" id="post-day" class="cmp-date" title="發生日（可改成過去的日期）" aria-label="發生日">
+              <input type="number" id="post-hours-custom" class="cmp-date" min="1" max="1440" step="5" placeholder="分鐘" style="display:none;width:78px;">
+              <button type="button" class="cmp-mini" onclick="copyLastPost()">複製上一則</button>
+              <button type="button" class="cmp-mini" onclick="openReportSummary()">工時總表・匯出</button>
             </div>
           </div>
 
@@ -2506,6 +2527,36 @@
   </div>
 </div>
 
+<!-- 工時總表・匯出週報 -->
+<div class="modal-overlay" id="report-summary-modal">
+  <div class="modal-content-box" style="max-width:720px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
+      <h3 style="font-size:15px;font-weight:800;">工時總表</h3>
+      <button class="action-btn" onclick="closeReportSummary()">關閉</button>
+    </div>
+    <div class="rp-tabs" id="rp-ranges">
+      <button class="cmp-mini" data-k="week" onclick="rpSet('range','week')">本週</button>
+      <button class="cmp-mini" data-k="lastweek" onclick="rpSet('range','lastweek')">上週</button>
+      <button class="cmp-mini" data-k="month" onclick="rpSet('range','month')">本月</button>
+      <button class="cmp-mini" data-k="lastmonth" onclick="rpSet('range','lastmonth')">上月</button>
+      <button class="cmp-mini" data-k="all" onclick="rpSet('range','all')">全部</button>
+      <button class="cmp-mini" data-k="custom" onclick="rpSet('range','custom')">自訂</button>
+    </div>
+    <div class="rp-tabs">
+      <span id="rp-custom" style="display:none;gap:4px;align-items:center;"><input type="date" id="rp-from" class="cmp-date" onchange="renderReportSummary()"> – <input type="date" id="rp-to" class="cmp-date" onchange="renderReportSummary()"></span>
+      <select id="rp-author" class="cmp-select" onchange="rpSet('author',this.value)"></select>
+      <select id="rp-view" class="cmp-select" onchange="rpSet('view',this.value)"><option value="tag">依類別</option><option value="week">依週</option></select>
+      <span id="rp-bounds" style="font-size:12px;color:var(--fg-muted);"></span>
+    </div>
+    <div id="rp-body" style="max-height:52vh;overflow:auto;"></div>
+    <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
+      <button class="btn-submit" id="rp-export-btn" onclick="exportReportLink()">產生給日本同事看的週報連結</button>
+      <div style="font-size:11.5px;color:var(--fg-muted);margin-top:6px;line-height:1.5;">連結內容是按下當下的快照，之後再改日誌不會變。範圍用上面選的日期（不受「人員」篩選影響，包含所有人）。</div>
+      <div id="rp-link-box" style="display:none;margin-top:8px;"><input id="rp-link" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin:0;width:100%;" readonly onclick="this.select()"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Edit Post Modal (編輯文字功能) -->
 <div class="modal-overlay" id="edit-post-modal">
   <div class="modal-content-box" style="max-width:560px;">
@@ -2523,7 +2574,12 @@
     <div style="display:flex;gap:10px;align-items:center;margin-bottom:16px;">
       <div>
         <label style="font-size:12px;font-weight:700;">投入工時：</label>
-        <select id="edit-post-hours" class="cmp-select"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option></select>
+        <input type="number" id="edit-post-hours-custom" class="cmp-date" min="1" max="1440" step="5" placeholder="分鐘" style="display:none;width:78px;">
+        <select id="edit-post-hours" class="cmp-select" onchange="hoursSelChange('edit')"><option value="0.17">10 分鐘</option><option value="0.5" selected>30 分鐘</option><option value="0.75">45 分鐘</option><option value="1">60 分鐘</option><option value="2">2 小時</option><option value="3">3 小時</option><option value="4">4 小時</option><option value="5">5 小時</option><option value="6">6 小時</option><option value="custom">自訂（分鐘）…</option></select>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:700;">日期：</label>
+        <input type="date" id="edit-post-day" class="cmp-date">
       </div>
       <div>
         <label style="font-size:12px;font-weight:700;">分類標籤：</label>
@@ -3033,7 +3089,7 @@ const STORE_KEY = 'grounds_tw_v5_data';
 const MEMBERS_KEY = 'grounds_tw_v5_members';
 const TAGS_KEY = 'grounds_tw_v5_tags';
 
-const DEFAULT_CUSTOM_TAGS = ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流'];
+const DEFAULT_CUSTOM_TAGS = ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流', '日本溝通', '其他'];
 
 const DEFAULT_MEMBERS = [
   {
@@ -3192,6 +3248,7 @@ function loadAppState() {
   const savedTags = localStorage.getItem(TAGS_KEY);
   if (savedTags) {
     try { state.customTags = JSON.parse(savedTags); } catch(e) { state.customTags = [...DEFAULT_CUSTOM_TAGS]; }
+    ['日本溝通', '其他'].forEach(t => { if (Array.isArray(state.customTags) && !state.customTags.includes(t)) state.customTags.push(t); });
   } else {
     state.customTags = [...DEFAULT_CUSTOM_TAGS];
   }
@@ -3496,7 +3553,7 @@ function mergeFromCloud(data) {
     const mr = mergeReactionsInto(lp.reactions, sp.reactions);
     if (mr.changed) { lp.reactions = mr.list; res.updated = true; }
     if ((Number(sp.editedAt) || 0) > (Number(lp.editedAt) || 0)) {
-      ['zh', 'ja', 'hours', 'tag', 'editedAt'].forEach(k => { lp[k] = sp[k]; });
+      ['zh', 'ja', 'hours', 'tag', 'day', 'date', 'editedAt'].forEach(k => { lp[k] = sp[k]; });
       res.updated = true;
     }
   });
@@ -4514,7 +4571,8 @@ async function submitFeedPost() {
   const doneFiles = state.composerFiles.filter(f => f.status === 'done').map(f => ({ type: f.type, name: f.name, url: f.url, size: f.size, w: f.w, h: f.h }));
   if (!textZh && !doneFiles.length) return;
 
-  const hours = parseFloat(hoursEl.value) || 0.0;
+  const hours = readHours('post');
+  const dayEl = document.getElementById('post-day');
   const tag = (tagEl.value === '__ADD_NEW__' || !tagEl.value) ? '進度回報' : tagEl.value;
 
   // Visual publishing loading animation on the button
@@ -4610,12 +4668,14 @@ async function submitFeedPost() {
     let textJa = await translateToJapaneseAsync(textZh);
 
     const now = new Date();
-    const timeStr = `${now.getFullYear()}/${(now.getMonth()+1).toString().padStart(2,'0')}/${now.getDate().toString().padStart(2,'0')} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+    const dayStr = (dayEl && /^\d{4}-\d{2}-\d{2}$/.test(dayEl.value)) ? dayEl.value.replace(/-/g, '/') : fmtDayStr(now);
+    const timeStr = `${dayStr} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
 
     const newPost = {
       id: Date.now(),
       author: state.currentUser,
       date: timeStr,
+      day: dayStr,
       hours: hours,
       tag: tag,
       zh: textZh,
@@ -4658,7 +4718,8 @@ async function submitFeedPost() {
 function fmtHours(h, lang) {
   h = Number(h) || 0;
   if (h <= 1) return Math.round(h * 60) + (lang === 'ja' ? '分' : '分');
-  return (Math.round(h * 100) / 100) + 'h';
+  const hh = Math.floor(h + 1e-6), mm = Math.round((h - hh) * 60);
+  return mm >= 60 ? (hh + 1) + 'h' : (mm ? `${hh}h${mm}m` : `${hh}h`);
 }
 
 // 日期後加上星期：中文「（週四）」、日文「（木）」
@@ -5091,11 +5152,14 @@ function openEditPostModal(postId) {
     editHoursSel.insertAdjacentHTML('beforeend', `<option value="${hv}">${fmtHours(parseFloat(hv))}</option>`);
   }
   editHoursSel.value = [...editHoursSel.options].find(o => parseFloat(o.value) === parseFloat(hv)).value;
+  hoursSelChange('edit');
+  const editDayEl = document.getElementById('edit-post-day');
+  if (editDayEl) { editDayEl.value = postDayKey(p).replace(/\//g, '-'); editDayEl.dataset.orig = editDayEl.value; }
   
   // Populate edit-post-tag
   const editTag = document.getElementById('edit-post-tag');
   if (editTag) {
-    editTag.innerHTML = (state.customTags || ['進度回報', '門市選址', '公司設立', '商標佈局', '營運規劃', '進口物流']).map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
+    editTag.innerHTML = (state.customTags || DEFAULT_CUSTOM_TAGS).map(t => `<option value="${escapeHtml(t)}">${escapeHtml(t)}</option>`).join('');
     editTag.value = p.tag || '進度回報';
   }
   
@@ -5123,8 +5187,13 @@ async function saveEditedPost() {
     p.zh = newText;
     p.ja = await translateToJapaneseAsync(storedTextToPlain(newText));
   }
-  p.hours = parseFloat(document.getElementById('edit-post-hours').value) || 0.0;
+  p.hours = readHours('edit');
   p.tag = document.getElementById('edit-post-tag').value;
+  const editDayEl = document.getElementById('edit-post-day');
+  if (editDayEl && /^\d{4}-\d{2}-\d{2}$/.test(editDayEl.value) && editDayEl.value !== editDayEl.dataset.orig) {
+    p.day = editDayEl.value.replace(/-/g, '/');
+    p.date = p.day + (/ \d{1,2}:\d{2}$/.test(p.date || '') ? p.date.slice(-6) : ' 00:00');
+  }
   p.editedAt = Date.now();
   sortPostsByStamp();
 
@@ -7355,13 +7424,189 @@ function changeUiZoom(d) { applyUiZoom(currentUiZoom() + d); }
 // --- 動態「NEW」：對方還沒看過就標示，對方看完就消失（已讀狀態存在雲端）---
 function postStamp(p) { return Number(p.editedAt) || Number(p.id) || 0; }
 function postDayKey(p) {
+  if (/^\d{4}\/\d{2}\/\d{2}$/.test(p.day || '')) return p.day;
   if (p.editedAt) {
     const d = new Date(Number(p.editedAt));
     return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`;
   }
   return (/^\d{4}\/\d{1,2}\/\d{1,2}/.exec(p.date || '') || ['未知日期'])[0];
 }
-function sortPostsByStamp() { state.posts.sort((a, b) => postStamp(b) - postStamp(a)); }
+function sortPostsByStamp() {
+  state.posts.sort((a, b) => {
+    const da = postDayKey(a), db = postDayKey(b);
+    return da === db ? postStamp(b) - postStamp(a) : (da < db ? 1 : -1);
+  });
+}
+
+// ===== 工時：自訂分鐘、發生日、總表、匯出週報 =====
+function fmtDayStr(d) { return `${d.getFullYear()}/${String(d.getMonth() + 1).padStart(2, '0')}/${String(d.getDate()).padStart(2, '0')}`; }
+function hoursSelChange(pre) {
+  const sel = document.getElementById(pre === 'post' ? 'post-hours' : 'edit-post-hours');
+  const inp = document.getElementById(pre === 'post' ? 'post-hours-custom' : 'edit-post-hours-custom');
+  if (!sel || !inp) return;
+  const c = sel.value === 'custom';
+  inp.style.display = c ? '' : 'none';
+  if (c) inp.focus();
+}
+function readHours(pre) {
+  const sel = document.getElementById(pre === 'post' ? 'post-hours' : 'edit-post-hours');
+  const inp = document.getElementById(pre === 'post' ? 'post-hours-custom' : 'edit-post-hours-custom');
+  if (sel.value === 'custom') {
+    const m = Math.min(1440, parseFloat(inp && inp.value) || 0);
+    return m > 0 ? Math.round(m / 60 * 100) / 100 : 0;
+  }
+  return parseFloat(sel.value) || 0;
+}
+(function initPostDay() {
+  setTimeout(() => {
+    const el = document.getElementById('post-day');
+    if (el) { el.value = fmtDayStr(new Date()).replace(/\//g, '-'); el.max = el.value; }
+  }, 0);
+})();
+function copyLastPost() {
+  const p = state.posts.filter(x => x.author === state.currentUser && !isComparePostText(x.zh))[0];
+  if (!p) { showToast('還沒有可以複製的紀錄', 1800); return; }
+  document.getElementById('post-text-zh').value = storedTextToPlain(p.zh);
+  const tagEl = document.getElementById('post-tag');
+  if (tagEl && [...tagEl.options].some(o => o.value === p.tag)) tagEl.value = p.tag;
+  const sel = document.getElementById('post-hours');
+  const hv = parseFloat(p.hours) || 0.5;
+  const opt = [...sel.options].find(o => parseFloat(o.value) === hv);
+  if (opt) { sel.value = opt.value; hoursSelChange('post'); }
+  else { sel.value = 'custom'; hoursSelChange('post'); document.getElementById('post-hours-custom').value = Math.round(hv * 60); }
+  showToast('已帶入上一則，改日期和時數後發布', 2200);
+}
+
+// --- 工時總表 ---
+const rp = { range: 'week', author: '', view: 'tag', open: null, link: '' };
+function rpDate(s) { const m = /^(\d{4})\/(\d{1,2})\/(\d{1,2})/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null; }
+function rpWeekStart(d) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() - ((x.getDay() + 6) % 7)); return x; }
+function rpAdd(d, n) { const x = new Date(d.getFullYear(), d.getMonth(), d.getDate()); x.setDate(x.getDate() + n); return x; }
+function rpBounds() {
+  const t = new Date(), today = new Date(t.getFullYear(), t.getMonth(), t.getDate());
+  const k = rp.range;
+  if (k === 'week') { const a = rpWeekStart(today); return [fmtDayStr(a), fmtDayStr(rpAdd(a, 6))]; }
+  if (k === 'lastweek') { const a = rpAdd(rpWeekStart(today), -7); return [fmtDayStr(a), fmtDayStr(rpAdd(a, 6))]; }
+  if (k === 'month') return [fmtDayStr(new Date(t.getFullYear(), t.getMonth(), 1)), fmtDayStr(new Date(t.getFullYear(), t.getMonth() + 1, 0))];
+  if (k === 'lastmonth') return [fmtDayStr(new Date(t.getFullYear(), t.getMonth() - 1, 1)), fmtDayStr(new Date(t.getFullYear(), t.getMonth(), 0))];
+  if (k === 'custom') {
+    const a = (document.getElementById('rp-from') || {}).value, b = (document.getElementById('rp-to') || {}).value;
+    return [a ? a.replace(/-/g, '/') : '0000/00/00', b ? b.replace(/-/g, '/') : '9999/99/99'];
+  }
+  return ['0000/00/00', '9999/99/99'];
+}
+function rpPosts(ignoreAuthor) {
+  const [a, b] = rpBounds();
+  return state.posts.filter(p => {
+    const d = postDayKey(p);
+    return d >= a && d <= b && (ignoreAuthor || !rp.author || p.author === rp.author);
+  });
+}
+function rpPlain(p) {
+  if (isComparePostText(p.zh)) return '（店面比較表）';
+  const t = storedTextToPlain(p.zh || '').replace(/https?:\/\/[^\s<>"')]+/g, u => {
+    const key = u.replace(/[?#].*$/, '');
+    const st = state.stores.find(x => x.url && String(x.url).replace(/[?#].*$/, '') === key);
+    return st ? `【${st.title}】` : '（連結）';
+  }).replace(/\s+/g, ' ').trim();
+  return t.length > 70 ? t.slice(0, 70) + '…' : t;
+}
+function openReportSummary() {
+  rp.link = '';
+  document.getElementById('report-summary-modal').classList.add('open');
+  const sel = document.getElementById('rp-author');
+  const names = Array.from(new Set(state.posts.map(p => p.author))).filter(Boolean);
+  sel.innerHTML = '<option value="">全部人員</option>' + names.map(n => `<option value="${escapeHtml(n)}">${escapeHtml(n)}</option>`).join('');
+  sel.value = rp.author;
+  renderReportSummary();
+}
+function closeReportSummary() { document.getElementById('report-summary-modal').classList.remove('open'); }
+function rpSet(key, val) {
+  rp[key] = val; rp.open = null;
+  if (key === 'range') document.getElementById('rp-custom').style.display = val === 'custom' ? 'inline-flex' : 'none';
+  renderReportSummary();
+}
+function rpToggle(tag) { rp.open = rp.open === tag ? null : tag; renderReportSummary(); }
+function rpH(h) { return (Math.round(h * 100) / 100) + 'h'; }
+function renderReportSummary() {
+  document.querySelectorAll('#rp-ranges .cmp-mini').forEach(b => b.style.background = b.dataset.k === rp.range ? '#111' : '', );
+  document.querySelectorAll('#rp-ranges .cmp-mini').forEach(b => b.style.color = b.dataset.k === rp.range ? '#fff' : '');
+  const posts = rpPosts(false);
+  const [a, b] = rpBounds();
+  document.getElementById('rp-bounds').textContent = a.startsWith('0000') ? '全部期間' : (b.startsWith('9999') ? `${a} 起` : `${a} – ${b}`);
+  const box = document.getElementById('rp-body');
+  if (!posts.length) { box.innerHTML = '<div style="padding:24px;text-align:center;color:var(--fg-muted);font-size:13px;">這段期間沒有紀錄</div>'; return; }
+  const total = posts.reduce((s, p) => s + (Number(p.hours) || 0), 0);
+  const days = new Set(posts.map(postDayKey)).size;
+  let html = '';
+  if (rp.view === 'tag') {
+    const by = {};
+    posts.forEach(p => { const k = p.tag || '其他'; const o = by[k] || (by[k] = { tag: k, h: 0, n: 0, d: new Set(), list: [] }); o.h += Number(p.hours) || 0; o.n++; o.d.add(postDayKey(p)); o.list.push(p); });
+    const rows = Object.values(by).sort((x, y) => y.h - x.h);
+    html = '<table class="rp-table"><tr><th>類別</th><th>天數</th><th>筆數</th><th>工時</th><th>佔比</th></tr>';
+    rows.forEach(o => {
+      const pc = total ? Math.round(o.h / total * 100) : 0;
+      html += `<tr class="rp-row" onclick="rpToggle(${jsArg(o.tag)})"><td>${rp.open === o.tag ? '▾' : '▸'} ${escapeHtml(o.tag)}</td><td>${o.d.size}</td><td>${o.n}</td><td>${rpH(o.h)}</td><td><span class="rp-bar" style="width:${Math.max(2, pc * 0.7)}px"></span> ${pc}%</td></tr>`;
+      if (rp.open === o.tag) {
+        const det = o.list.slice().sort((x, y) => postDayKey(y) < postDayKey(x) ? -1 : 1).map(p => `<div>${escapeHtml(postDayKey(p).slice(5))}　${rpH(Number(p.hours) || 0)}　${escapeHtml(rpPlain(p))}</div>`).join('');
+        html += `<tr><td colspan="5" class="rp-detail">${det}</td></tr>`;
+      }
+    });
+    html += `<tr class="rp-total"><td>合計</td><td>${days}</td><td>${posts.length}</td><td>${rpH(total)}</td><td></td></tr></table>`;
+  } else {
+    const wk = {}, tags = {};
+    posts.forEach(p => {
+      const w = fmtDayStr(rpWeekStart(rpDate(postDayKey(p)) || new Date())), k = p.tag || '其他';
+      wk[w] = wk[w] || {}; wk[w][k] = (wk[w][k] || 0) + (Number(p.hours) || 0); tags[k] = (tags[k] || 0) + (Number(p.hours) || 0);
+    });
+    const weeks = Object.keys(wk).sort(), tl = Object.keys(tags).sort((x, y) => tags[y] - tags[x]);
+    html = '<div style="overflow-x:auto;"><table class="rp-table"><tr><th>週（週一起）</th>' + tl.map(t => `<th>${escapeHtml(t)}</th>`).join('') + '<th>合計</th></tr>';
+    weeks.forEach(w => {
+      const sum = tl.reduce((s, t) => s + (wk[w][t] || 0), 0);
+      html += `<tr><td>${w.slice(5)} ～</td>` + tl.map(t => `<td>${wk[w][t] ? rpH(wk[w][t]) : '–'}</td>`).join('') + `<td><b>${rpH(sum)}</b></td></tr>`;
+    });
+    html += '<tr class="rp-total"><td>合計</td>' + tl.map(t => `<td>${rpH(tags[t])}</td>`).join('') + `<td>${rpH(total)}</td></tr></table></div>`;
+  }
+  box.innerHTML = html;
+}
+function rpUrlFor(raw, lang) {
+  return String(raw || '').replace(/https?:\/\/[^\s<>"')]+/g, u => {
+    const key = u.replace(/[?#].*$/, '');
+    const st = state.stores.find(x => x.url && String(x.url).replace(/[?#].*$/, '') === key);
+    return st ? `【${lang === 'ja' ? (st.titleJa || st.title) : st.title}】 ${u}` : u;
+  });
+}
+async function exportReportLink() {
+  const posts = rpPosts(true);
+  if (!posts.length) { showToast('這段期間沒有紀錄', 1800); return; }
+  const [a, b] = rpBounds();
+  const payload = {
+    from: a.startsWith('0000') ? postDayKey(posts[posts.length - 1]) : a,
+    to: b.startsWith('9999') ? postDayKey(posts[0]) : b,
+    posts: posts.map(p => {
+      const cmp = isComparePostText(p.zh);
+      return {
+        day: postDayKey(p), author: p.author, tag: p.tag || '其他', hours: Number(p.hours) || 0,
+        zh: cmp ? '（店面比較表）' : rpUrlFor(storedTextToPlain(p.zh || ''), 'zh'),
+        ja: cmp ? '（店舗比較表）' : rpUrlFor(storedTextToPlain(p.ja || ''), 'ja'),
+        atts: (p.attachments || []).filter(x => x.type === 'image').map(x => ({ type: 'image', url: x.url, name: x.name }))
+      };
+    })
+  };
+  const btn = document.getElementById('rp-export-btn');
+  btn.disabled = true;
+  try {
+    const r = await fetch('api_report.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+    const d = await r.json();
+    if (!d.success) { showToast('產生失敗：' + (d.error || r.status), 3000); return; }
+    const url = new URL('report.html?id=' + encodeURIComponent(d.id), location.href.replace(/index\.html(?:\?.*)?$/, '')).href;
+    rp.link = url;
+    document.getElementById('rp-link-box').style.display = 'block';
+    document.getElementById('rp-link').value = url;
+    try { await navigator.clipboard.writeText(url); showToast('已複製週報連結', 2000); } catch (e) { showToast('連結已產生，請複製下方網址', 2500); }
+  } catch (e) { showToast('產生失敗，請再試一次', 2500); }
+  finally { btn.disabled = false; }
+}
 
 function roleOfAuthor(name) {
   const m = (state.members || []).find(x => x.name === name);
