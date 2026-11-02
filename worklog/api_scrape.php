@@ -124,6 +124,7 @@ $platformNames = [
 $targetOk = wl_validate_fetch_target($url);
 $html = '';
 $httpCode = 0;
+$fetchErr = '';
 $effectiveUrl = $url;
 $hostForCheck = parse_url($url, PHP_URL_HOST);
 $allowedHost = $hostForCheck && wl_host_allowed($hostForCheck);
@@ -157,6 +158,7 @@ if (!$targetOk['ok'] && !($allowedHost && in_array($targetOk['error'], array('dn
 }
 if ($targetOk['ok']) {
     $fetched = wl_http_get($url);
+    $fetchErr = isset($fetched['error']) ? $fetched['error'] : '';
     $html = !empty($fetched['ok']) ? $fetched['body'] : '';
     $httpCode = (int)(isset($fetched['code']) ? $fetched['code'] : 0);
     if (!empty($fetched['ok']) && !empty($fetched['url'])) $effectiveUrl = $fetched['url'];
@@ -180,6 +182,7 @@ if ($isChallenge || !$html) {
         'id' => $propId,
         'rawId' => $safeId,
         'url' => $url,
+        'reason' => 'HTTP ' . $httpCode . ($fetchErr !== '' ? ' / ' . $fetchErr : '') . ($html !== '' ? ' / 回傳內容像防機器人頁面' : ''),
         'title' => '',
         'rent' => 0,
         'area' => 0,

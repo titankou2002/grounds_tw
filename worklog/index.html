@@ -7140,7 +7140,7 @@ function makeStoreFromSource(o) {
     canRegister: bool(src.canRegister),
     canInvoice: bool(src.canInvoice),
     pros: src.pros || '',
-    cons: src.cons || '',
+    cons: src.cons || (src.reason ? `⚠ 伺服器讀不到原網頁（${src.reason}）。` : ''),
     url: o.url,
     images: (src.images || []).filter(u => u && !/unsplash\.com/i.test(u) && String(u).indexOf('data:') !== 0),
     activeImgIdx: 0,
