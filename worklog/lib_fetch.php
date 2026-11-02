@@ -134,12 +134,14 @@ function wl_validate_fetch_target($url) {
     if (!wl_host_allowed($host)) return $fail('host');
     $ips = wl_resolve_host_ips($host);
     if (!$ips) return $fail('dns');
+    // 只連到安全的 IP；有些網站的 DNS 會混一筆怪的 AAAA，略過即可，全部都不安全才拒絕。
     $resolve = array();
     foreach ($ips as $ip) {
-        if (wl_ip_blocked($ip)) return $fail('ip');
+        if (wl_ip_blocked($ip)) continue;
         if (strpos($ip, ':') !== false) $resolve[] = $host . ':' . $port . ':[' . $ip . ']';
         else $resolve[] = $host . ':' . $port . ':' . $ip;
     }
+    if (!$resolve) return $fail('ip');
     return array('ok' => true, 'url' => $url, 'resolve' => $resolve, 'error' => '', 'host' => $host, 'port' => $port);
 }
 

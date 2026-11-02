@@ -225,8 +225,10 @@ if (preg_match('/(?:使用坪數|總坪數|坪數|面積)[\s:：]*([\d\.]+)[\s]*
     $area = (float)$am[1];
 }
 
-// Extract address
-if (preg_match('/位於[\s:：]*([台臺北新北桃竹中彰雲嘉南高屏宜花東基][市縣].*?)(?:，|。|更多|\s)/u', $desc . ' ' . $html, $locm)) {
+// Extract address：優先用網頁結構化資料的街道地址
+if (preg_match('/"streetAddress":"([^"]+)"/u', $html, $sa) && preg_match('/"addressRegion":"([^"]+)"/u', $html, $ar)) {
+    $address = $ar[1] . $sa[1];
+} elseif (preg_match('/位於[\s:：]*([台臺北新北桃竹中彰雲嘉南高屏宜花東基][市縣].*?)(?:，|。|更多|\s)/u', $desc . ' ' . $html, $locm)) {
     $address = trim($locm[1]);
 } elseif (preg_match('/([台臺北新北桃竹中彰雲嘉南高屏宜花東基][市縣][^\s"\'<>]{4,25}(?:路|街|巷|段|號))/u', $desc . ' ' . $html, $locm)) {
     $address = trim($locm[1]);
@@ -251,6 +253,7 @@ if (preg_match_all('/https?:\/\/[^\s"\'<>]+\.(?:jpg|jpeg|png|webp)/i', $html, $a
     }
 }
 
+$title = trim(preg_replace('/\s*\|\s*店面出租.*$/u', '', $title));
 $safeId = $extractedId ?: substr(md5($url), 0, 8);
 $unitPrice = ($area > 0 && $rent > 0) ? round($rent / $area) : 0;
 $realCost = $rent > 0 ? round($rent * 1.1211) : 0;
