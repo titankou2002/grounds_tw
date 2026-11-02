@@ -2296,6 +2296,15 @@
     .sc-menu button { display:block; width:100%; text-align:left; background:none; border:none; padding:10px 12px; font-size:13.5px; font-weight:600; border-radius:6px; cursor:pointer; color:var(--fg); }
     .sc-menu button:hover { background:#f1f5f9; }
     .sc-menu button.danger { color:#dc2626; }
+    /* 電腦版（寬螢幕）：REPORT 在左、MAP 在右，同時顯示，不用切換 */
+    @media (min-width: 1280px) {
+      main.main-body { max-width: 1840px; display: grid; grid-template-columns: minmax(420px, 4fr) minmax(0, 6fr); gap: 20px; align-items: start; }
+      main.main-body > #tab-feed, main.main-body > #tab-store { display: block !important; min-width: 0; }
+      main.main-body > #tab-store { position: sticky; top: 76px; }
+      main.main-body > #tab-store .store-layout { grid-template-columns: minmax(300px, 400px) 1fr; height: calc(100vh - 100px); }
+      .nav-tabs { display: none !important; }
+      .split-desktop-view { grid-template-columns: minmax(0, 1fr); }
+    }
     /* ===== MAP 列表 v2：商圈分組、兩行卡片 ===== */
     .dist-bar { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
     .dist-chip-btn { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:16px; font-size:11.5px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; }
@@ -3933,7 +3942,16 @@ function toggleActiveMember() {
 }
 
 // --- Navigation Tabs (REPORT / MAP / BOARD) ---
+const isDualPane = () => window.matchMedia('(min-width: 1280px)').matches;
 function switchNavTab(tabId) {
+  if (isDualPane() && tabId !== 'board') {
+    // 寬螢幕：REPORT 與 MAP 並排，不切換頁面
+    ['tab-feed', 'tab-store'].forEach(id => { const el = document.getElementById(id); if (el) el.style.display = 'block'; });
+    const tb = document.getElementById('tab-board'); if (tb) tb.style.display = 'none';
+    renderFeeds(); renderStores();
+    setTimeout(initStoreMap, 200);
+    return;
+  }
   const _tb = document.getElementById('tab-board');
   if (tabId !== 'board' && _tb && _tb.style.display !== 'none' && _tb.style.display !== '') markBoardSeen();
   document.querySelectorAll('.nav-tab-btn').forEach(b => b.classList.remove('active'));
@@ -4000,6 +4018,8 @@ function applyLanguageLayout() {
 }
 
 window.addEventListener('resize', applyLanguageLayout);
+window.matchMedia('(min-width: 1280px)').addEventListener('change', () => switchNavTab('feed'));
+document.addEventListener('DOMContentLoaded', () => { if (isDualPane()) switchNavTab('feed'); });
 
 // --- Real Translation Engine (Bidirectional zh-TW <-> ja via translate.php) ---
 // 譯文不該含「思考／分析／說明」。這類壞輸出一律不收（存進資料會一直顯示）
