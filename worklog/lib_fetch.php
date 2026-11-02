@@ -142,6 +142,10 @@ function wl_validate_fetch_target($url) {
         else $resolve[] = $host . ':' . $port . ':' . $ip;
     }
     if (!$resolve) return $fail('ip');
+    // 主機沒有 IPv6 出口時連 IPv6 會失敗；有 IPv4 就只用 IPv4。
+    $v4only = array();
+    foreach ($resolve as $row) { if (strpos($row, '[') === false) $v4only[] = $row; }
+    if ($v4only) $resolve = $v4only;
     return array('ok' => true, 'url' => $url, 'resolve' => $resolve, 'error' => '', 'host' => $host, 'port' => $port);
 }
 
