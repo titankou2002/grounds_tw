@@ -260,7 +260,22 @@ $title = trim(preg_replace('/\s*\|\s*店面出租.*$/u', '', $title));
 $safeId = $extractedId ?: substr(md5($url), 0, 8);
 $unitPrice = ($area > 0 && $rent > 0) ? round($rent / $area) : 0;
 $realCost = $rent > 0 ? round($rent * 1.1211) : 0;
-$deposit = 0;   // 押金網頁多半寫「面議／N個月」，不推測
+$deposit = 0;   // 押金網頁多半寫「面議／N個月」，只照抄文字，不換算金額
+
+// 頁面上的文字欄位：押金、免租期、可否登記（只收網頁明寫的）
+$pageText = html_entity_decode(strip_tags(preg_replace('#<(script|style)[^>]*>.*?</\1>#is', ' ', $html)), ENT_QUOTES, 'UTF-8');
+$pageText = preg_replace('/\s+/u', ' ', $pageText);
+$depositText = '';
+if (preg_match('/押金\s*(面議|[一二兩三四五六七八九十\d]+\s*個月)/u', $pageText, $dm)) {
+    $depositText = str_replace(array(' ', '兩'), array('', '二'), $dm[1]);
+}
+$freeRentText = '洽詢';
+if (preg_match('/免租期\s*(?!諮詢)([一二兩三四五六七八九十\d.]+\s*個月|無)/u', $pageText, $fm)) {
+    $freeRentText = str_replace(array(' ', '兩'), array('', '二'), $fm[1]);
+}
+$canRegister = null;
+if (preg_match('/不可\s*(?:工商|營業)?登記|不能\s*登記/u', $pageText)) $canRegister = false;
+elseif (preg_match('/可\s*(?:工商|營業)?登記/u', $pageText)) $canRegister = true;
 
 echo json_encode([
     'success' => true,
@@ -275,14 +290,15 @@ echo json_encode([
     'area' => $area,
     'unitPrice' => $unitPrice,
     'deposit' => $deposit,
-    'freeRent' => '洽詢',
+    'freeRent' => $freeRentText,
+    'depositText' => $depositText,
     'realCost' => $realCost,
     'address' => $address,
     'floor' => $floor,
     'lat' => null,
     'lng' => null,
     'images' => $images,
-    'canRegister' => null,
+    'canRegister' => $canRegister,
     'canInvoice' => null,
     'fireSafety' => null,
     'pros' => '',

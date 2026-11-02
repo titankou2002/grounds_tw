@@ -7159,6 +7159,7 @@ function makeStoreFromSource(o) {
     lng: pos(src.lng) || null,
     rent, area,
     deposit: pos(src.deposit),
+    depositText: src.depositText || undefined,
     freeRent: src.freeRent || '洽詢',
     floor: src.floor || '',
     canRegister: bool(src.canRegister),
