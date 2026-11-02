@@ -2090,6 +2090,32 @@
     .cmp-select { height:34px; min-width:0; border:1px solid var(--border); border-radius:17px; padding:0 8px; font-size:12px; font-weight:600; background:#fff; }
     .cmp-select.cmp-tag { flex:1 1 0; max-width:130px; text-overflow:ellipsis; }
     .post-tag, .hours-tag { white-space:nowrap; }
+    /* ===== Slack 風格訊息列 ===== */
+    .feed-card { display:flex; gap:10px; align-items:flex-start; border:0; border-radius:0; border-bottom:1px solid var(--border); background:transparent; padding:10px 2px; }
+    .feed-card:hover { background:#fafafa; }
+    .daily-log .feed-card { padding:10px 12px; }
+    .msg-avatar { flex:0 0 34px; width:34px; height:34px; border-radius:8px; background:#111; color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; }
+    .msg-main { flex:1; min-width:0; }
+    .msg-head { display:flex; flex-wrap:wrap; align-items:baseline; gap:3px 8px; line-height:1.3; }
+    .msg-name { font-weight:800; font-size:14px; }
+    .msg-time { font-size:11.5px; color:var(--fg-subtle); white-space:nowrap; }
+    .msg-head .post-tag, .msg-head .hours-tag, .msg-head .post-new-pill { align-self:center; }
+    .feed-card .post-body-text { margin:3px 0 4px; font-size:14px; }
+    .msg-foot { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:6px; }
+    .msg-foot .react-row { display:contents; }
+    .msg-foot .thread-sum { width:auto; border:1px solid var(--border); border-radius:14px; padding:3px 10px; font-size:12.5px; background:#fff; }
+    .msg-foot .thread-sum span { margin-left:2px; }
+    .msg-foot .btn-mini-trans { margin:0; padding:3px 8px; }
+    .msg-foot .thread-sum, .msg-foot .react-pill, .msg-foot .react-plus { padding:3px 8px; }
+    .feed-card .jp-translation-box { margin:4px 0; padding:4px 10px; }
+    .feed-card .jp-trans-head { display:none; }
+    .feed-card .jp-trans-body { font-size:13px; color:var(--fg-muted); }
+    .msg-acts { margin-left:auto; display:flex; gap:2px; }
+    .comments-thread { margin-top:0; }
+    .day-div { display:flex; align-items:center; gap:10px; margin:16px 0 2px; font-size:12px; font-weight:800; color:var(--fg-muted); white-space:nowrap; }
+    .day-div::before, .day-div::after { content:''; flex:1; height:1px; background:var(--border); }
+    body.previewing .view-panel { padding-bottom:96px; }
+    .cmp-extra .cmp-date { font-size:12px; max-width:140px; }
     .cmp-extra { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; }
     .cmp-date { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 10px; font-size:12px; font-weight:600; background:#fff; }
     .cmp-mini { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 12px; font-size:12px; font-weight:700; background:#fff; cursor:pointer; }
@@ -4789,7 +4815,20 @@ function renderFeeds() {
     return;
   }
 
+  const dayStat = {};
+  state.posts.forEach(p => { const d = postDayKey(p); const o = dayStat[d] || (dayStat[d] = { n: 0, h: 0 }); o.n++; o.h += Number(p.hours) || 0; });
+  let lastDay = null;
   state.posts.forEach(p => {
+    const d = postDayKey(p);
+    if (d !== lastDay) {
+      lastDay = d;
+      [['zh', zhBox], ['ja', jaBox]].forEach(([lg, box]) => {
+        const el = document.createElement('div');
+        el.className = 'day-div';
+        el.textContent = `${fmtDateWd(d, lg)}　${dayStat[d].n}${lg === 'ja' ? '件' : '筆'}・${rpH(dayStat[d].h)}`;
+        box.appendChild(el);
+      });
+    }
     zhBox.appendChild(createCard(p, 'zh'));
     jaBox.appendChild(createCard(p, 'ja'));
   });
@@ -5012,50 +5051,9 @@ function createCard(p, colLang) {
     `;
   }).join('');
 
-  card.innerHTML = `
-    <div class="feed-card-header">
-      <div class="author-info">
-        <div class="author-avatar">${escapeHtml(String(p.author || '').slice(0, 1))}</div>
-        <div>
-          <div class="author-name">${escapeHtml(p.author)}</div>
-          <div class="post-timestamp">${escapeHtml(fmtDateWd(p.date, colLang))}</div>
-        </div>
-      </div>
-      <div style="display:flex;gap:6px;align-items:center;">
-        <span class="post-new-pill" data-pid="${escapeHtml(p.id)}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
-        <span class="post-tag">#${escapeHtml(p.tag)}</span>
-        ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
-        <!-- Edit Post Button -->
-        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${jsArg(p.id)})" title="編輯文字">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
-        </button>
-        <!-- Delete Post Button with Audit Log -->
-        <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${jsArg(p.id)})" title="刪除動態">
-          <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-        </button>
-      </div>
-    </div>
-
-    ${hideBody ? '' : `<div class="post-body-text">${bodyHtml}</div>`}
-    ${postAttachHtml}
-    ${attachmentsHtml(p.attachments)}
-    ${embedsHtml(p.zh)}
-    <div style="margin:4px 0 6px 0;display:${hideBody ? 'none' : 'flex'};align-items:center;gap:6px;">
-      <button class="btn-mini-trans" type="button" onclick="togglePostTranslation(${jsArg(p.id)}, '${colLang}', this)">
-        <svg class="icon icon-sm" style="width:12px;height:12px;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1 4-10z"></path></svg>
-        <span>${colLang === 'zh' ? '🌐 翻譯' : '🌐 翻訳'}</span>
-      </button>
-    </div>
-    <div id="trans-box-post-${escapeHtml(p.id)}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
-
-    ${bilingualBox}
-    ${propHtml}
-
-    ${reactionHtml(p.id, '', p)}
-
-    <div class="comments-thread">
-      <button type="button" class="thread-sum${state.openThreads.has(p.id) ? ' open' : ''}" onclick="toggleThread(${jsArg(p.id)})">💬 ${(p.comments || []).length ? tr((p.comments || []).length + ' 則回覆', (p.comments || []).length + '件の返信') + ' ・ ' + escapeHtml((p.comments || [])[(p.comments || []).length - 1].author) + ' ' + escapeHtml(fmtDateWd((p.comments || [])[(p.comments || []).length - 1].date, colLang)) : tr('回覆', '返信')} <span>${state.openThreads.has(p.id) ? '▴' : '▾'}</span></button>
-      ${state.openThreads.has(p.id) ? `<div class="thread-body">
+  const nCm = (p.comments || []).length;
+  const threadOpen = state.openThreads.has(p.id);
+  const threadBody = threadOpen ? `<div class="thread-body">
       ${commentsHtml}
       <div id="rep-file-preview-${escapeHtml(p.id)}-${colLang}" style="display:none;margin-bottom:4px;"></div>
       <div class="comment-reply-row">
@@ -5064,7 +5062,41 @@ function createCard(p, colLang) {
         <input type="text" class="comment-reply-input" id="rep-${escapeHtml(p.id)}-${colLang}" placeholder="${colLang==='zh'?'輸入回覆...':'日本語で返信...'}" onkeydown="if(event.key==='Enter')submitReply(${jsArg(p.id)}, '${colLang}')">
         <button class="action-btn" onclick="submitReply(${jsArg(p.id)}, '${colLang}')">${colLang==='zh'?'送出':'返信'}</button>
       </div>
-      </div>` : ''}
+      </div>` : '';
+
+  card.innerHTML = `
+    <div class="msg-avatar">${escapeHtml(String(p.author || '').slice(0, 1))}</div>
+    <div class="msg-main">
+      <div class="msg-head">
+        <span class="msg-name">${escapeHtml(p.author)}</span>
+        <span class="msg-time">${escapeHtml(((/(\d{1,2}:\d{2})$/.exec(String(p.date || '')) || [])[1]) || fmtDateWd(p.date, colLang))}</span>
+        <span class="post-new-pill" data-pid="${escapeHtml(p.id)}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
+        <span class="post-tag">#${escapeHtml(p.tag)}</span>
+        ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
+      </div>
+      ${hideBody ? '' : `<div class="post-body-text">${bodyHtml}</div>`}
+      ${postAttachHtml}
+      ${attachmentsHtml(p.attachments)}
+      ${embedsHtml(p.zh)}
+      ${propHtml}
+      ${bilingualBox}
+      <div class="msg-foot">
+        <button type="button" class="thread-sum${threadOpen ? ' open' : ''}" onclick="toggleThread(${jsArg(p.id)})">💬 ${nCm ? tr(nCm + ' 則回覆', nCm + '件の返信') : tr('回覆', '返信')} <span>${threadOpen ? '▴' : '▾'}</span></button>
+        ${reactionHtml(p.id, '', p)}
+        <button class="btn-mini-trans" type="button" style="${hideBody ? 'display:none;' : ''}" onclick="togglePostTranslation(${jsArg(p.id)}, '${colLang}', this)">
+          <span title="${colLang === 'zh' ? '翻譯' : '翻訳'}">🌐</span>
+        </button>
+        <span class="msg-acts">
+          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="openEditPostModal(${jsArg(p.id)})" title="編輯">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>
+          </button>
+          <button class="action-btn" style="padding:2px 6px;border:none;color:var(--fg-subtle);" onclick="deletePost(${jsArg(p.id)})" title="刪除">
+            <svg class="icon icon-sm" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+          </button>
+        </span>
+      </div>
+      <div id="trans-box-post-${escapeHtml(p.id)}-${colLang}" class="inline-trans-bubble" style="display:none;"></div>
+      <div class="comments-thread">${threadBody}</div>
     </div>
   `;
   return card;
