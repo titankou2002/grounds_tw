@@ -557,7 +557,8 @@
     /* 1. FEED & COMPOSER */
     .split-desktop-view {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0, 860px);
+      justify-content: center;
       gap: 16px;
       align-items: start;
     }
@@ -2985,7 +2986,6 @@
     <!-- Settings Panel 0: Display Language -->
     <div id="stg-panel-lang">
       <div style="display:flex;flex-direction:column;gap:8px;">
-        <button type="button" class="stg-lang-btn" data-lang="bilingual" onclick="setAppLanguage('bilingual')">中日雙語對照</button>
         <button type="button" class="stg-lang-btn" data-lang="zh" onclick="setAppLanguage('zh')">純中文</button>
         <button type="button" class="stg-lang-btn" data-lang="ja" onclick="setAppLanguage('ja')">純日文</button>
       </div>
@@ -3239,7 +3239,7 @@ const LEGACY_BOARD_IDS = new Set(['board-1','board-2','board-3','board-4','board
 let state = {
   currentUser: 'Lynn',
   currentUserRole: 'tw',
-  langMode: 'bilingual', // 'bilingual', 'zh', 'ja'
+  langMode: 'zh', // 'zh', 'zh', 'ja'
   storeModalLang: 'bilingual',
   boardFilter: 'all',
   seen: { tw: 0, jp: 0 },
@@ -3411,7 +3411,7 @@ function loadAppState() {
   const deletedBoardIds = new Set((state.deletedLogs || []).filter(l => l.type === '決策議題').map(l => l.id));
 
   state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
-  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+  state.stores = state.stores.filter(s => !storeDeleted(s));
   state.boardTopics = (state.boardTopics || []).filter(t => !deletedBoardIds.has(t.id));
   if (state.posts.length === 0) {
     state.posts = [
@@ -3482,7 +3482,7 @@ function loadAppState() {
       }
     ].filter(p => !deletedPostIds.has(p.id));
   }
-  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+  state.stores = state.stores.filter(s => !storeDeleted(s));
 
   const params = new URLSearchParams(window.location.search);
   const token = params.get('token') || params.get('auth');
@@ -3494,7 +3494,7 @@ function loadAppState() {
     if (matched) {
       state.currentUser = matched.name;
       state.currentUserRole = matched.role;
-      state.langMode = matched.role === 'jp' ? 'ja' : 'bilingual';
+      state.langMode = matched.role === 'jp' ? 'ja' : 'zh';
     }
   } else if (legacyUser) {
     if (legacyUser.toLowerCase().includes('kana') || legacyUser.toLowerCase() === 'jp') {
@@ -3504,7 +3504,7 @@ function loadAppState() {
     } else {
       state.currentUser = 'Lynn';
       state.currentUserRole = 'tw';
-      state.langMode = 'bilingual';
+      state.langMode = 'zh';
     }
   }
 
@@ -3685,7 +3685,7 @@ function mergeFromCloud(data) {
 
   // 店面
   (Array.isArray(data.stores) ? data.stores : []).forEach(ss => {
-    if (deletedStoreIds.has(ss.id)) return;
+    if (storeDeleted(ss)) return;
     const ls = state.stores.find(x => x.id === ss.id);
     if (!ls) { state.stores.push(ss); res.updated = res.stores = true; return; }
     if (takeMigratedImages(ls, ss)) { res.updated = true; res.stores = true; }
@@ -3711,7 +3711,7 @@ function mergeFromCloud(data) {
   // 刪除過的一律清掉
   const n0 = state.posts.length + state.stores.length + state.boardTopics.length;
   state.posts = state.posts.filter(p => !deletedPostIds.has(p.id) && p.id !== 201 && p.id !== 202 && p.id !== 203);
-  state.stores = state.stores.filter(s => !deletedStoreIds.has(s.id));
+  state.stores = state.stores.filter(s => !storeDeleted(s));
   state.boardTopics = state.boardTopics.filter(t => !deletedBoardIds.has(t.id));
   if (state.posts.length + state.stores.length + state.boardTopics.length !== n0) res.updated = true;
   if (sanitizeTranslations()) { res.updated = true; res.stores = true; res.push = true; }
@@ -3837,6 +3837,22 @@ function updateUserUI() {
   applyLanguageLayout();
 }
 
+// --- 店面刪除紀錄：刪除之後「重新貼同一個網址」要能加回來 ---
+// 刪除紀錄有時間；店面的 addedAt 比刪除時間新，就不再被當成已刪除。
+function logTs(l) {
+  if (Number(l.ts) > 0) return Number(l.ts);
+  const m = /(\d{4})\/(\d{1,2})\/(\d{1,2})\s*(上午|下午)?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?/.exec(String(l.deletedAt || ''));
+  if (!m) return Infinity;
+  let hh = +m[5]; if (m[4] === '下午' && hh < 12) hh += 12; if (m[4] === '上午' && hh === 12) hh = 0;
+  return new Date(+m[1], +m[2] - 1, +m[3], hh, +m[6], +(m[7] || 0)).getTime();
+}
+function storeDeleted(s) {
+  const logs = (state.deletedLogs || []).filter(l => l.type === '店面物件' && l.id === s.id);
+  if (!logs.length) return false;
+  const ts = Math.max.apply(null, logs.map(logTs));
+  return !((Number(s.addedAt) || 0) > ts);
+}
+
 // --- Global One-Click Language Switcher (中文 / 日本語) ---
 function setAppLanguage(lang) {
   state.langMode = lang;
@@ -3911,7 +3927,7 @@ function toggleActiveMember() {
   const nextMember = state.members[nextIdx];
   state.currentUser = nextMember.name;
   state.currentUserRole = nextMember.role;
-  state.langMode = nextMember.role === 'jp' ? 'ja' : 'bilingual';
+  state.langMode = nextMember.role === 'jp' ? 'ja' : 'zh';
   updateUserUI();
   renderFeeds();
 }
@@ -4766,7 +4782,7 @@ async function submitFeedPost() {
               activeImgIdx: 0,
               sourceType: platform
             };
-            state.stores.unshift(storeObj);
+            storeObj.addedAt = Date.now(); state.stores.unshift(storeObj);
           }
         } else if (!storeObj) {
           // Backend scrape or fallback
@@ -4783,7 +4799,7 @@ async function submitFeedPost() {
 
           storeObj = makeStoreFromSource({ id: finalPropId, platform, name, rawId, url: matchedUrl, src: fetched });
           flagUnverified(storeObj, false);
-          state.stores.unshift(storeObj);
+          storeObj.addedAt = Date.now(); state.stores.unshift(storeObj);
           geocodeStoreIfNeeded(storeObj);
         }
       }
@@ -5418,7 +5434,7 @@ function executeDeleteConfirmed() {
           id: id,
           title: post.zh.slice(0, 30) + '...',
           deletedBy: state.currentUser,
-          deletedAt: new Date().toLocaleString(),
+          deletedAt: new Date().toLocaleString(), ts: Date.now(),
           reason: reason
         });
         state.posts = state.posts.filter(p => p.id !== id);
@@ -5434,7 +5450,7 @@ function executeDeleteConfirmed() {
           id: id,
           title: item.title,
           deletedBy: state.currentUser,
-          deletedAt: new Date().toLocaleString(),
+          deletedAt: new Date().toLocaleString(), ts: Date.now(),
           reason: reason
         });
         state.stores = state.stores.filter(s => s.id !== id);
@@ -5457,7 +5473,7 @@ function executeDeleteConfirmed() {
         id: id,
         title: titleText,
         deletedBy: state.currentUser,
-        deletedAt: new Date().toLocaleString(),
+        deletedAt: new Date().toLocaleString(), ts: Date.now(),
         reason: reason
       });
       state.boardTopics = (state.boardTopics || []).filter(t => t.id !== id);
@@ -6680,7 +6696,7 @@ async function parseAndAddStoreDirect() {
     if (existingIdx >= 0) {
       state.stores[existingIdx] = storeObj;
     } else {
-      state.stores.unshift(storeObj);
+      storeObj.addedAt = Date.now(); state.stores.unshift(storeObj);
     }
     geocodeStoreIfNeeded(storeObj);
 
@@ -6790,7 +6806,7 @@ async function confirmSaveAgencySheet() {
   if (existingIdx >= 0) {
     state.stores[existingIdx] = storeObj;
   } else {
-    state.stores.unshift(storeObj);
+    storeObj.addedAt = Date.now(); state.stores.unshift(storeObj);
   }
   geocodeStoreIfNeeded(storeObj);
 
@@ -8044,7 +8060,7 @@ function startPreview(name) {
   state.previewing = true;
   state.currentUser = m.name;
   state.currentUserRole = m.role;
-  state.langMode = m.role === 'jp' ? 'ja' : 'bilingual';
+  state.langMode = m.role === 'jp' ? 'ja' : 'zh';
   state.compareModalLang = state.langMode === 'ja' ? 'ja' : 'bilingual';
   state.storeModalLang = state.compareModalLang;
   applyIdentityView();
@@ -8054,7 +8070,7 @@ function endPreview() {
   state.previewing = false;
   state.currentUser = state.realUser;
   state.currentUserRole = state.realRole;
-  state.langMode = 'bilingual';
+  state.langMode = 'zh';
   state.compareModalLang = 'bilingual';
   state.storeModalLang = 'bilingual';
   applyIdentityView();

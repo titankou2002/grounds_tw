@@ -94,13 +94,31 @@ function wl_merge_topic($old, $new) {
     if ($dead) $base['delC'] = array_values($dead);
     return $base;
 }
+// 刪除紀錄的時間（毫秒）。解析不出來就當成最新（刪除優先）。
+function wl_log_ts($l) {
+    if (is_numeric($l['ts'] ?? null) && $l['ts'] > 0) return (int)$l['ts'];
+    if (preg_match('#(\d{4})/(\d{1,2})/(\d{1,2})\s*(上午|下午)?\s*(\d{1,2}):(\d{2})(?::(\d{2}))?#u', (string)($l['deletedAt'] ?? ''), $m)) {
+        $hh = (int)$m[5];
+        if ($m[4] === '下午' && $hh < 12) $hh += 12;
+        if ($m[4] === '上午' && $hh === 12) $hh = 0;
+        $d = new DateTime(sprintf('%04d-%02d-%02d %02d:%02d:%02d', $m[1], $m[2], $m[3], $hh, $m[6], $m[7] ?? 0), new DateTimeZone('Asia/Taipei'));
+        return $d->getTimestamp() * 1000;
+    }
+    return PHP_INT_MAX;
+}
+// $dead[id] 是 true（一律刪）或時間（店面：addedAt 比它新就視為重新加入）
+function wl_is_dead($x, $id, $dead) {
+    if (!isset($dead[$id])) return false;
+    $ts = $dead[$id];
+    return !(is_int($ts) && (int)($x['addedAt'] ?? 0) > $ts);
+}
 function wl_merge_by_id($old, $new, $fn, $dead) {
     $m = [];
-    foreach ((is_array($old) ? $old : []) as $x) { if (is_array($x) && isset($x['id']) && !isset($dead[(string)$x['id']])) $m[(string)$x['id']] = $x; }
+    foreach ((is_array($old) ? $old : []) as $x) { if (is_array($x) && isset($x['id']) && !wl_is_dead($x, (string)$x['id'], $dead)) $m[(string)$x['id']] = $x; }
     foreach ((is_array($new) ? $new : []) as $x) {
         if (!is_array($x) || !isset($x['id'])) continue;
         $id = (string)$x['id'];
-        if (isset($dead[$id])) continue;
+        if (wl_is_dead($x, $id, $dead)) continue;
         $m[$id] = isset($m[$id]) ? $fn($m[$id], $x) : $x;
     }
     return array_values($m);
@@ -115,7 +133,13 @@ function wl_merge_state($old, $new) {
         if (!isset($dl[$k])) $dl[$k] = $l; elseif (!empty($l['hidden'])) $dl[$k]['hidden'] = true;
     }
     $dead = ['工作動態' => [], '店面物件' => [], '決策議題' => []];
-    foreach ($dl as $l) { if (isset($dead[$l['type'] ?? ''])) $dead[$l['type']][(string)$l['id']] = true; }
+    foreach ($dl as $l) {
+        $t = $l['type'] ?? '';
+        if (!isset($dead[$t])) continue;
+        $k = (string)$l['id'];
+        if ($t === '店面物件') { $ts = wl_log_ts($l); $dead[$t][$k] = max($dead[$t][$k] ?? 0, $ts); }
+        else $dead[$t][$k] = true;
+    }
     $out['deletedLogs'] = array_values($dl);
     $posts = wl_merge_by_id($old['posts'] ?? [], $new['posts'] ?? [], 'wl_merge_post', $dead['工作動態']);
     foreach ($posts as $i => $pp) { if (!empty($pp['comments'])) $posts[$i]['comments'] = wl_merge_comments($pp['comments'], []); }   // 舊回覆補 id、去重
