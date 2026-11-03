@@ -2312,6 +2312,11 @@
     .es-g3.es-g3b { grid-template-columns:2fr 1fr 1fr; }
     .es-bigta { min-height:170px; max-height:50vh; field-sizing:content; line-height:1.55; font-size:13.5px; }
     @media (max-width:600px) { .es-g3, .es-g3.es-g3b { grid-template-columns:1fr 1fr; } }
+    .stage-chip { display:inline-flex; align-items:center; font-size:10.5px; font-weight:800; padding:1px 7px; border-radius:10px; white-space:nowrap; flex-shrink:0; background:#fef3c7; color:#92400e; }
+    .stage-chip.st-cand { background:#dbeafe; color:#1e40af; }
+    .stage-chip.st-sign { background:#dcfce7; color:#166534; }
+    .stage-chip.st-out { background:#f1f5f9; color:#64748b; text-decoration:line-through; }
+    #m-store-stage { font-size:12.5px; font-weight:700; border:1px solid var(--border); border-radius:6px; padding:2px 6px; background:#fff; }
     .feed-dist-chip { display:inline-flex; align-items:center; gap:4px; align-self:center; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; white-space:nowrap; }
     .feed-dist-chip i { width:7px; height:7px; border-radius:50%; display:inline-block; }
     .feed-dist-chip.active { background:#0f1419; color:#fff; border-color:#0f1419; }
@@ -2606,6 +2611,7 @@
 
     <div class="sd-pane active" id="sd-pane-info">
       <div class="sd-facts">
+        <span><strong>決策狀態：</strong><select id="m-store-stage" onchange="setStoreStage(this.value)"><option value="">未設定</option><option value="待聯絡">待聯絡</option><option value="待看屋">待看屋</option><option value="已看屋">已看屋</option><option value="條件確認中">條件確認中</option><option value="候選">候選</option><option value="淘汰">淘汰</option><option value="已簽約">已簽約</option></select></span>
         <span><strong id="lbl-store-freerent">裝潢免租期：</strong><span id="m-store-freerent">--</span> <span id="m-store-freerent-ja" style="font-size:11px;color:var(--fg-muted);"></span></span>
         <span><strong id="lbl-store-canreg">營業登記：</strong><span id="m-store-canreg">--</span> <span id="m-store-canreg-ja" style="font-size:11px;color:var(--fg-muted);"></span></span>
         <span><strong id="lbl-store-caninvoice">稅籍開立發票：</strong><span id="m-store-caninvoice">--</span> <span id="m-store-caninvoice-ja" style="font-size:11px;color:var(--fg-muted);"></span></span>
@@ -2752,6 +2758,12 @@
       <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">刊登月租 (元/月)</label><input type="number" id="es-rent" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
       <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用坪數 (坪)</label><input type="number" step="0.1" id="es-area" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
       <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">押金 (元)</label><input type="number" id="es-deposit" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
+    </div>
+
+    <div class="es-g3">
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">增建坪數（選填）</label><input type="number" step="0.1" id="es-areaextra" class="composer-textarea" style="min-height:34px;padding:5px 9px;" placeholder="違建、加蓋等"></div>
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">房東實收月租（選填）</label><input type="number" id="es-ownerrent" class="composer-textarea" style="min-height:34px;padding:5px 9px;" placeholder="未扣繳前"></div>
+      <div></div>
     </div>
 
     <div style="margin-bottom:10px;">
@@ -4986,6 +4998,22 @@ function feedDistrictRank(p) {
   const d = feedDistrictOf(p), i = d ? allDistricts().indexOf(d) : -1;
   return i < 0 ? 999 : i;
 }
+const STAGE_JA = { '待聯絡': '連絡待ち', '待看屋': '内見待ち', '已看屋': '内見済み', '條件確認中': '条件確認中', '候選': '候補', '淘汰': '見送り', '已簽約': '契約済み' };
+function stageChipHtml(s, ja) {
+  if (!s || !s.stage) return '';
+  const cls = s.stage === '候選' ? ' st-cand' : s.stage === '已簽約' ? ' st-sign' : s.stage === '淘汰' ? ' st-out' : '';
+  return `<span class="stage-chip${cls}" title="${ja ? '意思決定ステータス' : '決策狀態'}">${escapeHtml(ja ? (STAGE_JA[s.stage] || s.stage) : s.stage)}</span>`;
+}
+function setStoreStage(v) {
+  const s = state.stores.find(x => x.id === state.activeDetailStoreId);
+  if (!s) return;
+  if (v) s.stage = v; else delete s.stage;
+  s.editedAt = Date.now();
+  postStoreEdit(s.id, { stage: v || '' });
+  saveAppState();
+  renderStores();
+  renderFeeds();
+}
 function toggleFeedDistrictSort() { state.feedDistrictSort = !state.feedDistrictSort; renderFeeds(); }
 
 function renderFeeds() {
@@ -5150,7 +5178,7 @@ function createCard(p, colLang) {
           ${thumb ? `<img src="${escapeHtml(thumb)}" class="feed-591-thumb" alt="店面照">` : ''}
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;min-width:0;">
-              <span class="store-tag ${safeClass(prop.status || 'candidate')}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${escapeHtml(pLabel)}</span>              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${escapeHtml(dispTitle)}">${escapeHtml(dispTitle)}</div>
+              <span class="store-tag ${safeClass(prop.status || 'candidate')}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${escapeHtml(pLabel)}</span>${stageChipHtml(prop, isJaCol)}              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${escapeHtml(dispTitle)}">${escapeHtml(dispTitle)}</div>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${fmtWan(prop.rent)}萬</strong> (約 ${jpyRentWan}万円)</span>
@@ -5662,13 +5690,15 @@ function openStoreDetailModal(storeId) {
 
   const nn = hasNums(s);
   document.getElementById('m-store-rent').textContent = nn ? `NT$ ${rentWan} 萬` : '—';
-  document.getElementById('m-store-rent-ja').textContent = nn ? `（約 ${rentJpyWan} 万円/月）` : '';
+  document.getElementById('m-store-rent-ja').textContent = nn ? (Number(s.ownerRent) > 0 ? tr(`房東實收 ${fmtWan(s.ownerRent)} 萬；承租方實付 ${rentWan} 萬`, `大家受取 ${fmtWan(s.ownerRent)} 万；借主負担 ${rentWan} 万`) : `（約 ${rentJpyWan} 万円/月）`) : '';
 
   document.getElementById('m-store-area').textContent = nn ? `${areaPing} 坪` : '—';
-  document.getElementById('m-store-area-ja').textContent = nn ? `（約 ${areaSqm} ㎡）` : '';
+  const exA = Number(s.areaExtra) > 0 ? Number(s.areaExtra) : 0;
+  document.getElementById('m-store-area-ja').textContent = nn ? (exA ? tr(`合法 ${areaPing} ＋ 增建 ${fmtPing(exA)} ＝ 實際可用 ${fmtPing(Number(s.area) + exA)} 坪`, `登記 ${areaPing} ＋ 増築 ${fmtPing(exA)} ＝ 実使用 ${fmtPing(Number(s.area) + exA)} 坪`) : `（約 ${areaSqm} ㎡）`) : '';
 
   document.getElementById('m-store-unitprice').textContent = nn ? `NT$ ${unitPrice.toLocaleString()} /坪` : '—';
-  document.getElementById('m-store-unitprice-ja').textContent = nn ? `（約 ${unitJpy} 円/坪）` : '';
+  document.getElementById('m-store-unitprice-ja').textContent = nn ? (exA ? tr(`以合法坪數計；含增建約 NT$ ${Math.round(Number(s.rent) / (Number(s.area) + exA)).toLocaleString()}/坪`, `登記坪数ベース。増築込み 約 NT$ ${Math.round(Number(s.rent) / (Number(s.area) + exA)).toLocaleString()}/坪`) : `（約 ${unitJpy} 円/坪）`) : '';
+  const stSel = document.getElementById('m-store-stage'); if (stSel) stSel.value = s.stage || '';
 
 
   const depNum = Number(s.deposit) > 0;
@@ -6372,6 +6402,8 @@ function openEditStoreModal() {
   const esH = document.querySelector('#edit-store-modal h3'); if (esH) esH.textContent = s.draft ? tr('手動新增店面', '店舗を手動で追加') : tr('編輯店面數據與規格', '店舗データ・仕様の編集');
   document.getElementById('es-rent').value = s.rent || '';
   document.getElementById('es-area').value = s.area || '';
+  document.getElementById('es-areaextra').value = s.areaExtra || '';
+  document.getElementById('es-ownerrent').value = s.ownerRent || '';
   document.getElementById('es-title').value = s.title || '';
   document.getElementById('es-address').value = s.address || '';
   document.getElementById('es-district').value = districtOf(s);
@@ -6513,6 +6545,8 @@ async function saveEditedStore() {
   const dist = document.getElementById('es-district').value.trim().slice(0, 20);
   const fr = document.getElementById('es-freerent').value.trim() || s.freeRent;
   const dep = parseInt(document.getElementById('es-deposit').value) || s.deposit;
+  const exArea = parseFloat(document.getElementById('es-areaextra').value) || 0;
+  const ownRent = parseInt(document.getElementById('es-ownerrent').value) || 0;
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
   const cons = document.getElementById('es-cons').value.trim() || s.cons;
 
@@ -6545,6 +6579,8 @@ async function saveEditedStore() {
     if (dist) s.district = dist; else delete s.district;
     s.freeRent = fr;
     s.deposit = dep;
+    if (exArea > 0) s.areaExtra = exArea; else delete s.areaExtra;
+    if (ownRent > 0) s.ownerRent = ownRent; else delete s.ownerRent;
     s.pros = pros;
     s.cons = cons;
     if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
@@ -6559,7 +6595,7 @@ async function saveEditedStore() {
     const orderRes = await fetch('api_edit.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'img_set', id: s.id, images: s.images }) });
     const orderJson = await orderRes.json();
     if (!orderJson || !orderJson.success) throw new Error('order');
-    postStoreEdit(s.id, { title: s.title, address: s.address, district: s.district || '', rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
+    postStoreEdit(s.id, { title: s.title, address: s.address, district: s.district || '', rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, areaExtra: exArea > 0 ? exArea : null, ownerRent: ownRent > 0 ? ownRent : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
     if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }
     geocodeStoreIfNeeded(s);
     if (wasDraft) {

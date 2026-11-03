@@ -7,7 +7,7 @@ require_once __DIR__ . '/lib_images.php';
 require_once __DIR__ . '/lib_overrides.php';
 
 $SHARE_DIR = __DIR__ . '/compare_shares';
-$SHARE_KEYS = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','district','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
+$SHARE_KEYS = ['id','title','titleJa','address','lat','lng','rent','area','deposit','freeRent','pros','prosJa','cons','consJa','images','status','statusLabel','district','areaExtra','ownerRent','stage','canRegister','canInvoice','url','unverified','depositText','floor','coverImg'];
 $MAX_STORES = 8;
 $MAX_FILE_BYTES = 400 * 1024;
 $MAX_SHARES = 300;
