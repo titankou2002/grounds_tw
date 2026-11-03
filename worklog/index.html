@@ -2091,7 +2091,9 @@
     .stg-size-row button { width:44px; height:40px; font-size:15px; font-weight:800; border:1px solid var(--border); background:#fff; border-radius:10px; cursor:pointer; }
     /* ===== 發文卡片縮小成一行、工時選單 ===== */
     .sr-only { position:absolute; width:1px; height:1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; }
-    .composer-meta-row.cmp-one-row { display:flex; flex-wrap:nowrap; align-items:center; gap:6px; }
+    .composer-meta-row.cmp-one-row { display:flex; flex-wrap:wrap; align-items:center; gap:6px; }
+    .cmp-one-row .cmp-extra { margin-top:0; flex-wrap:nowrap; }
+    @media (max-width:600px) { .cmp-one-row .cmp-extra { order:3; flex-basis:100%; margin-top:2px; } }
     .cmp-icon-btn, .composer-post-btn.cmp-send { flex:0 0 auto; width:34px; height:34px; padding:0; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; }
     .cmp-icon-btn svg, .composer-post-btn.cmp-send svg { width:18px; height:18px; flex:0 0 18px; }
     .cmp-icon-btn { border:1px solid var(--border); background:#fff; cursor:pointer; }
@@ -2439,15 +2441,15 @@
                 <option value="進口物流">#進口物流</option>
                 <option value="__ADD_NEW__">＋ 新增條件...</option>
               </select>
+              <div class="cmp-extra">
+              <input type="date" id="post-day" class="cmp-date" title="發生日（可改成過去的日期）" aria-label="發生日">
+              <input type="number" id="post-hours-custom" class="cmp-date" min="1" max="1440" step="5" placeholder="分鐘" style="display:none;width:78px;">
+              <button type="button" class="cmp-mini" onclick="openReportSummary()">匯出</button>
+            </div>
               <button class="composer-post-btn cmp-send" type="button" id="btn-submit-post" onclick="submitFeedPost()" aria-label="發布">
                 <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
                 <span id="btn-submit-post-label" class="sr-only">發布</span>
               </button>
-            </div>
-            <div class="cmp-extra">
-              <input type="date" id="post-day" class="cmp-date" title="發生日（可改成過去的日期）" aria-label="發生日">
-              <input type="number" id="post-hours-custom" class="cmp-date" min="1" max="1440" step="5" placeholder="分鐘" style="display:none;width:78px;">
-              <button type="button" class="cmp-mini" onclick="openReportSummary()">工時總表・匯出</button>
             </div>
           </div>
 
