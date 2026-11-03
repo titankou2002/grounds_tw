@@ -114,12 +114,17 @@ $user = "已知資料：\n" . json_encode($facts, JSON_UNESCAPED_UNICODE) . "\n\
 if (!$ok) out(['success' => false, 'error' => $res]);
 $a = strpos($res, '{'); $b = strrpos($res, '}');
 $j = ($a !== false && $b !== false) ? json_decode(substr($res, $a, $b - $a + 1), true) : null;
-$pros = is_array($j) && is_string($j['pros'] ?? null) ? trim(mb_substr($j['pros'], 0, 3000)) : '';
-$cons = is_array($j) && is_string($j['cons'] ?? null) ? trim(mb_substr($j['cons'], 0, 3000)) : '';
+// 模型有時把每點拆成陣列回傳，統一轉成「• 」開頭的多行文字
+$as_text = function ($v) {
+    if (is_array($v)) $v = implode("\n", array_map(function ($x) { $x = trim((string)$x); return $x === '' ? '' : (preg_match('/^[•\-*]/u', $x) ? $x : '• ' . $x); }, $v));
+    return is_string($v) ? trim(mb_substr($v, 0, 3000)) : '';
+};
+$pros = is_array($j) ? $as_text($j['pros'] ?? null) : '';
+$cons = is_array($j) ? $as_text($j['cons'] ?? null) : '';
 $fields = [];
 if ($needP && $pros !== '') $fields['pros'] = $pros;
 if ($needC && $cons !== '') $fields['cons'] = $cons;
-if (!$fields) out(['success' => false, 'error' => 'bad_output']);
+if (!$fields) out(['success' => false, 'error' => 'bad_output', 'raw' => mb_substr((string)$res, 0, 400)]);
 
 $fp = fopen(WL_OV_FILE, 'c+');
 flock($fp, LOCK_EX);
