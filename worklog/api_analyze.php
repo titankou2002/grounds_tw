@@ -124,7 +124,7 @@ $cons = is_array($j) ? $as_text($j['cons'] ?? null) : '';
 $fields = [];
 if ($needP && $pros !== '') $fields['pros'] = $pros;
 if ($needC && $cons !== '') $fields['cons'] = $cons;
-if (!$fields) out(['success' => false, 'error' => 'bad_output', 'raw' => mb_substr((string)$res, 0, 400)]);
+if (!$fields) out(['success' => false, 'error' => 'bad_output', 'jerr' => json_last_error_msg(), 'len' => strlen($res), 'tail' => mb_substr((string)$res, -300)]);
 
 $fp = fopen(WL_OV_FILE, 'c+');
 flock($fp, LOCK_EX);
