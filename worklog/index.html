@@ -6785,6 +6785,7 @@ function handleAgencySheetUpload(event) {
   reader.onload = function(e) {
     currentAgencyImgData = e.target.result;
     document.getElementById('ag-preview-img').src = currentAgencyImgData;
+    document.getElementById('ag-preview-img').style.display = '';
     
     // 不預填任何數字：金額、坪數、押金一律由人依房仲資料表填入
     ['ag-code','ag-title','ag-address','ag-rent','ag-area','ag-deposit','ag-freerent','ag-specs','ag-license','ag-pros','ag-cons'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
@@ -6797,7 +6798,7 @@ function handleAgencySheetUpload(event) {
 function openManualStore() {
   currentAgencyImgData = '';
   const img = document.getElementById('ag-preview-img');
-  if (img) img.removeAttribute('src');
+  if (img) { img.removeAttribute('src'); img.style.display = 'none'; }
   ['ag-code','ag-title','ag-address','ag-rent','ag-area','ag-deposit','ag-freerent','ag-specs','ag-license','ag-pros','ag-cons'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
   openAgencyModal();
   const t = document.getElementById('ag-title'); if (t) t.focus();
