@@ -2308,6 +2308,10 @@
       .nav-tabs { display: none !important; }
       .split-desktop-view { grid-template-columns: minmax(0, 1fr); }
     }
+    .es-g3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; margin-bottom:10px; }
+    .es-g3.es-g3b { grid-template-columns:2fr 1fr 1fr; }
+    .es-bigta { min-height:170px; max-height:50vh; field-sizing:content; line-height:1.55; font-size:13.5px; }
+    @media (max-width:600px) { .es-g3, .es-g3.es-g3b { grid-template-columns:1fr 1fr; } }
     .feed-dist-chip { display:inline-flex; align-items:center; gap:4px; align-self:center; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; white-space:nowrap; }
     .feed-dist-chip i { width:7px; height:7px; border-radius:50%; display:inline-block; }
     .feed-dist-chip.active { background:#0f1419; color:#fff; border-color:#0f1419; }
@@ -2737,58 +2741,37 @@
 
 <!-- Edit Store Modal (編輯店面數據：月租、坪數、條件) -->
 <div class="modal-overlay" id="edit-store-modal">
-  <div class="modal-content-box" style="max-width:580px;">
+  <div class="modal-content-box" style="max-width:780px;">
     <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border);padding-bottom:10px;margin-bottom:12px;">
       <h3 style="font-size:15px;font-weight:800;">編輯店面數據與規格</h3>
       <button class="action-btn" onclick="closeEditStoreModal()">關閉</button>
     </div>
 
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div>
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">刊登月租 (元/月)：</label>
-        <input type="number" id="es-rent" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
-      </div>
-      <div>
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">使用坪數 (坪)：</label>
-        <input type="number" step="0.1" id="es-area" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
-      </div>
+    <div class="es-g3">
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">刊登月租 (元/月)</label><input type="number" id="es-rent" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">使用坪數 (坪)</label><input type="number" step="0.1" id="es-area" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">押金 (元)</label><input type="number" id="es-deposit" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
     </div>
 
-    <div style="margin-bottom:12px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">店面標題：</label>
-      <input type="text" id="es-title" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
+    <div style="margin-bottom:10px;">
+      <label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">店面標題</label>
+      <input type="text" id="es-title" class="composer-textarea" style="min-height:34px;padding:5px 9px;">
     </div>
 
-    <div style="margin-bottom:12px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">店面地址：</label>
-      <input type="text" id="es-address" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
-    </div>
-
-    <div style="margin-bottom:12px;">
-      <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">商圈：<span style="font-weight:400;color:var(--fg-muted);">（選一個，或直接輸入新的）</span></label>
-      <input type="text" id="es-district" list="es-district-list" class="composer-textarea" style="min-height:36px;padding:6px 10px;" placeholder="例如：赤峰">
-      <datalist id="es-district-list"></datalist>
-    </div>
-
-    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-      <div>
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">裝潢免租期：</label>
-        <input type="text" id="es-freerent" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
-      </div>
-      <div>
-        <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">押金需求 (元)：</label>
-        <input type="number" id="es-deposit" class="composer-textarea" style="min-height:36px;padding:6px 10px;">
-      </div>
+    <div class="es-g3 es-g3b">
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">店面地址</label><input type="text" id="es-address" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">商圈</label><input type="text" id="es-district" list="es-district-list" class="composer-textarea" style="min-height:34px;padding:5px 9px;" placeholder="選一個或輸入新的"><datalist id="es-district-list"></datalist></div>
+      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">裝潢免租期</label><input type="text" id="es-freerent" class="composer-textarea" style="min-height:34px;padding:5px 9px;"></div>
     </div>
 
     <div style="margin-bottom:12px;">
       <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;">優點：</label>
-      <textarea id="es-pros" class="composer-textarea" style="min-height:60px;"></textarea>
+      <textarea id="es-pros" class="composer-textarea es-bigta"></textarea>
     </div>
 
     <div style="margin-bottom:16px;">
       <label style="font-size:12px;font-weight:700;display:block;margin-bottom:4px;color:var(--danger);">注意：</label>
-      <textarea id="es-cons" class="composer-textarea" style="min-height:60px;"></textarea>
+      <textarea id="es-cons" class="composer-textarea es-bigta"></textarea>
     </div>
 
     <div style="margin-bottom:16px;">
