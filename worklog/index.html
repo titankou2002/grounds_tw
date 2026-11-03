@@ -2306,6 +2306,16 @@
       .nav-tabs { display: none !important; }
       .split-desktop-view { grid-template-columns: minmax(0, 1fr); }
     }
+    .feed-dist-chip { display:inline-flex; align-items:center; gap:4px; align-self:center; padding:1px 8px; border-radius:10px; font-size:11px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; white-space:nowrap; }
+    .feed-dist-chip i { width:7px; height:7px; border-radius:50%; display:inline-block; }
+    .feed-dist-chip.active { background:#0f1419; color:#fff; border-color:#0f1419; }
+    #dual-tools { display:none; gap:8px; align-items:center; }
+    @media (min-width: 1280px) {
+      #dual-tools { display:flex; }
+      main.main-body > #tab-store #quick-store-url, main.main-body > #tab-store .store-add-bar .btn-submit, main.main-body > #tab-store #btn-open-compare { display: none !important; }
+    }
+    .cmp-pick-row { display:flex; align-items:center; gap:10px; padding:9px 4px; border-bottom:1px solid var(--border); cursor:pointer; font-size:13px; }
+    .cmp-pick-row i { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
     /* ===== MAP 列表 v2：商圈分組、兩行卡片 ===== */
     .dist-bar { display:flex; gap:6px; flex-wrap:wrap; margin-top:8px; }
     .dist-chip-btn { display:inline-flex; align-items:center; gap:5px; padding:3px 10px; border-radius:16px; font-size:11.5px; font-weight:700; border:1px solid var(--border); background:#fff; color:var(--fg); cursor:pointer; }
@@ -2465,6 +2475,10 @@
     <section id="tab-store" class="view-panel" style="display:none;">
       <div class="store-add-bar">
         <div style="display:flex;gap:8px;align-items:center;width:100%;flex-wrap:wrap;">
+          <div id="dual-tools">
+            <button type="button" class="action-btn" onclick="openComparePick()"><span>比較</span><span id="dual-cmp-count" style="margin-left:4px;font-weight:800;"></span></button>
+            <button type="button" class="action-btn" id="btn-ai-analyze" onclick="runAiAnalysisAll()"><span>AI 解析</span></button>
+          </div>
           <input type="text" class="store-add-input" id="quick-store-url" placeholder="貼上房仲網址">
           <button class="btn-submit" onclick="parseAndAddStoreDirect()">
             <svg class="icon icon-sm" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
@@ -2903,6 +2917,20 @@
 </div>
 
 <!-- Comparison Matrix Modal -->
+<div class="modal-overlay" id="cmp-pick-modal" onclick="if(event.target===this)closeComparePick()">
+  <div class="modal-content-box" style="width:min(94vw,520px);">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;">
+      <div style="font-size:16px;font-weight:800;">選要比較的店面</div>
+      <button type="button" class="action-btn" onclick="closeComparePick()">✕</button>
+    </div>
+    <div id="cmp-pick-list"></div>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button type="button" class="action-btn" style="flex:1;" onclick="state.selectedStoresForCompare=[];renderStores();renderComparePick()">清除</button>
+      <button type="button" class="action-btn" id="cmp-pick-go" style="flex:2;background:#111;color:#fff;font-weight:700;" onclick="closeComparePick();openCompareModal()">查看比較表</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="compare-modal">
   <div class="modal-content-box compare-modal-box" style="width:min(98vw, 1300px);max-width:1300px;">
     <div class="cmp-toolbar">
@@ -4962,6 +4990,18 @@ function monthSummaryEl(lang) {
   return el;
 }
 
+// 貼文裡第一間店的商圈（左邊 REPORT 的商圈標籤與排序用）
+function feedDistrictOf(p) {
+  const ids = (p.propIds && p.propIds.length) ? p.propIds : (p.propId ? [p.propId] : []);
+  for (const id of ids) { const s = state.stores.find(x => x.id === id); if (s && districtOf(s)) return districtOf(s); }
+  return '';
+}
+function feedDistrictRank(p) {
+  const d = feedDistrictOf(p), i = d ? allDistricts().indexOf(d) : -1;
+  return i < 0 ? 999 : i;
+}
+function toggleFeedDistrictSort() { state.feedDistrictSort = !state.feedDistrictSort; renderFeeds(); }
+
 function renderFeeds() {
   sortPostsByStamp();
   ensureStoreJa();
@@ -4985,14 +5025,16 @@ function renderFeeds() {
   const dayStat = {};
   state.posts.forEach(p => { const d = postDayKey(p); const o = dayStat[d] || (dayStat[d] = { n: 0, h: 0 }); o.n++; o.h += Number(p.hours) || 0; });
   let lastDay = null;
-  state.posts.forEach(p => {
-    const d = postDayKey(p);
+  const bySd = !!state.feedDistrictSort;
+  const feedList = bySd ? state.posts.map((p, i) => [p, i]).sort((a, b) => (feedDistrictRank(a[0]) - feedDistrictRank(b[0])) || (a[1] - b[1])).map(x => x[0]) : state.posts;
+  feedList.forEach(p => {
+    const d = bySd ? (feedDistrictOf(p) || '未分商圈') : postDayKey(p);
     if (d !== lastDay) {
       lastDay = d;
       [['zh', zhBox], ['ja', jaBox]].forEach(([lg, box]) => {
         const el = document.createElement('div');
         el.className = 'day-div';
-        el.textContent = `${fmtDateWd(d, lg)}　${dayStat[d].n}${lg === 'ja' ? '件' : '筆'}・${rpH(dayStat[d].h)}`;
+        el.textContent = bySd ? d : `${fmtDateWd(d, lg)}　${dayStat[d].n}${lg === 'ja' ? '件' : '筆'}・${rpH(dayStat[d].h)}`;
         box.appendChild(el);
       });
     }
@@ -5122,9 +5164,7 @@ function createCard(p, colLang) {
           ${thumb ? `<img src="${escapeHtml(thumb)}" class="feed-591-thumb" alt="店面照">` : ''}
           <div style="flex:1;min-width:0;">
             <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px;min-width:0;">
-              <span class="store-tag ${safeClass(prop.status || 'candidate')}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${escapeHtml(pLabel)}</span>
-              ${districtOf(prop) ? `<span style="display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:1px 7px;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--fg);white-space:nowrap;flex-shrink:0;"><i style="width:7px;height:7px;border-radius:50%;background:${districtColor(districtOf(prop))};display:inline-block;"></i>${escapeHtml(districtOf(prop))}</span>` : ''}
-              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${escapeHtml(dispTitle)}">${escapeHtml(dispTitle)}</div>
+              <span class="store-tag ${safeClass(prop.status || 'candidate')}" style="font-size:10px;padding:1px 6px;line-height:1.2;background:#111;color:#fff;border-color:#111;">${escapeHtml(pLabel)}</span>              <div style="font-size:13px;font-weight:800;color:var(--fg);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1;min-width:0;" title="${escapeHtml(dispTitle)}">${escapeHtml(dispTitle)}</div>
             </div>
             <div style="font-size:11.5px;color:var(--fg-muted);margin:3px 0;line-height:1.4;display:flex;align-items:center;gap:6px;flex-wrap:wrap;">
               <span class="metric-pill ${getRentColorClass(prop.rent)}">${isJaCol ? '月額賃料' : '月租'}: <strong>NT$ ${fmtWan(prop.rent)}萬</strong> (約 ${jpyRentWan}万円)</span>
@@ -5240,6 +5280,7 @@ function createCard(p, colLang) {
         <span class="msg-name">${escapeHtml(p.author)}</span>
         <span class="msg-time">${escapeHtml(((/(\d{1,2}:\d{2})$/.exec(String(p.date || '')) || [])[1]) || fmtDateWd(p.date, colLang))}</span>
         <span class="post-new-pill" data-pid="${escapeHtml(p.id)}"${postIsNew(p) ? '' : ' hidden'}>NEW</span>
+        ${feedDistrictOf(p) ? `<button type="button" class="feed-dist-chip${state.feedDistrictSort ? ' active' : ''}" onclick="toggleFeedDistrictSort()" title="${state.feedDistrictSort ? '回復時間排序' : '依商圈排序'}"><i style="background:${districtColor(feedDistrictOf(p))}"></i>${escapeHtml(feedDistrictOf(p))}</button>` : ''}
         <span class="post-tag">#${escapeHtml(p.tag)}</span>
         ${Number(p.hours) > 0 ? `<span class="hours-tag">${fmtHours(p.hours, colLang)}</span>` : ''}
       </div>
@@ -6872,10 +6913,31 @@ function toggleCompareStore(storeId) {
   renderStores();
 }
 
+function openComparePick() { renderComparePick(); document.getElementById('cmp-pick-modal').classList.add('open'); }
+function closeComparePick() { document.getElementById('cmp-pick-modal').classList.remove('open'); }
+function renderComparePick() {
+  const box = document.getElementById('cmp-pick-list');
+  if (!box) return;
+  box.innerHTML = sortedStores().map(s => `<label class="cmp-pick-row"><input type="checkbox" ${state.selectedStoresForCompare.includes(s.id) ? 'checked' : ''} onchange="toggleCompareStore(${jsArg(s.id)});renderComparePick()"><i style="background:${districtColor(districtOf(s))}"></i><span style="flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${escapeHtml(storeTitleText(s))}</span><span style="color:var(--fg-muted);white-space:nowrap;">${hasNums(s) ? fmtWan(s.rent) + '萬・' + fmtPing(s.area) + '坪' : '—'}</span></label>`).join('');
+  const go = document.getElementById('cmp-pick-go');
+  if (go) go.textContent = `查看比較表（${state.selectedStoresForCompare.length}）`;
+}
+// 手動觸發：把還沒有優缺點的店面都補分析一次
+function runAiAnalysisAll() {
+  if (_analysisBusy) { showToast('分析進行中…', 1500); return; }
+  const todo = state.stores.filter(s => hasNums(s) && !s.unverified && /^https?:/i.test(s.url || '') && (!String(s.pros || '').trim() || !String(s.cons || '').trim()));
+  if (!todo.length) { showToast('每間都已有優缺點分析', 2000); return; }
+  _analysisNoKey = false;
+  todo.forEach(s => _analysisTried.delete(s.id));
+  ensureStoreAnalysis();
+}
+
 function updateCompareButton() {
   const btn = document.getElementById('btn-open-compare');
   const count = document.getElementById('selected-compare-count');
   const n = state.selectedStoresForCompare.length;
+  const dc = document.getElementById('dual-cmp-count');
+  if (dc) dc.textContent = n ? `(${n})` : '';
   if (n >= 1) {
     btn.style.display = 'flex';
     count.textContent = n;
