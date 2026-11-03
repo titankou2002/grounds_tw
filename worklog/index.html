@@ -3796,12 +3796,12 @@ function pushStateToCloud() {
   try {
     const payload = JSON.stringify({
       posts: state.posts,
-      stores: state.stores,
+      stores: state.stores.filter(x => !x.draft),
       boardTopics: state.boardTopics,
       deletedLogs: state.deletedLogs,
       seen: state.seen
     });
-    fetch('api_sync.php', {
+    return fetch('api_sync.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: payload
@@ -6369,6 +6369,7 @@ function openEditStoreModal() {
   const s = state.stores.find(x => x.id === state.activeDetailStoreId);
   if (!s) return;
 
+  const esH = document.querySelector('#edit-store-modal h3'); if (esH) esH.textContent = s.draft ? tr('手動新增店面', '店舗を手動で追加') : tr('編輯店面數據與規格', '店舗データ・仕様の編集');
   document.getElementById('es-rent').value = s.rent || '';
   document.getElementById('es-area').value = s.area || '';
   document.getElementById('es-title').value = s.title || '';
@@ -6394,6 +6395,8 @@ function openEditStoreModal() {
 }
 
 function closeEditStoreModal() {
+  const _ds = state.stores.find(x => x.id === state.activeDetailStoreId);
+  if (_ds && _ds.draft) { state.stores = state.stores.filter(x => x !== _ds); try { renderStores(); } catch (e) {} }
   if (state.editFromCard) { state.editFromCard = false; if (!document.getElementById('store-detail-modal').classList.contains('open')) state.activeDetailStoreId = null; }
   esRevokePreviews();
   state.editPhotos = [];
@@ -6498,8 +6501,9 @@ async function esUploadStorePhoto(storeId, blob) {
 async function saveEditedStore() {
   if (!state.activeDetailStoreId) return;
   const fromCard = !!state.editFromCard;
-  const s = state.stores.find(x => x.id === state.activeDetailStoreId);
+  let s = state.stores.find(x => x.id === state.activeDetailStoreId);
   if (!s) return;
+  const wasDraft = !!s.draft;
 
   const r = parseInt(document.getElementById('es-rent').value) || s.rent;
   const a = parseFloat(document.getElementById('es-area').value) || s.area;
@@ -6512,10 +6516,20 @@ async function saveEditedStore() {
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
   const cons = document.getElementById('es-cons').value.trim() || s.cons;
 
+  if (wasDraft && (!t || !(r > 0) || !(a > 0))) { showToast(tr('請填名稱、月租、坪數', '名称・賃料・坪数を入力'), 2200); return; }
   if ((state.editFiles || []).some(f => f.status === 'uploading')) { showToast(tr('檔案上傳中，請稍候', 'アップロード中です'), 1800); return; }
   const saveBtn = document.querySelector('#edit-store-modal .btn-submit');
   if (saveBtn) { saveBtn.disabled = true; saveBtn.textContent = tr('上傳中…', 'アップロード中…'); }
   try {
+    if (wasDraft) {
+      // 先讓伺服器認得這間店，才能上傳照片
+      Object.assign(s, { title: t, address: addr, rent: r, area: a, deposit: dep || 0, freeRent: fr, pros, cons });
+      if (dist) s.district = dist;
+      delete s.draft;
+      saveAppState(false);
+      await pushStateToCloud();
+      s = state.stores.find(x => x.id === s.id) || s;
+    }
     const urls = [];
     for (const p of (state.editPhotos || [])) {
       if (p.url && String(p.url).indexOf('data:') !== 0) { urls.push(p.url); continue; }
@@ -6548,6 +6562,11 @@ async function saveEditedStore() {
     postStoreEdit(s.id, { title: s.title, address: s.address, district: s.district || '', rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
     if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }
     geocodeStoreIfNeeded(s);
+    if (wasDraft) {
+      const now = new Date(), pad = n => String(n).padStart(2, '0');
+      const zh = `手動新增店面：${s.title}`;
+      state.posts.unshift({ id: Date.now(), author: state.currentUser, date: `${now.getFullYear()}/${pad(now.getMonth() + 1)}/${pad(now.getDate())} ${pad(now.getHours())}:${pad(now.getMinutes())}`, hours: 0.5, tag: '門市選址', zh, ja: translateToJapanese(zh), propId: s.id, comments: [] });
+    }
     saveAppState();
     closeEditStoreModal();
     renderStores();
@@ -6794,14 +6813,18 @@ function handleAgencySheetUpload(event) {
   reader.readAsDataURL(file);
 }
 
-// 沒有網址、沒有照片時，直接手動輸入店面資料
+// 沒有網址時直接手動新增：開一張空白草稿，用編輯店面視窗填（可上傳照片、影片、PDF），按儲存才會真的建立
 function openManualStore() {
-  currentAgencyImgData = '';
-  const img = document.getElementById('ag-preview-img');
-  if (img) { img.removeAttribute('src'); img.style.display = 'none'; }
-  ['ag-code','ag-title','ag-address','ag-rent','ag-area','ag-deposit','ag-freerent','ag-specs','ag-license','ag-pros','ag-cons'].forEach(id => { const el = document.getElementById(id); if (el) el.value = ''; });
-  openAgencyModal();
-  const t = document.getElementById('ag-title'); if (t) t.focus();
+  const id = 'MAN-' + Date.now().toString(36).toUpperCase();
+  state.stores.unshift({
+    id, title: '', address: '', rent: 0, area: 0, deposit: 0, freeRent: '1 個月', pros: '', cons: '',
+    status: 'candidate', statusLabel: '房仲推薦', sourceType: 'manual', url: '#', images: [],
+    lat: null, lng: null, addedAt: Date.now(), draft: true
+  });
+  state.activeDetailStoreId = id;
+  state.editFromCard = true;
+  openEditStoreModal();
+  const t = document.getElementById('es-title'); if (t) t.focus();
 }
 
 function openAgencyModal() {
