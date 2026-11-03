@@ -2762,7 +2762,6 @@
 
     <div class="es-g3">
       <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">增建坪數（選填）</label><input type="number" step="0.1" id="es-areaextra" class="composer-textarea" style="min-height:34px;padding:5px 9px;" placeholder="違建、加蓋等"></div>
-      <div><label style="font-size:11.5px;font-weight:700;display:block;margin-bottom:3px;">房東實收月租（選填）</label><input type="number" id="es-ownerrent" class="composer-textarea" style="min-height:34px;padding:5px 9px;" placeholder="未扣繳前"></div>
       <div></div>
     </div>
 
@@ -5690,7 +5689,7 @@ function openStoreDetailModal(storeId) {
 
   const nn = hasNums(s);
   document.getElementById('m-store-rent').textContent = nn ? `NT$ ${rentWan} 萬` : '—';
-  document.getElementById('m-store-rent-ja').textContent = nn ? (Number(s.ownerRent) > 0 ? tr(`房東實收 ${fmtWan(s.ownerRent)} 萬；承租方實付 ${rentWan} 萬`, `大家受取 ${fmtWan(s.ownerRent)} 万；借主負担 ${rentWan} 万`) : `（約 ${rentJpyWan} 万円/月）`) : '';
+  document.getElementById('m-store-rent-ja').textContent = nn ? `（約 ${rentJpyWan} 万円/月）` : '';
 
   document.getElementById('m-store-area').textContent = nn ? `${areaPing} 坪` : '—';
   const exA = Number(s.areaExtra) > 0 ? Number(s.areaExtra) : 0;
@@ -6403,7 +6402,6 @@ function openEditStoreModal() {
   document.getElementById('es-rent').value = s.rent || '';
   document.getElementById('es-area').value = s.area || '';
   document.getElementById('es-areaextra').value = s.areaExtra || '';
-  document.getElementById('es-ownerrent').value = s.ownerRent || '';
   document.getElementById('es-title').value = s.title || '';
   document.getElementById('es-address').value = s.address || '';
   document.getElementById('es-district').value = districtOf(s);
@@ -6546,7 +6544,6 @@ async function saveEditedStore() {
   const fr = document.getElementById('es-freerent').value.trim() || s.freeRent;
   const dep = parseInt(document.getElementById('es-deposit').value) || s.deposit;
   const exArea = parseFloat(document.getElementById('es-areaextra').value) || 0;
-  const ownRent = parseInt(document.getElementById('es-ownerrent').value) || 0;
   const pros = document.getElementById('es-pros').value.trim() || s.pros;
   const cons = document.getElementById('es-cons').value.trim() || s.cons;
 
@@ -6580,7 +6577,6 @@ async function saveEditedStore() {
     s.freeRent = fr;
     s.deposit = dep;
     if (exArea > 0) s.areaExtra = exArea; else delete s.areaExtra;
-    if (ownRent > 0) s.ownerRent = ownRent; else delete s.ownerRent;
     s.pros = pros;
     s.cons = cons;
     if (s.unverified) { s.unverified = false; if (s.statusLabel === '數字待確認') { s.statusLabel = '房仲推薦'; s.status = 'agency'; } }
@@ -6595,7 +6591,7 @@ async function saveEditedStore() {
     const orderRes = await fetch('api_edit.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ action: 'img_set', id: s.id, images: s.images }) });
     const orderJson = await orderRes.json();
     if (!orderJson || !orderJson.success) throw new Error('order');
-    postStoreEdit(s.id, { title: s.title, address: s.address, district: s.district || '', rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, areaExtra: exArea > 0 ? exArea : null, ownerRent: ownRent > 0 ? ownRent : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
+    postStoreEdit(s.id, { title: s.title, address: s.address, district: s.district || '', rent: s.rent, area: s.area, deposit: Number(s.deposit) > 0 ? s.deposit : null, areaExtra: exArea > 0 ? exArea : null, freeRent: s.freeRent || '', pros: s.pros || '', cons: s.cons || '', statusLabel: s.statusLabel || '', coverImg: s.coverImg || '' });
     if (addrChanged && s.geoApprox) { s.lat = null; s.lng = null; }
     geocodeStoreIfNeeded(s);
     if (wasDraft) {
