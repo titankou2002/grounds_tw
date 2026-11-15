@@ -297,3 +297,10 @@ interface AuditLogItem {
 - [x] **圖片智慧壓縮與安全持久化**：
   - 上傳相片自動經 Canvas 等比縮放至 1200px 內（~60KB）。
   - `saveAppState()` 具備自我修復機制，防止 `localStorage` 超額報錯。
+
+## 工時報告輸出（2026-11-16）
+- REPORT「匯出」→ 工時總表視窗有兩個按鈕，內容都是「先工時總表（類別／人員／週），後附照片的每日工作日誌」：
+  - **產生週報連結**：`api_report.php` 建快照 → `report.html?id=…`。公開唯讀（日本同事免密碼）；已登入 worklog 的人打開會看到「編輯」：可改標題、備註、每筆日期／類別／工時／人員／中日文，刪除或排序照片（只能用快照裡原本的照片），`action=update` 存回（flock＋原子寫入）。另有「PDF / 列印」（A4）。
+  - **輸出成 Google 文件**：先建快照，再由 `api_report_doc.php`（需登入）呼叫 Apps Script 部署「worklog report Google Doc」（`tools/apps_script/Code.gs` 的 `wlReportDoc_`，和翻譯用的部署 @8 分開）。Apps Script 只收快照 id、自己讀公開的 api_report.php，建在雲端硬碟「GROUNDS 工時報告」資料夾，共用設定＝知道連結的人可留言。同一份快照沒改過會回傳同一份文件（不會蓋掉文件裡的修改）。
+  - 第一次使用前，擁有者要在 Apps Script 編輯器執行 `wlAuthorizeDocs` 並允許（文件＋雲端硬碟權限）。
+- 快照存在伺服器 `worklog/report_shares/`（不進 git、部署排除）。

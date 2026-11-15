@@ -2696,8 +2696,11 @@
     </div>
     <div id="rp-body" style="max-height:52vh;overflow:auto;"></div>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
-      <button class="btn-submit" id="rp-export-btn" onclick="exportReportLink()">產生給日本同事看的週報連結</button>
-      <div style="font-size:11.5px;color:var(--fg-muted);margin-top:6px;line-height:1.5;">連結內容是按下當下的快照，之後再改日誌不會變。範圍用上面選的日期（不受「人員」篩選影響，包含所有人）。</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn-submit" id="rp-export-btn" onclick="exportReportLink()" style="flex:1;min-width:200px;">產生週報連結（登入後可線上編輯）</button>
+        <button class="btn-submit" id="rp-doc-btn" onclick="exportReportDoc()" style="flex:1;min-width:200px;background:#1a73e8;border-color:#1a73e8;">輸出成 Google 文件</button>
+      </div>
+      <div style="font-size:11.5px;color:var(--fg-muted);margin-top:6px;line-height:1.5;">兩種都是「先工時總表、後附照片的工作日誌」。內容是按下當下的快照，之後再改日誌不會變；範圍用上面選的日期（不受「人員」篩選影響，包含所有人）。週報連結日本同事免密碼唯讀，已登入的人打開可直接修改；Google 文件可在文件裡自由編輯（知道連結的人可留言）。</div>
       <div id="rp-link-box" style="display:none;margin-top:8px;"><input id="rp-link" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin:0;width:100%;" readonly onclick="this.select()"></div>
     </div>
   </div>
@@ -8083,11 +8086,11 @@ function rpUrlFor(raw, lang) {
     return st ? `【${lang === 'ja' ? (st.titleJa || st.title) : st.title}】 ${u}` : u;
   });
 }
-async function exportReportLink() {
+function rpSnapshotPayload() {
   const posts = rpPosts(true);
-  if (!posts.length) { showToast('這段期間沒有紀錄', 1800); return; }
+  if (!posts.length) return null;
   const [a, b] = rpBounds();
-  const payload = {
+  return {
     from: a.startsWith('0000') ? postDayKey(posts[posts.length - 1]) : a,
     to: b.startsWith('9999') ? postDayKey(posts[0]) : b,
     posts: posts.map(p => {
@@ -8100,19 +8103,45 @@ async function exportReportLink() {
       };
     })
   };
+}
+async function rpCreateSnapshot() {
+  const payload = rpSnapshotPayload();
+  if (!payload) { showToast('這段期間沒有紀錄', 1800); return null; }
+  const r = await fetch('api_report.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+  const d = await r.json();
+  if (!d.success) { showToast('產生失敗：' + (d.error || r.status), 3000); return null; }
+  return d.id;
+}
+async function exportReportLink() {
   const btn = document.getElementById('rp-export-btn');
   btn.disabled = true;
   try {
-    const r = await fetch('api_report.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-    const d = await r.json();
-    if (!d.success) { showToast('產生失敗：' + (d.error || r.status), 3000); return; }
-    const url = new URL('report.html?id=' + encodeURIComponent(d.id), location.href.replace(/index\.html(?:\?.*)?$/, '')).href;
+    const id = await rpCreateSnapshot();
+    if (!id) return;
+    const url = new URL('report.html?id=' + encodeURIComponent(id), location.href.replace(/index\.html(?:\?.*)?$/, '')).href;
     rp.link = url;
     document.getElementById('rp-link-box').style.display = 'block';
     document.getElementById('rp-link').value = url;
     try { await navigator.clipboard.writeText(url); showToast('已複製週報連結', 2000); } catch (e) { showToast('連結已產生，請複製下方網址', 2500); }
   } catch (e) { showToast('產生失敗，請再試一次', 2500); }
   finally { btn.disabled = false; }
+}
+async function exportReportDoc() {
+  const btn = document.getElementById('rp-doc-btn');
+  if (!rpSnapshotPayload()) { showToast('這段期間沒有紀錄', 1800); return; }
+  const win = window.open('', '_blank'); // 先開視窗，避免被擋彈出視窗
+  if (win) win.document.write('<p style="font:15px sans-serif;padding:24px">正在產生 Google 文件（照片多時約 10–60 秒）…</p>');
+  btn.disabled = true; const label = btn.textContent; btn.textContent = '產生中…';
+  try {
+    const id = await rpCreateSnapshot();
+    if (!id) { if (win) win.close(); return; }
+    const r = await fetch('api_report_doc.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
+    const d = await r.json().catch(() => ({}));
+    if (!d.success) { if (win) win.close(); showToast('Google 文件產生失敗：' + (d.error || r.status), 6000); return; }
+    if (win) win.location.href = d.url; else location.href = d.url;
+    showToast('Google 文件已產生', 2000);
+  } catch (e) { if (win) win.close(); showToast('Google 文件產生失敗，請再試一次', 3000); }
+  finally { btn.disabled = false; btn.textContent = label; }
 }
 
 function roleOfAuthor(name) {

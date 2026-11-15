@@ -69,3 +69,6 @@ worklog/compare_shares/**
 
 # 伺服器上的 AI 金鑰，絕不進 repo
 worklog/.wl_anthropic_key
+
+# 週報快照（伺服器端，可線上編輯，不進 git、部署不覆蓋）
+worklog/report_shares/

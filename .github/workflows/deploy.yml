@@ -51,3 +51,5 @@ jobs:
             **/files/**
             compare_shares/**
             **/compare_shares/**
+            report_shares/**
+            **/report_shares/**

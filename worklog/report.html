@@ -50,10 +50,26 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
 .yt img{width:120px;height:68px;object-fit:cover;display:block}.yt span{font-size:12px;padding:4px 8px}
 .lb{position:fixed;inset:0;background:rgba(0,0,0,.85);display:none;align-items:center;justify-content:center;z-index:50}
 .lb.on{display:flex}.lb img{max-width:96vw;max-height:94vh}
+.notes{white-space:pre-wrap;word-break:break-word;font-size:14px;line-height:1.65}
+.btn.blue{background:#1a73e8;color:#fff;border-color:#1a73e8}
+.btn.warn{color:#b91c1c}
+.ed input,.ed textarea,.ed select{font:inherit;font-size:14px;border:1px solid #cfd0d8;border-radius:6px;padding:6px 8px;background:#fff;width:100%}
+.ed textarea{min-height:80px;line-height:1.55;resize:vertical}
+.ed label{display:block;font-size:11.5px;color:var(--muted);font-weight:700;margin:8px 0 3px}
+.ed-row{display:flex;gap:8px;flex-wrap:wrap}.ed-row>div{flex:1;min-width:110px}
+.ed-ent{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px;margin-bottom:10px}
+.ed-ent-h{display:flex;justify-content:space-between;align-items:center;gap:6px;font-size:12px;font-weight:800}
+.ed-ent-h .btn{padding:4px 9px;font-size:12px}
+.ed-imgs{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.ed-img{width:132px;border:1px solid var(--line);border-radius:8px;overflow:hidden;background:#fafafa}
+.ed-img img{width:100%;height:88px;object-fit:cover;display:block}
+.ed-img div{display:flex;justify-content:space-between}
+.ed-img button{flex:1;border:0;background:transparent;padding:5px 0;cursor:pointer;font-size:13px}
+.ed-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;justify-content:flex-end;z-index:9}
 @media print{
   @page{size:A4;margin:12mm}
   body{background:#fff}
-  header .actions,.no-print{display:none !important}
+  header .actions,.no-print,.ed-bar{display:none !important}
   header{position:static;border:0;padding:0 0 8px}
   .wrap{padding:0;max-width:none}
   .ent,.card{break-inside:avoid}
@@ -73,10 +89,13 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
       <button type="button" id="l-ja" onclick="setLang('ja')">日本語</button>
       <button type="button" id="l-zh" onclick="setLang('zh')">純中文</button>
     </div>
-    <button type="button" class="btn pri" onclick="window.print()">PDF</button>
+    <button type="button" class="btn" id="b-edit" style="display:none" onclick="startEdit()">編輯</button>
+    <button type="button" class="btn blue" id="b-doc" style="display:none" onclick="toDoc()">Google 文件</button>
+    <button type="button" class="btn pri" onclick="window.print()">PDF / 列印</button>
   </div>
 </header>
 <div class="wrap"><div id="box" class="loading">載入中… / 読み込み中…</div></div>
+<div class="ed-bar" id="ed-bar" style="display:none"><span id="ed-msg" style="flex:1;font-size:12px;color:var(--muted);align-self:center"></span><button type="button" class="btn" onclick="cancelEdit()">取消</button><button type="button" class="btn pri" id="b-save" onclick="saveEdit()">儲存</button></div>
 <div class="lb" id="lb" onclick="this.classList.remove('on')"><img id="lb-img" alt=""></div>
 <script>
 (function () {
@@ -111,10 +130,10 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
     var d=st.data; if(!d)return;
     var lang=st.lang, posts=d.posts.slice().sort(function(a,b){return a.day<b.day?-1:a.day>b.day?1:0;});
     var range=d.from&&d.to?d.from+' – '+d.to:'';
-    document.getElementById('title').textContent=(lang==='zh'?'grounds Taiwan 工作日誌':lang==='ja'?'grounds Taiwan 作業日誌':'grounds Taiwan 作業日誌 / 工作日誌')+(range?'　'+range:'');
+    document.getElementById('title').textContent=(d.title||(lang==='zh'?'grounds Taiwan 工作日誌':lang==='ja'?'grounds Taiwan 作業日誌':'grounds Taiwan 作業日誌 / 工作日誌'))+(range?'　'+range:'');
     var s=summarize(posts);
     var L=function(zh,ja){return lang==='zh'?zh:lang==='ja'?ja:zh+' / '+ja;};
-    var h='<h2>'+L('工時總表','作業時間の集計')+'</h2><div class="card"><table class="sum"><tr><th>'+L('類別','区分')+'</th><th>'+L('天數','日数')+'</th><th>'+L('筆數','件数')+'</th><th>'+L('工時','時間')+'</th><th>%</th></tr>';
+    var h=(d.notes?'<div class="card notes" style="margin-top:6px">'+linkify(d.notes)+'</div>':'')+'<h2>'+L('工時總表','作業時間の集計')+'</h2><div class="card"><table class="sum"><tr><th>'+L('類別','区分')+'</th><th>'+L('天數','日数')+'</th><th>'+L('筆數','件数')+'</th><th>'+L('工時','時間')+'</th><th>%</th></tr>';
     s.rows.forEach(function(o){var pc=s.total?Math.round(o.h/s.total*100):0;
       h+='<tr><td>'+esc(tagText(o.tag,lang))+'</td><td>'+o.days+'</td><td>'+o.n+'</td><td>'+(Math.round(o.h*100)/100)+'h</td><td><span class="barbox"><div class="bar" style="width:'+pc+'%"></div></span> '+pc+'%</td></tr>';});
     h+='<tr class="total"><td>'+L('合計','合計')+'</td><td>'+s.days+'</td><td>'+s.n+'</td><td>'+(Math.round(s.total*100)/100)+'h</td><td></td></tr></table></div>';
@@ -138,11 +157,99 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
     document.getElementById('box').innerHTML=h;
   }
   window.lb=function(src){document.getElementById('lb-img').src=src;document.getElementById('lb').classList.add('on');};
-  window.setLang=function(l){st.lang=l;['bi','ja','zh'].forEach(function(k){document.getElementById('l-'+k).classList.toggle('on',k===l);});render();};
+  window.setLang=function(l){st.lang=l;['bi','ja','zh'].forEach(function(k){document.getElementById('l-'+k).classList.toggle('on',k===l);});if(!st.edit)render();};
+
+  // ---------- 線上編輯（只有登入 worklog 的人看得到按鈕；伺服器也會再檢查） ----------
+  function sortPosts(a){return a.slice().sort(function(x,y){return x.day<y.day?-1:x.day>y.day?1:0;});}
+  function clone(o){return JSON.parse(JSON.stringify(o));}
+  var TAGS=Object.keys(TAG_JA);
+  function renderEdit(){
+    var e=st.edit, h='<div class="ed">';
+    h+='<div class="card"><label>標題（空白＝預設）</label><input data-g="title" maxlength="120" value="'+esc(e.title)+'" placeholder="grounds Taiwan 作業日誌 / 工作日誌">';
+    h+='<label>備註（顯示在工時總表上方）</label><textarea data-g="notes" maxlength="4000" placeholder="例：本週重點、待日本確認事項…">'+esc(e.notes)+'</textarea></div>';
+    h+='<h2>每筆紀錄（'+e.posts.length+'）</h2>';
+    e.posts.forEach(function(p,i){
+      h+='<div class="ed-ent"><div class="ed-ent-h"><span>#'+(i+1)+'　'+esc(p.day)+'</span><span>'
+        +'<button type="button" class="btn" onclick="edMove('+i+',-1)" '+(i?'':'disabled')+'>↑</button> '
+        +'<button type="button" class="btn" onclick="edMove('+i+',1)" '+(i<e.posts.length-1?'':'disabled')+'>↓</button> '
+        +'<button type="button" class="btn warn" onclick="edDel('+i+')">刪除這筆</button></span></div>';
+      h+='<div class="ed-row"><div><label>日期</label><input type="date" data-i="'+i+'" data-f="day" value="'+esc(p.day.replace(/\//g,'-'))+'"></div>'
+        +'<div><label>類別</label><input data-i="'+i+'" data-f="tag" list="ed-tags" maxlength="40" value="'+esc(p.tag)+'"></div>'
+        +'<div><label>工時（h）</label><input type="number" min="0" max="24" step="0.25" data-i="'+i+'" data-f="hours" value="'+esc(p.hours)+'"></div>'
+        +'<div><label>人員</label><input data-i="'+i+'" data-f="author" maxlength="40" value="'+esc(p.author)+'"></div></div>';
+      h+='<label>中文</label><textarea data-i="'+i+'" data-f="zh" maxlength="6000">'+esc(p.zh)+'</textarea>';
+      h+='<label>日本語</label><textarea data-i="'+i+'" data-f="ja" maxlength="6000">'+esc(p.ja)+'</textarea>';
+      if((p.atts||[]).length){
+        h+='<label>照片（可排序、移除）</label><div class="ed-imgs">';
+        p.atts.forEach(function(a,j){var u=safeImg(a.url);
+          h+='<div class="ed-img">'+(u?'<img src="'+esc(u)+'" alt="">':'<div style="height:88px"></div>')+'<div>'
+            +'<button type="button" title="往前" onclick="edImg('+i+','+j+',-1)" '+(j?'':'disabled')+'>◀</button>'
+            +'<button type="button" title="移除" onclick="edImg('+i+','+j+',0)" style="color:#b91c1c">✕</button>'
+            +'<button type="button" title="往後" onclick="edImg('+i+','+j+',1)" '+(j<p.atts.length-1?'':'disabled')+'>▶</button></div></div>';
+        });
+        h+='</div>';
+      }
+      h+='</div>';
+    });
+    h+='<datalist id="ed-tags">'+TAGS.map(function(t){return '<option value="'+esc(t)+'">';}).join('')+'</datalist></div>';
+    var box=document.getElementById('box');box.className='';box.innerHTML=h;
+  }
+  document.addEventListener('input',function(ev){
+    var t=ev.target; if(!st.edit||!t||!t.getAttribute)return;
+    var g=t.getAttribute('data-g'); if(g){st.edit[g]=t.value;st.dirty=true;return;}
+    var i=t.getAttribute('data-i'),f=t.getAttribute('data-f'); if(i==null||!f)return;
+    var p=st.edit.posts[+i]; if(!p)return;
+    if(f==='hours')p.hours=Math.max(0,Math.min(24,parseFloat(t.value)||0));
+    else if(f==='day'){ if(/^\d{4}-\d{2}-\d{2}$/.test(t.value))p.day=t.value.replace(/-/g,'/'); }
+    else p[f]=t.value;
+    st.dirty=true;
+  });
+  window.startEdit=function(){
+    var d=st.data; st.edit={title:d.title||'',notes:d.notes||'',posts:clone(sortPosts(d.posts))}; st.dirty=false;
+    document.getElementById('ed-bar').style.display='flex';document.getElementById('b-edit').style.display='none';
+    document.getElementById('ed-msg').textContent='修改後按「儲存」，日本同事打開連結就會看到新內容';
+    renderEdit();
+  };
+  window.cancelEdit=function(){
+    if(st.dirty&&!confirm('放棄還沒儲存的修改？'))return;
+    st.edit=null;st.dirty=false;document.getElementById('ed-bar').style.display='none';document.getElementById('b-edit').style.display='';render();
+  };
+  window.edMove=function(i,dir){var a=st.edit.posts,j=i+dir;if(j<0||j>=a.length)return;var t=a[i];a[i]=a[j];a[j]=t;
+    // 搬到不同日期時跟著改日期，畫面才會照這個順序
+    if(a[i].day!==a[j].day){var dd=a[i].day;a[i].day=a[j].day;a[j].day=dd;}
+    st.dirty=true;renderEdit();};
+  window.edDel=function(i){if(st.edit.posts.length<=1){alert('至少要留一筆');return;}if(!confirm('刪除第 '+(i+1)+' 筆？'))return;st.edit.posts.splice(i,1);st.dirty=true;renderEdit();};
+  window.edImg=function(i,j,dir){var a=st.edit.posts[i].atts;if(dir===0)a.splice(j,1);else{var k=j+dir;if(k<0||k>=a.length)return;var t=a[j];a[j]=a[k];a[k]=t;}st.dirty=true;renderEdit();};
+  window.saveEdit=function(){
+    var b=document.getElementById('b-save');b.disabled=true;document.getElementById('ed-msg').textContent='儲存中…';
+    var e=st.edit, body={action:'update',id:st.data.id,title:e.title,notes:e.notes,posts:sortPosts(e.posts)};
+    fetch('api_report.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)})
+      .then(function(r){return r.json().then(function(d){return {r:r,d:d};});})
+      .then(function(x){
+        if(!x.d||!x.d.success){document.getElementById('ed-msg').textContent='儲存失敗：'+((x.d&&x.d.error)||x.r.status)+(x.r.status===401?'（請先登入工作日誌）':'');return;}
+        st.data=x.d;st.edit=null;st.dirty=false;
+        document.getElementById('ed-bar').style.display='none';document.getElementById('b-edit').style.display='';render();
+      })
+      .catch(function(){document.getElementById('ed-msg').textContent='儲存失敗，請再試一次';})
+      .then(function(){b.disabled=false;});
+  };
+  window.toDoc=function(){
+    if(st.edit){alert('請先儲存或取消編輯');return;}
+    var w=window.open('','_blank'); if(w)w.document.write('<p style="font:15px sans-serif;padding:24px">正在產生 Google 文件（照片多時約 10–60 秒）…</p>');
+    var b=document.getElementById('b-doc');b.disabled=true;
+    fetch('api_report_doc.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({id:st.data.id})})
+      .then(function(r){return r.json().catch(function(){return {};});})
+      .then(function(d){ if(d&&d.success){ if(w)w.location.href=d.url; else location.href=d.url; } else { if(w)w.close(); alert('Google 文件產生失敗：'+((d&&d.error)||'')); } })
+      .catch(function(){if(w)w.close();alert('Google 文件產生失敗，請再試一次');})
+      .then(function(){b.disabled=false;});
+  };
+  window.addEventListener('beforeunload',function(ev){if(st.edit&&st.dirty){ev.preventDefault();ev.returnValue='';}});
+
   var id=new URLSearchParams(location.search).get('id')||'';
-  fetch('api_report.php?id='+encodeURIComponent(id),{cache:'no-store'}).then(function(r){return r.json();}).then(function(d){
+  fetch('api_report.php?id='+encodeURIComponent(id),{cache:'no-store',credentials:'same-origin'}).then(function(r){return r.json();}).then(function(d){
     if(!d||!d.success){document.getElementById('box').className='err';document.getElementById('box').textContent='找不到這份日誌 / ログが見つかりません';return;}
     st.data=d;render();
+    if(d.canEdit){document.getElementById('b-edit').style.display='';document.getElementById('b-doc').style.display='';}
   }).catch(function(){document.getElementById('box').className='err';document.getElementById('box').textContent='載入失敗 / 読み込みに失敗しました';});
 })();
 </script>

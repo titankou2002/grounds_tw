@@ -1,6 +1,7 @@
 <?php
 // 工作日誌週報快照：POST 建立（需登入 cookie）、GET 讀取（公開，給日本同事免密碼看）
-// 快照建立後內容就固定，之後再改日誌不會影響已分享出去的那一份。
+// 快照建立後就跟日誌脫鉤（之後再改日誌不會影響已分享的那一份）。
+// 登入的人可以在 report.html 直接修改快照（action=update：標題、備註、每筆文字／工時、照片刪除與排序）。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
@@ -53,6 +54,27 @@ function wl_rp_clean_post(array $p) {
         'atts' => $atts,
     ];
 }
+function wl_rp_load($path) {
+    if (!is_file($path)) return null;
+    $data = json_decode((string)file_get_contents($path), true);
+    return (is_array($data) && isset($data['posts'])) ? $data : null;
+}
+function wl_rp_view($id, array $data) {
+    $posts = [];
+    foreach ((array)$data['posts'] as $p) { if (is_array($p) && ($c = wl_rp_clean_post($p))) $posts[] = $c; }
+    return [
+        'success' => true,
+        'id' => $id,
+        'createdAt' => (int)($data['createdAt'] ?? 0),
+        'updatedAt' => (int)($data['updatedAt'] ?? ($data['createdAt'] ?? 0)),
+        'from' => wl_rp_day($data['from'] ?? ''),
+        'to' => wl_rp_day($data['to'] ?? ''),
+        'title' => wl_rp_str($data['title'] ?? '', 120),
+        'notes' => wl_rp_str($data['notes'] ?? '', 4000),
+        'posts' => $posts,
+        'canEdit' => wl_rp_authed(),
+    ];
+}
 function wl_rp_prune($dir, $max) {
     $files = glob($dir . '/*.json');
     if (!is_array($files) || count($files) <= $max) return;
@@ -65,26 +87,48 @@ $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
 if ($method === 'GET') {
     $id = strtolower(trim((string)($_GET['id'] ?? '')));
     if (!wl_rp_id_ok($id)) wl_rp_out(['success' => false, 'error' => 'bad id'], 400);
-    $path = $DIR . '/' . $id . '.json';
-    if (!is_file($path)) wl_rp_out(['success' => false, 'error' => 'not found'], 404);
-    $data = json_decode((string)file_get_contents($path), true);
-    if (!is_array($data) || !isset($data['posts'])) wl_rp_out(['success' => false, 'error' => 'not found'], 404);
-    $posts = [];
-    foreach ((array)$data['posts'] as $p) { if (is_array($p) && ($c = wl_rp_clean_post($p))) $posts[] = $c; }
-    wl_rp_out([
-        'success' => true,
-        'id' => $id,
-        'createdAt' => (int)($data['createdAt'] ?? 0),
-        'from' => wl_rp_day($data['from'] ?? ''),
-        'to' => wl_rp_day($data['to'] ?? ''),
-        'posts' => $posts,
-    ]);
+    $data = wl_rp_load($DIR . '/' . $id . '.json');
+    if (!$data) wl_rp_out(['success' => false, 'error' => 'not found'], 404);
+    wl_rp_out(wl_rp_view($id, $data));
 }
 
 if ($method === 'POST') {
     if (!wl_rp_authed()) wl_rp_out(['success' => false, 'error' => 'Unauthorized'], 401);
     $body = json_decode((string)file_get_contents('php://input'), true);
     if (!is_array($body)) $body = [];
+
+    // 修改既有快照（只能刪除／排序原本就有的照片，不能塞新網址進來）
+    if (($body['action'] ?? '') === 'update') {
+        $id = strtolower(trim((string)($body['id'] ?? '')));
+        if (!wl_rp_id_ok($id)) wl_rp_out(['success' => false, 'error' => 'bad id'], 400);
+        $path = $DIR . '/' . $id . '.json';
+        $lock = fopen($DIR . '/.lock', 'c');
+        if ($lock) flock($lock, LOCK_EX);
+        $old = wl_rp_load($path);
+        $fail = function ($err, $code) use ($lock) { if ($lock) { flock($lock, LOCK_UN); fclose($lock); } wl_rp_out(['success' => false, 'error' => $err], $code); };
+        if (!$old) $fail('not found', 404);
+        $known = [];
+        foreach ((array)$old['posts'] as $op) foreach ((array)($op['atts'] ?? []) as $a) if (is_array($a) && isset($a['url'])) $known[(string)$a['url']] = true;
+        $posts = [];
+        foreach ((array)($body['posts'] ?? []) as $p) {
+            if (!is_array($p)) continue;
+            $p['atts'] = array_values(array_filter((array)($p['atts'] ?? []), function ($a) use ($known) { return is_array($a) && isset($known[(string)($a['url'] ?? '')]); }));
+            if ($c = wl_rp_clean_post($p)) $posts[] = $c;
+        }
+        if (count($posts) < 1) $fail('no posts', 400);
+        if (count($posts) > $MAX_POSTS) $fail('too many posts', 400);
+        $old['posts'] = $posts;
+        $old['title'] = wl_rp_str($body['title'] ?? '', 120);
+        $old['notes'] = wl_rp_str($body['notes'] ?? '', 4000);
+        $old['updatedAt'] = time();
+        $json = json_encode($old, JSON_UNESCAPED_UNICODE);
+        if ($json === false || strlen($json) > $MAX_FILE_BYTES) $fail('snapshot too large', 400);
+        $ok = wl_atomic_write($path, $json);
+        if ($lock) { flock($lock, LOCK_UN); fclose($lock); }
+        if (!$ok) wl_rp_out(['success' => false, 'error' => 'write failed'], 500);
+        wl_rp_out(wl_rp_view($id, $old));
+    }
+
     $in = is_array($body['posts'] ?? null) ? $body['posts'] : [];
     $posts = [];
     foreach ($in as $p) { if (is_array($p) && ($c = wl_rp_clean_post($p))) $posts[] = $c; }
@@ -96,6 +140,7 @@ if ($method === 'POST') {
     $payload = [
         'id' => $id,
         'createdAt' => time(),
+        'title' => wl_rp_str($body['title'] ?? '', 120),
         'from' => wl_rp_day($body['from'] ?? ''),
         'to' => wl_rp_day($body['to'] ?? ''),
         'posts' => $posts,
