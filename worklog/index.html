@@ -8136,8 +8136,8 @@ async function exportReportDoc() {
     const id = await rpCreateSnapshot();
     if (!id) { if (win) win.close(); return; }
     const r = await fetch('api_report_doc.php', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id }) });
-    const d = await r.json().catch(() => ({}));
-    if (!d.success) { if (win) win.close(); showToast('Google 文件產生失敗：' + (d.error || r.status), 6000); return; }
+    const d = await r.json().catch(() => ({ error: '伺服器回應 ' + r.status }));
+    if (!d.success) { if (win) win.close(); showToast('Google 文件產生失敗：' + (d.error || r.status), 8000); return; }
     if (win) win.location.href = d.url; else location.href = d.url;
     showToast('Google 文件已產生', 2000);
   } catch (e) { if (win) win.close(); showToast('Google 文件產生失敗，請再試一次', 3000); }

@@ -5,6 +5,7 @@
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
+// 注意：失敗也回 HTTP 200 + success:false。Cloudflare 會把來源站的 502/504 換成自己的錯誤頁，前端就看不到原因。
 // Apps Script「工時報告 Google 文件」部署（和翻譯用的部署分開，互不影響）
 $GAS_DOC_URL = 'https://script.google.com/macros/s/AKfycbyV4ZL0FBoivjZ21D_0emkwghZcXE7M6H0MnGtZRzV14rgUNbg47Wc-srJtLIdA5itxnw/exec';
 
@@ -41,12 +42,12 @@ $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
 $j = is_string($res) ? json_decode($res, true) : null;
 if (!is_array($j)) {
     // Apps Script 還沒授權時回的是 HTML 錯誤頁，不是 JSON
-    wl_rd_out(['success' => false, 'error' => 'Google 文件服務沒有回應（' . $code . '），請稍後再試', 'http' => $code], 502);
+    wl_rd_out(['success' => false, 'error' => 'Google 文件服務沒有回應（' . $code . '），請稍後再試', 'http' => $code], 200);
 }
 if (empty($j['ok']) && preg_match('/權限|permission|authoriz/i', (string)($j['error'] ?? ''))) {
-    wl_rd_out(['success' => false, 'code' => 'gas_auth', 'error' => 'Google 文件服務還沒授權：請到 Apps Script 編輯器執行一次 wlAuthorizeDocs 並按「允許」'], 502);
+    wl_rd_out(['success' => false, 'code' => 'gas_auth', 'error' => 'Google 文件服務還沒有雲端硬碟寫入權限：請到 Apps Script 編輯器執行一次 wlAuthorizeDocs，授權畫面的權限要全部勾選後按「允許」'], 200);
 }
 if (empty($j['ok']) || empty($j['url']) || !preg_match('#^https://docs\.google\.com/document/d/[\w-]+#', (string)$j['url'])) {
-    wl_rd_out(['success' => false, 'error' => (string)($j['error'] ?? 'Google 文件產生失敗')], 502);
+    wl_rd_out(['success' => false, 'error' => (string)($j['error'] ?? 'Google 文件產生失敗')], 200);
 }
 wl_rd_out(['success' => true, 'url' => (string)$j['url'], 'reused' => !empty($j['reused'])]);

@@ -400,9 +400,14 @@ var WL_DOC_FOLDER = 'GROUNDS 工時報告';
 var WL_TAG_JA = {'進度回報':'進捗報告','門市選址':'店舗探し','公司設立':'会社設立','商標佈局':'商標','營運規劃':'運営ルール','進口物流':'輸入・物流','日本溝通':'日本との連絡','其他':'その他'};
 
 function wlAuthorizeDocs() {
-  // 只是讓 Google 跳出授權視窗（文件＋雲端硬碟），不會建立任何東西
-  DriveApp.getRootFolder().getName();
+  // 讓 Google 跳出授權視窗：需要「查看、編輯、建立及刪除雲端硬碟檔案」（請全部勾選）。
+  // 只會建立（或找到）「GROUNDS 工時報告」資料夾，不建其他東西。
+  var it = DriveApp.getFoldersByName(WL_DOC_FOLDER);
+  var f = it.hasNext() ? it.next() : DriveApp.createFolder(WL_DOC_FOLDER);
   UrlFetchApp.fetch(WL_BASE + 'api_report.php?id=00000000000000000000000000000000', { muteHttpExceptions: true });
+  Drive.Files.list({ pageSize: 1, fields: 'files(id)' });
+  try { DocumentApp.openById('x'); } catch (e) {} // 只為了讓授權畫面包含「Google 文件」
+  Logger.log('OK，資料夾：' + f.getUrl());
   return 'ok';
 }
 
@@ -415,22 +420,29 @@ function wlWeek_(s) {
 }
 function wlTag_(t) { t = t || '其他'; return WL_TAG_JA[t] ? t + ' / ' + WL_TAG_JA[t] : t; }
 
-function wlTable_(body, rows) {
-  var t = body.appendTable(rows);
-  t.setBorderColor('#cccccc');
-  var head = t.getRow(0);
-  for (var c = 0; c < head.getNumCells(); c++) {
-    head.getCell(c).setBackgroundColor('#111111');
-    head.getCell(c).editAsText().setForegroundColor('#ffffff').setBold(true);
-  }
-  var last = t.getRow(t.getNumRows() - 1);
-  if (String(last.getCell(0).getText()).indexOf('合計') === 0) last.editAsText().setBold(true);
-  for (var r = 0; r < t.getNumRows(); r++) t.getRow(r).editAsText().setFontSize(10);
-  return t;
+function wlEsc_(t) { return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
+function wlTxt_(t) { return wlEsc_(t).replace(/\r?\n/g, '<br>'); }
+function wlTableHtml_(rows) {
+  var h = '<table style="border-collapse:collapse;width:100%" border="1" cellpadding="5">';
+  rows.forEach(function (r, i) {
+    var head = i === 0, tot = i === rows.length - 1 && String(r[0]).indexOf('合計') === 0;
+    h += '<tr>' + r.map(function (c, j) {
+      var st = 'border:1px solid #bbbbbb;font-size:10pt;' + (j ? 'text-align:right;' : '') +
+        (head ? 'background-color:#111111;color:#ffffff;font-weight:bold;' : tot ? 'font-weight:bold;background-color:#f1f1f4;' : '');
+      return '<td style="' + st + '">' + wlEsc_(c) + '</td>';
+    }).join('') + '</tr>';
+  });
+  return h + '</table>';
 }
 
+// 用 Drive API 把 HTML 轉成 Google 文件（只需要雲端硬碟權限，照片以 base64 內嵌）
 function wlReportDoc_(b) {
-  if (b.check) { DriveApp.getRootFolder(); return { ok: true, check: true }; } // 只確認授權，不建任何東西
+  if (b.check) { // 只確認授權（回傳已授權的權限範圍，不含金鑰），不建任何東西
+    var ti = UrlFetchApp.fetch('https://oauth2.googleapis.com/tokeninfo?access_token=' + encodeURIComponent(ScriptApp.getOAuthToken()), { muteHttpExceptions: true });
+    var sc = ''; try { sc = JSON.parse(ti.getContentText()).scope || ''; } catch (e) {}
+    return { ok: true, check: true, scopes: sc.split(' ') };
+  }
+  var t0 = Date.now();
   var id = String(b.id || '').toLowerCase();
   if (!/^[a-f0-9]{32}$/.test(id)) return { ok: false, error: 'bad id' };
   var res = UrlFetchApp.fetch(WL_BASE + 'api_report.php?id=' + id, { muteHttpExceptions: true });
@@ -438,9 +450,10 @@ function wlReportDoc_(b) {
   var d = JSON.parse(res.getContentText());
   if (!d || !d.success || !d.posts || !d.posts.length) return { ok: false, error: '週報是空的' };
 
+  var preview = !!b.preview; // 只回傳 HTML（測試用，內容本來就公開）
   var key = 'WLDOC_' + id, ver = String(d.updatedAt || d.createdAt || 0);
   var prev = PROPS.getProperty(key);
-  if (prev && !b.fresh) {
+  if (prev && !b.fresh && !preview) {
     try {
       var pj = JSON.parse(prev);
       if (pj.v === ver) { var f0 = DriveApp.getFileById(pj.doc); if (!f0.isTrashed()) return { ok: true, url: f0.getUrl(), reused: true }; }
@@ -450,14 +463,37 @@ function wlReportDoc_(b) {
   var posts = d.posts.slice().sort(function (a, c) { return a.day < c.day ? -1 : a.day > c.day ? 1 : 0; });
   var range = d.from && d.to ? d.from + ' – ' + d.to : '';
   var title = (d.title || 'grounds Taiwan 工作時數報告 / 作業時間報告') + (range ? '　' + range : '');
-  var doc = DocumentApp.create(title);
-  var body = doc.getBody();
-  body.setMarginTop(40).setMarginBottom(40).setMarginLeft(48).setMarginRight(48);
-  body.getParagraphs()[0].setText(title).setHeading(DocumentApp.ParagraphHeading.TITLE);
-  if (d.notes) body.appendParagraph(d.notes);
+
+  // ---- 照片：平行抓取，失敗的略過 ----
+  var reqs = [], idx = [];
+  posts.forEach(function (p, i) {
+    (p.atts || []).forEach(function (a, j) {
+      var u = String(a.url || '');
+      if (!/^https?:\/\//i.test(u)) u = WL_BASE + u.replace(/^\/+/, '');
+      reqs.push({ url: u, muteHttpExceptions: true, followRedirects: true });
+      idx.push(i + '_' + j);
+    });
+  });
+  var imgs = {}, total = 0, missing = 0, bytes = 0;
+  for (var k = 0; k < reqs.length; k += 20) {
+    var part;
+    try { part = UrlFetchApp.fetchAll(reqs.slice(k, k + 20)); } catch (e) { part = []; }
+    part.forEach(function (r, m) {
+      try {
+        var ct = String((r.getHeaders() || {})['Content-Type'] || '');
+        if (r.getResponseCode() !== 200 || !/^image\//i.test(ct)) return;
+        var bl = r.getBlob();
+        if (!/^image\/(jpe?g|png|gif)/i.test(ct)) bl = bl.getAs('image/png');
+        var by = bl.getBytes();
+        if (bytes + by.length > 30 * 1024 * 1024) return; // 太大就不放（Google 文件匯入上限）
+        bytes += by.length;
+        imgs[idx[k + m]] = 'data:' + bl.getContentType() + ';base64,' + Utilities.base64Encode(by);
+      } catch (e) {}
+    });
+  }
 
   // ---- 1. 工時總表 ----
-  var total = 0, by = {}, who = {}, wk = {}, days = {};
+  var by = {}, who = {}, wk = {}, days = {};
   posts.forEach(function (p) {
     var h = Number(p.hours) || 0, t = p.tag || '其他', a = p.author || '—', w = wlWeek_(p.day);
     total += h; days[p.day] = 1;
@@ -465,92 +501,78 @@ function wlReportDoc_(b) {
     who[a] = who[a] || { h: 0, n: 0 }; who[a].h += h; who[a].n++;
     wk[w] = (wk[w] || 0) + h;
   });
-  body.appendParagraph('工時總表 / 作業時間の集計').setHeading(DocumentApp.ParagraphHeading.HEADING1);
-  body.appendParagraph('合計 ' + wlH_(total) + '　・　' + Object.keys(days).length + ' 天 / 日　・　' + posts.length + ' 筆 / 件');
-
-  body.appendParagraph('依類別 / 区分別').setHeading(DocumentApp.ParagraphHeading.HEADING2);
+  var H = '<html><head><meta charset="utf-8"></head><body style="font-family:Arial,sans-serif;font-size:11pt">';
+  H += '<h1>' + wlEsc_(title) + '</h1>';
+  if (d.notes) H += '<p>' + wlTxt_(d.notes) + '</p>';
+  H += '<h2>工時總表 / 作業時間の集計</h2>';
+  H += '<p><b>合計 ' + wlH_(total) + '</b>　・　' + Object.keys(days).length + ' 天 / 日　・　' + posts.length + ' 筆 / 件</p>';
   var rows = [['類別 / 区分', '天數 / 日数', '筆數 / 件数', '工時 / 時間', '%']];
   Object.keys(by).sort(function (x, y) { return by[y].h - by[x].h; }).forEach(function (t) {
     rows.push([wlTag_(t), String(Object.keys(by[t].d).length), String(by[t].n), wlH_(by[t].h), (total ? Math.round(by[t].h / total * 100) : 0) + '%']);
   });
   rows.push(['合計 / 合計', String(Object.keys(days).length), String(posts.length), wlH_(total), '100%']);
-  wlTable_(body, rows);
-
-  body.appendParagraph('依人員 / 担当者別').setHeading(DocumentApp.ParagraphHeading.HEADING2);
+  H += '<h3>依類別 / 区分別</h3>' + wlTableHtml_(rows);
   rows = [['人員 / 担当者', '筆數 / 件数', '工時 / 時間']];
   Object.keys(who).sort(function (x, y) { return who[y].h - who[x].h; }).forEach(function (a) { rows.push([a, String(who[a].n), wlH_(who[a].h)]); });
   rows.push(['合計 / 合計', String(posts.length), wlH_(total)]);
-  wlTable_(body, rows);
-
+  H += '<h3>依人員 / 担当者別</h3>' + wlTableHtml_(rows);
   var weeks = Object.keys(wk).sort();
   if (weeks.length > 1) {
-    body.appendParagraph('依週 / 週別（週一起 / 月曜始まり）').setHeading(DocumentApp.ParagraphHeading.HEADING2);
-    rows = [['週 / 週', '工時 / 時間']];
+    rows = [['週（週一起）/ 週（月曜始まり）', '工時 / 時間']];
     weeks.forEach(function (w) { rows.push([w + ' ～', wlH_(wk[w])]); });
     rows.push(['合計 / 合計', wlH_(total)]);
-    wlTable_(body, rows);
+    H += '<h3>依週 / 週別</h3>' + wlTableHtml_(rows);
   }
 
-  // ---- 2. 工作日誌（附照片） ----
-  body.appendPageBreak();
-  body.appendParagraph('工作日誌 / 作業ログ').setHeading(DocumentApp.ParagraphHeading.HEADING1);
-  var reqs = [], idx = [];
-  posts.forEach(function (p, i) {
-    (p.atts || []).forEach(function (a, j) {
-      var u = String(a.url || '');
-      if (!/^https?:\/\//i.test(u)) u = WL_BASE + u.replace(/^\/+/, '');
-      reqs.push({ url: u, muteHttpExceptions: true, followRedirects: true });
-      idx.push([i, j]);
-    });
-  });
-  var blobs = {};
-  for (var k = 0; k < reqs.length; k += 20) {
-    var part = UrlFetchApp.fetchAll(reqs.slice(k, k + 20));
-    part.forEach(function (r, m) {
-      var ct = String((r.getHeaders() || {})['Content-Type'] || '');
-      if (r.getResponseCode() !== 200) return;
-      if (/^image\/(jpe?g|png|gif)/i.test(ct)) blobs[idx[k + m].join('_')] = r.getBlob();
-      else if (/^image\//i.test(ct)) { try { blobs[idx[k + m].join('_')] = r.getBlob().getAs('image/png'); } catch (e) {} }
-    });
-  }
+  // ---- 2. 工作日誌（附照片），換頁 ----
+  H += '<h2 style="page-break-before:always">工作日誌 / 作業ログ</h2>';
   var dayH = {}; posts.forEach(function (p) { dayH[p.day] = (dayH[p.day] || 0) + (Number(p.hours) || 0); });
-  var curDay = '', missing = 0;
+  var curDay = '';
   posts.forEach(function (p, i) {
     if (p.day !== curDay) {
       curDay = p.day;
       var dd = wlDate_(p.day), wd = dd ? '（週' + '日一二三四五六'[dd.getDay()] + ' / ' + '日月火水木金土'[dd.getDay()] + '）' : '';
-      body.appendParagraph(p.day + wd + '　' + wlH_(dayH[p.day])).setHeading(DocumentApp.ParagraphHeading.HEADING2);
+      H += '<h3>' + wlEsc_(p.day + wd) + '　' + wlH_(dayH[p.day]) + '</h3>';
     }
-    var meta = body.appendParagraph('【' + wlTag_(p.tag) + '】　' + wlH_(Number(p.hours) || 0) + '　' + (p.author || ''));
-    meta.editAsText().setBold(true).setFontSize(10).setForegroundColor('#444444');
-    if (p.zh) body.appendParagraph(p.zh).editAsText().setFontSize(11).setBold(false).setForegroundColor('#111111');
-    if (p.ja && p.ja !== p.zh) body.appendParagraph(p.ja).editAsText().setFontSize(10).setBold(false).setForegroundColor('#555555');
-    var imgs = (p.atts || []).map(function (a, j) { return blobs[i + '_' + j]; });
-    var any = imgs.some(function (x) { return !!x; });
-    if (any) {
-      var para = body.appendParagraph('');
-      imgs.forEach(function (bl) {
-        if (!bl) { missing++; return; }
-        try {
-          var im = para.appendInlineImage(bl), w = im.getWidth(), h = im.getHeight(), mw = 220;
-          if (w > mw) { im.setWidth(mw); im.setHeight(Math.round(h * mw / w)); }
-          para.appendText(' ');
-        } catch (e) { missing++; }
-      });
-    } else missing += imgs.length;
-    body.appendParagraph('');
+    H += '<p style="color:#444444;font-size:10pt"><b>【' + wlEsc_(wlTag_(p.tag)) + '】　' + wlH_(Number(p.hours) || 0) + '　' + wlEsc_(p.author || '') + '</b></p>';
+    if (p.zh) H += '<p>' + wlTxt_(p.zh) + '</p>';
+    if (p.ja && p.ja !== p.zh) H += '<p style="color:#555555;font-size:10pt">' + wlTxt_(p.ja) + '</p>';
+    var pics = (p.atts || []).map(function (a, j) { var s = imgs[i + '_' + j]; if (!s) missing++; return s; }).filter(Boolean);
+    if (pics.length) H += '<p>' + pics.map(function (s) { return '<img src="' + s + '" width="300">'; }).join(' ') + '</p>';
+    H += '<p></p>';
   });
-  if (missing) body.appendParagraph('（' + missing + ' 張照片無法載入，未放入文件 / 読み込めなかった写真 ' + missing + ' 枚）').editAsText().setFontSize(9).setForegroundColor('#999999');
-  doc.saveAndClose();
+  if (missing) H += '<p style="color:#999999;font-size:9pt">（' + missing + ' 張照片無法載入，未放入文件 / 読み込めなかった写真 ' + missing + ' 枚）</p>';
+  H += '</body></html>';
 
-  var file = DriveApp.getFileById(doc.getId());
+  if (preview) return { ok: true, title: title, html: H, images: Object.keys(imgs).length, missing: missing, ms: Date.now() - t0 };
+
+  // ---- 3. 上傳並轉成 Google 文件 ----
+  var folderId = '';
+  try { var it = DriveApp.getFoldersByName(WL_DOC_FOLDER); folderId = (it.hasNext() ? it.next() : DriveApp.createFolder(WL_DOC_FOLDER)).getId(); } catch (e) {}
+  var meta = { name: title, mimeType: MimeType.GOOGLE_DOCS };
+  if (folderId) meta.parents = [folderId];
+  var info;
   try {
-    var it = DriveApp.getFoldersByName(WL_DOC_FOLDER);
-    file.moveTo(it.hasNext() ? it.next() : DriveApp.createFolder(WL_DOC_FOLDER));
+    info = Drive.Files.create(meta, Utilities.newBlob(H, 'text/html', 'report.html'), { supportsAllDrives: true, fields: 'id,webViewLink' });
+  } catch (e) {
+    if (/insufficient|permission|權限/i.test(String(e))) return { ok: false, error: 'permission: 雲端硬碟寫入權限未授權' };
+    return { ok: false, error: 'Google 文件建立失敗：' + String(e).slice(0, 300) };
+  }
+  // HTML 匯入不支援分頁，轉好後在「工作日誌」標題前插入分頁（失敗不影響文件本身）
+  try {
+    var ddoc = DocumentApp.openById(info.id), dbody = ddoc.getBody();
+    var hit = dbody.findText('工作日誌 / 作業ログ');
+    if (hit) {
+      var par = hit.getElement().getParent();
+      while (par && par.getType() !== DocumentApp.ElementType.PARAGRAPH) par = par.getParent();
+      if (par) dbody.insertPageBreak(dbody.getChildIndex(par));
+    }
+    ddoc.saveAndClose();
   } catch (e) {}
-  try { file.setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.COMMENT); } catch (e) {}
-  PROPS.setProperty(key, JSON.stringify({ v: ver, doc: doc.getId() }));
-  return { ok: true, url: doc.getUrl(), reused: false };
+  try { DriveApp.getFileById(info.id).setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.COMMENT); } catch (e) {}
+  PROPS.setProperty(key, JSON.stringify({ v: ver, doc: info.id }));
+  return { ok: true, url: info.webViewLink || ('https://docs.google.com/document/d/' + info.id + '/edit'), reused: false,
+    images: Object.keys(imgs).length, missing: missing, ms: Date.now() - t0 };
 }
 
 /* ------------------------------------------------------------

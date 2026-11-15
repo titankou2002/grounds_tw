@@ -66,6 +66,32 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
 .ed-img div{display:flex;justify-content:space-between}
 .ed-img button{flex:1;border:0;background:transparent;padding:5px 0;cursor:pointer;font-size:13px}
 .ed-bar{position:sticky;bottom:0;background:#fff;border-top:1px solid var(--line);padding:10px 14px calc(10px + env(safe-area-inset-bottom));display:flex;gap:8px;justify-content:flex-end;z-index:9}
+/* 寬版閱讀：桌機約 1080px、字放大、照片放大（點圖可放大看） */
+.wrap{max-width:1080px;padding:20px 24px calc(36px + env(safe-area-inset-bottom))}
+header{padding-left:max(24px,calc((100vw - 1080px)/2 + 24px));padding-right:max(24px,calc((100vw - 1080px)/2 + 24px))}
+.ttl{font-size:17px}
+h2{font-size:18px;margin:28px 0 10px}
+table.sum{font-size:15px}table.sum th{font-size:13px}table.sum th,table.sum td{padding:9px 10px}
+.barbox{width:140px}.bar{height:8px}
+.day{margin-top:26px}.day-h b{font-size:17px}.day-h span{font-size:14px}
+.wk{font-size:14px;padding:8px 12px}
+.ent{padding:14px 18px;margin-bottom:12px}
+.ent-h{font-size:13px;margin-bottom:8px}
+.ja{font-size:16px;line-height:1.75}
+.zh{font-size:14.5px;line-height:1.7;margin-top:6px}
+.only .ja,.only .zh{font-size:16px}
+.notes{font-size:15.5px;line-height:1.75}
+.imgs{grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px;margin-top:12px}
+.imgs img{height:auto;aspect-ratio:4/3;border-radius:10px}
+@media (max-width:640px){
+  .wrap{padding:14px 12px calc(30px + env(safe-area-inset-bottom))}
+  header{padding-left:12px;padding-right:12px}
+  .ttl{font-size:15px;flex-basis:100%}
+  .ent{padding:12px 13px}
+  .ja,.only .ja,.only .zh{font-size:15px}.zh{font-size:13.5px}
+  table.sum{font-size:13.5px}table.sum th,table.sum td{padding:7px 6px}.barbox{width:60px}
+  .imgs{grid-template-columns:1fr 1fr;gap:6px}
+}
 @media print{
   @page{size:A4;margin:12mm}
   body{background:#fff}
@@ -73,7 +99,11 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
   header{position:static;border:0;padding:0 0 8px}
   .wrap{padding:0;max-width:none}
   .ent,.card{break-inside:avoid}
-  .imgs img{height:90px}
+  .wrap{padding:0}
+  .ja,.only .ja,.only .zh{font-size:11pt}.zh{font-size:10pt}
+  table.sum{font-size:10.5pt}
+  .imgs{grid-template-columns:repeat(3,1fr);gap:6px}
+  .imgs img{aspect-ratio:4/3;height:auto}
   .wk{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   .bar{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
@@ -238,8 +268,8 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
     var w=window.open('','_blank'); if(w)w.document.write('<p style="font:15px sans-serif;padding:24px">正在產生 Google 文件（照片多時約 10–60 秒）…</p>');
     var b=document.getElementById('b-doc');b.disabled=true;
     fetch('api_report_doc.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify({id:st.data.id})})
-      .then(function(r){return r.json().catch(function(){return {};});})
-      .then(function(d){ if(d&&d.success){ if(w)w.location.href=d.url; else location.href=d.url; } else { if(w)w.close(); alert('Google 文件產生失敗：'+((d&&d.error)||'')); } })
+      .then(function(r){return r.json().catch(function(){return {error:'伺服器回應 '+r.status};});})
+      .then(function(d){ if(d&&d.success){ if(w)w.location.href=d.url; else location.href=d.url; } else { if(w)w.close(); alert('Google 文件產生失敗：'+((d&&d.error)||'未知錯誤')); } })
       .catch(function(){if(w)w.close();alert('Google 文件產生失敗，請再試一次');})
       .then(function(){b.disabled=false;});
   };
