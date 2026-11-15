@@ -1,5 +1,5 @@
 <?php
-// 比較表分享快照：POST 建立（需登入 cookie）、GET 讀取（公開，給日本同事免密碼看）
+// 比較表分享快照：POST 建立（公開，已取消密碼）、GET 讀取（公開，給日本同事免密碼看）
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 
@@ -13,12 +13,7 @@ $MAX_FILE_BYTES = 400 * 1024;
 $MAX_SHARES = 300;
 
 function wl_share_authed() {
-    $secretFile = __DIR__ . '/.wl_secret';
-    if (!is_file($secretFile)) return false;
-    $secret = trim((string)file_get_contents($secretFile));
-    if ($secret === '') return false;
-    $token = hash_hmac('sha256', 'worklog-ok', $secret);
-    return isset($_COOKIE['wl_auth']) && hash_equals($token, (string)$_COOKIE['wl_auth']);
+    return true; // 2026-11-16 已取消工作日誌密碼，所有人都可建立／編輯
 }
 
 function wl_share_id_ok($id) {

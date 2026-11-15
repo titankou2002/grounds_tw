@@ -300,7 +300,12 @@ interface AuditLogItem {
 
 ## 工時報告輸出（2026-11-16）
 - REPORT「匯出」→ 工時總表視窗有兩個按鈕，內容都是「先工時總表（類別／人員／週），後附照片的每日工作日誌」：
-  - **產生週報連結**：`api_report.php` 建快照 → `report.html?id=…`。公開唯讀（日本同事免密碼）；已登入 worklog 的人打開會看到「編輯」：可改標題、備註、每筆日期／類別／工時／人員／中日文，刪除或排序照片（只能用快照裡原本的照片），`action=update` 存回（flock＋原子寫入）。另有「PDF / 列印」（A4）。
-  - **輸出成 Google 文件**：先建快照，再由 `api_report_doc.php`（需登入）呼叫 Apps Script 部署「worklog report Google Doc」（`tools/apps_script/Code.gs` 的 `wlReportDoc_`，和翻譯用的部署 @8 分開）。Apps Script 只收快照 id、自己讀公開的 api_report.php，建在雲端硬碟「GROUNDS 工時報告」資料夾，共用設定＝知道連結的人可留言。同一份快照沒改過會回傳同一份文件（不會蓋掉文件裡的修改）。
+  - **產生週報連結**：`api_report.php` 建快照 → `report.html?id=…`。公開，任何人打開都會看到「編輯」：可改標題、備註、每筆日期／類別／工時／人員／中日文，刪除或排序照片（只能用快照裡原本的照片），`action=update` 存回（flock＋原子寫入）。另有「PDF / 列印」（A4）。
+  - **輸出成 Google 文件**：先建快照，再由 `api_report_doc.php`（公開）呼叫 Apps Script 部署「worklog report Google Doc」（`tools/apps_script/Code.gs` 的 `wlReportDoc_`，和翻譯用的部署 @8 分開）。Apps Script 只收快照 id、自己讀公開的 api_report.php，建在雲端硬碟「GROUNDS 工時報告」資料夾，共用設定＝知道連結的人可留言。同一份快照沒改過會回傳同一份文件（不會蓋掉文件裡的修改）。
   - 第一次使用前，擁有者要在 Apps Script 編輯器執行 `wlAuthorizeDocs` 並允許（文件＋雲端硬碟權限）。
 - 快照存在伺服器 `worklog/report_shares/`（不進 git、部署排除）。
+
+## 已取消密碼閘門（2026-11-16）
+- 依使用者要求，worklog 全部頁面與 API 不再需要密碼：`gate.php` 已刪除，`.htaccess` 不再把請求轉給 gate；`api_report/api_share/api_report_doc` 的登入檢查一律放行，`report.html` 的「編輯」「Google 文件」按鈕所有人可見；MAP 頁「✏️ 編輯」直接切換，不再問密碼。
+- 仍保留：隱藏檔（`.wl_*` 金鑰等）、`*.lock`、`*.md`、`*.tmp.*` 由 `.htaccess` 擋掉；SSRF 白名單、輸入清洗、flock、大小限制照舊。伺服器上的 `.wl_pw`／`.wl_secret` 已不再使用（留著無害）。
+- 注意：網址公開＝任何人都可讀寫資料。

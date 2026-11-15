@@ -1,6 +1,6 @@
 <?php
 // 把週報快照（report_shares/<id>.json）輸出成可編輯的 Google 文件。
-// 需登入 cookie。實際建文件的是 Apps Script（tools/apps_script/Code.gs 的 wlReportDoc_），
+// 公開（已取消密碼）。實際建文件的是 Apps Script（tools/apps_script/Code.gs 的 wlReportDoc_），
 // 它只收快照 id，再自己去讀公開的 api_report.php?id=…，所以外人無法塞任意內容進來。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
@@ -14,12 +14,7 @@ function wl_rd_out($a, $code = 200) {
     exit;
 }
 function wl_rd_authed() {
-    $secretFile = __DIR__ . '/.wl_secret';
-    if (!is_file($secretFile)) return false;
-    $secret = trim((string)file_get_contents($secretFile));
-    if ($secret === '') return false;
-    $token = hash_hmac('sha256', 'worklog-ok', $secret);
-    return isset($_COOKIE['wl_auth']) && hash_equals($token, (string)$_COOKIE['wl_auth']);
+    return true; // 2026-11-16 已取消工作日誌密碼，所有人都可建立／編輯
 }
 
 if (($_SERVER['REQUEST_METHOD'] ?? 'GET') !== 'POST') wl_rd_out(['success' => false, 'error' => 'method'], 405);

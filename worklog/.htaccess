@@ -7,12 +7,14 @@
     </IfModule>
 </FilesMatch>
 
-# ---- 密碼閘門：所有請求都先經過 gate.php（登入後 cookie 記住一年） ----
+# 2026-11-16 已取消密碼閘門（gate.php 已刪除），所有頁面與 API 公開。
+# 隱藏檔（.wl_anthropic_key 等金鑰）、鎖檔、暫存檔一律擋掉
 <FilesMatch "^\.">
     Require all denied
 </FilesMatch>
+<FilesMatch "\.(lock|md)$|\.tmp\.">
+    Require all denied
+</FilesMatch>
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_URI} !/gate\.php$
-    RewriteRule ^ gate.php [L]
+    RewriteEngine Off
 </IfModule>

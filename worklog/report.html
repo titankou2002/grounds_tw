@@ -226,7 +226,7 @@ table.sum tr.total td{font-weight:800;border-bottom:0}
     fetch('api_report.php',{method:'POST',headers:{'Content-Type':'application/json'},credentials:'same-origin',body:JSON.stringify(body)})
       .then(function(r){return r.json().then(function(d){return {r:r,d:d};});})
       .then(function(x){
-        if(!x.d||!x.d.success){document.getElementById('ed-msg').textContent='儲存失敗：'+((x.d&&x.d.error)||x.r.status)+(x.r.status===401?'（請先登入工作日誌）':'');return;}
+        if(!x.d||!x.d.success){document.getElementById('ed-msg').textContent='儲存失敗：'+((x.d&&x.d.error)||x.r.status);return;}
         st.data=x.d;st.edit=null;st.dirty=false;
         document.getElementById('ed-bar').style.display='none';document.getElementById('b-edit').style.display='';render();
       })

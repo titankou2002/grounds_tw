@@ -1,6 +1,6 @@
 <?php
 // 店面優缺點分析：讀 591 等刊登頁的全文，請 Claude 依內容寫優缺點，只填空白欄位。
-// 金鑰放在伺服器上的 .wl_anthropic_key（隱藏檔，.htaccess 擋掉、不進 repo）。gate.php 已要求登入 cookie。
+// 金鑰放在伺服器上的 .wl_anthropic_key（隱藏檔，.htaccess 擋掉、不進 repo）。已取消密碼，公開可用。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 require_once __DIR__ . '/lib_fetch.php';

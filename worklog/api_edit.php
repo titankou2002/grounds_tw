@@ -1,5 +1,5 @@
 <?php
-// MAP 頁寫入端點。gate.php 已要求登入 cookie（未登入會得到 401），這裡只處理寫入。
+// MAP 頁寫入端點。已取消密碼，所有人都可寫入；這裡只處理寫入。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
 require_once __DIR__ . '/lib_overrides.php';

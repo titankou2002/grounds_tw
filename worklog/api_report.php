@@ -1,5 +1,5 @@
 <?php
-// 工作日誌週報快照：POST 建立（需登入 cookie）、GET 讀取（公開，給日本同事免密碼看）
+// 工作日誌週報快照：POST 建立／編輯（公開，已取消密碼）、GET 讀取（公開，給日本同事免密碼看）
 // 快照建立後就跟日誌脫鉤（之後再改日誌不會影響已分享的那一份）。
 // 登入的人可以在 report.html 直接修改快照（action=update：標題、備註、每筆文字／工時、照片刪除與排序）。
 header('Content-Type: application/json; charset=utf-8');
@@ -14,12 +14,7 @@ $MAX_FILE_BYTES = 1500 * 1024;
 $MAX_SHARES = 200;
 
 function wl_rp_authed() {
-    $secretFile = __DIR__ . '/.wl_secret';
-    if (!is_file($secretFile)) return false;
-    $secret = trim((string)file_get_contents($secretFile));
-    if ($secret === '') return false;
-    $token = hash_hmac('sha256', 'worklog-ok', $secret);
-    return isset($_COOKIE['wl_auth']) && hash_equals($token, (string)$_COOKIE['wl_auth']);
+    return true; // 2026-11-16 已取消工作日誌密碼，所有人都可建立／編輯
 }
 function wl_rp_out($a, $code = 200) {
     http_response_code($code);

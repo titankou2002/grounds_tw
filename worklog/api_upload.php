@@ -1,5 +1,5 @@
 <?php
-// 動態／留言／店面的附件上傳（圖片、影片、PDF）。gate.php 已要求登入 cookie，沒登入到不了這裡。
+// 動態／留言／店面的附件上傳（圖片、影片、PDF）。已取消密碼，公開可用。
 // 只收真的圖片或 PDF（檢查檔案內容，不看副檔名）；檔名一律隨機，原始檔名只當顯示用文字。
 header('Content-Type: application/json; charset=utf-8');
 header('Cache-Control: no-store');
