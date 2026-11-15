@@ -420,6 +420,69 @@ function wlWeek_(s) {
 }
 function wlTag_(t) { t = t || '其他'; return WL_TAG_JA[t] ? t + ' / ' + WL_TAG_JA[t] : t; }
 
+// 照片在文件裡的最大尺寸（px；匯入後約 ×0.75 = pt）。一列兩張、一列高度不超過約 1/3 頁
+var WL_IMG_W = 290, WL_IMG_H = 250;
+
+// 讀 JPEG／PNG／GIF 的實際寬高（含 JPEG 的 EXIF 旋轉）
+function wlImgSize_(by) {
+  function u(i) { return by[i] & 255; }
+  if (u(0) === 0x89 && u(1) === 0x50) return { w: (u(16) << 24 | u(17) << 16 | u(18) << 8 | u(19)), h: (u(20) << 24 | u(21) << 16 | u(22) << 8 | u(23)) };
+  if (u(0) === 0x47 && u(1) === 0x49) return { w: u(6) | u(7) << 8, h: u(8) | u(9) << 8 };
+  if (u(0) !== 0xFF || u(1) !== 0xD8) return null;
+  var i = 2, rot = 1, n = by.length;
+  while (i + 9 < n) {
+    if (u(i) !== 0xFF) { i++; continue; }
+    var m = u(i + 1), len = u(i + 2) << 8 | u(i + 3);
+    if (m === 0xE1 && u(i + 4) === 0x45 && u(i + 5) === 0x78) { // Exif
+      var t = i + 10, le = u(t) === 0x49;
+      var r16 = function (o) { return le ? (u(t + o) | u(t + o + 1) << 8) : (u(t + o) << 8 | u(t + o + 1)); };
+      var r32 = function (o) { return le ? (u(t + o) | u(t + o + 1) << 8 | u(t + o + 2) << 16 | u(t + o + 3) << 24) : (u(t + o) << 24 | u(t + o + 1) << 16 | u(t + o + 2) << 8 | u(t + o + 3)); };
+      try {
+        var ifd = r32(4), cnt = r16(ifd);
+        for (var e = 0; e < cnt && e < 60; e++) { var o = ifd + 2 + e * 12; if (r16(o) === 0x0112) { rot = r16(o + 8); break; } }
+      } catch (er) {}
+    }
+    if (m >= 0xC0 && m <= 0xCF && m !== 0xC4 && m !== 0xC8 && m !== 0xCC) {
+      var h = u(i + 5) << 8 | u(i + 6), w = u(i + 7) << 8 | u(i + 8);
+      return rot >= 5 && rot <= 8 ? { w: h, h: w } : { w: w, h: h };
+    }
+    i += 2 + len;
+  }
+  return null;
+}
+
+// 轉好的文件：每筆紀錄從「【類別】」那行到照片為止，除最後一段外都設 keepWithNext；當天標題也黏住下一筆
+function wlKeepEntriesTogether_(docId) {
+  var d = Docs.Documents.get(docId);
+  var paras = [];
+  (d.body.content || []).forEach(function (el) {
+    if (!el.paragraph) { paras.push(null); return; }
+    var txt = '', img = false;
+    (el.paragraph.elements || []).forEach(function (pe) { if (pe.textRun) txt += pe.textRun.content; if (pe.inlineObjectElement) img = true; });
+    paras.push({ s: el.startIndex, e: el.endIndex, t: txt.replace(/\n$/, ''), img: img, st: (el.paragraph.paragraphStyle || {}).namedStyleType || '' });
+  });
+  var startLog = -1;
+  for (var a = 0; a < paras.length; a++) if (paras[a] && paras[a].t.indexOf('工作日誌 / 作業ログ') === 0) { startLog = a; break; }
+  if (startLog < 0) return;
+  var reqs = [];
+  function keep(p, next) {
+    reqs.push({ updateParagraphStyle: { range: { startIndex: p.s, endIndex: p.e }, paragraphStyle: { keepWithNext: next, keepLinesTogether: true }, fields: 'keepWithNext,keepLinesTogether' } });
+  }
+  var isStart = function (p) { return p && p.t.charAt(0) === '【'; };
+  var isHead = function (p) { return p && /^HEADING/.test(p.st); };
+  for (var i = startLog + 1; i < paras.length; i++) {
+    var p = paras[i];
+    if (!p) continue;
+    if (isHead(p)) { keep(p, true); continue; }
+    if (!isStart(p)) continue;
+    var j = i + 1, block = [p];
+    while (j < paras.length && paras[j] && !isStart(paras[j]) && !isHead(paras[j]) && /\S/.test(paras[j].t + (paras[j].img ? 'x' : ''))) { block.push(paras[j]); j++; }
+    block.forEach(function (q, k) { keep(q, k < block.length - 1); });
+    i = j - 1;
+  }
+  for (var r = 0; r < reqs.length; r += 400) Docs.Documents.batchUpdate({ requests: reqs.slice(r, r + 400) }, docId);
+}
+
 function wlEsc_(t) { return String(t == null ? '' : t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
 function wlTxt_(t) { return wlEsc_(t).replace(/\r?\n/g, '<br>'); }
 function wlTableHtml_(rows) {
@@ -487,7 +550,10 @@ function wlReportDoc_(b) {
         var by = bl.getBytes();
         if (bytes + by.length > 30 * 1024 * 1024) return; // 太大就不放（Google 文件匯入上限）
         bytes += by.length;
-        imgs[idx[k + m]] = 'data:' + bl.getContentType() + ';base64,' + Utilities.base64Encode(by);
+        var dim = wlImgSize_(by) || { w: 4, h: 3 };
+        var sc = Math.min(WL_IMG_W / dim.w, WL_IMG_H / dim.h, 1);
+        imgs[idx[k + m]] = { src: 'data:' + bl.getContentType() + ';base64,' + Utilities.base64Encode(by),
+          w: Math.max(40, Math.round(dim.w * sc)), h: Math.max(30, Math.round(dim.h * sc)) };
       } catch (e) {}
     });
   }
@@ -538,7 +604,7 @@ function wlReportDoc_(b) {
     if (p.zh) H += '<p>' + wlTxt_(p.zh) + '</p>';
     if (p.ja && p.ja !== p.zh) H += '<p style="color:#555555;font-size:10pt">' + wlTxt_(p.ja) + '</p>';
     var pics = (p.atts || []).map(function (a, j) { var s = imgs[i + '_' + j]; if (!s) missing++; return s; }).filter(Boolean);
-    if (pics.length) H += '<p>' + pics.map(function (s) { return '<img src="' + s + '" width="300">'; }).join(' ') + '</p>';
+    if (pics.length) H += '<p>' + pics.map(function (s) { return '<img src="' + s.src + '" width="' + s.w + '" height="' + s.h + '">'; }).join(' ') + '</p>';
     H += '<p></p>';
   });
   if (missing) H += '<p style="color:#999999;font-size:9pt">（' + missing + ' 張照片無法載入，未放入文件 / 読み込めなかった写真 ' + missing + ' 枚）</p>';
@@ -569,6 +635,8 @@ function wlReportDoc_(b) {
     }
     ddoc.saveAndClose();
   } catch (e) {}
+  // 每筆（類別行＋文字＋照片）與當天標題設成「與下段同頁」，照片不會跟文字分到不同頁
+  try { wlKeepEntriesTogether_(info.id); } catch (e) {}
   try { DriveApp.getFileById(info.id).setSharing(DriveApp.Access.ANYONE_WITH_LINK, DriveApp.Permission.COMMENT); } catch (e) {}
   PROPS.setProperty(key, JSON.stringify({ v: ver, doc: info.id }));
   return { ok: true, url: info.webViewLink || ('https://docs.google.com/document/d/' + info.id + '/edit'), reused: false,
