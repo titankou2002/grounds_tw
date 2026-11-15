@@ -2140,7 +2140,7 @@
       #report-summary-modal .modal-content-box { width:100%; max-width:100% !important; max-height:calc(100dvh - 16px); overflow-y:auto; padding:14px 12px calc(14px + env(safe-area-inset-bottom)); }
       #report-summary-modal #rp-body { max-height:42vh !important; }
       #report-summary-modal .rp-tabs { flex-wrap:wrap; }
-      #report-summary-modal .btn-submit { min-width:0 !important; width:100%; flex-basis:100%; }
+      #report-summary-modal .btn-submit { min-width:0 !important; width:100%; flex:1 1 100% !important; padding:12px 10px; font-size:14px; }
     }
     .cmp-extra { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:8px; }
     .cmp-date { height:32px; border:1px solid var(--border); border-radius:16px; padding:0 10px; font-size:12px; font-weight:600; background:#fff; }
@@ -2704,10 +2704,10 @@
     <div id="rp-body" style="max-height:52vh;overflow:auto;"></div>
     <div style="margin-top:14px;padding-top:12px;border-top:1px solid var(--border);">
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <button class="btn-submit" id="rp-export-btn" onclick="exportReportLink()" style="flex:1;min-width:200px;">產生週報連結（登入後可線上編輯）</button>
+        <button class="btn-submit" id="rp-export-btn" onclick="exportReportLink()" style="flex:1;min-width:200px;">產生週報連結（可線上編輯）</button>
         <button class="btn-submit" id="rp-doc-btn" onclick="exportReportDoc()" style="flex:1;min-width:200px;background:#1a73e8;border-color:#1a73e8;">輸出成 Google 文件</button>
       </div>
-      <div style="font-size:11.5px;color:var(--fg-muted);margin-top:6px;line-height:1.5;">兩種都是「先工時總表、後附照片的工作日誌」。內容是按下當下的快照，之後再改日誌不會變；範圍用上面選的日期（不受「人員」篩選影響，包含所有人）。週報連結日本同事免密碼唯讀，已登入的人打開可直接修改；Google 文件可在文件裡自由編輯（知道連結的人可留言）。</div>
+      <div style="font-size:11.5px;color:var(--fg-muted);margin-top:6px;line-height:1.5;">兩種都是「先工時總表、後附照片的工作日誌」。內容是按下當下的快照，之後再改日誌不會變；範圍用上面選的日期（不受「人員」篩選影響，包含所有人）。週報連結打開即可看，也能直接線上修改；Google 文件可在文件裡自由編輯（知道連結的人可留言）。</div>
       <div id="rp-link-box" style="display:none;margin-top:8px;"><input id="rp-link" class="composer-textarea" style="min-height:36px;padding:6px 10px;margin:0;width:100%;" readonly onclick="this.select()"></div>
     </div>
   </div>
